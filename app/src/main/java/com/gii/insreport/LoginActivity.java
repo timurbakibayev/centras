@@ -307,6 +307,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         layout.addView(newPassword1);
         layout.addView(newPassword2);
 
+
         final SharedPreferences preferences = getSharedPreferences("emailPasswordRecircle", MODE_PRIVATE);
         Toast.makeText(getApplicationContext(), preferences.getString("password", ""),
                 Toast.LENGTH_LONG).show();
