@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 
 public class MainActivity extends AppCompatActivity {
@@ -58,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
         grantStoragePermission();
         grantCameraPermission();
         grantCallPermission();
+
+        refreshUser();
+        InsReport.mainActivity = this;
     }
 
 
@@ -178,14 +182,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        refreshUser();
+
+    }
+
+    public void refreshUser() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (InsReport.ref.getAuth() == null) {
-            InsReport.refreshUser();
+        FirebaseUser user = InsReport.mAuth.getCurrentUser();
+        if (user != null)
+            toolbar.setSubtitle("Online: " + user.getEmail());
+        else
             toolbar.setSubtitle("Offline");
-        }
-        else {
-            InsReport.refreshUser();
-            toolbar.setSubtitle("Online");
-        }
     }
 }

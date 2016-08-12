@@ -3,11 +3,16 @@ package com.gii.insreport;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.ListView;
 
 import com.firebase.client.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StreamDownloadTask;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -19,14 +24,22 @@ import java.util.Random;
  */
 public class InsReport extends Application {
 
+    private final static String TAG = "InsReport (Application)";
+
     public final static String EXTRA_FIREBASE_CATALOG = "Firebase.Catalog";
     public final static String EXTRA_ID_NO = "Firebase.Form.No";
 
     public static Firebase ref;
     public static FirebaseStorage storage;
     public static StorageReference storageRef;
+    public static FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
     public static String userID = "";
     public static SharedPreferences sharedPref;
+
+    public static MainActivity mainActivity;
+
 
     public static DamagePlanData damagePlanData = new DamagePlanData();
     public static ArrayList<FormsCollection> mainMenuForms = new ArrayList<>();
@@ -57,6 +70,28 @@ public class InsReport extends Application {
         userID = "testUserID";
 
         ref = new Firebase("https://insreport-f39a3.firebaseio.com/");
+
+        mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.e(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    Log.e(TAG, "onAuthStateChanged:signed_out");
+                }
+                if (mainActivity != null)
+                    mainActivity.refreshUser();
+                // ...
+            }
+        };
+
+        mAuth.addAuthStateListener(mAuthListener);
+
         initForms();
 
         //TODO: REMOVE THIS WHEN RELEASED!!!!!

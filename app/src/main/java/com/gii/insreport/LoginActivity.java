@@ -38,6 +38,10 @@ import android.widget.Toast;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,7 +59,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Id to identity READ_CONTACTS permission request.
      */
+
+    FirebaseUser user;
+
     private static final int REQUEST_READ_CONTACTS = 0;
+    private static final String TAG = "LoginActivity.java";
 
     private UserLoginTask mAuthTask = null;
 
@@ -68,6 +76,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        user = InsReport.mAuth.getCurrentUser();
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -106,18 +115,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
         final Button signOutButton = (Button) findViewById(R.id.sign_out_button);
-        if (InsReport.ref.getAuth() != null) {
+        if (user != null) {
             mEmailView.setVisibility(View.GONE);
             mPasswordView.setVisibility(View.GONE);
             mEmailSignInButton.setVisibility(View.GONE);
             mResetPasswordButton.setVisibility(View.GONE);
             mChangePasswordButton.setEnabled(true);
             signOutButton.setEnabled(true);
-            signOutButton.setText("Выйти (" + InsReport.ref.getAuth().getProviderData().get("email").toString() + ")");
+            signOutButton.setText("Выйти (" + user.getEmail() + ")");
             signOutButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    InsReport.ref.unauth();
+                    InsReport.mAuth.signOut();
                     mEmailView.setVisibility(View.VISIBLE);
                     mPasswordView.setVisibility(View.VISIBLE);
                     signOutButton.setEnabled(false);
@@ -163,7 +172,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             return true;
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(mEmailView, "Необходимо для автозаполнения", Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
@@ -294,7 +303,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     //-----------
     private void changePassword() {
-        if (InsReport.ref.getAuth() == null)
+        if (user == null)
             return;
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final AlertDialog dialog = builder.create();
@@ -318,21 +327,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     public void onClick(DialogInterface dialog, int whichButton) {
                         if (newPassword1.getText().toString().equals(newPassword2.getText().toString()) &&
                                 isPasswordValid(newPassword1.getText().toString())) {
-                            InsReport.ref.changePassword(InsReport.ref.getAuth().getProviderData().get("email").toString(),
-                                    preferences.getString("password", ""), newPassword1.getText().toString(),
-                                    new Firebase.ResultHandler() {
-                                        @Override
-                                        public void onSuccess() {
-                                            Toast.makeText(getApplicationContext(), "Пароль сменён",
-                                                    Toast.LENGTH_LONG).show();
-                                        }
-
-                                        @Override
-                                        public void onError(FirebaseError firebaseError) {
-                                            Toast.makeText(getApplicationContext(), firebaseError.getMessage(),
-                                                    Toast.LENGTH_LONG).show();
-                                        }
-                                    });
+                            InsReport.mAuth.getCurrentUser().updatePassword(newPassword1.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful())
+                                        Toast.makeText(getApplicationContext(), "Пароль сменён",
+                                                Toast.LENGTH_LONG).show();
+                                    else
+                                        Toast.makeText(getApplicationContext(), task.getException().getMessage(),
+                                                Toast.LENGTH_LONG).show();
+                                }
+                            });
                         } else
                         if (!isPasswordValid(newPassword1.getText().toString()))
                             Toast.makeText(getApplicationContext(), getString(R.string.error_invalid_password),
@@ -371,25 +376,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             focusView.requestFocus();
         } else {
             showProgress(true);
-            InsReport.ref.resetPassword(email, new Firebase.ResultHandler() {
+            InsReport.mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
-                public void onSuccess() {
-                    showProgress(false);
-                    Toast.makeText(getApplicationContext(), "Проверьте почту, пароль сброшен",
-                            Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void onError(FirebaseError firebaseError) {
-                    showProgress(false);
-                    Toast.makeText(getApplicationContext(), "Не удалось сбросить пароль",
-                            Toast.LENGTH_LONG).show();
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        showProgress(false);
+                        Toast.makeText(getApplicationContext(), "Проверьте почту, пароль сброшен",
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        showProgress(false);
+                        Toast.makeText(getApplicationContext(), "Не удалось сбросить пароль",
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }
     }
 
     private void attemptLogin() {
+        Log.e(TAG, "attemptLogin: ");
         if (mAuthTask != null) {
             return;
         }
@@ -447,6 +452,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         public void onAuthenticationError(FirebaseError firebaseError) {
             switch (firebaseError.getCode()) {
                 case FirebaseError.USER_DOES_NOT_EXIST:
+                    Log.e(TAG, "onAuthenticationError: USER DOES NOT EXIST");
                     if (!signedUp)
                         signUp(email,password);
                     signedUp = true;
@@ -458,6 +464,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     break;
                 default:
                     // handle other errors
+                    Toast.makeText(getApplicationContext(),firebaseError.getMessage(),Toast.LENGTH_LONG).show();
                     break;
             }
 
@@ -465,8 +472,38 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     };
 
-    private void loginFirebase(String email, String password) {
-        InsReport.ref.authWithPassword(email,password,authResultHandler);
+    private void loginFirebase(final String email, final String password) {
+        Log.e(TAG, "loginFirebase: " + email + " / " + password);
+        //InsReport.ref.authWithPassword(email,password,authResultHandler);
+        InsReport.mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    savePassword(email, password);
+                    finish();
+                } else {
+                    Log.e(TAG, "onComplete: " + task.getException().getMessage());
+                    if (task.getException().getMessage().contains("LOGIN_DISABLED")) {
+                        Toast.makeText(getApplicationContext(), "Firebase USER/PASSWORD Authentication is disabled!",
+                                Toast.LENGTH_LONG).show();
+                        showProgress(false);
+                        return;
+                    }
+                    if (task.getException().getMessage().contains("no user record")) {
+                        signUp(email,password);
+                        return;
+                    }
+                    if (task.getException().getMessage().contains("password is invalid")) {
+                        Toast.makeText(getApplicationContext(), "Неверный пароль!",
+                                Toast.LENGTH_LONG).show();
+                        showProgress(false);
+                        return;
+                    }
+
+                    showProgress(false);
+                }
+            }
+        });
     }
 
     private void loadPassword() {
@@ -479,32 +516,30 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private void signUp(final String email, final String password) {
         Log.e("Firebase","Registered user:" + " trying to sign up");
-        InsReport.ref.createUser(email,password, new Firebase.ValueResultHandler<Map<String, Object>>() {
-                    @Override
-                    public void onSuccess(Map<String, Object> result) {
-                        Toast.makeText(getApplicationContext(), "Регистрация ОК",
-                                Toast.LENGTH_LONG).show();
-                        Log.e("Firebase","Registered user:" + result.get("uid") + ", giving free license");
-                    }
-
-                    @Override
-                    public void onError(FirebaseError firebaseError) {
-                        // there was an error]
-                        Toast.makeText(getApplicationContext(), "Ошибка регистрации",
-                                Toast.LENGTH_LONG).show();
-                        Log.e("Firebase","Registering user ERROR: " + firebaseError.toString());
-                    }
+        InsReport.mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                Log.e(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+                if (!task.isSuccessful()) {
+                    Log.e(TAG, "onComplete: ERROR: " + task.getException().getMessage());
+                    Toast.makeText(getApplicationContext(), "Ошибка регистрации",
+                            Toast.LENGTH_LONG).show();
+                    showProgress(false);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Регистрация ОК",
+                    Toast.LENGTH_LONG).show();
+                    InsReport.mAuth.signInWithEmailAndPassword(email,password);
+                    showProgress(false);
                 }
-        );
-
-        InsReport.ref.authWithPassword(email,password,authResultHandler);
+            }
+        });
     }
     private boolean isEmailValid(String email) {
         return email.contains("@") && email.contains(".");
     }
 
     private boolean isPasswordValid(String password) {
-        return password.length() > 4;
+        return password.length() > 6;
     }
 
     /**
