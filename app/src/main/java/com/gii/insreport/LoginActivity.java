@@ -291,8 +291,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-
-
     //-----------
     private void changePassword() {
         if (InsReport.ref.getAuth() == null)
