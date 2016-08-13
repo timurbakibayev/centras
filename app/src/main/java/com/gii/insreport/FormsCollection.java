@@ -36,8 +36,9 @@ public class FormsCollection {
         return forms;
     }
 
+
     public void retrieveDataFromFireBase() {
-        Query queryRef = InsReport.ref.child("forms/" + fireBaseCatalog + "/" + InsReport.userID).orderByChild("dateCreated").limitToLast(10); //how many forms do we see
+        Query queryRef = InsReport.ref.child("forms/" + fireBaseCatalog + "/" + InsReport.user.getUid()).orderByChild("dateCreated").limitToLast(10); //how many forms do we see
         queryRef.
                 addValueEventListener(new ValueEventListener() {
                     @Override

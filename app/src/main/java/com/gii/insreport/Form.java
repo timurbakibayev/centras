@@ -118,7 +118,7 @@ public class Form {
 
     public void saveToCloud() {
         updateDescription();
-        ref.child("forms/" + fireBaseCatalog + "/" + InsReport.userID + "/" + id).
+        ref.child("forms/" + fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + id).
                 setValue(this);
         //now save raw data (ungroup and save):
 

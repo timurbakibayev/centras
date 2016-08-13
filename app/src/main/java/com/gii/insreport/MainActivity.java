@@ -17,8 +17,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                login();
             }
         });
 
@@ -153,12 +155,16 @@ public class MainActivity extends AppCompatActivity {
         refreshDescriptions();
     }
 
+
+    ArrayList<Button> formButtons = new ArrayList<>();
+    Button loginButton = null;
     private void addForms() {
         LinearLayout mainMenuLL = (LinearLayout)findViewById(R.id.mainMenuLL);
         mainMenuLL.removeAllViews();
         final MainActivity thisActivity = this;
         for (final FormsCollection formsCollection : InsReport.mainMenuForms) {
             Button newMenuButton = new Button(this);
+            formButtons.add(newMenuButton);
             newMenuButton.setText(formsCollection.description);
             final float scale = getResources().getDisplayMetrics().density;
             newMenuButton.setHeight((int)(96 * scale + 0.5f));
@@ -173,6 +179,23 @@ public class MainActivity extends AppCompatActivity {
             });
             mainMenuLL.addView(newMenuButton);
         }
+
+        Button newMenuButton = new Button(this);
+        formButtons.add(newMenuButton);
+        newMenuButton.setText("АВТОРИЗАЦИЯ");
+        final float scale = getResources().getDisplayMetrics().density;
+        newMenuButton.setHeight((int)(96 * scale + 0.5f));
+        newMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(thisActivity, LoginActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+        loginButton = newMenuButton;
+        mainMenuLL.addView(newMenuButton);
+
+
     }
 
     private void refreshDescriptions() {
@@ -186,12 +209,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void refreshUser() {
+    public  void refreshUser() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         FirebaseUser user = InsReport.mAuth.getCurrentUser();
-        if (user != null)
+        if (user != null) {
             toolbar.setSubtitle("Online: " + user.getEmail());
-        else
+            InsReport.userID = user.getEmail();
+            for (Button formButton : formButtons) {
+                formButton.setVisibility(View.VISIBLE);
+            }
+            loginButton.setVisibility(View.GONE);
+        }
+        else {
             toolbar.setSubtitle("Offline");
+            InsReport.userID = "Incognito";
+            for (Button formButton : formButtons) {
+                formButton.setVisibility(View.GONE);
+            }
+            loginButton.setVisibility(View.VISIBLE);
+        }
+
     }
 }

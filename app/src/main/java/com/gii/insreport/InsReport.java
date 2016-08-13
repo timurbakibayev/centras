@@ -3,6 +3,7 @@ package com.gii.insreport;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.InsetDrawable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ListView;
@@ -49,6 +50,8 @@ public class InsReport extends Application {
 
     public static Element currentElement = null;
 
+    public static FirebaseUser user;
+
     public static ListView currentListView = null;
 
     public static ArrayList<Bitmap> bitmapsNeedToBeRecycled = new ArrayList<>();
@@ -73,13 +76,20 @@ public class InsReport extends Application {
 
         mAuth = FirebaseAuth.getInstance();
 
+
+        initForms();
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
+                InsReport.user = user;
                 if (user != null) {
                     // User is signed in
                     Log.e(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    for (FormsCollection mainMenuForm : mainMenuForms) {
+                        mainMenuForm.retrieveDataFromFireBase();
+                    }
                 } else {
                     // User is signed out
                     Log.e(TAG, "onAuthStateChanged:signed_out");
@@ -92,7 +102,6 @@ public class InsReport extends Application {
 
         mAuth.addAuthStateListener(mAuthListener);
 
-        initForms();
 
         //TODO: REMOVE THIS WHEN RELEASED!!!!!
         //addDummyForms();
@@ -164,17 +173,13 @@ public class InsReport extends Application {
 
         preInsuranceFormsCollection.description = getString(R.string.preInsurance);
         preInsuranceFormsCollection.fireBaseCatalog = "preInsurance";
-        preInsuranceFormsCollection.retrieveDataFromFireBase();
+        //preInsuranceFormsCollection.retrieveDataFromFireBase();
         incidentFormsCollection.description = getString(R.string.Incident);
         incidentFormsCollection.fireBaseCatalog = "incident";
-        incidentFormsCollection.retrieveDataFromFireBase();
+        //incidentFormsCollection.retrieveDataFromFireBase();
         //incidentFormsCollection.checkSMS(getApplicationContext());
 
         mainMenuForms.add(preInsuranceFormsCollection);
         mainMenuForms.add(incidentFormsCollection);
-    }
-
-    public static void refreshUser() {
-
     }
 }
