@@ -1,0 +1,16 @@
+
+Initiate a new incident:
+
+curl -X PUT -d '{"description" : "terminal", "dateCreated": {".sv" : "timestamp"}, "input" : {"phone" : "87022162040", "note" : "any note here"}}' "https://insreport-f39a3.firebaseio.com/forms/incident/testUserID/test/.json"
+
+more data: timeOfAccident
+
+curl -X PUT -d '{"description" : "terminal", "dateCreated": {".sv" : "timestamp"}, "input" : { "phone" : "87022162040", "timeOfAccident" : {".sv" : "timestamp"}, "nameOfProgram" : "OSGPO"}}' "https://insreport-f39a3.firebaseio.com/forms/incident/testUserID/test/.json"
+
+more data: timeOfAccident, autoBrand
+
+curl -X PUT -d '{"description" : "terminal", "dateCreated": {".sv" : "timestamp"}, "input" : { "phone" : "87022162040", "timeOfAccident" : {".sv" : "timestamp"}, "nameOfProgram" : "OSGPO", "autoBrand" : "Toyota Corolla"}}' "https://insreport-f39a3.firebaseio.com/forms/incident/testUserID/test/.json"
+
+assign a user:
+
+curl -X PUT -d '{"description" : "terminal", "dateCreated": {".sv" : "timestamp"}, "input" : { "phone" : "87022162040", "timeOfAccident" : {".sv" : "timestamp"}, "nameOfProgram" : "OSGPO", "autoBrand" : "Toyota Corolla"}}' "https://insreport-f39a3.firebaseio.com/forms/incident/5ARsewRkMeTL9kRLHVIkwnKbq812/no_1/.json"
