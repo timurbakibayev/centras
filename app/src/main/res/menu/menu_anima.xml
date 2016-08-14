@@ -1,0 +1,42 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.gii.anima.MainActivity">
+    <item
+        android:id="@+id/action_new"
+        android:orderInCategory="100"
+        android:title="Новый файл"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_open"
+        android:orderInCategory="100"
+        android:title="Открыть..."
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_save_as"
+        android:orderInCategory="100"
+        android:title="Сохранить как..."
+        app:showAsAction="never" />
+    <item
+        android:title="Previous Frame"
+        android:id="@+id/action_prevFrame"
+        android:icon="@drawable/_ic_arrow_left_24dp"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/action_frameClick"
+        app:showAsAction="always"
+        android:actionLayout="@layout/frame_menu"
+        android:orderInCategory="101"
+        android:title="Кадр 0"/>
+
+    <item
+        android:title="Next Frame"
+        android:id="@+id/action_nextFrame"
+        android:icon="@drawable/_ic_arrow_right_24dp"
+        android:orderInCategory="102"
+        app:showAsAction="always"/>
+
+
+
+</menu>
