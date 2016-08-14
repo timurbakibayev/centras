@@ -57,6 +57,7 @@ public class FillFormActivity extends AppCompatActivity {
     private static final int DAMAGE_PLAN_INTENT = 15;
     private static final int REQUEST_IMAGE_CAPTURE = 17;
     private static final int FREE_DRAW_INTENT = 19;
+    private static final int ANIMA_INTENT = 21;
 
     String fireBaseCatalog = "";
     String id_no = "";
@@ -526,6 +527,25 @@ public class FillFormActivity extends AppCompatActivity {
                         }
                     });
                     LL.addView(drawButton);
+                    break;
+                case eAnima:
+                    final Button animaButton = new Button(this);
+                    element.container = animaButton;
+                    animaButton.setText(span2Strings(element.description,element.toString()), Button.BufferType.SPANNABLE);
+                    //animaButton.setCompoundDrawablesWithIntrinsicBounds(element.getBitmapDrawable(this),null,null,null);
+                    animaButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            InsReport.currentElement = element;
+                            currentElement = element;
+                            currentButton = animaButton;
+                            Intent intent = new Intent(thisActivity, AnimaActivity.class);
+                            //InsReport.damagePlanData = element.vPlan;
+                            //TODO: bind the frames...
+                            startActivityForResult(intent, ANIMA_INTENT);
+                        }
+                    });
+                    LL.addView(animaButton);
                     break;
                 case eSignature:
                     final Button drawButton1 = new Button(this);

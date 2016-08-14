@@ -194,7 +194,7 @@ public class Element {
     }
 
     public enum ElementType {
-        eInteger, eBoolean, ePhoto, eText, eCombo, eRadio, eDate, eDateTime, eGroup, eDraw, ePlan, eSignature;
+        eInteger, eBoolean, ePhoto, eText, eCombo, eRadio, eDate, eDateTime, eGroup, eDraw, ePlan, eSignature, eAnima;
     }
 
     @JsonIgnore

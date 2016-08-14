@@ -1,11 +1,7 @@
 package com.gii.insreport;
 
-import com.firebase.client.Firebase;
-import com.firebase.client.ServerValue;
-
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * Created by Timur_hnimdvi on 07-Aug-16.
@@ -295,7 +291,7 @@ public class FormTemplates {
                     additionalInfo.add(new Element(Element.ElementType.eText, "nameOfServiceStation",
                             "название"));
 
-                    additionalInfo.add(new Element(Element.ElementType.eDraw, "schemeOfAccident", "Схема ДТП"));
+                    additionalInfo.add(new Element(Element.ElementType.eAnima, "schemeOfAccident", "Схема ДТП"));
                     additionalInfo.add(new Element(Element.ElementType.ePlan, "damagePlan", "План повреждений"));
                     additionalInfo.add(new Element(Element.ElementType.ePhoto, "generalPhotos", "Фотографии"));
 
