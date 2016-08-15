@@ -3,11 +3,9 @@ package com.gii.insreport;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,7 +15,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -64,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
 
         refreshUser();
         InsReport.mainActivity = this;
+
+        Intent intent = new Intent(this, AnimaActivity.class);
+        startActivityForResult(intent, 10);
+
     }
 
 

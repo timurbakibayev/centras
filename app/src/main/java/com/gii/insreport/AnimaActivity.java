@@ -2,7 +2,6 @@ package com.gii.insreport;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -10,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Timer;
@@ -50,15 +50,26 @@ public class AnimaActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        defFab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.lock_roads);
+        defFab = (FloatingActionButton) findViewById(R.id.lock_roads);
+        final AnimaActivity thisActivity = this;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Sending by e-mail...", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //fab.setBackgroundDrawable();
+                animaView.roads_are_locked = !animaView.roads_are_locked;
+                if (animaView.roads_are_locked) {
+                    fab.setImageResource(R.drawable.ic_lock_outline_black_24dp);
+                    Toast.makeText(thisActivity, "Дороги зафиксированы", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    fab.setImageResource(R.drawable.ic_lock_open_black_24dp);
+                    Toast.makeText(thisActivity, "Дороги разблокированы", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
+
 
         final FloatingActionButton deleteAllFab = (FloatingActionButton) findViewById(R.id.deleteFab);
         deleteAllFab.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +141,11 @@ public class AnimaActivity extends AppCompatActivity {
         }, 0, 100);
 
         iconsWindow.init(animaView);
+
+        if (animaView.roads_are_locked)
+            fab.setImageResource(R.drawable.ic_lock_outline_black_24dp);
+        else
+            fab.setImageResource(R.drawable.ic_lock_open_black_24dp);
     }
 
 

@@ -25,18 +25,19 @@
         android:id="@+id/canvas"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/lock_roads"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+        android:background="@drawable/ic_local_movies_black_24dp"
+        android:src="@drawable/ic_lock_outline_black_24dp" />
 
     <View
         android:id="@+id/dummy"
         android:layout_width="1dp"
         android:layout_height="16dp"
-        app:layout_anchor="@id/fab"
+        app:layout_anchor="@id/lock_roads"
         app:layout_anchorGravity="top|right|end" />
 
     <android.support.design.widget.FloatingActionButton

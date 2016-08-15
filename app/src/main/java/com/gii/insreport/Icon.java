@@ -1,6 +1,6 @@
 package com.gii.insreport;
 
-import android.graphics.Point;
+import android.graphics.PointF;
 
 /**
  * Created by Timur on 07-Jul-16.
@@ -11,12 +11,12 @@ public class Icon {
 
     public Integer picId = 0;
     public Integer rotation = 0;
-    public Point center = new Point(0,0);
+    public PointF center = new PointF(0,0);
 
-    public int left = 0;
-    public int top = 0;
-    public int right = 0;
-    public int bottom = 0;
+    public float left = 0;
+    public float top = 0;
+    public float right = 0;
+    public float bottom = 0;
 
     public boolean aCopy = false;
 
@@ -26,19 +26,19 @@ public class Icon {
         return aCopy;
     }
 
-    public int getLeft() {
+    public float getLeft() {
         return left;
     }
 
-    public int getTop() {
+    public float getTop() {
         return top;
     }
 
-    public int getRight() {
+    public float getRight() {
         return right;
     }
 
-    public int getBottom() {
+    public float getBottom() {
         return bottom;
     }
 
@@ -50,7 +50,7 @@ public class Icon {
         return rotation;
     }
 
-    public Point getCenter() {
+    public PointF getCenter() {
         return center;
     }
 

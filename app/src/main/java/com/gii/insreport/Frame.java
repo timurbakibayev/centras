@@ -1,5 +1,7 @@
 package com.gii.insreport;
 
+import android.graphics.Point;
+
 import java.util.ArrayList;
 
 /**
@@ -9,6 +11,8 @@ public class Frame {
     ArrayList<Stroke> strokes = new ArrayList<>();
     ArrayList<Icon> icons = new ArrayList<>();
     ArrayList<Operation> operations = new ArrayList<>();
+    public Point backgroundCenter = new Point(200,300);
+    public float scale = 20;
 
     public ArrayList<Stroke> getStrokes() {
         return strokes;
@@ -20,6 +24,14 @@ public class Frame {
 
     public ArrayList<Operation> getOperations() {
         return operations;
+    }
+
+    public Point getBackgroundCenter() {
+        return backgroundCenter;
+    }
+
+    public float getScale() {
+        return scale;
     }
 
     public Frame() {
@@ -34,6 +46,8 @@ public class Frame {
             icons.add(new Icon(icon));
         }
         operations = new ArrayList<>(copyFromFrame.operations);
+        backgroundCenter.set(copyFromFrame.backgroundCenter.x, copyFromFrame.backgroundCenter.y);
+        scale = copyFromFrame.scale;
     }
 
     public void undo() {
@@ -57,6 +71,11 @@ public class Frame {
             icons.get(lastOperation.newIdInArray).bottom = lastOperation.oldIcon.bottom;
             icons.get(lastOperation.newIdInArray).center = lastOperation.oldIcon.center;
             icons.get(lastOperation.newIdInArray).rotation = lastOperation.oldIcon.rotation;
+        }
+
+        if (lastOperation.operationType.equals("background position")) {
+            backgroundCenter.set(lastOperation.lastBackgroundCenter.x, lastOperation.lastBackgroundCenter.y);
+            scale = lastOperation.lastScale;
         }
         operations.remove(operations.size() - 1);
     }
