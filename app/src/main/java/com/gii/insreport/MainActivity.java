@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity {
         refreshUser();
         InsReport.mainActivity = this;
 
-        Intent intent = new Intent(this, AnimaActivity.class);
-        startActivityForResult(intent, 10);
+        //Intent intent = new Intent(this, AnimaActivity.class);
+        //startActivityForResult(intent, 10);
 
     }
 

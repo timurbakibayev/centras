@@ -3,7 +3,6 @@ package com.gii.insreport;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.drawable.InsetDrawable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ListView;
@@ -13,7 +12,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.StreamDownloadTask;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -29,6 +27,7 @@ public class InsReport extends Application {
 
     public final static String EXTRA_FIREBASE_CATALOG = "Firebase.Catalog";
     public final static String EXTRA_ID_NO = "Firebase.Form.No";
+    public final static String INCIDENT_TYPE = "Incident.Type";
 
     public static Firebase ref;
     public static FirebaseStorage storage;
