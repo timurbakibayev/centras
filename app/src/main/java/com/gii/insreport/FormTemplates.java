@@ -1,8 +1,5 @@
 package com.gii.insreport;
 
-import android.widget.Toast;
-
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -306,6 +303,9 @@ public class FormTemplates {
 
                     generalInfo.add(new Element(Element.ElementType.eText, "INSR_CLASS",
                             "Класс страхования"));
+
+                    //TODO: WRONG!!! SAMPLE!
+                    generalInfo.add(new Element(Element.ElementType.eCombo, "DOCUMENT_TYPE", "Тип документа", "DCT_CLAIM_TYPE"));
 
                     generalInfo.add(new Element(Element.ElementType.eDateTime, "EVENT_DATE",
                             "Дата и Время ДТП"));

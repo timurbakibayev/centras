@@ -14,3 +14,11 @@ curl -X PUT -d '{"description" : "terminal", "dateCreated": {".sv" : "timestamp"
 assign a user:
 
 curl -X PUT -d '{"description" : "terminal", "dateCreated": {".sv" : "timestamp"}, "input" : { "phone" : "87022162040", "timeOfAccident" : {".sv" : "timestamp"}, "nameOfProgram" : "OSGPO", "autoBrand" : "Toyota Corolla"}}' "https://insreport-f39a3.firebaseio.com/forms/incident/5ARsewRkMeTL9kRLHVIkwnKbq812/no_1/.json"
+
+add an item to a directory:
+
+curl -X PUT -d '{
+"code001":{"name":"description 001","status":"true"},
+"code002":{"name":"description 002","status":"true"}
+}' "https://insreport-f39a3.firebaseio.com/dirs/DCT_CLAIM_TYPE/.json"
+

@@ -45,6 +45,21 @@ public class Element {
         this.vText = "";
     }
 
+    public Element(ElementType elementType, String fireBaseFieldName, String prompt, String directory) {
+        this.type = elementType;
+        this.fireBaseFieldName = fireBaseFieldName;
+        this.description = prompt;
+        this.content = "";
+        this.directory = directory;
+        /*
+        for (int i = 0; i < comboItems.length; i++)
+            this.comboItems.add(comboItems[i]);
+            */
+        this.vInteger = -1;
+        //if (comboItems.length > 0)
+        this.vText = "";
+    }
+
     public Element(ArrayList<Element> elements, String fireBaseFieldName, String prompt) {
         this.type = ElementType.eGroup;
         this.elements = elements;
@@ -201,6 +216,7 @@ public class Element {
     public View container = null;
 
     public String content = "";
+    public String directory = "";
     public ArrayList<String> comboItems = new ArrayList<>();
     public ElementType type = ElementType.eText;
     public String fireBaseFieldName = "";
@@ -332,4 +348,7 @@ public class Element {
         return comboItems;
     }
 
+    public String getDirectory() {
+        return directory;
+    }
 }

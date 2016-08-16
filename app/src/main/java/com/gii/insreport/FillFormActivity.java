@@ -44,6 +44,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
+import com.firebase.client.ValueEventListener;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -578,22 +583,73 @@ public class FillFormActivity extends AppCompatActivity {
                     final Spinner comboSpinner = new Spinner(this);
                     element.container = comboSpinner;
                     comboSpinner.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-                    ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, element.comboItems);
-                    comboSpinner.setAdapter(spinnerArrayAdapter);
-                    comboSpinner.setSelection(element.vInteger);
-                    comboSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            element.vText = comboSpinner.getSelectedItem().toString();
-                            element.vInteger = comboSpinner.getSelectedItemPosition();
-                            saveToCloud();
-                        }
 
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
+                    if (!element.directory.equals("")) {
+                        Query queryRef = InsReport.ref.child("dirs/" + element.directory);
+                        queryRef.
+                                addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot snapshot) {
+                                        Log.e(TAG, "onDataChange: got new directory, processing...");
+                                        int i  =0;
+                                        final ArrayList<DirectoryItem> directoryItems = new ArrayList<DirectoryItem>();
+                                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                                            try {
+                                                final DirectoryItem newDirectoryItem = postSnapshot.getValue(DirectoryItem.class);
+                                                newDirectoryItem.id = postSnapshot.getKey();
+                                                if (newDirectoryItem.status)
+                                                    directoryItems.add(newDirectoryItem);
+                                            } catch (Exception e) {
+                                                Log.e(TAG, "onDataChange: PROBLEMS CASTING DIRECTORY FROM DB!!! : " + element.directory + "/" + postSnapshot.getKey());
+                                            }
+                                        }
+                                        if (directoryItems.size() > 0) {
+                                            element.comboItems = new ArrayList<String>();
+                                            for (DirectoryItem directoryItem : directoryItems) {
+                                                element.comboItems.add(directoryItem.name);
+                                            }
+                                            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(thisActivity, android.R.layout.simple_spinner_dropdown_item, element.comboItems);
+                                            comboSpinner.setAdapter(spinnerArrayAdapter);
+                                            for (int j = 0; j < directoryItems.size(); j++)
+                                                if (directoryItems.get(j).id.equals(element.vText))
+                                                    comboSpinner.setSelection(j);
+                                            comboSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                @Override
+                                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                                    element.vText = directoryItems.get(comboSpinner.getSelectedItemPosition()).id;
+                                                    element.vInteger = comboSpinner.getSelectedItemPosition();
+                                                    saveToCloud();
+                                                }
+                                                @Override
+                                                public void onNothingSelected(AdapterView<?> parent) {
 
-                        }
-                    });
+                                                }
+                                            });
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(FirebaseError firebaseError) {
+                                        Log.e("Firebase", "The read failed 9: " + firebaseError.getMessage());
+                                    }
+                                });
+                    } else {
+                        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, element.comboItems);
+                        comboSpinner.setAdapter(spinnerArrayAdapter);
+                        comboSpinner.setSelection(element.vInteger);
+                        comboSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                element.vText = comboSpinner.getSelectedItem().toString();
+                                element.vInteger = comboSpinner.getSelectedItemPosition();
+                                saveToCloud();
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+                    }
                     horizontalLLCombo.addView(captionTVCombo);
                     horizontalLLCombo.addView(comboSpinner);
                     LL.addView(horizontalLLCombo);
@@ -614,39 +670,67 @@ public class FillFormActivity extends AppCompatActivity {
                     radioGroup.setOrientation(RadioGroup.HORIZONTAL);
                     final RadioButton[] radioButtons = new RadioButton[element.comboItems.size()];
 
-                    for (int i = 0; i < element.comboItems.size(); i++) {
-                        if (!element.comboItems.get(i).equals("")) {
-                            radioButtons[i] = new RadioButton(this);
-                            radioButtons[i].setText(element.comboItems.get(i));
-                            radioButtons[i].setChecked(i == element.vInteger);
-                            final int _i = i;
-                            radioButtons[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                                @Override
-                                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                    if (isChecked) {
-                                        element.vInteger = _i;
-                                        element.vText = element.comboItems.get(_i);
-                                        saveToCloud();
+                    if (!element.directory.equals("")) {
+                        Query queryRef = InsReport.ref.child("dirs/" + element.directory);
+                        queryRef.
+                                addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot snapshot) {
+                                        Log.e(TAG, "onDataChange: got new directory, processing...");
+                                        int i  =0;
+                                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                                            try {
+                                                final DirectoryItem newDirectoryItem = postSnapshot.getValue(DirectoryItem.class);
+                                                newDirectoryItem.id = postSnapshot.getKey();
+                                                if (newDirectoryItem.status) {
+                                                    RadioButton radioButton = new RadioButton(thisActivity);
+                                                    radioButton.setText(newDirectoryItem.name);
+                                                    i++;
+                                                    radioButton.setId(i);
+                                                    radioButton.setChecked(element.vText.equals(newDirectoryItem.id));
+                                                    radioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                                        @Override
+                                                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                                            if (isChecked) {
+                                                                element.vText = newDirectoryItem.id;
+                                                                saveToCloud();
+                                                            }
+                                                        }
+                                                    });
+                                                    if (radioGroup != null)
+                                                        radioGroup.addView(radioButton);
+                                                }
+                                            } catch (Exception e) {
+                                                Log.e(TAG, "onDataChange: PROBLEMS CASTING DIRECTORY FROM DB!!! : " + element.directory + "/" + postSnapshot.getKey());
+                                            }
+                                        }
                                     }
-                                }
-                            });
-                            radioGroup.addView(radioButtons[i]);
+                                    @Override
+                                    public void onCancelled(FirebaseError firebaseError) {
+                                        Log.e("Firebase", "The read failed 9: " + firebaseError.getMessage());
+                                    }
+                                });
+                    } else {
+                        for (int i = 0; i < element.comboItems.size(); i++) {
+                            if (!element.comboItems.get(i).equals("")) {
+                                radioButtons[i] = new RadioButton(this);
+                                radioButtons[i].setText(element.comboItems.get(i));
+                                radioButtons[i].setChecked(i == element.vInteger);
+                                final int _i = i;
+                                radioButtons[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                        if (isChecked) {
+                                            element.vInteger = _i;
+                                            element.vText = element.comboItems.get(_i);
+                                            saveToCloud();
+                                        }
+                                    }
+                                });
+                                radioGroup.addView(radioButtons[i]);
+                            }
                         }
                     }
-                    /*
-                    radioGroup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            element.vText = radioGroup.getSelectedItem().toString();
-                            element.vInteger = radioGroup.getSelectedItemPosition();
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-
-                        }
-                    });
-                    */
                     LL.addView(captionTVRadio);
                     horizontalLLRadio.addView(radioGroup);
                     LL.addView(horizontalLLRadio);
