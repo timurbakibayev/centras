@@ -22,3 +22,13 @@ curl -X PUT -d '{
 "code002":{"name":"description 002","status":"true"}
 }' "https://insreport-f39a3.firebaseio.com/dirs/DCT_CLAIM_TYPE/.json"
 
+//gulnar: B4m2mvpt8STf2pUykgSGs6eEvMV2
+
+curl -X PUT -d '{"description" : "terminal", 
+"dateCreated": {".sv" : "timestamp"}, 
+"input" : { 
+"phone" : "8777200200200", 
+"timeOfAccident" : {".sv" : "timestamp"}, 
+"nameOfProgram" : "OSGPO", 
+"autoBrand" : "Jeep Grand Cherokee"}
+}' "https://insreport-f39a3.firebaseio.com/forms/incident/B4m2mvpt8STf2pUykgSGs6eEvMV2/2089/.json"

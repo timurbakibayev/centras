@@ -793,6 +793,29 @@ public class FillFormActivity extends AppCompatActivity {
                 currentElement.vPhotos.add(id);
             }
         }
+        //TODO: if animaView, add the pictures (need to remove the recycle in the anima view)
+        //TODO: remove the green line in the bottom of the screenshots!!!
+        if (requestCode == ANIMA_INTENT) {
+            /*
+            final String id = CameraAndPictures.savePictureToFirebase();
+            if (CameraAndPictures.bitmap != null) {
+                InsReport.bitmapsNeedToBeRecycled.add(CameraAndPictures.bitmap);
+                ImageView newImage = new ImageView(this);
+                newImage.setImageBitmap(CameraAndPictures.bitmap);
+                //newImage.setLayoutParams(new LinearLayout.LayoutParams(150, LinearLayout.LayoutParams.MATCH_PARENT));
+                newImage.setAdjustViewBounds(true);
+                newImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        cameraAndPictures.showZoomed(currentLinearLayout, CameraAndPictures.bitmap);
+                    }
+                });
+                currentLinearLayout.addView(newImage);
+                currentElement.vPhotos.add(id);
+            }
+            */
+        }
+
         saveToCloud();
         super.onActivityResult(requestCode, resultCode, data);
     }
