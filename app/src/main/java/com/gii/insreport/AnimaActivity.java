@@ -57,8 +57,8 @@ public class AnimaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //fab.setBackgroundDrawable();
-                animaView.roads_are_locked = !animaView.roads_are_locked;
-                if (animaView.roads_are_locked) {
+                InsReport.currentElement.vBoolean = !InsReport.currentElement.vBoolean;
+                if (InsReport.currentElement.vBoolean) {
                     fab.setImageResource(R.drawable.ic_lock_outline_black_24dp);
                     Toast.makeText(thisActivity, "Дороги зафиксированы", Toast.LENGTH_SHORT).show();
                 }
@@ -71,6 +71,7 @@ public class AnimaActivity extends AppCompatActivity {
 
 
 
+        /*
         final FloatingActionButton deleteAllFab = (FloatingActionButton) findViewById(R.id.deleteFab);
         deleteAllFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +81,20 @@ public class AnimaActivity extends AppCompatActivity {
                 animaView.postInvalidate();
             }
         });
+        */
+
+        final FloatingActionButton photoFab = (FloatingActionButton) findViewById(R.id.photoFab);
+        photoFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animaView.takePicture();
+                //animaView.currentFrame.strokes.clear();
+                //animaView.currentFrame.icons.clear();
+                //animaView.postInvalidate();
+            }
+        });
+
+
 
         final FloatingActionButton undoFab = (FloatingActionButton) findViewById(R.id.undoFab);
         undoFab.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +122,7 @@ public class AnimaActivity extends AppCompatActivity {
 
         animaView.bindActivity(this);
         animaView.loadResources(this);
+        frames = InsReport.currentElement.frames;
         if (frames.size() == 0)
             frames.add(new Frame());
         animaView.frames = frames;
@@ -130,7 +146,6 @@ public class AnimaActivity extends AppCompatActivity {
                                 animaView.playTo(frameNo + 1);
                                 animaView.currentFrame = frames.get(frameNo);
                                 animaView.postInvalidate();
-                                //TODO: updateFrameNo();
                             }
                             else
                                 play = false;
@@ -142,7 +157,7 @@ public class AnimaActivity extends AppCompatActivity {
 
         iconsWindow.init(animaView);
 
-        if (animaView.roads_are_locked)
+        if (InsReport.currentElement.vBoolean)
             fab.setImageResource(R.drawable.ic_lock_outline_black_24dp);
         else
             fab.setImageResource(R.drawable.ic_lock_open_black_24dp);
@@ -170,14 +185,8 @@ public class AnimaActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_save_as) {
-            saveAs();
-            return true;
-        }
-
-        if (id == R.id.action_open) {
-            load();
+        if (id == R.id.action_delete_frame) {
+            deleteCurrentFrame();
             return true;
         }
 
@@ -234,12 +243,26 @@ public class AnimaActivity extends AppCompatActivity {
 
     public void newFile() {
         //currentFilename = "";
-        frames = new ArrayList<>();
+        //frames = new ArrayList<>();
+        frames.clear();
         frames.add(new Frame());
         frameNo = 0;
         updateFrameNo();
         currentFilename = "default";
         animaView.currentFrame = frames.get(0);
+        animaView.postInvalidate();
+    }
+
+    public void deleteCurrentFrame() {
+        frames.remove(frameNo);
+        if (frameNo >= frames.size())
+            frameNo--;
+        if (frameNo < 0) {
+            frames.add(new Frame());
+            frameNo = 0;
+        }
+        updateFrameNo();
+        animaView.currentFrame = frames.get(frameNo);
         animaView.postInvalidate();
     }
 }

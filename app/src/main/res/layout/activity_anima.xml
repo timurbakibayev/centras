@@ -30,7 +30,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:background="@drawable/ic_local_movies_black_24dp"
         android:src="@drawable/ic_lock_outline_black_24dp" />
 
     <View
@@ -41,12 +40,12 @@
         app:layout_anchorGravity="top|right|end" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/deleteFab"
+        android:id="@+id/photoFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|top"
         android:layout_margin="16dp"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:src="@android:drawable/ic_menu_camera"
         app:layout_anchor="@id/dummy"
         app:layout_anchorGravity="top|right|end" />
 
@@ -55,7 +54,7 @@
         android:id="@+id/dummy3"
         android:layout_width="1dp"
         android:layout_height="16dp"
-        app:layout_anchor="@id/deleteFab"
+        app:layout_anchor="@id/photoFab"
         app:layout_anchorGravity="top|right|end" />
 
     <android.support.design.widget.FloatingActionButton

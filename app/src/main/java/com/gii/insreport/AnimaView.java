@@ -1,6 +1,7 @@
 package com.gii.insreport;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -11,6 +12,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.media.MediaActionSound;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -33,8 +35,6 @@ public class AnimaView extends View {
     int playToFrame = -1;
     int intermediateFrames = 10;
 
-    boolean roads_are_locked = false;
-
     public void playTo(int frameTo) {
         if (playToFrame != frameTo) {
             playToPercent = 0;
@@ -51,6 +51,20 @@ public class AnimaView extends View {
             animaActivity.updateFrameNo();
         }
         postInvalidate();
+    }
+
+    public void takePicture() {
+        Bitmap screenShot = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_4444);
+        Canvas canvas = new Canvas(screenShot);
+        draw(canvas);
+
+        String id = CameraAndPictures.generateNewId();
+        InsReport.ref.child("images/" + id).setValue(CameraAndPictures.encodeToBase64(screenShot,Bitmap.CompressFormat.JPEG,70));
+        InsReport.currentElement.vPhotos.add(id);
+        screenShot.recycle();
+
+        MediaActionSound sound = new MediaActionSound();
+        sound.play(MediaActionSound.SHUTTER_CLICK);
     }
 
     public enum AppState {
@@ -79,6 +93,7 @@ public class AnimaView extends View {
     Paint roadMark = new Paint();
     Paint white = new Paint();
     Paint gray = new Paint();
+    Paint backgroundPaint = new Paint();
     Paint green = new Paint();
     Path path = new Path();
     RectF drawRectF = new RectF(0,0,1,1);
@@ -94,9 +109,10 @@ public class AnimaView extends View {
         canvasWidth = canvas.getWidth();
         canvasHeight = canvas.getHeight();
 
+
+        canvas.drawRect(0,0,canvasWidth,canvasHeight,backgroundPaint);
         //canvas.drawLine(40,40,200,200,road);
         //canvas.drawLine(40,40,200,200,roadMark);
-
 
         if (appState == AppState.idle || appState == AppState.positionIcon ||
                 appState == AppState.moveIcon || appState == AppState.rotateIcon) {
@@ -200,6 +216,9 @@ public class AnimaView extends View {
         gray.setColor(Color.DKGRAY);
         gray.setStrokeWidth(10);
         gray.setStyle(Paint.Style.STROKE);
+        backgroundPaint = new Paint();
+        backgroundPaint.setColor(Color.LTGRAY);
+        backgroundPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         green = new Paint();
         green.setColor(Color.GREEN);
         green.setAlpha(100);
@@ -354,9 +373,10 @@ public class AnimaView extends View {
                     appState = AppState.idle;
 
                 if (!(appState == AppState.rotateIcon)) {
-                    int minLayer = roads_are_locked?2:0;
+                    int minLayer = InsReport.currentElement.vBoolean?2:0;
                     //if roads are locked, minLayer = 2;
-                    for (int layer = 10; layer >= minLayer; layer--)
+                    for (int layer = 10; layer >= minLayer; layer--) {
+                        i = 0;
                         for (Icon icon : currentFrame.icons) {
                             if (iconLayer[icon.picId] == layer) {
                                 drawRectF.set(icon.left, icon.top, icon.right, icon.bottom);
@@ -373,11 +393,13 @@ public class AnimaView extends View {
                                     moveOperation.newIdInArray = movingIconId;
                                     moveOperation.oldIcon = new Icon(icon);
                                     currentFrame.operations.add(moveOperation);
+                                    Log.e(TAG, "onTouchEventIdle: adding a new 'MOVE' operation!");
                                     layer = -1; //exiting the loop
                                 }
-                                i++;
                             }
+                            i++;
                         }
+                    }
                 }
                 if (appState == AppState.idle) {
                     relativePoint.set((int) event.getX(),
@@ -388,6 +410,7 @@ public class AnimaView extends View {
                     newOperation.lastBackgroundCenter.set(currentFrame.backgroundCenter.x,currentFrame.backgroundCenter.y);
                     newOperation.lastScale = currentFrame.scale;
                     currentFrame.operations.add(newOperation);
+                    Log.e(TAG, "onTouchEventIdle: adding a new 'BACKGROUND POSITION/SCALE' operation!" );
 
                     /*
                     currentStroke = new Stroke();

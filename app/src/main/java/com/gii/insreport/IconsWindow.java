@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
@@ -15,6 +16,8 @@ import java.util.Calendar;
  * Created by Timur on 07-Jul-16.
  */
 public class IconsWindow {
+
+    private static String TAG = "IconsWindow.java";
 
     private Canvas canvas;
     private float scaleFactor;
@@ -167,6 +170,7 @@ public class IconsWindow {
                 Operation newOperation = new Operation();
                 newOperation.operationType = "new icon";
                 animaView.currentFrame.operations.add(newOperation);
+                Log.e(TAG, "onClick: adding a new 'NEW ICON' operation!" );
                 animaView.appState = AnimaView.AppState.idle;
                 animaView.postInvalidate();
                 return;

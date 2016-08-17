@@ -1,6 +1,7 @@
 package com.gii.insreport;
 
 import android.graphics.Point;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -8,6 +9,9 @@ import java.util.ArrayList;
  * Created by Timur on 06-Jul-16.
  */
 public class Frame {
+
+    private static String TAG = "Frame.java";
+
     ArrayList<Stroke> strokes = new ArrayList<>();
     ArrayList<Icon> icons = new ArrayList<>();
     ArrayList<Operation> operations = new ArrayList<>();
@@ -54,6 +58,9 @@ public class Frame {
         if (operations.size() == 0)
             return;
         Operation lastOperation = operations.get(operations.size() - 1);
+
+        Log.e(TAG, "undo: " + lastOperation.operationType);
+
         if (lastOperation.operationType.equals("new stroke")) {
             if (strokes.size() > 0) {
                 strokes.remove(strokes.size() - 1);

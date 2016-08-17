@@ -218,6 +218,7 @@ public class Element {
     public String content = "";
     public String directory = "";
     public ArrayList<String> comboItems = new ArrayList<>();
+    public ArrayList<Frame> frames = new ArrayList<>();
     public ElementType type = ElementType.eText;
     public String fireBaseFieldName = "";
     public String description = "";
@@ -350,5 +351,9 @@ public class Element {
 
     public String getDirectory() {
         return directory;
+    }
+
+    public ArrayList<Frame> getFrames() {
+        return frames;
     }
 }

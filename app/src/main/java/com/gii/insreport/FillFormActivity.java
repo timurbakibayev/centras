@@ -534,10 +534,21 @@ public class FillFormActivity extends AppCompatActivity {
                     LL.addView(drawButton);
                     break;
                 case eAnima:
+                    final HorizontalScrollView scrollViewPhoto1 = new HorizontalScrollView(this);
+                    element.container = scrollViewPhoto1;
+                    scrollViewPhoto1.setHorizontalScrollBarEnabled(true);
+                    scrollViewPhoto1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200));
+                    final LinearLayout linearLayoutPhoto1 = new LinearLayout(this);
+                    linearLayoutPhoto1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                    linearLayoutPhoto1.setOrientation(LinearLayout.HORIZONTAL);
+                    //here request the pictures from the cloud into linearLayoutPhoto:
+                    for (String photoID : element.vPhotos)
+                        cameraAndPictures.getPicFromFirebase(photoID,linearLayoutPhoto1);
+
                     final Button animaButton = new Button(this);
                     element.container = animaButton;
                     animaButton.setText(span2Strings(element.description,element.toString()), Button.BufferType.SPANNABLE);
-                    //animaButton.setCompoundDrawablesWithIntrinsicBounds(element.getBitmapDrawable(this),null,null,null);
+                    animaButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
                     animaButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -550,7 +561,9 @@ public class FillFormActivity extends AppCompatActivity {
                             startActivityForResult(intent, ANIMA_INTENT);
                         }
                     });
-                    LL.addView(animaButton);
+                    linearLayoutPhoto1.addView(animaButton);
+                    scrollViewPhoto1.addView(linearLayoutPhoto1);
+                    LL.addView(scrollViewPhoto1);
                     break;
                 case eSignature:
                     final Button drawButton1 = new Button(this);
