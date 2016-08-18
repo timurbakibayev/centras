@@ -32,3 +32,7 @@ curl -X PUT -d '{"description" : "terminal",
 "nameOfProgram" : "OSGPO", 
 "autoBrand" : "Jeep Grand Cherokee"}
 }' "https://insreport-f39a3.firebaseio.com/forms/incident/B4m2mvpt8STf2pUykgSGs6eEvMV2/2089/.json"
+
+send a push notification to a user
+curl --insecure --header 'Authorization: key=AIzaSyCCpeRFK0PoHkuo08VqZiVkoVqB0USoZNQ' --header 'Content-Type:application/json' -d '{"notification":{"title":"New accident!","body":"You have got a new form", "sound" : "default"},"to" : "/topics/5ARsewRkMeTL9kRLHVIkwnKbq812"}' "https://fcm.googleapis.com/fcm/send"
+

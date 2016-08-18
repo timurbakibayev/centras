@@ -10,6 +10,7 @@ import android.widget.ListView;
 import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -86,11 +87,15 @@ public class InsReport extends Application {
                 if (user != null) {
                     // User is signed in
                     Log.e(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    //TODO: first unsubscribe from others
+                    FirebaseMessaging.getInstance().subscribeToTopic(user.getUid());
+                    Log.e(TAG, "onAuthStateChanged: subscribed to " + user.getUid());
                     for (FormsCollection mainMenuForm : mainMenuForms) {
                         mainMenuForm.retrieveDataFromFireBase();
                     }
                 } else {
                     // User is signed out
+                    //TODO: first unsubscribe from others
                     Log.e(TAG, "onAuthStateChanged:signed_out");
                 }
                 if (mainActivity != null)
