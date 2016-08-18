@@ -93,6 +93,16 @@
                 android:textStyle="bold"
                 android:enabled="false"/>
 
+            <Button
+                android:id="@+id/send_details_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Отправить технические данные об устройстве"
+                android:textStyle="bold"
+                android:enabled="false"/>
+
             <Button android:id="@+id/sign_out_button" style="?android:textAppearanceSmall"
                 android:layout_width="match_parent" android:layout_height="wrap_content"
                 android:layout_marginTop="16dp" android:text="Выйти"

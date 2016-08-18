@@ -10,6 +10,7 @@ import android.widget.ListView;
 import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -87,8 +88,9 @@ public class InsReport extends Application {
                 if (user != null) {
                     // User is signed in
                     Log.e(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    //TODO: somehow handle the notification inside the app :(
+                    //TODO: somehow handle the notification inside the app, currently it is beeping
                     FirebaseMessaging.getInstance().subscribeToTopic(user.getUid());
+                    Log.e(TAG, "onAuthStateChanged: Instance_Id_Scope:" + FirebaseInstanceId.getInstance().getToken());
                     Log.e(TAG, "onAuthStateChanged: subscribed to " + user.getUid());
                     for (FormsCollection mainMenuForm : mainMenuForms) {
                         mainMenuForm.retrieveDataFromFireBase();

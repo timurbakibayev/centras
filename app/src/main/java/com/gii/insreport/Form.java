@@ -1,9 +1,6 @@
 package com.gii.insreport;
 
-import android.util.Log;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.deser.std.NumberDeserializers;
 import com.firebase.client.Firebase;
 
 import java.math.BigInteger;
@@ -101,8 +98,8 @@ public class Form {
             n += element.filled();
             outOf += element.outOf();
         }
-        Log.e(TAG, "filledPercent: " + n + "/" + outOf );
-        Log.e(TAG, "filledPercent result: " + (int)((float)n/outOf*100) );
+        //Log.e(TAG, "filledPercent: " + n + "/" + outOf );
+        //Log.e(TAG, "filledPercent result: " + (int)((float)n/outOf*100) );
         return (int)((float)n/outOf*100);
     }
 

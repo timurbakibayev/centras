@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -40,6 +41,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
@@ -95,6 +97,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         final Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         final Button mResetPasswordButton = (Button) findViewById(R.id.reset_password_button);
         final Button mChangePasswordButton = (Button) findViewById(R.id.change_password_button);
+        final Button mSendUserDetailsButton = (Button) findViewById(R.id.send_details_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,6 +121,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mPasswordView.setVisibility(View.GONE);
             mEmailSignInButton.setVisibility(View.GONE);
             mResetPasswordButton.setVisibility(View.GONE);
+            mSendUserDetailsButton.setEnabled(true);
             mChangePasswordButton.setEnabled(true);
             signOutButton.setEnabled(true);
             signOutButton.setText("Выйти (" + user.getEmail() + ")");
@@ -133,6 +137,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     mChangePasswordButton.setEnabled(false);
                     mEmailSignInButton.setVisibility(View.VISIBLE);
                     mResetPasswordButton.setVisibility(View.VISIBLE);
+                }
+            });
+            final LoginActivity thisActivity = this;
+            mSendUserDetailsButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+                    intentShareFile.setType("application/pdf");
+                    intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
+                            "Информация: " + user.getEmail());
+                    intentShareFile.putExtra(Intent.EXTRA_TEXT, "User email: " + user.getEmail() + "\n\n" +
+                            "User TOKEN ID: " + FirebaseInstanceId.getInstance().getToken() + "\n\n" +
+                            "User ID: " + user.getUid() + "\n\n" +
+                            "");
+                    //TODO: add information with sample curl queries
+                    thisActivity.startActivity(Intent.createChooser(intentShareFile, "Отправить данные"));
                 }
             });
             mChangePasswordButton.setOnClickListener(new OnClickListener() {
