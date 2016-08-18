@@ -4,23 +4,21 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-
-import android.content.CursorLoader;
-import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -42,9 +40,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,9 +121,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mChangePasswordButton.setEnabled(true);
             signOutButton.setEnabled(true);
             signOutButton.setText("Выйти (" + user.getEmail() + ")");
+            final String uId = user.getUid();
             signOutButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic(uId);
                     InsReport.mAuth.signOut();
                     mEmailView.setVisibility(View.VISIBLE);
                     mPasswordView.setVisibility(View.VISIBLE);

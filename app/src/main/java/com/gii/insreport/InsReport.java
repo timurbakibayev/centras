@@ -87,7 +87,7 @@ public class InsReport extends Application {
                 if (user != null) {
                     // User is signed in
                     Log.e(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    //TODO: first unsubscribe from others
+                    //TODO: somehow handle the notification inside the app :(
                     FirebaseMessaging.getInstance().subscribeToTopic(user.getUid());
                     Log.e(TAG, "onAuthStateChanged: subscribed to " + user.getUid());
                     for (FormsCollection mainMenuForm : mainMenuForms) {
@@ -95,7 +95,6 @@ public class InsReport extends Application {
                     }
                 } else {
                     // User is signed out
-                    //TODO: first unsubscribe from others
                     Log.e(TAG, "onAuthStateChanged:signed_out");
                 }
                 if (mainActivity != null)
