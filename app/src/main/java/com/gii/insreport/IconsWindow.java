@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -167,6 +168,10 @@ public class IconsWindow {
                 newIcon.right = + AnimaView.drawableSize[i].x / 2;
                 newIcon.bottom = + AnimaView.drawableSize[i].y / 2;
                 animaView.currentFrame.icons.add(newIcon);
+                if (animaView.iconLayer[i] > 2)
+                    InsReport.currentElement.vBoolean = true;
+                ((FloatingActionButton) animaView.animaActivity.findViewById(R.id.lock_roads)).setImageResource(R.drawable.ic_lock_outline_black_24dp);
+
                 Operation newOperation = new Operation();
                 newOperation.operationType = "new icon";
                 animaView.currentFrame.operations.add(newOperation);

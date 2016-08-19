@@ -5,7 +5,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -76,6 +75,9 @@ public class FillFormActivity extends AppCompatActivity {
     public Element currentElement = null;
     public LinearLayout currentLinearLayout = null;
 
+    //LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+
     DatePickerDialog.OnDateSetListener dateThenTime = new
             DatePickerDialog.OnDateSetListener() {
 
@@ -104,7 +106,7 @@ public class FillFormActivity extends AppCompatActivity {
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                     datePicker[currentDatePicker].setText(dateOnlyText(calendar.getTime()));
                     currentDateElement.vDate.setTime(calendar.getTime().getTime());
-                    saveToCloud();
+                    //saveToCloud();
                 }
 
             };
@@ -117,7 +119,7 @@ public class FillFormActivity extends AppCompatActivity {
                     calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                     calendar.set(Calendar.MINUTE, minute);
                     currentDateElement.vDate.setTime(calendar.getTime().getTime());
-                    saveToCloud();
+                    //saveToCloud();
                     datePicker[currentDatePicker].setText(dateTimeText(calendar.getTime()));
                 }
 
@@ -183,6 +185,7 @@ public class FillFormActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //lp.setMargins(20, 20, 20, 20);
         for (int i = 0; i < datePicker.length; i++)
             datePicker[i] = new EditText(this);
         setContentView(R.layout.activity_fill_form);
@@ -200,19 +203,22 @@ public class FillFormActivity extends AppCompatActivity {
         }
         if (currentForm == null)
             finish();
-        currentForm.updateDescription();
-        setTitle(currentForm.description);
-        buildTheForm(currentForm);
+        else {
+            currentForm.updateDescription();
+            setTitle(currentForm.description);
+            buildTheForm(currentForm);
+        }
     }
 
     private void buildTheForm(Form currentForm) {
         LinearLayout fillFormLL = (LinearLayout)findViewById(R.id.fill_form_ll);
-        fillFormLL.setOrientation(LinearLayout.VERTICAL);
+        fillFormLL.setOrientation(LinearLayout.HORIZONTAL);
         if (fillFormLL.getOrientation() == LinearLayout.VERTICAL) {
             //fillFormLL.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT));
             //TODO: handle different fillFormLL orientation.
         }
         datePickerIndex = -1;
+        fillFormLL.removeAllViews();
         addElementsToLL(fillFormLL,currentForm.elements);
     }
 
@@ -234,21 +240,26 @@ public class FillFormActivity extends AppCompatActivity {
                             android.R.attr.progressBarStyleHorizontal);
                     progressBar.setProgress(30);
                     innerLL.setOrientation(LinearLayout.VERTICAL);
-                    innerLL.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT));
+                    LinearLayout.LayoutParams innerLL_lp = (new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    innerLL_lp.setMargins(10,10,10,10);
+                    innerLL.setLayoutParams(innerLL_lp);
                     outerLL.setOrientation(LinearLayout.VERTICAL);
                     final float scale = getResources().getDisplayMetrics().density;
+                    LinearLayout.LayoutParams lp = null;
                     if (LL.getOrientation() == LinearLayout.HORIZONTAL)
-                        outerLL.setLayoutParams(new LinearLayoutCompat.LayoutParams((int)(500 * scale), LinearLayoutCompat.LayoutParams.WRAP_CONTENT));
+                        lp = new LinearLayout.LayoutParams((int)(500 * scale), LinearLayout.LayoutParams.WRAP_CONTENT);
                     else
-                        outerLL.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT));
+                        lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    lp.rightMargin = 20;
+                    lp.leftMargin = 20;
+                    //lp.setMargins(50,50,50,50);
+
+                    outerLL.setLayoutParams(lp);
                     addElementsToLL(innerLL,element.elements);
-                    GradientDrawable gd = new GradientDrawable();
-                    gd.setColor(0xFFEEEEFF);
-                    gd.setCornerRadius(15);
-                    gd.setStroke(1, 0xFF000000);
-                    outerLL.setBackground(gd);
+                    outerLL.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy, null));
                     Button expandingButton = new Button(this);
                     expandingButton.setText(element.description);
+                    expandingButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button, null));
                     //expandingButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_more_black_24dp, null),null,null,null);
                     expandingButton.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -269,7 +280,7 @@ public class FillFormActivity extends AppCompatActivity {
                             }
                         }
                     });
-                    if (firstGroup)
+                    if (firstGroup || true) //true is for the tablets
                         innerLL.setVisibility(View.VISIBLE);
                     else
                         innerLL.setVisibility(View.GONE);
@@ -420,7 +431,7 @@ public class FillFormActivity extends AppCompatActivity {
                         public void onFocusChange(View v, boolean hasFocus) {
                             if (!hasFocus) {
                                 element.vText = ((EditText)v).getText().toString();
-                                saveToCloud();
+                                //saveToCloud();
                             }
                         }
                     });
@@ -468,7 +479,7 @@ public class FillFormActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             element.vBoolean = booleanSwitch.isChecked();
-                            saveToCloud();
+                            //saveToCloud();
                         }
                     });
                     LL.addView(booleanSwitch);
@@ -535,10 +546,10 @@ public class FillFormActivity extends AppCompatActivity {
                     break;
                 case eAnima:
                     final HorizontalScrollView scrollViewPhoto1 = new HorizontalScrollView(this);
-                    element.container = scrollViewPhoto1;
                     scrollViewPhoto1.setHorizontalScrollBarEnabled(true);
                     scrollViewPhoto1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200));
                     final LinearLayout linearLayoutPhoto1 = new LinearLayout(this);
+                    element.container = linearLayoutPhoto1;
                     linearLayoutPhoto1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
                     linearLayoutPhoto1.setOrientation(LinearLayout.HORIZONTAL);
                     //here request the pictures from the cloud into linearLayoutPhoto:
@@ -546,7 +557,7 @@ public class FillFormActivity extends AppCompatActivity {
                         cameraAndPictures.getPicFromFirebase(photoID,linearLayoutPhoto1);
 
                     final Button animaButton = new Button(this);
-                    element.container = animaButton;
+                    //element.container = animaButton;
                     animaButton.setText(span2Strings(element.description,element.toString()), Button.BufferType.SPANNABLE);
                     animaButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
                     animaButton.setOnClickListener(new View.OnClickListener() {
@@ -631,7 +642,7 @@ public class FillFormActivity extends AppCompatActivity {
                                                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                                     element.vText = directoryItems.get(comboSpinner.getSelectedItemPosition()).id;
                                                     element.vInteger = comboSpinner.getSelectedItemPosition();
-                                                    saveToCloud();
+                                                    //saveToCloud();
                                                 }
                                                 @Override
                                                 public void onNothingSelected(AdapterView<?> parent) {
@@ -654,7 +665,7 @@ public class FillFormActivity extends AppCompatActivity {
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                 element.vText = comboSpinner.getSelectedItem().toString();
                                 element.vInteger = comboSpinner.getSelectedItemPosition();
-                                saveToCloud();
+                                //saveToCloud();
                             }
 
                             @Override
@@ -706,7 +717,7 @@ public class FillFormActivity extends AppCompatActivity {
                                                         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                                                             if (isChecked) {
                                                                 element.vText = newDirectoryItem.id;
-                                                                saveToCloud();
+                                                                //saveToCloud();
                                                             }
                                                         }
                                                     });
@@ -736,7 +747,7 @@ public class FillFormActivity extends AppCompatActivity {
                                         if (isChecked) {
                                             element.vInteger = _i;
                                             element.vText = element.comboItems.get(_i);
-                                            saveToCloud();
+                                            //saveToCloud();
                                         }
                                     }
                                 });
@@ -767,13 +778,18 @@ public class FillFormActivity extends AppCompatActivity {
         if (requestCode == DAMAGE_PLAN_INTENT)
         {
             //TODO: Warning: if you start the plan, rotate device and exit activity, currentButton does not exist any more, so, the app crashes!
-            currentButton.setText(span2Strings(currentElement.description,currentElement.vPlan.damageDescription), Button.BufferType.SPANNABLE);
+            if (currentButton != null)
+                currentButton.setText(span2Strings(currentElement.description,currentElement.vPlan.damageDescription), Button.BufferType.SPANNABLE);
         }
         if (requestCode == FREE_DRAW_INTENT)
         {
             currentElement.freeDrawBitmap = null;
-            currentButton.setText(span2Strings(currentElement.description,currentElement.toString()), Button.BufferType.SPANNABLE);
-            currentButton.setCompoundDrawablesWithIntrinsicBounds(currentElement.getBitmapDrawable(this),null,null,null);
+            //TODO: get the current element from the currentElement.container!
+
+            if (currentButton != null) {
+                currentButton.setText(span2Strings(currentElement.description, currentElement.toString()), Button.BufferType.SPANNABLE);
+                currentButton.setCompoundDrawablesWithIntrinsicBounds(currentElement.getBitmapDrawable(this), null, null, null);
+            }
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             final String id = CameraAndPictures.savePictureToFirebase();
@@ -796,24 +812,19 @@ public class FillFormActivity extends AppCompatActivity {
         //TODO: if animaView, add the pictures (need to remove the recycle in the anima view)
         //TODO: remove the green line in the bottom of the screenshots!!!
         if (requestCode == ANIMA_INTENT) {
-            /*
-            final String id = CameraAndPictures.savePictureToFirebase();
-            if (CameraAndPictures.bitmap != null) {
-                InsReport.bitmapsNeedToBeRecycled.add(CameraAndPictures.bitmap);
-                ImageView newImage = new ImageView(this);
-                newImage.setImageBitmap(CameraAndPictures.bitmap);
-                //newImage.setLayoutParams(new LinearLayout.LayoutParams(150, LinearLayout.LayoutParams.MATCH_PARENT));
-                newImage.setAdjustViewBounds(true);
-                newImage.setOnClickListener(new View.OnClickListener() {
+            for (final Bitmap bitmap : currentElement.bitmapsToBeAddedOnResult) {
+                final ImageView theImageView = new ImageView(InsReport.currentElement.container.getContext());
+                final LinearLayout linearLayout = (LinearLayout)InsReport.currentElement.container;
+                theImageView.setImageBitmap(bitmap);
+                theImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        cameraAndPictures.showZoomed(currentLinearLayout, CameraAndPictures.bitmap);
+                        cameraAndPictures.showZoomed(linearLayout, bitmap);
                     }
                 });
-                currentLinearLayout.addView(newImage);
-                currentElement.vPhotos.add(id);
+                theImageView.setAdjustViewBounds(true);
+                linearLayout.addView(theImageView);
             }
-            */
         }
 
         saveToCloud();
@@ -821,10 +832,10 @@ public class FillFormActivity extends AppCompatActivity {
     }
 
     public void saveToCloud() {
-        currentForm.updateDescription();
-        currentForm.validate();
-        currentForm.saveToCloud();
-        setTitle(currentForm.description);
+            currentForm.updateDescription();
+            currentForm.validate();
+            currentForm.saveToCloud();
+            setTitle(currentForm.description);
     }
 
     private void takePhoto() {
@@ -851,14 +862,23 @@ public class FillFormActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        saveToCloud();
+        finish();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        currentForm.validate();
-        currentForm.saveToCloud();
+        if (currentForm != null) {
+            currentForm.validate();
+            currentForm.saveToCloud();
+        }
         for (Bitmap bitmap : InsReport.bitmapsNeedToBeRecycled)
             bitmap.recycle();
         InsReport.bitmapsNeedToBeRecycled.clear();
-        cleanBitmaps(currentForm.elements);
+        if (currentForm != null)
+            cleanBitmaps(currentForm.elements);
         Log.e(TAG, "onDestroy: recycling bitmaps...");
     }
 

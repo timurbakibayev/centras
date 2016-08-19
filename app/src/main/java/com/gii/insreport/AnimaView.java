@@ -54,14 +54,17 @@ public class AnimaView extends View {
     }
 
     public void takePicture() {
-        Bitmap screenShot = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_4444);
+        final Bitmap screenShot = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_4444);
         Canvas canvas = new Canvas(screenShot);
+        appState = AppState.idle;
         draw(canvas);
 
         String id = CameraAndPictures.generateNewId();
         InsReport.ref.child("images/" + id).setValue(CameraAndPictures.encodeToBase64(screenShot,Bitmap.CompressFormat.JPEG,70));
         InsReport.currentElement.vPhotos.add(id);
-        screenShot.recycle();
+        //screenShot.recycle();
+        InsReport.bitmapsNeedToBeRecycled.add(screenShot);
+        InsReport.currentElement.bitmapsToBeAddedOnResult.add(screenShot);
 
         MediaActionSound sound = new MediaActionSound();
         sound.play(MediaActionSound.SHUTTER_CLICK);

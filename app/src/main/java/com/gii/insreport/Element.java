@@ -22,6 +22,9 @@ import java.util.Date;
 public class Element {
     private static final String TAG  = "Element.java";
 
+    @JsonIgnore
+    public ArrayList<Bitmap> bitmapsToBeAddedOnResult = new ArrayList<>();
+
     public Element() {
 
     }
@@ -236,13 +239,13 @@ public class Element {
     BitmapDrawable myIcon = null;
 
     public BitmapDrawable getBitmapDrawable(Context context) {
-        if (freeDrawBitmap == null)
+        if (freeDrawBitmap == null || freeDrawBitmap.isRecycled())
             myIcon = new BitmapDrawable(context.getResources(), getFreeDrawBitmap());
         return myIcon;
     }
 
     public Bitmap getFreeDrawBitmap() {
-        if (freeDrawBitmap == null) {
+        if (freeDrawBitmap == null || freeDrawBitmap.isRecycled()) {
             freeDrawBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
             if (vDraw.size() > 0) {
                 Paint blue = new Paint();

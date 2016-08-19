@@ -49,6 +49,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:screenOrientation="userPortrait"
             android:name=".VehicleDamageActivity"
             android:label="@string/title_activity_vehicle_damage_plan"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -57,6 +58,7 @@
             android:label="@string/title_activity_forms_list"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:screenOrientation="userLandscape"
             android:name=".FillFormActivity"
             android:label="Анкета"
             android:windowSoftInputMode="stateHidden|adjustResize" />
