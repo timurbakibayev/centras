@@ -1,5 +1,7 @@
 package com.gii.insreport;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -204,10 +206,7 @@ public class FormTemplates {
                                     "Покрышки (фирма,модель)"));
                             regularSet.add(new Element(Element.ElementType.eText, "other",
                                     "Другое штатное заводское оборудование:"));
-                            damageInfo.add(new Element(Element.ElementType.ePlan, "damagePlan",
-                                    "План повреждений"));
-
-
+                            VehicleDamageView.carType = "Bike";
                         } else if (selectionTypes.equalsIgnoreCase("Bus") ||
                                 selectionTypes.equalsIgnoreCase("Truck")) {
                             regularSet.add(new Element(Element.ElementType.eBoolean, "hatch", "люк"));
@@ -253,11 +252,17 @@ public class FormTemplates {
                                     "Колпаки", "Резина"}));
                             regularSet.add(new Element(Element.ElementType.eText, "otherEquipment",
                                     "Другое оборудование"));
-                        } else if (selectionTypes.equalsIgnoreCase("Car")) {
+                            if(selectionTypes.equalsIgnoreCase("Bus")){
+                                VehicleDamageView.carType = "Bus";
 
-                        } else if (selectionTypes.equalsIgnoreCase("Truck")) {
 
+                            }else if(selectionTypes.equalsIgnoreCase(("Truck"))){
+                                VehicleDamageView.carType = "Truck";
+                            }
                         }
+
+                        damageInfo.add(new Element(Element.ElementType.ePlan, "damagePlan",
+                                "План повреждений"));
                         regularSet.add(new Element(Element.ElementType.eText, "keys", "Количество оригинальных  комплектов  ключей у Страхователя"));
                         regularSet.add(new Element(Element.ElementType.eText, "photos", "Количество фотографий ТС"));
                         regularSet.add(new Element(Element.ElementType.eText, "specialNotes:", "Особые отметки:"));

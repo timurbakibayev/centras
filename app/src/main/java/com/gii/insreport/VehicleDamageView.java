@@ -33,6 +33,8 @@ import java.util.Calendar;
 public class VehicleDamageView extends View {
     public static Firebase ref = InsReport.ref;
     private String TAG = "VehicleDamageView.java";
+    //
+    public static String carType = "";
 
     VehicleDamageActivity vehicleDamageActivity;
     Bitmap[] vehicleImage;
@@ -44,6 +46,12 @@ public class VehicleDamageView extends View {
     public enum DamagePlanState {
         idle, choosePlan
     }
+
+    public void setCarType(String carType){
+        this.carType = carType;
+    }
+
+
 
     public DamagePlanState appState = DamagePlanState.idle;
 
@@ -108,10 +116,24 @@ public class VehicleDamageView extends View {
         red.setStrokeWidth(10);
         red.setStyle(Paint.Style.FILL_AND_STROKE);
         red.setStrokeCap(Paint.Cap.ROUND);
-        vehicleImage = new Bitmap[2];
-
-        vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(),R.drawable.limousine_plan_open);
+        vehicleImage = new Bitmap[3];
+//
+        vehicleImage[2] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(),R.drawable.limousine_plan_open);
         vehicleImage[1] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(),R.drawable.jeep_plan);
+        switch(carType){
+            case "Bike":
+                vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(),R.drawable.bike);
+                break;
+            case "Bus":
+                vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(),R.drawable.bus);
+                break;
+            case "Truck":
+                vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(),R.drawable.truck);
+                break;
+            default:
+                vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(),R.drawable.limousine_plan_open);
+        }
+//        vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(),R.drawable.bike);
 
         vehicleImageDestRect = new Rect[vehicleImage.length];
         vehicleImageSourceRect = new Rect[vehicleImage.length];
