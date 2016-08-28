@@ -11,13 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Switch;
-import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -30,11 +26,14 @@ public class FormsListAdapter extends BaseAdapter {
     LayoutInflater lInflater;
     ArrayList<Form> objects;
 
-    FormsListAdapter(Context context, ArrayList<Form> forms) {
+    View.OnTouchListener mTouchLsitener;
+    FormsListAdapter(Context context, ArrayList<Form> forms, View.OnTouchListener listener) {
+
         ctx = context;
         objects = forms;
         lInflater = (LayoutInflater) ctx
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mTouchLsitener = listener;
     }
 
     @Override
@@ -69,26 +68,30 @@ public class FormsListAdapter extends BaseAdapter {
             view = lInflater.inflate(R.layout.listitem, parent, false);
         }
 
+        if(view != convertView){
+            view.setOnTouchListener(mTouchLsitener);
+        }
+
         final Form p = getProduct(position);
 
         p.updateDescription();
 
-        ((Switch) view.findViewById(R.id.complete_form)).setChecked(p.formReady);
-
-        ((Switch) view.findViewById(R.id.complete_form)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (((Switch) view).isChecked()) {
-                    p.formReady = true;
-                    p.saveToCloud();
-                    Toast.makeText(view.getContext(), "Форма готова к отправке", Toast.LENGTH_SHORT).show();
-                } else {
-                    p.formReady = false;
-                    p.saveToCloud();
-                    Toast.makeText(view.getContext(), "Отмена готовности", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+//        ((Switch) view.findViewById(R.id.complete_form)).setChecked(p.formReady);
+//
+//        ((Switch) view.findViewById(R.id.complete_form)).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (((Switch) view).isChecked()) {
+//                    p.formReady = true;
+//                    p.saveToCloud();
+//                    Toast.makeText(view.getContext(), "Форма готова к отправке", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    p.formReady = false;
+//                    p.saveToCloud();
+//                    Toast.makeText(view.getContext(), "Отмена готовности", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
 
         ((TextView) view.findViewById(R.id.textView1)).setText(p.description);
         String photoInfo = "";

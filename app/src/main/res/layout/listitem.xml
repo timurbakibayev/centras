@@ -37,7 +37,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                <TextView
                     android:id="@+id/textView1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -45,9 +45,9 @@
                     android:padding="5dp"
                     android:text="1234 Фамилия Имя Отчество"
                     android:textColor="#3435AA"
-                    android:textSize="24sp"></TextView>
+                    android:textSize="24sp"/>
 
-                <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                <TextView
                     android:id="@+id/textView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -55,13 +55,8 @@
                     android:padding="5dp"
                     android:text="01 августа 2016 \n 2 фото"
                     android:textColor="#3435AA"
-                    android:textSize="14sp"></TextView>
+                    android:textSize="14sp"/>
             </LinearLayout>
-            <Switch
-                android:focusable="false"
-                android:id="@+id/complete_form"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"                />
         </TableRow>
 
         <ProgressBar
