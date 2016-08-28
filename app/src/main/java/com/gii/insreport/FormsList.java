@@ -46,6 +46,8 @@ public class FormsList extends AppCompatActivity {
     float mCurrentX = 0;
     float mCurrentAlpha = 1;
 
+    View mListIDView;
+
     private static final int SWIPE_DURATION = 250;
     private static final int MOVE_DURATION = 150;
 
@@ -97,9 +99,11 @@ public class FormsList extends AppCompatActivity {
         }
 
         final FormsList thisActivity = this;
+        mListIDView = findViewById(R.id.listView);
         ((ListView) findViewById(R.id.listView)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                if(view.getId() == )
                 InsReport.currentFormNo = position;
                 Intent intent = new Intent(thisActivity, FillFormActivity.class);
                 intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, fireBaseCatalog);
@@ -323,7 +327,7 @@ public class FormsList extends AppCompatActivity {
     }
 
     private void moveView(View view, float startX, float endX, float startY, float endY,
-                          Runnable endAction){
+                          Runnable endAction) {
         final Runnable finalEndAction = endAction;
         if (isRuntimePostGingerbread()) {
             view.animate().setDuration(MOVE_DURATION);

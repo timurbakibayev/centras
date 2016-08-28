@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
     <TableLayout
@@ -22,12 +23,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:focusable="false"
                     android:src="@drawable/ic_phone_black_24dp" />
 
                 <ImageView
                     android:id="@+id/imageInListView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:focusable="false"
                     android:src="@drawable/signature" />
             </LinearLayout>
 
@@ -45,7 +48,7 @@
                     android:padding="5dp"
                     android:text="1234 Фамилия Имя Отчество"
                     android:textColor="#3435AA"
-                    android:textSize="24sp"/>
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/textView2"
@@ -55,7 +58,7 @@
                     android:padding="5dp"
                     android:text="01 августа 2016 \n 2 фото"
                     android:textColor="#3435AA"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
             </LinearLayout>
         </TableRow>
 

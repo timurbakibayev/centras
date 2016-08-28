@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -62,7 +63,7 @@ public class FormsListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         View view = convertView;
         if (view == null) {
             view = lInflater.inflate(R.layout.listitem, parent, false);
@@ -104,9 +105,19 @@ public class FormsListAdapter extends BaseAdapter {
         ((ProgressBar) view.findViewById(R.id.progressBar)).setProgress(p.filledPercent());
 
         if (!p.signed())
-            ((ImageView) view.findViewById(R.id.imageInListView)).setVisibility(View.GONE);
+            ((ImageView) view.findViewById(R.id.imageInListView)).setVisibility(View.VISIBLE);
         else
             ((ImageView) view.findViewById(R.id.imageInListView)).setVisibility(View.VISIBLE);
+        ((ImageView) view.findViewById(R.id.imageInListView)).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((ListView) parent).performItemClick(view, position, 0);
+                        Log.i("CLICKED", "YASSS IT's clicked");
+                    }
+                }
+        );
+
 
         if (p.phoneNo.equals(""))
             ((ImageView) view.findViewById(R.id.imageCallInListView)).setVisibility(View.GONE);
