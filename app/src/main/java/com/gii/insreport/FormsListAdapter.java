@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -26,11 +27,14 @@ public class FormsListAdapter extends BaseAdapter {
     LayoutInflater lInflater;
     ArrayList<Form> objects;
 
-    FormsListAdapter(Context context, ArrayList<Form> forms) {
+    View.OnTouchListener mTouchLsitener;
+    FormsListAdapter(Context context, ArrayList<Form> forms, View.OnTouchListener listener) {
+
         ctx = context;
         objects = forms;
         lInflater = (LayoutInflater) ctx
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mTouchLsitener = listener;
     }
 
     @Override
@@ -59,35 +63,37 @@ public class FormsListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         View view = convertView;
         if (view == null) {
             view = lInflater.inflate(R.layout.listitem, parent, false);
+        }
+
+        if(view != convertView){
+            view.setOnTouchListener(mTouchLsitener);
         }
 
         final Form p = getProduct(position);
 
         p.updateDescription();
 
-        /*
-        ((Switch) view.findViewById(R.id.complete_form)).setChecked(p.formReady);
+//        ((Switch) view.findViewById(R.id.complete_form)).setChecked(p.formReady);
+//
+//        ((Switch) view.findViewById(R.id.complete_form)).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (((Switch) view).isChecked()) {
+//                    p.formReady = true;
+//                    p.saveToCloud();
+//                    Toast.makeText(view.getContext(), "Форма готова к отправке", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    p.formReady = false;
+//                    p.saveToCloud();
+//                    Toast.makeText(view.getContext(), "Отмена готовности", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
 
-        ((Switch) view.findViewById(R.id.complete_form)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (((Switch) view).isChecked()) {
-                    p.formReady = true;
-                    p.saveToCloud();
-                    Toast.makeText(view.getContext(), "Форма готова к отправке", Toast.LENGTH_SHORT).show();
-                } else {
-                    p.formReady = false;
-                    p.saveToCloud();
-                    Toast.makeText(view.getContext(), "Отмена готовности", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        */
-        ((TextView) view.findViewById(R.id.textViewSmall)).setText(FillFormActivity.dateOnlyText(p.dateCreated));
         ((TextView) view.findViewById(R.id.textView1)).setText(p.description);
         String photoInfo = "";
         int photoCount = p.numberOfPhotos();
@@ -99,9 +105,19 @@ public class FormsListAdapter extends BaseAdapter {
         ((ProgressBar) view.findViewById(R.id.progressBar)).setProgress(p.filledPercent());
 
         if (!p.signed())
-            ((ImageView) view.findViewById(R.id.imageInListView)).setVisibility(View.GONE);
+            ((ImageView) view.findViewById(R.id.imageInListView)).setVisibility(View.VISIBLE);
         else
             ((ImageView) view.findViewById(R.id.imageInListView)).setVisibility(View.VISIBLE);
+        ((ImageView) view.findViewById(R.id.imageInListView)).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((ListView) parent).performItemClick(view, position, 0);
+                        Log.i("CLICKED", "YASSS IT's clicked");
+                    }
+                }
+        );
+
 
         if (p.phoneNo.equals(""))
             ((ImageView) view.findViewById(R.id.imageCallInListView)).setVisibility(View.GONE);
