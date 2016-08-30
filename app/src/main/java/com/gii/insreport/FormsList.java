@@ -21,6 +21,7 @@ import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -118,6 +119,7 @@ public class FormsList extends AppCompatActivity {
     }
 
 
+    final FormsList thisActivity = this;
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
 
         float mDownX;
@@ -155,7 +157,7 @@ public class FormsList extends AppCompatActivity {
                         if (deltaXAbs > mSwipeSlop) {
                             mSwiping = true;
                             InsReport.currentListView.requestDisallowInterceptTouchEvent(true);
-                            mBackgroundContainer.showBackground(view.getTop(), view.getHeight());
+                            //mBackgroundContainer.showBackground(view.getTop(), view.getHeight());
 
                         }
                     }
@@ -189,8 +191,14 @@ public class FormsList extends AppCompatActivity {
                         }
                         long duration = (int) ((1 - fractionCovered) * SWIPE_DURATION);
                         animateSwipe(view, endX, duration, remove);
+                        mSwiping = false;
                     } else {
                         mItemPressed = false;
+                        String s = ((TextView) view.findViewById(R.id.textViewID)).getText().toString();
+                        Intent intent = new Intent(thisActivity, FillFormActivity.class);
+                        intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, fireBaseCatalog);
+                        intent.putExtra(InsReport.EXTRA_ID_NO, s);
+                        startActivity(intent);
                     }
                 }
                 break;

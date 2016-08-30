@@ -59,6 +59,17 @@
                     android:text="01 августа 2016 \n 2 фото"
                     android:textColor="#3435AA"
                     android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/textViewID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:padding="5dp"
+                    android:text="000"
+                    android:visibility="gone"
+                    android:textColor="#3435AA"
+                    android:textSize="14sp" />
             </LinearLayout>
         </TableRow>
 

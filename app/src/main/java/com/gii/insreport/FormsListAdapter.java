@@ -95,6 +95,7 @@ public class FormsListAdapter extends BaseAdapter {
 //        });
 
         ((TextView) view.findViewById(R.id.textView1)).setText(p.description);
+        ((TextView) view.findViewById(R.id.textViewID)).setText(p.id);
         String photoInfo = "";
         int photoCount = p.numberOfPhotos();
         if (photoCount > 0)
