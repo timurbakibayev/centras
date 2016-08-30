@@ -8,7 +8,9 @@
     <TableLayout
         android:id="@+id/list_item_table_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/boxy_listitem"
+        android:layout_marginBottom="10dp">
 
         <TableRow>
 
@@ -16,7 +18,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginLeft="5dp">
 
                 <ImageView
                     android:id="@+id/imageCallInListView"
@@ -34,43 +37,60 @@
                     android:src="@drawable/signature" />
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView1"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp">
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:padding="5dp"
-                    android:text="1234 Фамилия Имя Отчество"
-                    android:textColor="#3435AA"
-                    android:textSize="24sp" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:padding="5dp"
-                    android:text="01 августа 2016 \n 2 фото"
-                    android:textColor="#3435AA"
-                    android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/textView1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:padding="5dp"
+                        android:text="1234 Фамилия Имя Отчество"
+                        android:textColor="#3435AA"
+                        android:textSize="24sp" />
 
-                <TextView
-                    android:id="@+id/textViewID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:padding="5dp"
-                    android:text="000"
-                    android:visibility="gone"
-                    android:textColor="#3435AA"
-                    android:textSize="14sp" />
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:padding="5dp"
+                        android:text="01 августа 2016 \n 2 фото"
+                        android:textColor="#3435AA"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/textViewID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:padding="5dp"
+                        android:text="000"
+                        android:visibility="gone"
+                        android:textColor="#3435AA"
+                        android:textSize="14sp" />
+                </LinearLayout>
+                <ImageView
+                    android:id="@+id/checkReady"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_check_black_24dp"
+                    android:tint="@color/colorAccent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="15dp"
+
+                    />
+            </RelativeLayout>
         </TableRow>
 
         <ProgressBar
@@ -78,6 +98,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="26" />
+            android:progress="26"
+            android:visibility="gone"/>
     </TableLayout>
 </LinearLayout>

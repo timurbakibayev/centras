@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -96,6 +95,7 @@ public class FormsListAdapter extends BaseAdapter {
 
         ((TextView) view.findViewById(R.id.textView1)).setText(p.description);
         ((TextView) view.findViewById(R.id.textViewID)).setText(p.id);
+        ((ImageView) view.findViewById(R.id.checkReady)).setVisibility(p.formReady?View.VISIBLE:View.GONE);
         String photoInfo = "";
         int photoCount = p.numberOfPhotos();
         if (photoCount > 0)
@@ -106,19 +106,9 @@ public class FormsListAdapter extends BaseAdapter {
         ((ProgressBar) view.findViewById(R.id.progressBar)).setProgress(p.filledPercent());
 
         if (!p.signed())
-            ((ImageView) view.findViewById(R.id.imageInListView)).setVisibility(View.VISIBLE);
+            ((ImageView) view.findViewById(R.id.imageInListView)).setVisibility(View.GONE);
         else
             ((ImageView) view.findViewById(R.id.imageInListView)).setVisibility(View.VISIBLE);
-        ((ImageView) view.findViewById(R.id.imageInListView)).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ((ListView) parent).performItemClick(view, position, 0);
-                        Log.i("CLICKED", "YASSS IT's clicked");
-                    }
-                }
-        );
-
 
         if (p.phoneNo.equals(""))
             ((ImageView) view.findViewById(R.id.imageCallInListView)).setVisibility(View.GONE);

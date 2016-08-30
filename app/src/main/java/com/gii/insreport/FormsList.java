@@ -288,7 +288,19 @@ public class FormsList extends AppCompatActivity {
             }
         }
         // Delete the item from the adapter
-        int position = InsReport.currentListView.getPositionForView(viewToRemove);
+        //int position = InsReport.currentListView.getPositionForView(viewToRemove);
+        //currentFormsCollection.forms.remove(position);
+        String id = ((TextView) viewToRemove.findViewById(R.id.textViewID)).getText().toString();
+        for (Form form : currentFormsCollection.forms) {
+            if (form.id.equals(id)) {
+                //Toast.makeText(FormsList.this, "switching " + id, Toast.LENGTH_SHORT).show();
+                form.formReady = !form.formReady;
+                form.saveToCloud();
+                ((FormsListAdapter) ((ListView) findViewById(R.id.listView)).getAdapter()).notifyDataSetChanged();
+            }
+        //        currentFormsCollection.forms.remove(form);
+            //(((FormsListAdapter)listView.getAdapter()).notifyDataSetChanged();
+        }
 //        mAdapter.remove(mAdapter.getItem(position));
 
         // After layout runs, capture position of all itemIDs, compare to pre-layout

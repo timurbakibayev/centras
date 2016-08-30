@@ -161,8 +161,8 @@ public class Form {
 
     public void validate() {
         copyElementsRaw(rawMap, elements);
-        if (signed())
-            formReady = true;
+        //if (signed())
+        //    formReady = true;
     }
 
     private void copyElementsRaw(Map<String,String> destinationMapping, ArrayList<Element> elements) {

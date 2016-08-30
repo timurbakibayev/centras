@@ -93,7 +93,8 @@ public class InsReport extends Application {
                     Log.e(TAG, "onAuthStateChanged: Instance_Id_Scope:" + FirebaseInstanceId.getInstance().getToken());
                     Log.e(TAG, "onAuthStateChanged: subscribed to " + user.getUid());
                     for (FormsCollection mainMenuForm : mainMenuForms) {
-                        mainMenuForm.retrieveDataFromFireBase();
+                        if (!mainMenuForm.dataChangeListenerAdded)
+                            mainMenuForm.addDataChangeListener();
                     }
                 } else {
                     // User is signed out
@@ -178,10 +179,10 @@ public class InsReport extends Application {
 
         preInsuranceFormsCollection.description = getString(R.string.preInsurance);
         preInsuranceFormsCollection.fireBaseCatalog = "preInsurance";
-        //preInsuranceFormsCollection.retrieveDataFromFireBase();
+        //preInsuranceFormsCollection.addDataChangeListener();
         incidentFormsCollection.description = getString(R.string.Incident);
         incidentFormsCollection.fireBaseCatalog = "incident";
-        //incidentFormsCollection.retrieveDataFromFireBase();
+        //incidentFormsCollection.addDataChangeListener();
         //incidentFormsCollection.checkSMS(getApplicationContext());
 
         mainMenuForms.add(preInsuranceFormsCollection);

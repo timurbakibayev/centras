@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
-import android.util.Log;
 import android.view.View;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -173,7 +172,7 @@ public class Element {
 
     public boolean signed() {
         if (type == ElementType.eSignature && vDraw.size() == 0) {
-            Log.e(TAG, "not signed: " + description );
+            //Log.e(TAG, "not signed: " + description );
             return false;
         }
         if (type == ElementType.eGroup) {

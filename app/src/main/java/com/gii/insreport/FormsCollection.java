@@ -21,7 +21,8 @@ public class FormsCollection {
     public static String TAG = "FormsCollection.java";
     public String fireBaseCatalog = "";
     public String description = "";
-    public boolean readComplete = false;
+    public boolean loadComplete = false;
+    public boolean dataChangeListenerAdded = false;
     public ArrayList<Form> forms = new ArrayList<>();
 
     public String getFireBaseCatalog() {
@@ -37,20 +38,20 @@ public class FormsCollection {
     }
 
 
-    public void retrieveDataFromFireBase() {
+    public void addDataChangeListener() {
         Query queryRef = InsReport.ref.child("forms/" + fireBaseCatalog + "/" + InsReport.user.getUid()).orderByChild("dateCreated").limitToLast(10); //how many forms do we see
         queryRef.
                 addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         Log.e(TAG, "onDataChange: got new data, processing...");
-                        forms.clear();
+                        //forms.clear();
                         for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                             try {
                                 Form newForm = postSnapshot.getValue(Form.class);
                                 newForm.id = postSnapshot.getKey();
-                                newForm.validate();
-                                forms.add(newForm);
+                                Log.e(TAG, "onDataChange: processing another item..." + newForm.id);
+                                //newForm.validate();
                                 if (newForm.elements.size() == 0) {
                                     Log.e(TAG, "onDataChange: applying template for " + newForm.id);
                                     FormTemplates.applyTemplate(newForm, fireBaseCatalog);
@@ -61,6 +62,16 @@ public class FormsCollection {
                                     Log.e(TAG, "onDataChange: saving to cloud");
                                     newForm.saveToCloud();
                                 }
+                                boolean exists = false;
+                                for (int i = 0; i < forms.size(); i++) {
+                                    Form form = forms.get(i);
+                                    if (form.id.equals(newForm.id)) {
+                                        //forms.set(i,newForm);
+                                        exists = true;
+                                    }
+                                }
+                                if (!exists)
+                                    forms.add(newForm);
                             } catch (Exception e) {
                                 Log.e(TAG, "onDataChange: PROBLEMS CASTING FROM DB!!! : " + postSnapshot.getKey());
                             }
@@ -79,13 +90,14 @@ public class FormsCollection {
                                 InsReport.currentListView.getAdapter() != null)
                             ((FormsListAdapter)(InsReport.currentListView.getAdapter())).notifyDataSetChanged();
 
+                        loadComplete = true;
                     }
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
                         Log.e("Firebase", "The read failed 7: " + firebaseError.getMessage());
                     }
                 });
-        readComplete = true;
+        dataChangeListenerAdded = true;
     }
 
     public void checkSMS(Context context) {

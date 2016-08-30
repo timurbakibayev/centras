@@ -9,18 +9,25 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
+    private static String TAG = "MainActivity.java";
+
+    Timer timer = new Timer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         InsReport.storage = FirebaseStorage.getInstance();
         InsReport.storageRef = InsReport.storage.getReferenceFromUrl("gs://insreport-f39a3.appspot.com");
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,6 +71,29 @@ public class MainActivity extends AppCompatActivity {
 
         //Intent intent = new Intent(this, AnimaActivity.class);
         //startActivityForResult(intent, 10);
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                boolean allLoaded = true;
+                for (FormsCollection mainMenuForm : InsReport.mainMenuForms) {
+                    if (!mainMenuForm.loadComplete) {
+                        allLoaded = false;
+                        Log.e(TAG, "run: something is not yet loaded: " + mainMenuForm.fireBaseCatalog);
+                    }
+                }
+                if (allLoaded) {
+                    timer.cancel();
+                    final ProgressBar pb = (ProgressBar)findViewById(R.id.roundProgressbar);
+                    pb.getHandler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            pb.setVisibility(View.GONE);
+                        }
+                    });
+                    Log.e(TAG, "run: ALL LOADED");
+                }
+            }
+        }, 1000, 1000);
 
     }
 
