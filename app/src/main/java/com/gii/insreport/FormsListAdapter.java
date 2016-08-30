@@ -11,13 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Switch;
-import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -73,6 +69,7 @@ public class FormsListAdapter extends BaseAdapter {
 
         p.updateDescription();
 
+        /*
         ((Switch) view.findViewById(R.id.complete_form)).setChecked(p.formReady);
 
         ((Switch) view.findViewById(R.id.complete_form)).setOnClickListener(new View.OnClickListener() {
@@ -89,7 +86,8 @@ public class FormsListAdapter extends BaseAdapter {
                 }
             }
         });
-
+        */
+        ((TextView) view.findViewById(R.id.textViewSmall)).setText(FillFormActivity.dateOnlyText(p.dateCreated));
         ((TextView) view.findViewById(R.id.textView1)).setText(p.description);
         String photoInfo = "";
         int photoCount = p.numberOfPhotos();

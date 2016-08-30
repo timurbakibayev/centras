@@ -1,6 +1,7 @@
 package com.gii.insreport;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -26,6 +27,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -130,10 +132,7 @@ public class FillFormActivity extends AppCompatActivity {
             return "";
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        String year = "" + cal.get(Calendar.YEAR);
-        int monthNo = cal.get(Calendar.MONTH);
-        String day = "" + cal.get(Calendar.DAY_OF_MONTH);
-        return (day + " " + monthName[monthNo] + " " + year + " " + timeText(date));
+        return (dateOnlyText(date) + " " + timeText(date));
     }
 
     public static String dateTimeJson(Date date) {
@@ -162,10 +161,17 @@ public class FillFormActivity extends AppCompatActivity {
         if (date == null)
             return "";
         Calendar cal = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
         cal.setTime(date);
         String year = "" + cal.get(Calendar.YEAR);
         int monthNo = cal.get(Calendar.MONTH);
         String day = "" + cal.get(Calendar.DAY_OF_MONTH);
+        //TODO: test
+        if (today.compareTo(cal) == 0)
+            return "Сегодня";
+        today.add(Calendar.DAY_OF_MONTH,-1);
+        if (today.compareTo(cal) == 0)
+            return "Вчера";
         return (day + " " + monthName[monthNo] + " " + year);
     }
 
@@ -759,10 +765,86 @@ public class FillFormActivity extends AppCompatActivity {
                     horizontalLLRadio.addView(radioGroup);
                     LL.addView(horizontalLLRadio);
                     break;
+                case eLookUp:
+                    LinearLayout horizontalLLCombo1 = new LinearLayout(thisActivity);
+                    horizontalLLCombo1.setOrientation(LinearLayout.HORIZONTAL);
+                    horizontalLLCombo1.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
+
+                    TextView captionTVCombo1 = new TextView(this);
+                    captionTVCombo1.setText(element.description);
+
+                    captionTVCombo1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                    final EditText lookupEditText = new EditText(this);
+                    element.container = lookupEditText;
+                    lookupEditText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                    final ArrayList<DirectoryItem> directoryItems = new ArrayList<DirectoryItem>();
+                    if (!element.directory.equals("")) {
+                        Query queryRef = InsReport.ref.child("dirs/" + element.directory);
+                        queryRef.
+                                addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot snapshot) {
+                                        Log.e(TAG, "onDataChange: got new directory, processing...");
+                                        int i  =0;
+                                        directoryItems.clear();
+                                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                                            try {
+                                                final DirectoryItem newDirectoryItem = postSnapshot.getValue(DirectoryItem.class);
+                                                newDirectoryItem.id = postSnapshot.getKey();
+                                                if (newDirectoryItem.status)
+                                                    directoryItems.add(newDirectoryItem);
+                                            } catch (Exception e) {
+                                                Log.e(TAG, "onDataChange: PROBLEMS CASTING DIRECTORY FROM DB!!! : " + element.directory + "/" + postSnapshot.getKey());
+                                            }
+                                        }
+                                        if (directoryItems.size() > 0) {
+                                            element.comboItems = new ArrayList<String>();
+                                            for (DirectoryItem directoryItem : directoryItems) {
+                                                element.comboItems.add(directoryItem.name);
+                                            }
+
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(FirebaseError firebaseError) {
+                                        Log.e("Firebase", "The read failed 9: " + firebaseError.getMessage());
+                                    }
+                                });
+                    } else {
+                        //offline list
+                    }
+                    lookupEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View view, boolean b) {
+                            if (b) {
+                                openLookUpDialog(lookupEditText,directoryItems);
+                            }
+                        }
+
+                    });
+                    lookupEditText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            openLookUpDialog(lookupEditText,directoryItems);
+                        }
+                    });
+                    horizontalLLCombo1.addView(captionTVCombo1);
+                    horizontalLLCombo1.addView(lookupEditText);
+                    LL.addView(horizontalLLCombo1);
+                    break;
                 default:
                     break;
             }
         }
+    }
+
+    private void openLookUpDialog(EditText lookupEditText, ArrayList<DirectoryItem> directoryItems) {
+        Dialog lookUpDialog = new Dialog(this);
+        lookUpDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        lookUpDialog.setContentView(getLayoutInflater().inflate(R.layout.lookup
+                , null));
+        lookUpDialog.show();
     }
 
     @Override

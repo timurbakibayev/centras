@@ -31,10 +31,13 @@ curl -X PUT -d '{"description" : "terminal",
 "timeOfAccident" : {".sv" : "timestamp"}, 
 "nameOfProgram" : "OSGPO", 
 "autoBrand" : "Jeep Grand Cherokee"}
-}' "https://insreport-f39a3.firebaseio.com/forms/incident/B4m2mvpt8STf2pUykgSGs6eEvMV2/2089/.json"
+}' "https://insreport-f39a3.firebaseio.com/forms/incident/wo6npz1PuMVFieuiZFjgCNYOwa12/.json"
 
 send a push notification to a user
 curl --insecure --header 'Authorization: key=AIzaSyCCpeRFK0PoHkuo08VqZiVkoVqB0USoZNQ' --header 'Content-Type:application/json' -d '{"notification":{"title":"New accident!","body":"You have got a new form", "sound" : "default"},"to" : "/topics/5ARsewRkMeTL9kRLHVIkwnKbq812"}' "https://fcm.googleapis.com/fcm/send"
+
+send to Dauren:
+curl --insecure --header 'Authorization: key=AIzaSyCCpeRFK0PoHkuo08VqZiVkoVqB0USoZNQ' --header 'Content-Type:application/json' -d '{"notification":{"title":"New accident!","body":"Hi, Dauren!", "sound" : "default"},"to" : "/topics/wo6npz1PuMVFieuiZFjgCNYOwa12"}' "https://fcm.googleapis.com/fcm/send"
 
 check subscriptions of a user (IID_TOKEN needed):
 my device:  

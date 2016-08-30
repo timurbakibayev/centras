@@ -307,6 +307,8 @@ public class FormTemplates {
                     //TODO: WRONG!!! SAMPLE!
                     generalInfo.add(new Element(Element.ElementType.eCombo, "DOCUMENT_TYPE", "Тип документа", "DCT_CLAIM_TYPE"));
 
+                    generalInfo.add(new Element(Element.ElementType.eLookUp, "INSR_TYPE", "Тип страхования", "DCT_INSR_TYPE"));
+
                     generalInfo.add(new Element(Element.ElementType.eDateTime, "EVENT_DATE",
                             "Дата и Время ДТП"));
 
