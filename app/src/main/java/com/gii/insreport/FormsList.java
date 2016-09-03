@@ -106,7 +106,7 @@ public class FormsList extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                if(view.getId() == )
                 InsReport.currentFormNo = position;
-                Intent intent = new Intent(thisActivity, FillFormActivity.class);
+                Intent intent = new Intent(thisActivity, AdikStyleActivity.class);
                 intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, fireBaseCatalog);
                 intent.putExtra(InsReport.EXTRA_ID_NO, currentFormsCollection.forms.get(position).id);
                 startActivity(intent);
@@ -195,7 +195,7 @@ public class FormsList extends AppCompatActivity {
                     } else {
                         mItemPressed = false;
                         String s = ((TextView) view.findViewById(R.id.textViewID)).getText().toString();
-                        Intent intent = new Intent(thisActivity, FillFormActivity.class);
+                        Intent intent = new Intent(thisActivity, AdikStyleActivity.class);
                         intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, fireBaseCatalog);
                         intent.putExtra(InsReport.EXTRA_ID_NO, s);
                         startActivity(intent);
@@ -453,7 +453,7 @@ public class FormsList extends AppCompatActivity {
         currentFormsCollection.forms.add(newForm);
         ((FormsListAdapter) ((ListView) findViewById(R.id.listView)).getAdapter()).notifyDataSetChanged();
         InsReport.currentFormNo = currentFormsCollection.forms.size() - 1;
-        Intent intent = new Intent(this, FillFormActivity.class);
+        Intent intent = new Intent(this, AdikStyleActivity.class);
         intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, fireBaseCatalog);
         intent.putExtra(InsReport.EXTRA_ID_NO, newForm.id);
         intent.putExtra(InsReport.INCIDENT_TYPE, selectionType);

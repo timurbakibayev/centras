@@ -19,6 +19,8 @@ import java.util.Date;
  * Created by Timur_hnimdvi on 26-Jul-16.
  */
 public class Element {
+
+    @JsonIgnore
     private static final String TAG  = "Element.java";
 
     @JsonIgnore
@@ -219,6 +221,7 @@ public class Element {
 
     public String content = "";
     public String directory = "";
+
     public ArrayList<String> comboItems = new ArrayList<>();
     public ArrayList<Frame> frames = new ArrayList<>();
     public ElementType type = ElementType.eText;

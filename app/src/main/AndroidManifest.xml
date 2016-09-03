@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gii.insreport" >
+    package="com.gii.insreport">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -17,14 +17,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-
-
-
-
 
     <application
         android:name=".InsReport"
@@ -32,16 +27,17 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-        <service android:name=".MyFirebaseMessagingService" >
+        android:theme="@style/AppTheme">
+        <service android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,9 +45,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:screenOrientation="userPortrait"
             android:name=".VehicleDamageActivity"
             android:label="@string/title_activity_vehicle_damage_plan"
+            android:screenOrientation="userPortrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".FormsList"
@@ -72,6 +68,7 @@
             android:name=".AnimaActivity"
             android:label="@string/title_activity_anima"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".AdikStyleActivity"></activity>
     </application>
 
 </manifest>
