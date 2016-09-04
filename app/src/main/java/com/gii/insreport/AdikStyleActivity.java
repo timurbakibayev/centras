@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -42,6 +43,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -222,12 +224,228 @@ public class AdikStyleActivity extends AppCompatActivity {
                 showTheFragment("general","Общие сведения");
             }
         });
-        ((Button)findViewById(R.id.menu2)).setOnClickListener(new View.OnClickListener() {
+        ((Button)findViewById(R.id.menuExtraInfo)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showTheFragment("participant","Дополнительная информация");
+                showTheFragment("additionalInfo","Дополнительная информация");
             }
         });
+        ((Button)findViewById(R.id.menuObjects)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //showTheFragment("object","Информация по объектам");
+                showManyObjects();
+            }
+        });
+        ((Button)findViewById(R.id.menuParticipants)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showManyParticipants();
+            }
+        });
+
+        ((Button)findViewById(R.id.menuPhotos)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showManyPhotos();
+            }
+        });
+
+        ((Button)findViewById(R.id.menuSignature)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showManySignatures();
+            }
+        });
+    }
+
+    private void showManyPhotos() {
+        final ArrayList<Element> photoElements = new ArrayList<>();
+        for (Element element : currentForm.elements) {
+            if (element.category.equals("photo"))
+                photoElements.add(element);
+        }
+        final String[] photos = new String[photoElements.size()];
+        for (int i = 0; i < photoElements.size(); i++) {
+            Element element = photoElements.get(i);
+            photos[i] = element.description + " (" + element.elements.size() + " фото)";
+        }
+        final AdikStyleActivity adikStyleActivity = this;
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Выберите тип фото")
+                .setSingleChoiceItems(photos, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case Dialog.BUTTON_NEGATIVE: // Cancel button selected, do nothing
+                                dialog.cancel();
+                                break;
+
+                            case Dialog.BUTTON_POSITIVE: // OK button selected, send the data back
+                                dialog.dismiss();
+                                break;
+
+                            default:
+                                dialog.dismiss();
+                                InsReport.currentElement = photoElements.get(which);
+                                InsReport.currentForm = currentForm;
+                                Intent intent = new Intent(thisActivity, photosActivity.class);
+                                startActivity(intent);
+                                break;
+                        }
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        //return;
+                    }
+                }).
+                show();
+    }
+
+    private void showManySignatures() {
+        final ArrayList<Element> signatureElements = new ArrayList<>();
+        for (Element element : currentForm.elements) {
+            if (element.category.equals("signature"))
+                signatureElements.add(element);
+        }
+        final String[] signatures = new String[signatureElements.size()];
+        for (int i = 0; i < signatureElements.size(); i++) {
+            Element element = signatureElements.get(i);
+            signatures[i] = element.description + element.toString();
+        }
+        final AdikStyleActivity adikStyleActivity = this;
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Выберите подпись")
+                .setSingleChoiceItems(signatures, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case Dialog.BUTTON_NEGATIVE: // Cancel button selected, do nothing
+                                dialog.cancel();
+                                break;
+
+                            case Dialog.BUTTON_POSITIVE: // OK button selected, send the data back
+                                dialog.dismiss();
+                                break;
+
+                            default:
+                                dialog.dismiss();
+                                InsReport.currentElement = signatureElements.get(which);
+                                InsReport.currentForm = currentForm;
+                                Intent intent = new Intent(thisActivity, FreeDrawActivity.class);
+                                startActivityForResult(intent, FREE_DRAW_INTENT);
+                                break;
+                        }
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        //return;
+                    }
+                }).
+                show();
+    }
+
+    private void showManyParticipants() {
+        final String[] participants = new String[currentForm.participants.elements.size() + 1];
+        for (int i = 0; i < currentForm.participants.elements.size(); i++) {
+            Element element = currentForm.participants.elements.get(i);
+            participants[i] = element.description;
+        }
+        participants[participants.length - 1] = "Добавить +";
+        final AdikStyleActivity adikStyleActivity = this;
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Выберите участника")
+                .setSingleChoiceItems(participants, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case Dialog.BUTTON_NEGATIVE: // Cancel button selected, do nothing
+                                dialog.cancel();
+                                break;
+
+                            case Dialog.BUTTON_POSITIVE: // OK button selected, send the data back
+                                dialog.dismiss();
+                                break;
+
+                            default:
+                                dialog.dismiss();
+                                if (which == participants.length - 1) {
+                                    Element newParticipant = new Element("participant", Element.ElementType.eParticipant,
+                                            "participant" + (which + 1), "Участник " + (which + 1));
+                                    FormTemplates.applyTemplateForParticipants(newParticipant);
+                                    currentForm.participants.elements.add(newParticipant);
+                                }
+                                InsReport.currentElement = currentForm.participants.elements.get(which);
+                                LinearLayout newLL = new LinearLayout(adikStyleActivity);
+                                newLL.setOrientation(LinearLayout.VERTICAL);
+                                addElementsToLL(newLL,InsReport.currentElement.elements);
+                                linearLayoutForFragment.put("specific",newLL);
+                                showTheFragment("specific",InsReport.currentElement.description);
+                                break;
+                        }
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        //return;
+                    }
+                }).
+                show();
+    }
+
+
+    private void showManyObjects() {
+        final String[] objects = new String[currentForm.objects.elements.size() + 1];
+        for (int i = 0; i < currentForm.objects.elements.size(); i++) {
+            Element element = currentForm.objects.elements.get(i);
+            objects[i] = element.description;
+        }
+        objects[objects.length - 1] = "Добавить +";
+        final AdikStyleActivity adikStyleActivity = this;
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Выберите объект")
+                .setSingleChoiceItems(objects, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case Dialog.BUTTON_NEGATIVE: // Cancel button selected, do nothing
+                                dialog.cancel();
+                                break;
+
+                            case Dialog.BUTTON_POSITIVE: // OK button selected, send the data back
+                                dialog.dismiss();
+                                break;
+
+                            default:
+                                dialog.dismiss();
+                                if (which == objects.length - 1) {
+                                    Element newObject = new Element("object", Element.ElementType.eParticipant,
+                                            "object" + (which + 1), "Объект " + (which + 1));
+                                    FormTemplates.applyTemplateForObjects(newObject);
+                                    currentForm.objects.elements.add(newObject);
+                                }
+                                InsReport.currentElement = currentForm.objects.elements.get(which);
+                                LinearLayout newLL = new LinearLayout(adikStyleActivity);
+                                newLL.setOrientation(LinearLayout.VERTICAL);
+                                addElementsToLL(newLL,InsReport.currentElement.elements);
+                                linearLayoutForFragment.put("specific",newLL);
+                                showTheFragment("specific",InsReport.currentElement.description);
+                                break;
+                        }
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        //return;
+                    }
+                }).
+                show();
     }
 
 
@@ -238,22 +456,22 @@ public class AdikStyleActivity extends AppCompatActivity {
         if (parent != null)
             parent.removeAllViews();
 
-        /*Dialog buttonDialog = new Dialog(this);
-        buttonDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        buttonDialog.setContentView(linearLayoutForFragment[menuNo]);
-        buttonDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT);
-        dd
-        buttonDialog.show();
-        */
+        ScrollView scrollView = new ScrollView(this);
+        scrollView.addView(linearLayoutForFragment.get(menuName));
 
-        new AlertDialog.Builder(this).setTitle(title).setView(linearLayoutForFragment.get(menuName))
+        new AlertDialog.Builder(this).setTitle(title).setView(scrollView)
                 .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //currentForm.saveToCloud();
+                        currentForm.saveToCloud();
                     }
-                }).show();
+                }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                currentForm.saveToCloud();
+            }
+        }).
+                show();
     }
 
 
@@ -809,9 +1027,10 @@ public class AdikStyleActivity extends AppCompatActivity {
 
                         captionTVCombo1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
-                        final EditText lookupEditText = new EditText(this);
+                        final AutoCompleteTextView lookupEditText = new AutoCompleteTextView(this);
                         element.container = lookupEditText;
                         lookupEditText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                        /*
                         if (!element.directory.equals("")) {
                             lookupEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                                 @Override
@@ -827,7 +1046,42 @@ public class AdikStyleActivity extends AppCompatActivity {
                                     openLookUpDialog(lookupEditText,InsReport.directories.map.get(element.directory).items);
                                 }
                             });
-                        };
+                        };*/
+                        lookupEditText.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                element.vText = s.toString();
+                            }
+                        });
+                        lookupEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                            @Override
+                            public void onFocusChange(View v, boolean hasFocus) {
+                                if (!hasFocus) {
+                                    element.vText = ((EditText)v).getText().toString();
+                                    //saveToCloud();
+                                }
+                            }
+                        });
+
+                        String[] autoComplete = new String[InsReport.directories.map.get(element.directory).items.size()];
+                        int i = 0;
+                        for (DirectoryItem item : InsReport.directories.map.get(element.directory).items) {
+                            autoComplete[i] = item.name;
+                            i++;
+                        }
+
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                                this, android.R.layout.simple_list_item_1,
+                                autoComplete
+                        );
+
+                        lookupEditText.setAdapter(adapter);
 
                         horizontalLLCombo1.addView(captionTVCombo1);
                         horizontalLLCombo1.addView(lookupEditText);
@@ -865,13 +1119,13 @@ public class AdikStyleActivity extends AppCompatActivity {
         }
         if (requestCode == FREE_DRAW_INTENT)
         {
-            currentElement.freeDrawBitmap = null;
+            //currentElement.freeDrawBitmap = null;
             //TODO: get the current element from the currentElement.container!
 
-            if (currentButton != null) {
-                currentButton.setText(span2Strings(currentElement.description, currentElement.toString()), Button.BufferType.SPANNABLE);
-                currentButton.setCompoundDrawablesWithIntrinsicBounds(currentElement.getBitmapDrawable(this), null, null, null);
-            }
+            //if (currentButton != null) {
+            //    currentButton.setText(span2Strings(currentElement.description, currentElement.toString()), Button.BufferType.SPANNABLE);
+            //    currentButton.setCompoundDrawablesWithIntrinsicBounds(currentElement.getBitmapDrawable(this), null, null, null);
+            //}
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             final String id = CameraAndPictures.savePictureToFirebase();

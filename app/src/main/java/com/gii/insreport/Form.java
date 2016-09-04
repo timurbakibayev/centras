@@ -211,4 +211,23 @@ public class Form {
                 }
         }
     }
+
+    public int numberOfObjects() {
+        return objects.elements.size();
+    }
+
+    public int numberOfParticipants() {
+        return participants.elements.size();
+    }
+
+    public Element objects = new Element();
+    public Element participants = new Element();
+
+    public Element getParticipants() {
+        return participants;
+    }
+
+    public Element getObjects() {
+        return objects;
+    }
 }

@@ -51,6 +51,7 @@ public class InsReport extends Application {
     public static int currentFormNo = -1;
 
     public static Element currentElement = null;
+    public static Form currentForm= null;
 
     public static FirebaseUser user;
 

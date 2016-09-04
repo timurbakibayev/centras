@@ -8,6 +8,69 @@ import java.util.Date;
 public class FormTemplates {
     public static String selectionTypes = "";
 
+    public static void applyTemplateForParticipants(Element element) {
+        element.elements.add(new Element("participant", Element.ElementType.eText, "PERSON_NAME",
+                "ФИО персоны"));
+
+        element.elements.add(new Element("participant", Element.ElementType.eText, "PERSON_TYPE",
+                "Тип персоны", "DCT_PERSON_TYPE"));
+
+        element.elements.add(new Element("participant", Element.ElementType.eText, "PERSON_IIN",
+                "Иин персоны"));
+
+        element.elements.add(new Element("participant", Element.ElementType.eText, "GUILT_PERCENTAGE",
+                "% виновности"));
+
+        element.elements.add(new Element("participant", Element.ElementType.eText, "GUILTY_CONTRACT_NO",
+                "Номер договора другой страховой компании"));
+
+        element.elements.add(new Element("participant", Element.ElementType.eDate, "GUILTY_CONTRACT_DATE",
+                "Дата договора другой страховой компании"));
+
+        element.elements.add(new Element("participant", Element.ElementType.eCombo, "THIRD_PART_INSURER",
+                "страховая компания", "DCT_THIRD_PART_INSURER"));
+    }
+
+    public static void applyTemplateForObjects(Element form) {
+
+        form.elements.add(new Element("object", Element.ElementType.ePlan, "DAMAGE_PLAN", "Повреждения"));
+
+        form.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_TYPE",
+                "тип объекта",
+                "DCT_OBJECT_TYPE"));
+
+        form.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_SUB_TYPE",
+                "подтип объекта",
+                "DCT_OBJECT_SUB_TYPE"));
+
+        form.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_PRODUCTION",
+                "марка",
+                "DCT_OBJECT_PRODUCTION"));
+
+        form.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_MODEL",
+                "модель",
+                "DCT_OBJECT_MODEL"));
+
+        form.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_CHASSIS_NO_VIN",
+                "№ кузова, № шасси"));
+
+        form.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_REGISRATION_NUMBER",
+                "Регистрационный номер объекта"));
+
+        form.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_ENGINE_NO",
+                "Номер двигателя"));
+
+        form.elements.add(new Element("object", Element.ElementType.eText, "PRODUCTION_YEAR",
+                "Год производства"));
+
+        form.elements.add(new Element("object", Element.ElementType.eText, "PRODUCTION_MONTH",
+                "Месяц производства"));
+
+        form.elements.add(new Element("object", Element.ElementType.eText, "CAR_COLOUR",
+                "Цвет объекта"));
+
+    }
+
     public static void applyTemplate(Form form, String fireBaseCatalog) {
         form.dateModified = new Date(); //ServerValue.TIMESTAMP;
         form.fireBaseCatalog = fireBaseCatalog;
@@ -284,12 +347,13 @@ public class FormTemplates {
                     }
 //
                     break;
+
                 case ("incident"):
 
                     form.elements.add(new Element("general", Element.ElementType.eText, "DOCUMENT_ID",
                             "Системный код"));
 
-                    form.elements.add(new Element("general", Element.ElementType.eCombo, "DOCUMENT_TYPE",
+                    form.elements.add(new Element("general", Element.ElementType.eLookUp, "DOCUMENT_TYPE",
                             "Тип документа",
                             "DCT_DOCUMENT_TYPE"));
 
@@ -318,7 +382,6 @@ public class FormTemplates {
 
                     form.elements.add(new Element("general", Element.ElementType.eDate, "POLICY_INSR_END",
                             "конец действия"));
-
 
                     form.elements.add(new Element("general", Element.ElementType.eText, "POLICY_REG",
                             "№ Договора"));
@@ -355,35 +418,38 @@ public class FormTemplates {
                     form.elements.add(new Element("general", Element.ElementType.eText, "INITIAL_SUM",
                             "Предварительная сумма (ущерба для страховых случае, стоимости авто для предварительного страхового осмотра)"));
 
-                    form.elements.add(new Element("general", Element.ElementType.eDate, "REGISTRATION_DATE",
+                    form.elements.add(new Element("", Element.ElementType.eDate, "REGISTRATION_DATE",
                             "Системное/Серверное время создания записи"));
-                    form.elements.add(new Element("general", Element.ElementType.eText, "USERNAME",
+                    form.elements.add(new Element("", Element.ElementType.eText, "USERNAME",
                             "Пользователь создавший запись (Login)"));
-                    form.elements.add(new Element("general", Element.ElementType.eText, "CHANGED_BY",
+                    form.elements.add(new Element("", Element.ElementType.eText, "CHANGED_BY",
                             "Пользователь изменивший запись (Login)"));
-                    form.elements.add(new Element("general", Element.ElementType.eDate, "CHANGE_DATE",
+                    form.elements.add(new Element("", Element.ElementType.eDate, "CHANGE_DATE",
                             "Системное/Серверное время изменения записи"));
 
                     form.elements.add(new Element("general", Element.ElementType.eText, "OPERATOR_NAME",
                             "Имя оператора кол-центра"));
-                    form.elements.add(new Element("general", Element.ElementType.eText, "SEND_SMS",
+                    form.elements.add(new Element("", Element.ElementType.eText, "SEND_SMS",
                             "На какой номер АК было отправлено уведомление о страх. Случае"));
                     form.elements.add(new Element("general", Element.ElementType.eText, "CLAIMANT_PHONE_NO",
                             "Номер телефона застрахованного"));
                     form.elements.add(new Element("general", Element.ElementType.eText, "SMS_PROVIDER",
                             "СМС провайдер"));
-                    form.elements.add(new Element("general", Element.ElementType.eSignature, "SPECIALIST_SIGN",
-                            "Подпись Комисара"));
-                    form.elements.add(new Element("general", Element.ElementType.eSignature, "CLIENT_SIGN",
+                    form.elements.add(new Element("signature", Element.ElementType.eSignature, "SPECIALIST_SIGN",
+                            "Подпись Комисcара"));
+                    form.elements.add(new Element("signature", Element.ElementType.eSignature, "CLIENT_SIGN",
                             "Подпись Клиента"));
+                    form.elements.add(new Element("photo", Element.ElementType.ePhoto,"photoDocuments","Документы"));
+                    form.elements.add(new Element("photo", Element.ElementType.ePhoto,"photoDamages","Повреждения"));
+                    form.elements.add(new Element("photo", Element.ElementType.ePhoto,"photoOther","Другое"));
 
 
-                    form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "DOCUMENT_ID",
-                            "Ссылка на основную запись в таблице общие данные"));
+                    //form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "DOCUMENT_ID",
+                    //        "Ссылка на основную запись в таблице общие данные"));
 
-                    form.elements.add(new Element("additionalInfo", Element.ElementType.eCombo, "QUESTION_ID",
-                            "Системный код/счетчик дела (sequence)" +
-                                    "FireBase"));
+                    //form.elements.add(new Element("additionalInfo", Element.ElementType.eCombo, "QUESTION_ID",
+                    //        "Системный код/счетчик дела (sequence)" +
+                    //                "FireBase"));
 
                     form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "QUESTION_CODE",
                             "Код вопроса"));
@@ -397,72 +463,23 @@ public class FormTemplates {
                             "Ответ на вопрос", "DCT_QUESTION_ANSWER"));
 
 
+                    /*
                     form.elements.add(new Element("participant", Element.ElementType.eText, "DOCUMENT_ID",
                             "Ссылка на основную запись в таблице общие данные"));
                     form.elements.add(new Element("participant", Element.ElementType.eText, "PERSON_ID",
                             "Системный код/счетчик дела (sequence)" +
                                     "FireBase"));
-                    form.elements.add(new Element("participant", Element.ElementType.eText, "PERSON_TYPE",
-                            "Тип персоны", "DCT_PERSON_TYPE"));
-
-                    form.elements.add(new Element("participant", Element.ElementType.eText, "PERSON_IIN",
-                            "Иин персоны"));
-                    form.elements.add(new Element("participant", Element.ElementType.eText, "PERSON_NAME",
-                            "ФИО персоны"));
-
-                    form.elements.add(new Element("participant", Element.ElementType.eText, "GUILT_PERCENTAGE",
-                            "% виновности"));
-
-                    form.elements.add(new Element("participant", Element.ElementType.eText, "GUILTY_CONTRACT_NO",
-                            "Номер договора другой страховой компании"));
-
-                    form.elements.add(new Element("participant", Element.ElementType.eDate, "GUILTY_CONTRACT_DATE",
-                            "Дата договора другой страховой компании"));
-
-                    form.elements.add(new Element("participant", Element.ElementType.eCombo, "THIRD_PART_INSURER",
-                            "страховая компания", "DCT_THIRD_PART_INSURER"));
+                                    */
 
 
-                    form.elements.add(new Element("object", Element.ElementType.eText, "DOCUMENT_ID",
-                            "Ссылка на основную запись в таблице общие данные"));
 
-                    form.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_ID",
-                            "Системный код/счетчик дела (sequence)" +
-                                    "FireBase"));
+                    //form.elements.add(new Element("object", Element.ElementType.eText, "DOCUMENT_ID",
+                    //        "Ссылка на основную запись в таблице общие данные"));
 
-                    form.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_TYPE",
-                            "тип объекта",
-                            "DCT_OBJECT_TYPE"));
+                    //form.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_ID",
+                    //        "Системный код/счетчик дела (sequence)" +
+                    //                "FireBase"));
 
-                    form.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_SUB_TYPE",
-                            "подтип объекта",
-                            "DCT_OBJECT_SUB_TYPE"));
-
-                    form.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_PRODUCTION",
-                            "марка",
-                            "DCT_OBJECT_PRODUCTION"));
-
-                    form.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_MODEL",
-                            "модель",
-                            "DCT_OBJECT_MODEL"));
-
-                    form.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_CHASSIS_NO_VIN",
-                            "№ кузова, № шасси"));
-
-                    form.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_REGISRATION_NUMBER",
-                            "Регистрационный номер объекта"));
-
-                    form.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_ENGINE_NO",
-                            "Номер двигателя"));
-
-                    form.elements.add(new Element("object", Element.ElementType.eText, "PRODUCTION_YEAR",
-                            "Год производства"));
-
-                    form.elements.add(new Element("object", Element.ElementType.eText, "PRODUCTION_MONTH",
-                            "Месяц производства"));
-
-                    form.elements.add(new Element("object", Element.ElementType.eText, "CAR_COLOUR",
-                            "Цвет объекта"));
 
 
                     //////////////////////////////////////
@@ -470,7 +487,7 @@ public class FormTemplates {
 
 
 
-
+                    /*
                     form.elements.add(new Element("attachments", Element.ElementType.eText, "DOCUMENT_ID",
                             "Ссылка на основную запись в таблице общие данные"));
 
@@ -485,6 +502,7 @@ public class FormTemplates {
                     form.elements.add(new Element("attachments", Element.ElementType.eText, "ATTACHMENT_COMMENTS",
                             "Комментарии по документу"));
 
+                    */
                     /*
                     attachments.add(new Element(Element.ElementType.eCombo, "DCT_ATTACHMENT_TYPE",
                             "Тип документа",

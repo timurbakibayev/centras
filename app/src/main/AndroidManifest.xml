@@ -68,7 +68,11 @@
             android:name=".AnimaActivity"
             android:label="@string/title_activity_anima"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AdikStyleActivity"></activity>
+        <activity android:name=".AdikStyleActivity" />
+        <activity
+            android:name=".photosActivity"
+            android:label="@string/title_activity_photos"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

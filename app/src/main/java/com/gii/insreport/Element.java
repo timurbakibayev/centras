@@ -87,6 +87,7 @@ public class Element {
     }
 
     public Element(Element element) {
+        //this.objects = element.objects;
         this.category = element.category;
         this.serverStatic = element.serverStatic;
         this.description = element.description;
@@ -171,7 +172,7 @@ public class Element {
     }
 
     public int numberOfPhotos() {
-        int n = 0;
+        /*int n = 0;
         if (type == ElementType.ePhoto)
             n = vPhotos.size();
         if (type == ElementType.eGroup) {
@@ -179,8 +180,15 @@ public class Element {
                 n += element.numberOfPhotos();
             }
         }
+        return n; */
+        int n = 0;
+        for (Element element : elements) {
+            if (element.category.contains("photo"))
+                n += element.elements.size();
+        }
         return n;
     }
+
 
     public boolean signed() {
         if (type == ElementType.eSignature && vDraw.size() == 0) {
@@ -223,7 +231,7 @@ public class Element {
     }
 
     public enum ElementType {
-        eInteger, eBoolean, ePhoto, eText, eCombo, eRadio, eDate, eDateTime, eGroup, eDraw, ePlan, eSignature, eAnima, eLookUp;
+        eInteger, eBoolean, ePhoto, eText, eCombo, eRadio, eDate, eDateTime, eGroup, eDraw, ePlan, eSignature, eAnima, eLookUp, eParticipant;
     }
 
     @JsonIgnore
@@ -382,4 +390,6 @@ public class Element {
     public String getCategory() {
         return category;
     }
+
+
 }

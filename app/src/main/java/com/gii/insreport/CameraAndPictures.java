@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
@@ -40,9 +41,46 @@ public class CameraAndPictures {
         return id;
     }
 
-    public void getPicFromFirebase(String picId, final LinearLayout linearLayout) {
+    public void getPicFromFirebase(final Element element, final LinearLayout linearLayout) {
 
-        InsReport.ref.child("images/" + picId).
+        InsReport.ref.child("images/" + element.vText).
+                addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        String gotData = snapshot.getValue(String.class);
+                        if (gotData != null) {
+                            final Bitmap thePicture = CameraAndPictures.decodeBase64(gotData);
+                            InsReport.bitmapsNeedToBeRecycled.add(thePicture);
+                            final ImageView theImageView = new ImageView(linearLayout.getContext());
+                            theImageView.setImageBitmap(thePicture);
+                            //final CameraAndPictures thisClass = this;
+                            /*if (linearLayout.getOrientation() == LinearLayout.HORIZONTAL)
+                                theImageView.setMinimumHeight(linearLayout.getHeight());
+                            else
+                                theImageView.setMinimumWidth(linearLayout.getWidth());*/
+                            theImageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    showZoomed(linearLayout, thePicture);
+                                }
+                            });
+                            theImageView.setAdjustViewBounds(true);
+                            linearLayout.addView(theImageView);
+                            TextView descriptionAndDate = new TextView(linearLayout.getContext());
+                            descriptionAndDate.setText(element.description + "  " + FillFormActivity.dateTimeText(element.vDate));
+                            linearLayout.addView(descriptionAndDate);
+                        }
+                    }
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                        Log.e("Firebase", "The read failed 4: " + firebaseError.getMessage());
+                    }
+                });
+    }
+
+    public void getPicFromFirebase(String photoID, final LinearLayout linearLayout) {
+
+        InsReport.ref.child("images/" + photoID).
                 addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
