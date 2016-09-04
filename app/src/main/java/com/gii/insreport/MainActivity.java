@@ -81,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
                         Log.e(TAG, "run: something is not yet loaded: " + mainMenuForm.fireBaseCatalog);
                     }
                 }
+                if (!InsReport.directories.loaded) {
+                    allLoaded = false;
+                    Log.e(TAG, "run: directories are not yet loaded");
+                }
                 if (allLoaded) {
                     timer.cancel();
                     final ProgressBar pb = (ProgressBar)findViewById(R.id.roundProgressbar);
@@ -88,6 +92,9 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             pb.setVisibility(View.GONE);
+                            for (Button formButton : formButtons) {
+                                formButton.setEnabled(true);
+                            }
                         }
                     });
                     Log.e(TAG, "run: ALL LOADED");
@@ -208,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+            newMenuButton.setEnabled(false);
             mainMenuLL.addView(newMenuButton);
         }
 
@@ -225,8 +233,6 @@ public class MainActivity extends AppCompatActivity {
         });
         loginButton = newMenuButton;
         mainMenuLL.addView(newMenuButton);
-
-
     }
 
     private void refreshDescriptions() {

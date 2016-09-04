@@ -29,14 +29,17 @@ public class Element {
     public Element() {
 
     }
-    public Element(ElementType elementType, String fireBaseFieldName, String prompt) {
+    public Element(String category, ElementType elementType, String fireBaseFieldName, String prompt) {
+        this.category = category;
         this.type = elementType;
         this.fireBaseFieldName = fireBaseFieldName;
         this.description = prompt;
         this.content = "";
+        this.serverStatic = false;
     }
 
-    public Element(ElementType elementType, String fireBaseFieldName, String prompt, String[] comboItems) {
+    public Element(String category, ElementType elementType, String fireBaseFieldName, String prompt, String[] comboItems) {
+        this.category = category;
         this.type = elementType;
         this.fireBaseFieldName = fireBaseFieldName;
         this.description = prompt;
@@ -47,9 +50,11 @@ public class Element {
         this.vInteger = -1;
         //if (comboItems.length > 0)
         this.vText = "";
+        this.serverStatic = false;
     }
 
-    public Element(ElementType elementType, String fireBaseFieldName, String prompt, String directory) {
+    public Element(String category, ElementType elementType, String fireBaseFieldName, String prompt, String directory) {
+        this.category = category;
         this.type = elementType;
         this.fireBaseFieldName = fireBaseFieldName;
         this.description = prompt;
@@ -62,14 +67,17 @@ public class Element {
         this.vInteger = -1;
         //if (comboItems.length > 0)
         this.vText = "";
+        this.serverStatic = false;
     }
 
-    public Element(ArrayList<Element> elements, String fireBaseFieldName, String prompt) {
+    public Element(String category, ArrayList<Element> elements, String fireBaseFieldName, String prompt) {
+        this.category = category;
         this.type = ElementType.eGroup;
         this.elements = elements;
         this.description = prompt;
         this.fireBaseFieldName = fireBaseFieldName;
         this.content = "";
+        this.serverStatic = false;
     }
 
     String value = "";
@@ -79,6 +87,8 @@ public class Element {
     }
 
     public Element(Element element) {
+        this.category = element.category;
+        this.serverStatic = element.serverStatic;
         this.description = element.description;
         this.type = element.type;
         this.vDate = element.vDate;
@@ -235,6 +245,9 @@ public class Element {
     public Date vDate;
     public ArrayList<Element> elements = new ArrayList<>();
     public ArrayList<ArrayList<PointF>> vDraw = new ArrayList<>();
+    public boolean serverStatic = false;
+    public String category = "";
+
     @JsonIgnore
     public Bitmap freeDrawBitmap = null;
     @JsonIgnore
@@ -360,5 +373,13 @@ public class Element {
 
     public ArrayList<Frame> getFrames() {
         return frames;
+    }
+
+    public boolean isServerStatic() {
+        return serverStatic;
+    }
+
+    public String getCategory() {
+        return category;
     }
 }

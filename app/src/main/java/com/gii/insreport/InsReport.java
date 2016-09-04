@@ -35,6 +35,7 @@ public class InsReport extends Application {
     public static FirebaseStorage storage;
     public static StorageReference storageRef;
     public static FirebaseAuth mAuth;
+    public static Directories directories;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     public static String userID = "";
@@ -108,6 +109,7 @@ public class InsReport extends Application {
 
         mAuth.addAuthStateListener(mAuthListener);
 
+        directories = new Directories();
 
         //TODO: REMOVE THIS WHEN RELEASED!!!!!
         //addDummyForms();

@@ -144,7 +144,7 @@ public class Form {
     }
 
     @JsonIgnore
-    Element rawData = new Element(Element.ElementType.eGroup,"rawData","");
+    Element rawData = new Element("raw",Element.ElementType.eGroup,"rawData","");
 
 
     Map<String, String> rawMap = new HashMap<String, String>();
@@ -180,6 +180,7 @@ public class Form {
                 applyInput(element.elements);
             else
                 if (input.get(element.fireBaseFieldName) != null) {
+                    element.serverStatic = true;
                     String value = input.get(element.fireBaseFieldName);
                     if (element.type == Element.ElementType.eText)
                         element.vText = value;
@@ -190,13 +191,14 @@ public class Form {
                             element.vDate = inputDate;
                         } catch (Exception e) {
 
-                        } ;
+                        }
                     }
                     //TODO: not tested!
                     if (element.type == Element.ElementType.eInteger)
                         try {
                             element.vInteger = Integer.parseInt(value);
                         } catch (Exception e) {};
+
                     //TODO: not tested!
                     if (element.type == Element.ElementType.eRadio || element.type == Element.ElementType.eCombo) {
                         for (int i = 0; i < element.comboItems.size(); i++) {

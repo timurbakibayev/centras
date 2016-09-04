@@ -6,7 +6,7 @@ package com.gii.insreport;
 public class DirectoryItem {
     public String id = "";
     public String name = "";
-    public boolean status = true;
+    public String status = "";
 
     public String getId() {
         return id;
@@ -16,7 +16,7 @@ public class DirectoryItem {
         return name;
     }
 
-    public boolean isStatus() {
+    public String getStatus() {
         return status;
     }
 }

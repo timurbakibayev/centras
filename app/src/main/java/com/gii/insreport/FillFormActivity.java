@@ -627,7 +627,8 @@ public class FillFormActivity extends AppCompatActivity {
                                             try {
                                                 final DirectoryItem newDirectoryItem = postSnapshot.getValue(DirectoryItem.class);
                                                 newDirectoryItem.id = postSnapshot.getKey();
-                                                if (newDirectoryItem.status)
+                                                if (!newDirectoryItem.status.equalsIgnoreCase("N") &&
+                                                        !newDirectoryItem.status.equalsIgnoreCase("false"))
                                                     directoryItems.add(newDirectoryItem);
                                             } catch (Exception e) {
                                                 Log.e(TAG, "onDataChange: PROBLEMS CASTING DIRECTORY FROM DB!!! : " + element.directory + "/" + postSnapshot.getKey());
@@ -712,7 +713,8 @@ public class FillFormActivity extends AppCompatActivity {
                                             try {
                                                 final DirectoryItem newDirectoryItem = postSnapshot.getValue(DirectoryItem.class);
                                                 newDirectoryItem.id = postSnapshot.getKey();
-                                                if (newDirectoryItem.status) {
+                                                if (!newDirectoryItem.status.equalsIgnoreCase("N") &&
+                                                        !newDirectoryItem.status.equalsIgnoreCase("false")) {
                                                     RadioButton radioButton = new RadioButton(thisActivity);
                                                     radioButton.setText(newDirectoryItem.name);
                                                     i++;
@@ -792,7 +794,8 @@ public class FillFormActivity extends AppCompatActivity {
                                             try {
                                                 final DirectoryItem newDirectoryItem = postSnapshot.getValue(DirectoryItem.class);
                                                 newDirectoryItem.id = postSnapshot.getKey();
-                                                if (newDirectoryItem.status)
+                                                if (!newDirectoryItem.status.equalsIgnoreCase("N") &&
+                                                        !newDirectoryItem.status.equalsIgnoreCase("false"))
                                                     directoryItems.add(newDirectoryItem);
                                             } catch (Exception e) {
                                                 Log.e(TAG, "onDataChange: PROBLEMS CASTING DIRECTORY FROM DB!!! : " + element.directory + "/" + postSnapshot.getKey());

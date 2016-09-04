@@ -1,6 +1,5 @@
 package com.gii.insreport;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -16,11 +15,12 @@ public class FormTemplates {
             switch (fireBaseCatalog) {
                 case ("preInsurance"):
                     if (selectionTypes.equalsIgnoreCase("Car")) {
-                        ArrayList<Element> header = new ArrayList<>();
-                        ArrayList<Element> personalInfo = new ArrayList<>();
-                        ArrayList<Element> carInfo = new ArrayList<>();
-                        ArrayList<Element> additionalInfo1 = new ArrayList<>();
+                        //ArrayList<Element> header = new ArrayList<>();
+                        //ArrayList<Element> personalInfo = new ArrayList<>();
+                        //ArrayList<Element> carInfo = new ArrayList<>();
+                        //ArrayList<Element> additionalInfo1 = new ArrayList<>();
 
+                        /*
                         form.elements.add(new Element(header, "header", "Заголовок"));
 
                         form.elements.add(new Element(personalInfo, "personalInfo", "Личные данные"));
@@ -29,26 +29,29 @@ public class FormTemplates {
 
                         form.elements.add(new Element(additionalInfo1, "additionalInfo1", "Дополнительные данные"));
 
-                        header.add(new Element(Element.ElementType.eText, "city", "Город"));
+                        */
 
-                        header.add(new Element(Element.ElementType.eDate, "reportDate",
+                        form.elements.add(new Element("general",Element.ElementType.eText, "city", "Город"));
+
+                        form.elements.add(new Element("general",Element.ElementType.eDate, "reportDate",
                                 "Дата составления акта"));
 
-                        header.add(new Element(Element.ElementType.eText, "employee",
+                        form.elements.add(new Element("general",Element.ElementType.eText, "employee",
                                 "представитель АО «СК «Сентрас Иншуранс» - ФИО"));
 
-                        header.add(new Element(Element.ElementType.eText, "client",
+                        form.elements.add(new Element("general",Element.ElementType.eText, "client",
                                 "клиента - ФИО"));
 
-                        header.add(new Element(Element.ElementType.eText, "address",
+                        form.elements.add(new Element("general",Element.ElementType.eText, "address",
                                 "по адресу"));
 
-                        personalInfo.add(new Element(Element.ElementType.eText, "owner", "Владелец"));
+                        form.elements.add(new Element("personal",Element.ElementType.eText, "owner", "Владелец"));
 
                         form.descriptionFields.add("owner");
 
-                        personalInfo.add(new Element(Element.ElementType.eText, "contactInfo",
+                        form.elements.add(new Element("personal",Element.ElementType.eText, "contactInfo",
                                 "Контактные данные"));
+                        /*
 
                         carInfo.add(new Element(Element.ElementType.eText, "certificateOfRegistration",
                                 "Свидетельство о регистрации"));
@@ -135,120 +138,111 @@ public class FormTemplates {
 
                         //signatures.add(new Element(Element.ElementType.eText, "fullName", "ФИО"));
                         form.elements.add(new Element(Element.ElementType.eSignature, "signature", "Подпись Клиента"));
+                        */
                     } else {
+                        /*
                         ArrayList<Element> generalInfo1 = new ArrayList<>();
                         ArrayList<Element> carInfo = new ArrayList<>();
                         ArrayList<Element> regularSet = new ArrayList<>();
                         ArrayList<Element> damageInfo = new ArrayList<>();
                         ArrayList<Element> additionEquipment = new ArrayList<>();
                         ArrayList<Element> alarmSystem = new ArrayList<>();
+                        */
 
-                        form.elements.add(new Element(generalInfo1, "generalInfo", "Общие данные"));
-                        form.elements.add(new Element(carInfo, "carInfo", "Информация о ТС"));
-                        form.elements.add(new Element(regularSet, "regularSet",
-                                "Описание штатной комплектации"));
-                        form.elements.add(new Element(additionEquipment, "additionEquipment",
-                                "Дополнительное оборудование, подлежащее страхованию"));
-                        form.elements.add(new Element(damageInfo, "damageInfo",
-                                "Отметки об имеющихся повреждениях"));
-                        form.elements.add(new Element(alarmSystem, "alarmSystem",
-                                "ТС оборудовано следующими исправными средствами противоугонной защиты (СИСТЕМАМИ)"));
-
-
-                        generalInfo1.add(new Element(Element.ElementType.eText, "numberOfPolice",
+                        form.elements.add(new Element("general",Element.ElementType.eText, "numberOfPolice",
                                 "№"));
-                        generalInfo1.add(new Element(Element.ElementType.eDate, "date",
+                        form.elements.add(new Element("general",Element.ElementType.eDate, "date",
                                 "от"));
 
-                        carInfo.add(new Element(Element.ElementType.eText, "model", "Марка/модель ТС"));
-                        carInfo.add(new Element(Element.ElementType.eText, "productionDate", "Год выпуска"));
-                        carInfo.add(new Element(Element.ElementType.eText, "VIN", "VIN (№ кузова/шасси)"));
-                        carInfo.add(new Element(Element.ElementType.eCombo, "typeOfEngine", "Тип двигателя ",
+                        form.elements.add(new Element("car",Element.ElementType.eText, "model", "Марка/модель ТС"));
+                        form.elements.add(new Element("car",Element.ElementType.eText, "productionDate", "Год выпуска"));
+                        form.elements.add(new Element("car",Element.ElementType.eText, "VIN", "VIN (№ кузова/шасси)"));
+                        form.elements.add(new Element("car",Element.ElementType.eCombo, "typeOfEngine", "Тип двигателя ",
                                 new String[]{"бензиновый", "электродвигатель"}));
 
-                        carInfo.add(new Element(Element.ElementType.eText, "engineVolume", "Объем двигателя"));
-                        carInfo.add(new Element(Element.ElementType.eRadio, "driveType", "Тип привода",
+                        form.elements.add(new Element("car",Element.ElementType.eText, "engineVolume", "Объем двигателя"));
+                        form.elements.add(new Element("car",Element.ElementType.eRadio, "driveType", "Тип привода",
                                 new String[]{"передний", "задний"}));
-                        carInfo.add(new Element(Element.ElementType.eCombo, "gearboxType", "Тип КПП",
+                        form.elements.add(new Element("car",Element.ElementType.eCombo, "gearboxType", "Тип КПП",
                                 new String[]{"автомат", "типтроник", "вариатор", "механика"}));
-                        carInfo.add(new Element(Element.ElementType.eText, "plateNumber", "Гос.рег.номер"));
+                        form.elements.add(new Element("car",Element.ElementType.eText, "plateNumber", "Гос.рег.номер"));
 
-                        carInfo.add(new Element(Element.ElementType.eText, "mileage", "Пробег (на дату осмотра)миль/км"));
-                        carInfo.add(new Element(Element.ElementType.eText, "owner", "Владелец  ТС:"));
-                        carInfo.add(new Element(Element.ElementType.eText, "registration",
+                        form.elements.add(new Element("car",Element.ElementType.eText, "mileage", "Пробег (на дату осмотра)миль/км"));
+                        form.elements.add(new Element("car",Element.ElementType.eText, "owner", "Владелец  ТС:"));
+                        form.elements.add(new Element("car",Element.ElementType.eText, "registration",
                                 "Свидетельство о регистрации ТС:"));
-                        carInfo.add(new Element(Element.ElementType.eText, "series", "Серия №"));
+                        form.elements.add(new Element("car",Element.ElementType.eText, "series", "Серия №"));
 
-                        carInfo.add(new Element(Element.ElementType.eText, "issued", "Выдан:"));
+                        form.elements.add(new Element("car",Element.ElementType.eText, "issued", "Выдан:"));
 
-                        additionEquipment
-                                .add(new Element(Element.ElementType.eText, "name", "Название"));
-                        additionEquipment
-                                .add(new Element(Element.ElementType.eText, "price", "Стоимость"));
+                        form.elements
+                                .add(new Element("extra",Element.ElementType.eText, "name", "Название"));
+                        form.elements
+                                .add(new Element("extra",Element.ElementType.eText, "price", "Стоимость"));
 
                         if (selectionTypes.equalsIgnoreCase("Bike")) {
-                            regularSet.add(new Element(Element.ElementType.eBoolean, "windshield",
+                            form.elements.add(new Element("car",Element.ElementType.eBoolean, "windshield",
                                     "Стекло ветровое"));
-                            regularSet.add(new Element(Element.ElementType.eBoolean, "microcar",
+                            form.elements.add(new Element("car",Element.ElementType.eBoolean, "microcar",
                                     "Мотоколяска "));
-                            regularSet.add(new Element(Element.ElementType.eBoolean, "motokofr",
+                            form.elements.add(new Element("car",Element.ElementType.eBoolean, "motokofr",
                                     "Мотокофр"));
-                            regularSet.add(new Element(Element.ElementType.eBoolean, "motobagazhnik",
+                            form.elements.add(new Element("car",Element.ElementType.eBoolean, "motobagazhnik",
                                     "Мотобагажник "));
-                            regularSet.add(new Element(Element.ElementType.eRadio, "headlights",
+                            form.elements.add(new Element("car",Element.ElementType.eRadio, "headlights",
                                     "Фары",
                                     new String[]{"противотуманные", "ксеноновые"}));
-                            regularSet.add(new Element(Element.ElementType.eBoolean, "radio",
+                            form.elements.add(new Element("car",Element.ElementType.eBoolean, "radio",
                                     "Радио/музыкальное оборудование (автомагнитола)"));
-                            regularSet.add(new Element(Element.ElementType.eText, "rims",
+                            form.elements.add(new Element("car",Element.ElementType.eText, "rims",
                                     "Покрышки (фирма,модель)"));
-                            regularSet.add(new Element(Element.ElementType.eText, "other",
+                            form.elements.add(new Element("car",Element.ElementType.eText, "other",
                                     "Другое штатное заводское оборудование:"));
                             VehicleDamageView.carType = "Bike";
                         } else if (selectionTypes.equalsIgnoreCase("Bus") ||
                                 selectionTypes.equalsIgnoreCase("Truck")) {
-                            regularSet.add(new Element(Element.ElementType.eBoolean, "hatch", "люк"));
-                            regularSet.add(new Element(Element.ElementType.eBoolean, "fogHeadlights",
+                            form.elements.add(new Element("car",Element.ElementType.eBoolean, "hatch", "люк"));
+                            form.elements.add(new Element("car",Element.ElementType.eBoolean, "fogHeadlights",
                                     "противотуманные фарые"));
-                            regularSet.add(new Element(Element.ElementType.eBoolean, "xenon",
+                            form.elements.add(new Element("car",Element.ElementType.eBoolean, "xenon",
                                     "ксеноновые фары"));
-                            regularSet.add(new Element(Element.ElementType.eBoolean, "airConditioning",
+                            form.elements.add(new Element("car",Element.ElementType.eBoolean, "airConditioning",
                                     "кондиционер"));
-                            regularSet.add(new Element(Element.ElementType.eBoolean, "climateControl;",
+                            form.elements.add(new Element("car",Element.ElementType.eBoolean, "climateControl;",
                                     "климат-контроль"));
-                            regularSet.add(new Element(Element.ElementType.eBoolean, "centralLocking;",
+                            form.elements.add(new Element("car",Element.ElementType.eBoolean, "centralLocking;",
                                     "центральный замок"));
-                            regularSet.add(new Element(Element.ElementType.eBoolean, "navigationSystem;",
+                            form.elements.add(new Element("car",Element.ElementType.eBoolean, "navigationSystem;",
                                     "навигационная система"));
-                            regularSet.add(new Element(Element.ElementType.eBoolean, "headlightWasher",
+                            form.elements.add(new Element("car",Element.ElementType.eBoolean, "headlightWasher",
                                     "омыватель фар"));
-                            regularSet.add(new Element(Element.ElementType.eBoolean, "wiper",
+                            form.elements.add(new Element("car",Element.ElementType.eBoolean, "wiper",
                                     "обогреватель щеток стеклоочистителя"));
-                            regularSet.add(new Element(Element.ElementType.eBoolean, "windshield",
+                            form.elements.add(new Element("car",Element.ElementType.eBoolean, "windshield",
                                     "Стекло ветровое"));
 
-                            regularSet.add(new Element(Element.ElementType.eCombo, "sensors",
+                            form.elements.add(new Element("car",Element.ElementType.eCombo, "sensors",
                                     "Датчик парковки",
                                     new String[]{"задний", "передний", "дождя", "света"}));
-                            regularSet.add(new Element(Element.ElementType.eRadio, "interior",
+                            form.elements.add(new Element("car",Element.ElementType.eRadio, "interior",
                                     "Салон", new String[]{"ткань", "синтетика", "кожа"}));
-                            regularSet.add(new Element(Element.ElementType.eText, "bodyPaint", "Цвет кузова"));
-                            regularSet.add(new Element(Element.ElementType.eRadio, "tuning",
+                            form.elements.add(new Element("car",Element.ElementType.eText, "bodyPaint", "Цвет кузова"));
+                            form.elements.add(new Element("car",Element.ElementType.eRadio, "tuning",
                                     "Тюнинг", new String[]{"есть", "нет"}));
-                            regularSet.add(new Element(Element.ElementType.eText, "tuning",
+                            form.elements.add(new Element("car",Element.ElementType.eText, "tuning",
                                     "наименование"));
-                            regularSet.add(new Element(Element.ElementType.eRadio, "electricDrive",
+                            form.elements.add(new Element("car",Element.ElementType.eRadio, "electricDrive",
                                     "Электропривод", new String[]{"зеркала", "стеклоподъемники",
                                     "сиденья"}));
-                            regularSet.add(new Element(Element.ElementType.eRadio, "electricHeater",
+                            form.elements.add(new Element("car",Element.ElementType.eRadio, "electricHeater",
                                     "Электроподогрев", new String[]{"зеркала", "сиденья"}));
-                            regularSet.add(new Element(Element.ElementType.eCombo, "equipment",
+                            form.elements.add(new Element("car",Element.ElementType.eCombo, "equipment",
                                     "Электроподогрев", new String[]{"заводская магнитола",
                                     "заводской CD-чейнджер", "Встр. динамики"}));
-                            regularSet.add(new Element(Element.ElementType.eCombo, "rims",
+                            form.elements.add(new Element("car",Element.ElementType.eCombo, "rims",
                                     "Колесные диски", new String[]{"Литые", "Стальные",
                                     "Колпаки", "Резина"}));
-                            regularSet.add(new Element(Element.ElementType.eText, "otherEquipment",
+                            form.elements.add(new Element("car",Element.ElementType.eText, "otherEquipment",
                                     "Другое оборудование"));
                             if (selectionTypes.equalsIgnoreCase("Bus")) {
                                 VehicleDamageView.carType = "Bus";
@@ -259,6 +253,7 @@ public class FormTemplates {
                             }
                         }
 
+                        /*
                         damageInfo.add(new Element(Element.ElementType.ePlan, "damagePlan",
                                 "План повреждений"));
                         regularSet.add(new Element(Element.ElementType.eText, "keys", "Количество оригинальных  комплектов  ключей у Страхователя"));
@@ -285,39 +280,23 @@ public class FormTemplates {
 
                         form.elements.add(new Element(Element.ElementType.eSignature, "signatureClient", "Представитель страхователя"));
                         form.elements.add(new Element(Element.ElementType.eSignature, "signatureEmployee", "Представитель Страховщика"));
+                        */
                     }
 //
                     break;
                 case ("incident"):
-                    ArrayList<Element> mainInfo = new ArrayList<>();
-                    ArrayList<Element> additionalInfo = new ArrayList<>();
-                    ArrayList<Element> participantsInfo = new ArrayList<>();
-                    ArrayList<Element> objectsInfo = new ArrayList<>();
-                    ArrayList<Element> attachments = new ArrayList<>();
 
-                    form.elements.add(new Element(mainInfo, "MAIN_INFO",
-                            "Общие данные"));
-                    form.elements.add(new Element(additionalInfo, "ADDITIONAL_INFO",
-                            "Дополнительная информация по делу"));
-                    form.elements.add(new Element(participantsInfo, "PARTICIPANTS_INFO",
-                            "Данные по участникам  участвоваших в страховом случае/пред. Осмотре"));
-                    form.elements.add(new Element(objectsInfo, "OBJECTS_INFO",
-                            "Данные по объектам участвоваших в страховом случае/пред. Осмотре"));
-                    form.elements.add(new Element(attachments, "ATTACHMENTS",
-                            "Фотографии (документы) по делу"));
-
-
-                    mainInfo.add(new Element(Element.ElementType.eText, "DOCUMENT_ID",
+                    form.elements.add(new Element("general",Element.ElementType.eText, "DOCUMENT_ID",
                             "Системный код"));
 
-                    mainInfo.add(new Element(Element.ElementType.eCombo, "DCT_DOCUMENT_TYPE", "Тип документа",
-                            new String[]{"Страховой случай", "Предварительный страховой осмотр",
-                                    "Осмотр Груза"}));
+                    form.elements.add(new Element("general",Element.ElementType.eCombo, "DOCUMENT_TYPE",
+                            "Тип документа",
+                            "DCT_DOCUMENT_TYPE"));
 
-                    mainInfo.add(new Element(Element.ElementType.eText, "CLAIM_REGID",
+                    form.elements.add(new Element("general",Element.ElementType.eText, "CLAIM_REGID",
                             "Номер дела"));
 
-                    mainInfo.add(new Element(Element.ElementType.eCombo, "DCT_CLAIM_TYPE",
+                    form.elements.add(new Element("general",Element.ElementType.eCombo, "DCT_CLAIM_TYPE",
                             "Тип дела",
                             new String[]{"Прочее имущество третьих лиц (ОГПО ВТС)", "Имущество - транспортное средство",
                                     "Ответственность", "Неимущественные риски", "Финансовые потери",
@@ -329,119 +308,34 @@ public class FormTemplates {
                                     "Грузы", "Добровольное страхование жд транспорта", "СМР",
                                     "ДГПО ВТС", "Ответственность работодателя", "Ответственность перевозчика"}));
 
-                    mainInfo.add(new Element(Element.ElementType.eDateTime, "CLAIM_STARTED",
+                    form.elements.add(new Element("general",Element.ElementType.eDateTime, "CLAIM_STARTED",
                             "Дата регистрации дела"));
 
-                    mainInfo.add(new Element(Element.ElementType.eText, "POLICY_REG",
+                    form.elements.add(new Element("general",Element.ElementType.eText, "POLICY_REG",
                             "№ Договора"));
-                    mainInfo.add(new Element(Element.ElementType.eText, "POLICY_DATE_GIVEN",
+                    form.elements.add(new Element("general",Element.ElementType.eText, "POLICY_DATE_GIVEN",
                             "Дата выдачи договора"));
 
-                    mainInfo.add(new Element(Element.ElementType.eText, "POLICY_INSR_BEGIN",
+                    form.elements.add(new Element("general",Element.ElementType.eText, "POLICY_INSR_BEGIN",
                             "Начало действия"));
 
-                    mainInfo.add(new Element(Element.ElementType.eText, "POLICY_INSR_END",
+                    form.elements.add(new Element("general",Element.ElementType.eText, "POLICY_INSR_END",
                             "Конец действия"));
 
-                    mainInfo.add(new Element(Element.ElementType.eCombo, "DCT_INSR_TYPE",
+                    form.elements.add(new Element("general",Element.ElementType.eCombo, "INSR_TYPE",
                             "Код продукта страхования",
-                            new String[]{"Обязательное страхование гражданско-правовой" +
-                                    " ответственности владельцев транспортных средств",
-                                    "Обязательное страхование гражданско-правовой" +
-                                            " ответственности перевозчика перед пассажирами",
-                                    "Обязательное страхование работника от несчастных случаев" +
-                                            " при исполнении им трудовых (служебных) обязанностей",
-                                    "Обязательное страхование гражданско-правовой ответственности" +
-                                            " владельцев опасных объектов",
-                                    "Обязательное страхование гражданско-правовой ответственности" +
-                                            " туроператора и турагента",
-                                    "Обязательное экологическое страхование",
-                                    "Обязательное страхование гражданско-правовой" +
-                                            " ответственности частных нотариусов",
-                                    "Обязательное страхование гражданско-правовой" +
-                                            " ответственности Аудиторских организаций",
-                                    "Добровольное страхование от несчастных случаев",
-                                    "Добровольное страхование по программе НС-Стандарт",
-                                    "Добровольное страхование по программе НС-Авто",
-                                    "Добровольное страхование заемщика от несчастных случаев",
-                                    "Добровольное страхование от несчастного случая по Программе НС-Спорт",
-                                    "Добровольное страхование по программе НС-Дети",
-                                    "Добровольное страхование по программе НС-Гранд",
-                                    "Добровольное страхование Авто НС \"Выгодные друзья\"",
-                                    "Добровольное страхование от несчастных случаев по Программе \"НС водителя\"",
-                                    "НС Выбор", "Добровольное страхование на случай болезни",
-                                    "Добровольное страхование медицинских расходов выезжающих за границу",
-                                    "Добровольное страхование на случай болезни (для юридических лиц)",
-                                    "Добровольное страхование на случай болезни (для физических лиц)",
-                                    "Добровольное страхование детей до 1 года жизни по программе \"Малыш\"",
-                                    "Добровольное страхование на случай болезни по Программе \"Эконом EXP\"" +
-                                            " (для нерезидентов)",
-                                    "Добровольное страхование автомобильного транспорта по Программе Авто-Стандарт",
-                                    "Добровольное страхование автомобильного транспорта по Программе Авто-Лимит",
-                                    "Добровольное страхование автомобильного транспорта",
-                                    "Добровольное страхование автомобильного транспорта по Программе Авто-Элит",
-                                    "Добровольное страхование автомобильного транспорта по" +
-                                            " Программе Авто-Эксклюзив",
-                                    "Страхование автомобильного транспорта в залоге",
-                                    "Добровольное страхование по программе Мото-КАСКО",
-                                    "Добровольное страхование автомобильного транспорта по Программе САКТА",
-                                    "Добровольное страхование автомобильного транспорта по Программе" +
-                                            " \"Авто-Лимит\" (с франшизой)",
-                                    "Добровольное страхование автомобильного транспорта" +
-                                            " по Программе «МИНИ КАСКО» ",
-                                    "Добровольное страхование автомобильного транспорта по Программе" +
-                                            " Авто-Эксклюзив (ALLUR AUTO)",
-                                    "Добровольное страхование железнодорожного транспорта",
-                                    "Добровольное страхование воздушного транспорта",
-                                    "Добровольное страхование водного транспорта",
-                                    "Добровольное страхование грузов (Ген. договор)",
-                                    "Добровольное страхование грузов (полис)",
-                                    "Страхование имущества (Генеральный Договор)",
-                                    "Страхование имущества", "Добровольное страхование имущества в залоге",
-                                    "Добровольное страхование имущества Домашний Очаг",
-                                    "Добровольное страхование гражданско-правовой ответственности" +
-                                            " владельцев автомобильного транспорта",
-                                    "Добровольное страхование гражданско-правовой ответственности" +
-                                            " автовладельцев по программе ДГПО-Лимит",
-                                    "Добровольное страхование гражданско-правовой " +
-                                            "ответственности Программа \"Миллион плюс\"",
-                                    "Добровольное страхование гражданско-правовой ответственности" +
-                                            " Программа \"Сервис плюс\"",
-                                    "Добровольное страхование гражданско-правовой ответственности" +
-                                            " владельцев воздушного транспорта",
-                                    "Добровольное страхование гражданско-правовой ответственности" +
-                                            " владельцев водного транспорта",
-                                    "Добровольное страхование гражданско-правовой ответственности за вред",
-                                    "Добровольное страхование гражданско-правовой ответственности" +
-                                            " по программе По-СОСЕДски",
-                                    "Добровольное страхование прочих финансовых убытков",
-                                    "Добровольное титульное страхование",
-                                    "Добровольное страхование займов", "Входящее перестрахование",
-                                    "Входящее страхование Грузов",
-                                    "Добровольное комплексное страхование автомобильного транспорта",
-                                    "Добровольное страхование автомобильного транспорта по Программе 50 х 50",
-                                    "Добровольное страхование автомобильного транспорта по программе 90х60х90",
-                                    "Добровольное комплексное страхование по программе Моя семья",
-                                    "Добровольное страхование строительно-монтажных работ",
-                                    "ДС нефтяных операций и буровых работ",
-                                    "Программа страхования \"Свой бизнес\"",
-                                    "Программа \"ДОМашний очаг\"",
-                                    "Комплексное страхование воздушного судна",
-                                    "Добровольное страхование автомобильного транспорта \"Двухсторонка\"",
-                                    "Добровольное комплексное страхование по программе \"преИМУЩЕСТВО\"",
-                                    "Добровольное комплексное страхование"
-                            }));
+                            "DCT_INSR_TYPE"));
 
-                    mainInfo.add(new Element(Element.ElementType.eText, "CLIENT_NAME",
+                    form.elements.add(new Element("general",Element.ElementType.eText, "CLIENT_NAME",
                             "ФИО Страхователя"));
 
-                    mainInfo.add(new Element(Element.ElementType.eText, "CLIENT_NAME",
+                    form.elements.add(new Element("general",Element.ElementType.eText, "CLIENT_NAME",
                             "ФИО Страхователя"));
 
-                    mainInfo.add(new Element(Element.ElementType.eDateTime, "EVENT_DATE",
+                    form.elements.add(new Element("general",Element.ElementType.eDateTime, "EVENT_DATE",
                             "Дата страх. случая"));
 
-                    mainInfo.add(new Element(Element.ElementType.eCombo, "DCT_EVENT_TYPE",
+                    form.elements.add(new Element("general",Element.ElementType.eCombo, "DCT_EVENT_TYPE",
                             "Причина/Событие страх. Случая",
                             new String[]{"Пожар", "Стихийные бедствия", "Домашний несчастный случай",
                                     "Транспортное происшествие", "Болезнь", "Кража отдельных частей",
@@ -831,43 +725,21 @@ public class FormTemplates {
                                     "Другое"
                             }));
 
-                    mainInfo.add(new Element(Element.ElementType.eText, "EVENT_PLACE",
+                    form.elements.add(new Element("general",Element.ElementType.eText, "EVENT_PLACE",
                             "Место события"));
-                    mainInfo.add(new Element(Element.ElementType.eText, "INITIAL_SUM",
+                    form.elements.add(new Element("general",Element.ElementType.eText, "INITIAL_SUM",
                             "Предварительная сумма (ущерба для страховых случае, стоимости авто для предварительного страхового осмотра)"));
-                    mainInfo.add(new Element(Element.ElementType.eText, "OPERATOR_NAME",
+                    form.elements.add(new Element("general",Element.ElementType.eText, "OPERATOR_NAME",
                             "Имя оператора кол-центра"));
-                    mainInfo.add(new Element(Element.ElementType.eText, "SEND_SMS",
+                    form.elements.add(new Element("general",Element.ElementType.eText, "SEND_SMS",
                             "На какой номер АК было отправлено уведомление о страх. Случае"));
-                    mainInfo.add(new Element(Element.ElementType.eText, "CLAIMANT_PHONE_NO",
+                    form.elements.add(new Element("general",Element.ElementType.eText, "CLAIMANT_PHONE_NO",
                             "Номер телефона застрахованного"));
-                    mainInfo.add(new Element(Element.ElementType.eText, "SMS_PROVIDER",
+                    form.elements.add(new Element("general",Element.ElementType.eText, "SMS_PROVIDER",
                             "СМС провайдер"));
 
 
-                    mainInfo.add(new Element(Element.ElementType.eSignature, "SPECIALIST_SIGN", "Подпись Специалиста"));
-                    mainInfo.add(new Element(Element.ElementType.eSignature, "CLIENT_SIGN", "Подпись Клиента"));
-
-
-                    additionalInfo.add(new Element(Element.ElementType.eText, "QUESTION_CODE",
-                            "Код вопроса"));
-                    additionalInfo.add(new Element(Element.ElementType.eText, "QUESTION_DESC",
-                            "Описание вопроса"));
-                    additionalInfo.add(new Element(Element.ElementType.eText, "QUESTION_ANSWER_TYPE",
-                            "Тип ответа"));
-                    additionalInfo.add(new Element(Element.ElementType.eText, "QUESTION_ANSWER",
-                            "Ответ на вопрос"));
-                    additionalInfo.add(new Element(Element.ElementType.eText, "USERNAME",
-                            "Пользователь создавший запись (Login)"));
-                    additionalInfo.add(new Element(Element.ElementType.eText, "REGISTRATION_DATE",
-                            "Системное/Серверное время создания записи"));
-                    additionalInfo.add(new Element(Element.ElementType.eText, "CHANGED_BY",
-                            "Пользователь изменивший запись (Login)"));
-                    additionalInfo.add(new Element(Element.ElementType.eText, "CHANGE_DATE",
-                            "Системное/Серверное время изменения записи"));
-
-
-                    participantsInfo.add(new Element(Element.ElementType.eCombo, "DCT_PERSON_TYPE",
+                    form.elements.add(new Element("participant",Element.ElementType.eCombo, "DCT_PERSON_TYPE",
                             "Тип персоны", new String[]{
                             "Владелец",
                             "Пострадавший",
@@ -890,16 +762,16 @@ public class FormTemplates {
                             "Аджастер"
                     }));
 
-                    participantsInfo.add(new Element(Element.ElementType.eText, "PERSON_IIN",
+                    form.elements.add(new Element("participant",Element.ElementType.eText, "PERSON_IIN",
                             "Иин персоны"));
 
-                    participantsInfo.add(new Element(Element.ElementType.eText, "GUILT_PERCENTAGE",
+                    form.elements.add(new Element("participant",Element.ElementType.eText, "GUILT_PERCENTAGE",
                             "% виновности"));
-                    participantsInfo.add(new Element(Element.ElementType.eText, "GUILTY_CONTRACT_NO",
+                    form.elements.add(new Element("participant",Element.ElementType.eText, "GUILTY_CONTRACT_NO",
                             "Номер договора другой страховой компании"));
-                    participantsInfo.add(new Element(Element.ElementType.eDate, "GUILTY_CONTRACT_DATE",
+                    form.elements.add(new Element("participant",Element.ElementType.eDate, "GUILTY_CONTRACT_DATE",
                             "Дата договора другой страховой компании"));
-                    participantsInfo.add(new Element(Element.ElementType.eCombo, "DCT_THIRD_PART_INSURER",
+                    form.elements.add(new Element("participant",Element.ElementType.eCombo, "DCT_THIRD_PART_INSURER",
                             "страховая компания",
                             new String[]{
                                     "Cентрас Иншуранс",
@@ -928,17 +800,7 @@ public class FormTemplates {
                                     "Цесна Гарант"
                             }));
 
-
-                    participantsInfo.add(new Element(Element.ElementType.eText, "USERNAME",
-                            "Пользователь создавший запись (Login)"));
-                    participantsInfo.add(new Element(Element.ElementType.eText, "REGISTRATION_DATE",
-                            "Системное/Серверное время создания записи"));
-                    participantsInfo.add(new Element(Element.ElementType.eText, "CHANGED_BY",
-                            "Пользователь изменивший запись (Login)"));
-                    participantsInfo.add(new Element(Element.ElementType.eText, "CHANGE_DATE",
-                            "Системное/Серверное время изменения записи"));
-
-                    objectsInfo.add(new Element(Element.ElementType.eCombo, "DCT_OBJECT_TYPE",
+                    form.elements.add(new Element("object",Element.ElementType.eCombo, "DCT_OBJECT_TYPE",
                             "тип объекта",
                             new String[]{"Застрахованный",
                                     "Земледелие",
@@ -955,7 +817,7 @@ public class FormTemplates {
                                     "Железнодорожный транспорт"}));
 
 
-                    objectsInfo.add(new Element(Element.ElementType.eCombo, "DCT_OBJECT_SUB_TYPE",
+                    form.elements.add(new Element("object",Element.ElementType.eCombo, "DCT_OBJECT_SUB_TYPE",
                             "подтип объекта",
                             new String[]{"Легковые  автомашины",
                                     "Трамваи, троллейбусы",
@@ -969,39 +831,30 @@ public class FormTemplates {
                                     "Автобус",
                                     "Прицепы, полуприцепы"}));
 
-                    objectsInfo.add(new Element(Element.ElementType.eCombo, "DCT_OBJECT_PRODUCTION",
+                    form.elements.add(new Element("object",Element.ElementType.eCombo, "DCT_OBJECT_PRODUCTION",
                             "марка",
                             new String[]{"test"}));
-                    objectsInfo.add(new Element(Element.ElementType.eCombo, "DCT_OBJECT_MODEL",
+                    form.elements.add(new Element("object",Element.ElementType.eCombo, "DCT_OBJECT_MODEL",
                             "модель",
                             new String[]{"test"}));
 
 
-                    objectsInfo.add(new Element(Element.ElementType.eText, "OBJECT_CHASSIS_NO_VIN",
+                    form.elements.add(new Element("object",Element.ElementType.eText, "OBJECT_CHASSIS_NO_VIN",
                             "№ кузова, № шасси"));
-                    objectsInfo.add(new Element(Element.ElementType.eText, "OBJECT_REGISRATION_NUMBER",
+                    form.elements.add(new Element("object",Element.ElementType.eText, "OBJECT_REGISRATION_NUMBER",
                             "Регистрационный номер объекта"));
-                    objectsInfo.add(new Element(Element.ElementType.eText, "OBJECT_ENGINE_NO",
+                    form.elements.add(new Element("object",Element.ElementType.eText, "OBJECT_ENGINE_NO",
                             "Номер двигателя"));
-                    objectsInfo.add(new Element(Element.ElementType.eText, "PRODUCTION_YEAR",
+                    form.elements.add(new Element("object",Element.ElementType.eText, "PRODUCTION_YEAR",
                             "Год производства"));
-                    objectsInfo.add(new Element(Element.ElementType.eText, "PRODUCTION_MONTH",
+                    form.elements.add(new Element("object",Element.ElementType.eText, "PRODUCTION_MONTH",
                             "Месяц производства"));
 
-                    objectsInfo.add(new Element(Element.ElementType.eText, "CAR_COLOUR",
+                    form.elements.add(new Element("object",Element.ElementType.eText, "CAR_COLOUR",
                             "Цвет объекта"));
 
 
-                    objectsInfo.add(new Element(Element.ElementType.eText, "USERNAME",
-                            "Пользователь создавший запись (Login)"));
-                    objectsInfo.add(new Element(Element.ElementType.eText, "REGISTRATION_DATE",
-                            "Системное/Серверное время создания записи"));
-                    objectsInfo.add(new Element(Element.ElementType.eText, "CHANGED_BY",
-                            "Пользователь изменивший запись (Login)"));
-                    objectsInfo.add(new Element(Element.ElementType.eText, "CHANGE_DATE",
-                            "Системное/Серверное время изменения записи"));
-
-
+                    /*
                     attachments.add(new Element(Element.ElementType.eCombo, "DCT_ATTACHMENT_TYPE",
                             "Тип документа",
                             new String[]{"Список движимого/недвижимого имущества (ЖД ТС, скважин, Упаковочный лист)",
@@ -1080,6 +933,7 @@ public class FormTemplates {
                     attachments.add(new Element(Element.ElementType.eText, "CHANGE_DATE",
                             "Системное/Серверное время изменения записи"));
 
+                    */
 
 //                    ArrayList<Element> generalInfo = new ArrayList<>();
 //                    ArrayList<Element> insured = new ArrayList<>();

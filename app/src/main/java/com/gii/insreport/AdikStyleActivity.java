@@ -3,6 +3,7 @@ package com.gii.insreport;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -13,6 +14,7 @@ import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.Editable;
@@ -45,15 +47,12 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
-import com.firebase.client.ValueEventListener;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AdikStyleActivity extends AppCompatActivity {
 
@@ -195,7 +194,6 @@ public class AdikStyleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adik_style);
 
-
         for (int i = 0; i < datePicker.length; i++)
             datePicker[i] = new EditText(this);
         fireBaseCatalog = getIntent().getStringExtra(InsReport.EXTRA_FIREBASE_CATALOG);
@@ -221,62 +219,65 @@ public class AdikStyleActivity extends AppCompatActivity {
         ((Button)findViewById(R.id.AButtonGeneral)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showTheFragment(0);
+                showTheFragment("general","Общие сведения");
             }
         });
         ((Button)findViewById(R.id.menu2)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showTheFragment(1);
+                showTheFragment("participant","Дополнительная информация");
             }
         });
     }
 
 
-    LinearLayout[] linearLayoutForFragment;
-    private void showTheFragment(int menuNo) {
-        ViewGroup parent = (ViewGroup)linearLayoutForFragment[menuNo].getParent();
+    Map<String,LinearLayout> linearLayoutForFragment = new HashMap<>();
+    private void showTheFragment(String menuName, String title) {
+        ViewGroup parent = (ViewGroup)linearLayoutForFragment.get(menuName).getParent();
+
         if (parent != null)
             parent.removeAllViews();
 
-        Dialog buttonDialog = new Dialog(this);
+        /*Dialog buttonDialog = new Dialog(this);
         buttonDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         buttonDialog.setContentView(linearLayoutForFragment[menuNo]);
+        buttonDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
+        dd
         buttonDialog.show();
+        */
+
+        new AlertDialog.Builder(this).setTitle(title).setView(linearLayoutForFragment.get(menuName))
+                .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //currentForm.saveToCloud();
+                    }
+                }).show();
     }
 
 
     private void buildTheForm(Form currentForm) {
         int n = 0;
-        for (Element element : currentForm.elements)
-            if (element.type == Element.ElementType.eGroup)
-                n++;
-
-        /*
-        LinearLayout fillFormLL = (LinearLayout)findViewById(R.id.fill_form_ll);
-
-        fillFormLL.setOrientation(LinearLayout.HORIZONTAL);
-        if (fillFormLL.getOrientation() == LinearLayout.VERTICAL) {
-            //fillFormLL.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT));
-            //TODO: handle different fillFormLL orientation.
-        }
-
         datePickerIndex = -1;
-        fillFormLL.removeAllViews();
-        */
-        datePickerIndex = -1;
-        linearLayoutForFragment = new LinearLayout[n];
-        for (int i = 0; i < n; i++) {
-            linearLayoutForFragment[i] = new LinearLayout(this);
-            linearLayoutForFragment[i].setOrientation(LinearLayout.VERTICAL);
-        }
-
-        int i = 0;
+        //linearLayoutForFragment = new LinearLayout[n];
+        linearLayoutForFragment.clear();
         for (Element element : currentForm.elements) {
-            if (element.type == Element.ElementType.eGroup) {
-                addElementsToLL(linearLayoutForFragment[i],element.elements);
-                i++;
+            if (linearLayoutForFragment.get(element.category) == null) {
+                LinearLayout newLL = new LinearLayout(this);
+                newLL.setOrientation(LinearLayout.VERTICAL);
+                linearLayoutForFragment.put(element.category, newLL);
             }
+        }
+
+        for (Map.Entry<String, LinearLayout> linearLayoutEntry : linearLayoutForFragment.entrySet()) {
+            ArrayList<Element> elements = new ArrayList<>();
+            for (Element element : currentForm.elements) {
+                if (element.category.equals(linearLayoutEntry.getKey())) {
+                    elements.add(element);
+                }
+            }
+            addElementsToLL(linearLayoutEntry.getValue(),elements);
         }
     }
 
@@ -289,97 +290,135 @@ public class AdikStyleActivity extends AppCompatActivity {
     public void addElementsToLL(LinearLayout LL, ArrayList<Element> elements) {
         boolean firstGroup = true;
         for (final Element element : elements) {
-            switch (element.type) {
-                case eGroup:
-                    LinearLayout outerLL = new LinearLayout(this);
-                    element.container = outerLL;
-                    final LinearLayout innerLL = new LinearLayout(this);
-                    final ProgressBar progressBar = new ProgressBar(this,null,
-                            android.R.attr.progressBarStyleHorizontal);
-                    progressBar.setProgress(30);
-                    innerLL.setOrientation(LinearLayout.VERTICAL);
-                    LinearLayout.LayoutParams innerLL_lp = (new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                    innerLL_lp.setMargins(10,10,10,10);
-                    innerLL.setLayoutParams(innerLL_lp);
-                    outerLL.setOrientation(LinearLayout.VERTICAL);
-                    final float scale = getResources().getDisplayMetrics().density;
-                    LinearLayout.LayoutParams lp = null;
-                    if (LL.getOrientation() == LinearLayout.HORIZONTAL)
-                        lp = new LinearLayout.LayoutParams((int)(500 * scale), LinearLayout.LayoutParams.WRAP_CONTENT);
-                    else
-                        lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    lp.rightMargin = 20;
-                    lp.leftMargin = 20;
-                    //lp.setMargins(50,50,50,50);
+            if (element.serverStatic) {
+                LinearLayout horizontalLLStatic = new LinearLayout(this);
+                horizontalLLStatic.setOrientation(LinearLayout.HORIZONTAL);
+                horizontalLLStatic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
+                TextView fieldName = new TextView(this);
+                fieldName.setMaxLines(5);
+                fieldName.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,0.5f));
+                fieldName.setText(element.description);
+                horizontalLLStatic.addView(fieldName);
 
-                    outerLL.setLayoutParams(lp);
-                    addElementsToLL(innerLL,element.elements);
-                    outerLL.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy, null));
-                    Button expandingButton = new Button(this);
-                    expandingButton.setText(element.description);
-                    expandingButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button, null));
-                    //expandingButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_more_black_24dp, null),null,null,null);
-                    expandingButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Button thisButton = (Button)v;
-                            if (innerLL.getVisibility() == View.GONE) {
-                                innerLL.setVisibility(View.VISIBLE);
-                                thisButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_less_black_24dp, null),null,null,null);
-                                thisButton.setText(element.description);
-                                thisButton.requestFocus();
-                                progressBar.setVisibility(View.GONE);
-                            } else {
-                                innerLL.setVisibility(View.GONE);
-                                thisButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_more_black_24dp, null),null,null,null);
-                                thisButton.setText(element.description + "\n" + element.collectData(new ArrayList<String>()));
-                                progressBar.setVisibility(View.VISIBLE);
-                                progressBar.setProgress((int)((float)element.filled() / element.outOf() * 100));
-                            }
-                        }
-                    });
-                    if (firstGroup || true) //true is for the tablets
-                        innerLL.setVisibility(View.VISIBLE);
-                    else
-                        innerLL.setVisibility(View.GONE);
-                    firstGroup = false;
-                    if (innerLL.getVisibility() == View.VISIBLE) {
-                        expandingButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_less_black_24dp, null),null,null,null);
+                TextView fieldValue = new TextView(this);
+                fieldValue.setMaxLines(5);
+                fieldValue.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,0.5f));
+                fieldValue.setText(element.toString());
+                horizontalLLStatic.addView(fieldValue);
+                LL.addView(horizontalLLStatic);
+            }
+        }
+
+        for (final Element element : elements) {
+            if (!element.serverStatic)
+                switch (element.type) {
+                    case eGroup:
+                        LinearLayout outerLL = new LinearLayout(this);
+                        element.container = outerLL;
+                        final LinearLayout innerLL = new LinearLayout(this);
+                        final ProgressBar progressBar = new ProgressBar(this,null,
+                                android.R.attr.progressBarStyleHorizontal);
+                        progressBar.setProgress(30);
+                        innerLL.setOrientation(LinearLayout.VERTICAL);
+                        LinearLayout.LayoutParams innerLL_lp = (new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                        innerLL_lp.setMargins(10,10,10,10);
+                        innerLL.setLayoutParams(innerLL_lp);
+                        outerLL.setOrientation(LinearLayout.VERTICAL);
+                        final float scale = getResources().getDisplayMetrics().density;
+                        LinearLayout.LayoutParams lp = null;
+                        if (LL.getOrientation() == LinearLayout.HORIZONTAL)
+                            lp = new LinearLayout.LayoutParams((int)(500 * scale), LinearLayout.LayoutParams.WRAP_CONTENT);
+                        else
+                            lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        lp.rightMargin = 20;
+                        lp.leftMargin = 20;
+                        //lp.setMargins(50,50,50,50);
+
+                        outerLL.setLayoutParams(lp);
+                        addElementsToLL(innerLL,element.elements);
+                        outerLL.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy, null));
+                        Button expandingButton = new Button(this);
                         expandingButton.setText(element.description);
-                        expandingButton.requestFocus();
-                        progressBar.setVisibility(View.GONE);
-                    } else {
-                        expandingButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_more_black_24dp, null),null,null,null);
-                        expandingButton.setText(element.description + "\n" + element.collectData(new ArrayList<String>()));
-                        progressBar.setVisibility(View.VISIBLE);
+                        expandingButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button, null));
+                        //expandingButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_more_black_24dp, null),null,null,null);
+                        expandingButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Button thisButton = (Button)v;
+                                if (innerLL.getVisibility() == View.GONE) {
+                                    innerLL.setVisibility(View.VISIBLE);
+                                    thisButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_less_black_24dp, null),null,null,null);
+                                    thisButton.setText(element.description);
+                                    thisButton.requestFocus();
+                                    progressBar.setVisibility(View.GONE);
+                                } else {
+                                    innerLL.setVisibility(View.GONE);
+                                    thisButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_more_black_24dp, null),null,null,null);
+                                    thisButton.setText(element.description + "\n" + element.collectData(new ArrayList<String>()));
+                                    progressBar.setVisibility(View.VISIBLE);
+                                    progressBar.setProgress((int)((float)element.filled() / element.outOf() * 100));
+                                }
+                            }
+                        });
+                        if (firstGroup || true) //true is for the tablets
+                            innerLL.setVisibility(View.VISIBLE);
+                        else
+                            innerLL.setVisibility(View.GONE);
+                        firstGroup = false;
+                        if (innerLL.getVisibility() == View.VISIBLE) {
+                            expandingButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_less_black_24dp, null),null,null,null);
+                            expandingButton.setText(element.description);
+                            expandingButton.requestFocus();
+                            progressBar.setVisibility(View.GONE);
+                        } else {
+                            expandingButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_more_black_24dp, null),null,null,null);
+                            expandingButton.setText(element.description + "\n" + element.collectData(new ArrayList<String>()));
+                            progressBar.setVisibility(View.VISIBLE);
+                            progressBar.setProgress((int)((float)element.filled() / element.outOf() * 100));
+                        };
                         progressBar.setProgress((int)((float)element.filled() / element.outOf() * 100));
-                    };
-                    progressBar.setProgress((int)((float)element.filled() / element.outOf() * 100));
-                    outerLL.addView(expandingButton);
-                    outerLL.addView(progressBar);
-                    outerLL.addView(innerLL);
-                    outerLL.setFocusableInTouchMode(true);
-                    LL.addView(outerLL);
-                    break;
-                case eDate:
-                    LinearLayout horizontalLLdp1 = new LinearLayout(thisActivity);
-                    horizontalLLdp1.setOrientation(LinearLayout.HORIZONTAL);
-                    horizontalLLdp1.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
-                    TextView captionTVdp1 = new TextView(thisActivity);
-                    captionTVdp1.setText(element.description);
-                    captionTVdp1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                        outerLL.addView(expandingButton);
+                        outerLL.addView(progressBar);
+                        outerLL.addView(innerLL);
+                        outerLL.setFocusableInTouchMode(true);
+                        LL.addView(outerLL);
+                        break;
+                    case eDate:
+                        LinearLayout horizontalLLdp1 = new LinearLayout(thisActivity);
+                        horizontalLLdp1.setOrientation(LinearLayout.HORIZONTAL);
+                        horizontalLLdp1.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
+                        TextView captionTVdp1 = new TextView(thisActivity);
+                        captionTVdp1.setText(element.description);
+                        captionTVdp1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
-                    datePickerIndex++;
-                    final int dpI = datePickerIndex;
-                    final Element dpElement = element;
-                    element.container = datePicker[datePickerIndex];
-                    datePicker[datePickerIndex].setText(dateOnlyText(element.vDate));
-                    datePicker[datePickerIndex].setInputType(InputType.TYPE_NULL);
-                    datePicker[datePickerIndex].setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-                    datePicker[datePickerIndex].setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                        @Override
-                        public void onFocusChange(View v, boolean hasFocus) {
-                            if (hasFocus) {
+                        datePickerIndex++;
+                        final int dpI = datePickerIndex;
+                        final Element dpElement = element;
+                        element.container = datePicker[datePickerIndex];
+                        datePicker[datePickerIndex].setText(dateOnlyText(element.vDate));
+                        datePicker[datePickerIndex].setInputType(InputType.TYPE_NULL);
+                        datePicker[datePickerIndex].setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                        datePicker[datePickerIndex].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                            @Override
+                            public void onFocusChange(View v, boolean hasFocus) {
+                                if (hasFocus) {
+                                    if (element.vDate == null)
+                                        element.vDate = new Date();
+                                    calendar.setTime(element.vDate);
+                                    currentDatePicker = dpI;
+                                    currentDateElement = dpElement;
+                                    new DatePickerDialog(thisActivity, dateOnly, calendar
+                                            .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                                            calendar.get(Calendar.DAY_OF_MONTH)).show();
+                                }
+                            }
+                        });
+                        datePicker[datePickerIndex].setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
                                 if (element.vDate == null)
                                     element.vDate = new Date();
                                 calendar.setTime(element.vDate);
@@ -389,49 +428,49 @@ public class AdikStyleActivity extends AppCompatActivity {
                                         .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                                         calendar.get(Calendar.DAY_OF_MONTH)).show();
                             }
-                        }
-                    });
-                    datePicker[datePickerIndex].setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (element.vDate == null)
-                                element.vDate = new Date();
-                            calendar.setTime(element.vDate);
-                            currentDatePicker = dpI;
-                            currentDateElement = dpElement;
-                            new DatePickerDialog(thisActivity, dateOnly, calendar
-                                    .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                                    calendar.get(Calendar.DAY_OF_MONTH)).show();
-                        }
-                    });
-                    ViewGroup parent = (ViewGroup) datePicker[datePickerIndex].getParent();
+                        });
+                        ViewGroup parent = (ViewGroup) datePicker[datePickerIndex].getParent();
 
-                    if (parent != null)
-                        parent.removeAllViews();
+                        if (parent != null)
+                            parent.removeAllViews();
 
-                    horizontalLLdp1.addView(captionTVdp1);
-                    horizontalLLdp1.addView(datePicker[datePickerIndex]);
-                    LL.addView(horizontalLLdp1);
-                    break;
-                case eDateTime:
-                    LinearLayout horizontalLLdp = new LinearLayout(thisActivity);
-                    horizontalLLdp.setOrientation(LinearLayout.HORIZONTAL);
-                    horizontalLLdp.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
-                    TextView captionTVdp = new TextView(thisActivity);
-                    captionTVdp.setText(element.description);
-                    captionTVdp.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                        horizontalLLdp1.addView(captionTVdp1);
+                        horizontalLLdp1.addView(datePicker[datePickerIndex]);
+                        LL.addView(horizontalLLdp1);
+                        break;
+                    case eDateTime:
+                        LinearLayout horizontalLLdp = new LinearLayout(thisActivity);
+                        horizontalLLdp.setOrientation(LinearLayout.HORIZONTAL);
+                        horizontalLLdp.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
+                        TextView captionTVdp = new TextView(thisActivity);
+                        captionTVdp.setText(element.description);
+                        captionTVdp.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
-                    datePickerIndex++;
-                    final int dpI1 = datePickerIndex;
-                    final Element dpElement1 = element;
-                    element.container = datePicker[datePickerIndex];
-                    datePicker[datePickerIndex].setText(dateTimeText(element.vDate));
-                    datePicker[datePickerIndex].setInputType(InputType.TYPE_NULL);
-                    datePicker[datePickerIndex].setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-                    datePicker[datePickerIndex].setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                        @Override
-                        public void onFocusChange(View v, boolean hasFocus) {
-                            if (hasFocus) {
+                        datePickerIndex++;
+                        final int dpI1 = datePickerIndex;
+                        final Element dpElement1 = element;
+                        element.container = datePicker[datePickerIndex];
+                        datePicker[datePickerIndex].setText(dateTimeText(element.vDate));
+                        datePicker[datePickerIndex].setInputType(InputType.TYPE_NULL);
+                        datePicker[datePickerIndex].setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                        datePicker[datePickerIndex].setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                            @Override
+                            public void onFocusChange(View v, boolean hasFocus) {
+                                if (hasFocus) {
+                                    if (element.vDate == null)
+                                        element.vDate = new Date();
+                                    calendar.setTime(element.vDate);
+                                    currentDatePicker = dpI1;
+                                    currentDateElement = dpElement1;
+                                    new DatePickerDialog(thisActivity, dateThenTime, calendar
+                                            .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                                            calendar.get(Calendar.DAY_OF_MONTH)).show();
+                                }
+                            }
+                        });
+                        datePicker[datePickerIndex].setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
                                 if (element.vDate == null)
                                     element.vDate = new Date();
                                 calendar.setTime(element.vDate);
@@ -441,453 +480,362 @@ public class AdikStyleActivity extends AppCompatActivity {
                                         .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                                         calendar.get(Calendar.DAY_OF_MONTH)).show();
                             }
-                        }
-                    });
-                    datePicker[datePickerIndex].setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (element.vDate == null)
-                                element.vDate = new Date();
-                            calendar.setTime(element.vDate);
-                            currentDatePicker = dpI1;
-                            currentDateElement = dpElement1;
-                            new DatePickerDialog(thisActivity, dateThenTime, calendar
-                                    .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                                    calendar.get(Calendar.DAY_OF_MONTH)).show();
-                        }
-                    });
-                    ViewGroup parent1 = (ViewGroup) datePicker[datePickerIndex].getParent();
+                        });
+                        ViewGroup parent1 = (ViewGroup) datePicker[datePickerIndex].getParent();
 
-                    if (parent1 != null)
-                        parent1.removeAllViews();
+                        if (parent1 != null)
+                            parent1.removeAllViews();
 
-                    horizontalLLdp.addView(captionTVdp);
-                    horizontalLLdp.addView(datePicker[datePickerIndex]);
-                    LL.addView(horizontalLLdp);
-                    break;
-                case eText:
-                    final EditText editText = new EditText(thisActivity);
-                    ImageView speachButton = new ImageView(thisActivity);
-                    currentEditText = editText;
-                    element.container = editText;
-                    editText.setText(element.vText);
-                    //change the element, but do not save:
-                    editText.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                            element.vText = s.toString();
-                        }
-                    });
-                    editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                        @Override
-                        public void onFocusChange(View v, boolean hasFocus) {
-                            if (!hasFocus) {
-                                element.vText = ((EditText)v).getText().toString();
-                                //saveToCloud();
-                            }
-                        }
-                    });
-                    LinearLayout horizontalLL = new LinearLayout(thisActivity);
-                    horizontalLL.setOrientation(LinearLayout.HORIZONTAL);
-                    horizontalLL.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
-
-                    //ADIK: 06 August 2016:
-                    TextInputLayout fieldHint = new TextInputLayout(thisActivity);
-                    fieldHint.setHint(element.description);
-                    fieldHint.setLayoutParams(new LinearLayout.LayoutParams(0,
-                            LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-                    fieldHint.addView(editText);
-                    horizontalLL.addView(fieldHint);
-                    LinearLayout.LayoutParams loParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    loParams.gravity = Gravity.CENTER_VERTICAL;
-                    speachButton.setLayoutParams(loParams);
-                    speachButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_mic_black_24dp, null));
-                    speachButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            currentEditText = editText;
-                            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "ru-RU");
-                            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Пожалуйста, говорите...");
-                            intent.putExtra("android.speech.extra.EXTRA_ADDITIONAL_LANGUAGES", new String[]{});
-                            startActivityForResult(intent, SPEACH_INTENT);
-                        }
-                    });
-                    //hide button if there is no speech recognition on the device:
-                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                    if (intent.resolveActivity(getPackageManager()) == null)
-                        speachButton.setVisibility(View.GONE);
-
-                    horizontalLL.addView(speachButton);
-
-                    LL.addView(horizontalLL);
-                    break;
-                case eBoolean:
-                    final Switch booleanSwitch = new Switch(this);
-                    element.container = booleanSwitch;
-                    booleanSwitch.setText(element.description);
-                    booleanSwitch.setChecked(element.vBoolean);
-                    booleanSwitch.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            element.vBoolean = booleanSwitch.isChecked();
-                            //saveToCloud();
-                        }
-                    });
-                    LL.addView(booleanSwitch);
-                    break;
-                case ePlan:
-                    final Button planButton = new Button(this);
-                    element.container = planButton;
-                    planButton.setText(span2Strings(element.description,element.vPlan.damageDescription), Button.BufferType.SPANNABLE);
-                    planButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            currentElement = element;
-                            currentButton = planButton;
-                            Intent intent = new Intent(thisActivity, VehicleDamageActivity.class);
-                            InsReport.damagePlanData = element.vPlan;
-                            startActivityForResult(intent, DAMAGE_PLAN_INTENT);
-                        }
-                    });
-                    LL.addView(planButton);
-                    break;
-                case ePhoto:
-                    final HorizontalScrollView scrollViewPhoto = new HorizontalScrollView(this);
-                    element.container = scrollViewPhoto;
-                    scrollViewPhoto.setHorizontalScrollBarEnabled(true);
-                    scrollViewPhoto.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200));
-                    final LinearLayout linearLayoutPhoto = new LinearLayout(this);
-                    linearLayoutPhoto.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
-                    linearLayoutPhoto.setOrientation(LinearLayout.HORIZONTAL);
-                    //here request the pictures from the cloud into linearLayoutPhoto:
-                    for (String photoID : element.vPhotos)
-                        cameraAndPictures.getPicFromFirebase(photoID,linearLayoutPhoto);
-                    final Button takePhotoButton = new Button(this);
-                    takePhotoButton.setText("Камера+");
-                    takePhotoButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
-                    takePhotoButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            currentElement = element;
-                            currentLinearLayout = linearLayoutPhoto;
-                            takePhoto();
-                        }
-                    });
-                    linearLayoutPhoto.addView(takePhotoButton);
-                    scrollViewPhoto.addView(linearLayoutPhoto);
-                    LL.addView(scrollViewPhoto);
-                    break;
-                case eDraw:
-                    final Button drawButton = new Button(this);
-                    element.container = drawButton;
-                    drawButton.setText(span2Strings(element.description,element.toString()), Button.BufferType.SPANNABLE);
-                    drawButton.setCompoundDrawablesWithIntrinsicBounds(element.getBitmapDrawable(this),null,null,null);
-                    drawButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            InsReport.currentElement = element;
-                            currentElement = element;
-                            currentButton = drawButton;
-                            Intent intent = new Intent(thisActivity, FreeDrawActivity.class);
-                            InsReport.damagePlanData = element.vPlan;
-                            startActivityForResult(intent, FREE_DRAW_INTENT);
-                        }
-                    });
-                    LL.addView(drawButton);
-                    break;
-                case eAnima:
-                    final HorizontalScrollView scrollViewPhoto1 = new HorizontalScrollView(this);
-                    scrollViewPhoto1.setHorizontalScrollBarEnabled(true);
-                    scrollViewPhoto1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200));
-                    final LinearLayout linearLayoutPhoto1 = new LinearLayout(this);
-                    element.container = linearLayoutPhoto1;
-                    linearLayoutPhoto1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
-                    linearLayoutPhoto1.setOrientation(LinearLayout.HORIZONTAL);
-                    //here request the pictures from the cloud into linearLayoutPhoto:
-                    for (String photoID : element.vPhotos)
-                        cameraAndPictures.getPicFromFirebase(photoID,linearLayoutPhoto1);
-
-                    final Button animaButton = new Button(this);
-                    //element.container = animaButton;
-                    animaButton.setText(span2Strings(element.description,element.toString()), Button.BufferType.SPANNABLE);
-                    animaButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
-                    animaButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            InsReport.currentElement = element;
-                            currentElement = element;
-                            currentButton = animaButton;
-                            Intent intent = new Intent(thisActivity, AnimaActivity.class);
-                            //InsReport.damagePlanData = element.vPlan;
-                            //TODO: bind the frames...
-                            startActivityForResult(intent, ANIMA_INTENT);
-                        }
-                    });
-                    linearLayoutPhoto1.addView(animaButton);
-                    scrollViewPhoto1.addView(linearLayoutPhoto1);
-                    LL.addView(scrollViewPhoto1);
-                    break;
-                case eSignature:
-                    final Button drawButton1 = new Button(this);
-                    element.container = drawButton1;
-                    drawButton1.setText(span2Strings(element.description,element.toString()), Button.BufferType.SPANNABLE);
-                    drawButton1.setCompoundDrawablesWithIntrinsicBounds(element.getBitmapDrawable(this),null,null,null);
-                    drawButton1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            InsReport.currentElement = element;
-                            currentElement = element;
-                            currentButton = drawButton1;
-                            Intent intent = new Intent(thisActivity, FreeDrawActivity.class);
-                            InsReport.damagePlanData = element.vPlan;
-                            startActivityForResult(intent, FREE_DRAW_INTENT);
-                        }
-                    });
-                    LL.addView(drawButton1);
-                    break;
-                case eCombo:
-                    LinearLayout horizontalLLCombo = new LinearLayout(thisActivity);
-                    horizontalLLCombo.setOrientation(LinearLayout.HORIZONTAL);
-                    horizontalLLCombo.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
-
-                    TextView captionTVCombo = new TextView(this);
-                    captionTVCombo.setText(element.description);
-
-                    captionTVCombo.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-                    final Spinner comboSpinner = new Spinner(this);
-                    element.container = comboSpinner;
-                    comboSpinner.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-
-                    if (!element.directory.equals("")) {
-                        Query queryRef = InsReport.ref.child("dirs/" + element.directory);
-                        queryRef.
-                                addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot snapshot) {
-                                        Log.e(TAG, "onDataChange: got new directory, processing...");
-                                        int i  =0;
-                                        final ArrayList<DirectoryItem> directoryItems = new ArrayList<DirectoryItem>();
-                                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                                            try {
-                                                final DirectoryItem newDirectoryItem = postSnapshot.getValue(DirectoryItem.class);
-                                                newDirectoryItem.id = postSnapshot.getKey();
-                                                if (newDirectoryItem.status)
-                                                    directoryItems.add(newDirectoryItem);
-                                            } catch (Exception e) {
-                                                Log.e(TAG, "onDataChange: PROBLEMS CASTING DIRECTORY FROM DB!!! : " + element.directory + "/" + postSnapshot.getKey());
-                                            }
-                                        }
-                                        if (directoryItems.size() > 0) {
-                                            element.comboItems = new ArrayList<String>();
-                                            for (DirectoryItem directoryItem : directoryItems) {
-                                                element.comboItems.add(directoryItem.name);
-                                            }
-                                            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(thisActivity, android.R.layout.simple_spinner_dropdown_item, element.comboItems);
-                                            comboSpinner.setAdapter(spinnerArrayAdapter);
-                                            for (int j = 0; j < directoryItems.size(); j++)
-                                                if (directoryItems.get(j).id.equals(element.vText))
-                                                    comboSpinner.setSelection(j);
-                                            comboSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                @Override
-                                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                                    element.vText = directoryItems.get(comboSpinner.getSelectedItemPosition()).id;
-                                                    element.vInteger = comboSpinner.getSelectedItemPosition();
-                                                    //saveToCloud();
-                                                }
-                                                @Override
-                                                public void onNothingSelected(AdapterView<?> parent) {
-
-                                                }
-                                            });
-                                        }
-                                    }
-                                    @Override
-                                    public void onCancelled(FirebaseError firebaseError) {
-                                        Log.e("Firebase", "The read failed 9: " + firebaseError.getMessage());
-                                    }
-                                });
-                    } else {
-                        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, element.comboItems);
-                        comboSpinner.setAdapter(spinnerArrayAdapter);
-                        comboSpinner.setSelection(element.vInteger);
-                        comboSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        horizontalLLdp.addView(captionTVdp);
+                        horizontalLLdp.addView(datePicker[datePickerIndex]);
+                        LL.addView(horizontalLLdp);
+                        break;
+                    case eText:
+                        final EditText editText = new EditText(thisActivity);
+                        ImageView speachButton = new ImageView(thisActivity);
+                        currentEditText = editText;
+                        element.container = editText;
+                        editText.setText(element.vText);
+                        //change the element, but do not save:
+                        editText.addTextChangedListener(new TextWatcher() {
                             @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                element.vText = comboSpinner.getSelectedItem().toString();
-                                element.vInteger = comboSpinner.getSelectedItemPosition();
-                                //saveToCloud();
-                            }
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
                             @Override
-                            public void onNothingSelected(AdapterView<?> parent) {
+                            public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                element.vText = s.toString();
                             }
                         });
-                    }
-                    horizontalLLCombo.addView(captionTVCombo);
-                    horizontalLLCombo.addView(comboSpinner);
-                    LL.addView(horizontalLLCombo);
-                    break;
-                case eRadio:
-                    LinearLayout horizontalLLRadio = new LinearLayout(thisActivity);
-                    horizontalLLRadio.setOrientation(LinearLayout.HORIZONTAL);
-                    horizontalLLRadio.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
-                    TextView captionTVRadio = new TextView(this);
-                    captionTVRadio.setText(element.description + ":");
+                        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                            @Override
+                            public void onFocusChange(View v, boolean hasFocus) {
+                                if (!hasFocus) {
+                                    element.vText = ((EditText)v).getText().toString();
+                                    //saveToCloud();
+                                }
+                            }
+                        });
+                        LinearLayout horizontalLL = new LinearLayout(thisActivity);
+                        horizontalLL.setOrientation(LinearLayout.HORIZONTAL);
+                        horizontalLL.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
 
-                    captionTVRadio.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                        //ADIK: 06 August 2016:
+                        TextInputLayout fieldHint = new TextInputLayout(thisActivity);
+                        fieldHint.setHint(element.description);
+                        fieldHint.setLayoutParams(new LinearLayout.LayoutParams(0,
+                                LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                        fieldHint.addView(editText);
+                        horizontalLL.addView(fieldHint);
+                        LinearLayout.LayoutParams loParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        loParams.gravity = Gravity.CENTER_VERTICAL;
+                        speachButton.setLayoutParams(loParams);
+                        speachButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_mic_black_24dp, null));
+                        speachButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                currentEditText = editText;
+                                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "ru-RU");
+                                intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Пожалуйста, говорите...");
+                                intent.putExtra("android.speech.extra.EXTRA_ADDITIONAL_LANGUAGES", new String[]{});
+                                startActivityForResult(intent, SPEACH_INTENT);
+                            }
+                        });
+                        //hide button if there is no speech recognition on the device:
+                        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                        if (intent.resolveActivity(getPackageManager()) == null)
+                            speachButton.setVisibility(View.GONE);
 
-                    final RadioGroup radioGroup = new RadioGroup(this);
-                    element.container = radioGroup;
-                    radioGroup.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-                    //ArrayAdapter<String> radioArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, element.comboItems);
-                    radioGroup.setOrientation(RadioGroup.HORIZONTAL);
-                    final RadioButton[] radioButtons = new RadioButton[element.comboItems.size()];
+                        horizontalLL.addView(speachButton);
 
-                    if (!element.directory.equals("")) {
-                        Query queryRef = InsReport.ref.child("dirs/" + element.directory);
-                        queryRef.
-                                addValueEventListener(new ValueEventListener() {
+                        LL.addView(horizontalLL);
+                        break;
+                    case eBoolean:
+                        final Switch booleanSwitch = new Switch(this);
+                        element.container = booleanSwitch;
+                        booleanSwitch.setText(element.description);
+                        booleanSwitch.setChecked(element.vBoolean);
+                        booleanSwitch.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                element.vBoolean = booleanSwitch.isChecked();
+                                //saveToCloud();
+                            }
+                        });
+                        LL.addView(booleanSwitch);
+                        break;
+                    case ePlan:
+                        final Button planButton = new Button(this);
+                        element.container = planButton;
+                        planButton.setText(span2Strings(element.description,element.vPlan.damageDescription), Button.BufferType.SPANNABLE);
+                        planButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                currentElement = element;
+                                currentButton = planButton;
+                                Intent intent = new Intent(thisActivity, VehicleDamageActivity.class);
+                                InsReport.damagePlanData = element.vPlan;
+                                startActivityForResult(intent, DAMAGE_PLAN_INTENT);
+                            }
+                        });
+                        LL.addView(planButton);
+                        break;
+                    case ePhoto:
+                        final HorizontalScrollView scrollViewPhoto = new HorizontalScrollView(this);
+                        element.container = scrollViewPhoto;
+                        scrollViewPhoto.setHorizontalScrollBarEnabled(true);
+                        scrollViewPhoto.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200));
+                        final LinearLayout linearLayoutPhoto = new LinearLayout(this);
+                        linearLayoutPhoto.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                        linearLayoutPhoto.setOrientation(LinearLayout.HORIZONTAL);
+                        //here request the pictures from the cloud into linearLayoutPhoto:
+                        for (String photoID : element.vPhotos)
+                            cameraAndPictures.getPicFromFirebase(photoID,linearLayoutPhoto);
+                        final Button takePhotoButton = new Button(this);
+                        takePhotoButton.setText("Камера+");
+                        takePhotoButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                        takePhotoButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                currentElement = element;
+                                currentLinearLayout = linearLayoutPhoto;
+                                takePhoto();
+                            }
+                        });
+                        linearLayoutPhoto.addView(takePhotoButton);
+                        scrollViewPhoto.addView(linearLayoutPhoto);
+                        LL.addView(scrollViewPhoto);
+                        break;
+                    case eDraw:
+                        final Button drawButton = new Button(this);
+                        element.container = drawButton;
+                        drawButton.setText(span2Strings(element.description,element.toString()), Button.BufferType.SPANNABLE);
+                        drawButton.setCompoundDrawablesWithIntrinsicBounds(element.getBitmapDrawable(this),null,null,null);
+                        drawButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                InsReport.currentElement = element;
+                                currentElement = element;
+                                currentButton = drawButton;
+                                Intent intent = new Intent(thisActivity, FreeDrawActivity.class);
+                                InsReport.damagePlanData = element.vPlan;
+                                startActivityForResult(intent, FREE_DRAW_INTENT);
+                            }
+                        });
+                        LL.addView(drawButton);
+                        break;
+                    case eAnima:
+                        final HorizontalScrollView scrollViewPhoto1 = new HorizontalScrollView(this);
+                        scrollViewPhoto1.setHorizontalScrollBarEnabled(true);
+                        scrollViewPhoto1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200));
+                        final LinearLayout linearLayoutPhoto1 = new LinearLayout(this);
+                        element.container = linearLayoutPhoto1;
+                        linearLayoutPhoto1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                        linearLayoutPhoto1.setOrientation(LinearLayout.HORIZONTAL);
+                        //here request the pictures from the cloud into linearLayoutPhoto:
+                        for (String photoID : element.vPhotos)
+                            cameraAndPictures.getPicFromFirebase(photoID,linearLayoutPhoto1);
+
+                        final Button animaButton = new Button(this);
+                        //element.container = animaButton;
+                        animaButton.setText(span2Strings(element.description,element.toString()), Button.BufferType.SPANNABLE);
+                        animaButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                        animaButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                InsReport.currentElement = element;
+                                currentElement = element;
+                                currentButton = animaButton;
+                                Intent intent = new Intent(thisActivity, AnimaActivity.class);
+                                //InsReport.damagePlanData = element.vPlan;
+                                //TODO: bind the frames...
+                                startActivityForResult(intent, ANIMA_INTENT);
+                            }
+                        });
+                        linearLayoutPhoto1.addView(animaButton);
+                        scrollViewPhoto1.addView(linearLayoutPhoto1);
+                        LL.addView(scrollViewPhoto1);
+                        break;
+                    case eSignature:
+                        final Button drawButton1 = new Button(this);
+                        element.container = drawButton1;
+                        drawButton1.setText(span2Strings(element.description,element.toString()), Button.BufferType.SPANNABLE);
+                        drawButton1.setCompoundDrawablesWithIntrinsicBounds(element.getBitmapDrawable(this),null,null,null);
+                        drawButton1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                InsReport.currentElement = element;
+                                currentElement = element;
+                                currentButton = drawButton1;
+                                Intent intent = new Intent(thisActivity, FreeDrawActivity.class);
+                                InsReport.damagePlanData = element.vPlan;
+                                startActivityForResult(intent, FREE_DRAW_INTENT);
+                            }
+                        });
+                        LL.addView(drawButton1);
+                        break;
+                    case eCombo:
+                        LinearLayout horizontalLLCombo = new LinearLayout(thisActivity);
+                        horizontalLLCombo.setOrientation(LinearLayout.HORIZONTAL);
+                        horizontalLLCombo.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
+
+                        TextView captionTVCombo = new TextView(this);
+                        captionTVCombo.setText(element.description);
+
+                        captionTVCombo.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                        final Spinner comboSpinner = new Spinner(this);
+                        element.container = comboSpinner;
+                        comboSpinner.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+
+                        if (!element.directory.equals("") &&
+                                InsReport.directories.map.get(element.directory) != null) {
+                            final ArrayList<DirectoryItem> directoryItems = InsReport.directories.map.get(element.directory).items;
+                            if (directoryItems.size() > 0) {
+                                element.comboItems = new ArrayList<String>();
+                                for (DirectoryItem directoryItem : directoryItems) {
+                                    element.comboItems.add(directoryItem.name);
+                                }
+                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(thisActivity, android.R.layout.simple_spinner_dropdown_item, element.comboItems);
+                                comboSpinner.setAdapter(spinnerArrayAdapter);
+                                for (int j = 0; j < directoryItems.size(); j++)
+                                    if (directoryItems.get(j).id.equals(element.vText))
+                                        comboSpinner.setSelection(j);
+                                comboSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                     @Override
-                                    public void onDataChange(DataSnapshot snapshot) {
-                                        Log.e(TAG, "onDataChange: got new directory, processing...");
-                                        int i  =0;
-                                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                                            try {
-                                                final DirectoryItem newDirectoryItem = postSnapshot.getValue(DirectoryItem.class);
-                                                newDirectoryItem.id = postSnapshot.getKey();
-                                                if (newDirectoryItem.status) {
-                                                    RadioButton radioButton = new RadioButton(thisActivity);
-                                                    radioButton.setText(newDirectoryItem.name);
-                                                    i++;
-                                                    radioButton.setId(i);
-                                                    radioButton.setChecked(element.vText.equals(newDirectoryItem.id));
-                                                    radioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                                                        @Override
-                                                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                                            if (isChecked) {
-                                                                element.vText = newDirectoryItem.id;
-                                                                //saveToCloud();
-                                                            }
-                                                        }
-                                                    });
-                                                    if (radioGroup != null)
-                                                        radioGroup.addView(radioButton);
-                                                }
-                                            } catch (Exception e) {
-                                                Log.e(TAG, "onDataChange: PROBLEMS CASTING DIRECTORY FROM DB!!! : " + element.directory + "/" + postSnapshot.getKey());
-                                            }
-                                        }
+                                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                        element.vText = directoryItems.get(comboSpinner.getSelectedItemPosition()).id;
+                                        element.vInteger = comboSpinner.getSelectedItemPosition();
+                                        //saveToCloud();
                                     }
                                     @Override
-                                    public void onCancelled(FirebaseError firebaseError) {
-                                        Log.e("Firebase", "The read failed 9: " + firebaseError.getMessage());
+                                    public void onNothingSelected(AdapterView<?> parent) {
+
                                     }
                                 });
-                    } else {
-                        for (int i = 0; i < element.comboItems.size(); i++) {
-                            if (!element.comboItems.get(i).equals("")) {
-                                radioButtons[i] = new RadioButton(this);
-                                radioButtons[i].setText(element.comboItems.get(i));
-                                radioButtons[i].setChecked(i == element.vInteger);
-                                final int _i = i;
-                                radioButtons[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            }
+                        } else {
+                            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, element.comboItems);
+                            comboSpinner.setAdapter(spinnerArrayAdapter);
+                            comboSpinner.setSelection(element.vInteger);
+                            comboSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                    element.vText = comboSpinner.getSelectedItem().toString();
+                                    element.vInteger = comboSpinner.getSelectedItemPosition();
+                                    //saveToCloud();
+                                }
+
+                                @Override
+                                public void onNothingSelected(AdapterView<?> parent) {
+
+                                }
+                            });
+                        }
+                        horizontalLLCombo.addView(captionTVCombo);
+                        horizontalLLCombo.addView(comboSpinner);
+                        LL.addView(horizontalLLCombo);
+                        break;
+                    case eRadio:
+                        LinearLayout horizontalLLRadio = new LinearLayout(thisActivity);
+                        horizontalLLRadio.setOrientation(LinearLayout.HORIZONTAL);
+                        horizontalLLRadio.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
+                        TextView captionTVRadio = new TextView(this);
+                        captionTVRadio.setText(element.description + ":");
+
+                        captionTVRadio.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                        final RadioGroup radioGroup = new RadioGroup(this);
+                        element.container = radioGroup;
+                        radioGroup.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                        //ArrayAdapter<String> radioArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, element.comboItems);
+                        radioGroup.setOrientation(RadioGroup.HORIZONTAL);
+                        final RadioButton[] radioButtons = new RadioButton[element.comboItems.size()];
+
+                        if (!element.directory.equals("")) {
+                            int i = 0;
+                            for (final DirectoryItem item : InsReport.directories.map.get(element.directory).items) {
+                                RadioButton radioButton = new RadioButton(thisActivity);
+                                radioButton.setText(item.name);
+                                i++;
+                                radioButton.setId(i);
+                                radioButton.setChecked(element.vText.equals(item.id));
+                                radioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                                         if (isChecked) {
-                                            element.vInteger = _i;
-                                            element.vText = element.comboItems.get(_i);
-                                            //saveToCloud();
+                                            element.vText = item.id;
                                         }
                                     }
                                 });
-                                radioGroup.addView(radioButtons[i]);
+                                if (radioGroup != null)
+                                    radioGroup.addView(radioButton);
                             }
-                        }
-                    }
-                    LL.addView(captionTVRadio);
-                    horizontalLLRadio.addView(radioGroup);
-                    LL.addView(horizontalLLRadio);
-                    break;
-                case eLookUp:
-                    LinearLayout horizontalLLCombo1 = new LinearLayout(thisActivity);
-                    horizontalLLCombo1.setOrientation(LinearLayout.HORIZONTAL);
-                    horizontalLLCombo1.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
-
-                    TextView captionTVCombo1 = new TextView(this);
-                    captionTVCombo1.setText(element.description);
-
-                    captionTVCombo1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-                    final EditText lookupEditText = new EditText(this);
-                    element.container = lookupEditText;
-                    lookupEditText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-                    final ArrayList<DirectoryItem> directoryItems = new ArrayList<DirectoryItem>();
-                    if (!element.directory.equals("")) {
-                        Query queryRef = InsReport.ref.child("dirs/" + element.directory);
-                        queryRef.
-                                addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot snapshot) {
-                                        Log.e(TAG, "onDataChange: got new directory, processing...");
-                                        int i  =0;
-                                        directoryItems.clear();
-                                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                                            try {
-                                                final DirectoryItem newDirectoryItem = postSnapshot.getValue(DirectoryItem.class);
-                                                newDirectoryItem.id = postSnapshot.getKey();
-                                                if (newDirectoryItem.status)
-                                                    directoryItems.add(newDirectoryItem);
-                                            } catch (Exception e) {
-                                                Log.e(TAG, "onDataChange: PROBLEMS CASTING DIRECTORY FROM DB!!! : " + element.directory + "/" + postSnapshot.getKey());
+                        } else {
+                            for (int i = 0; i < element.comboItems.size(); i++) {
+                                if (!element.comboItems.get(i).equals("")) {
+                                    radioButtons[i] = new RadioButton(this);
+                                    radioButtons[i].setText(element.comboItems.get(i));
+                                    radioButtons[i].setChecked(i == element.vInteger);
+                                    final int _i = i;
+                                    radioButtons[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                        @Override
+                                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                            if (isChecked) {
+                                                element.vInteger = _i;
+                                                element.vText = element.comboItems.get(_i);
+                                                //saveToCloud();
                                             }
                                         }
-                                        if (directoryItems.size() > 0) {
-                                            element.comboItems = new ArrayList<String>();
-                                            for (DirectoryItem directoryItem : directoryItems) {
-                                                element.comboItems.add(directoryItem.name);
-                                            }
-
-                                        }
-                                    }
-                                    @Override
-                                    public void onCancelled(FirebaseError firebaseError) {
-                                        Log.e("Firebase", "The read failed 9: " + firebaseError.getMessage());
-                                    }
-                                });
-                    } else {
-                        //offline list
-                    }
-                    lookupEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                        @Override
-                        public void onFocusChange(View view, boolean b) {
-                            if (b) {
-                                openLookUpDialog(lookupEditText,directoryItems);
+                                    });
+                                    radioGroup.addView(radioButtons[i]);
+                                }
                             }
                         }
+                        LL.addView(captionTVRadio);
+                        horizontalLLRadio.addView(radioGroup);
+                        LL.addView(horizontalLLRadio);
+                        break;
+                    case eLookUp:
+                        LinearLayout horizontalLLCombo1 = new LinearLayout(thisActivity);
+                        horizontalLLCombo1.setOrientation(LinearLayout.HORIZONTAL);
+                        horizontalLLCombo1.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
 
-                    });
-                    lookupEditText.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            openLookUpDialog(lookupEditText,directoryItems);
-                        }
-                    });
-                    horizontalLLCombo1.addView(captionTVCombo1);
-                    horizontalLLCombo1.addView(lookupEditText);
-                    LL.addView(horizontalLLCombo1);
-                    break;
-                default:
-                    break;
-            }
+                        TextView captionTVCombo1 = new TextView(this);
+                        captionTVCombo1.setText(element.description);
+
+                        captionTVCombo1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                        final EditText lookupEditText = new EditText(this);
+                        element.container = lookupEditText;
+                        lookupEditText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                        if (!element.directory.equals("")) {
+                            lookupEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                                @Override
+                                public void onFocusChange(View view, boolean b) {
+                                    if (b) {
+                                        openLookUpDialog(lookupEditText,InsReport.directories.map.get(element.directory).items);
+                                    }
+                                }
+                            });
+                            lookupEditText.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    openLookUpDialog(lookupEditText,InsReport.directories.map.get(element.directory).items);
+                                }
+                            });
+                        };
+
+                        horizontalLLCombo1.addView(captionTVCombo1);
+                        horizontalLLCombo1.addView(lookupEditText);
+                        LL.addView(horizontalLLCombo1);
+                        break;
+                    default:
+                        break;
+                }
         }
     }
 
