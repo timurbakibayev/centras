@@ -457,6 +457,8 @@ public class AdikStyleActivity extends AppCompatActivity {
             parent.removeAllViews();
 
         ScrollView scrollView = new ScrollView(this);
+        int padding = (int) getResources().getDimension(R.dimen.activity_vertical_margin);
+        scrollView.setPadding(padding, 0,  padding, 0);
         scrollView.addView(linearLayoutForFragment.get(menuName));
 
         new AlertDialog.Builder(this).setTitle(title).setView(scrollView)

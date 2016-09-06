@@ -350,10 +350,10 @@ public class FormTemplates {
 
                 case ("incident"):
 
-                    form.elements.add(new Element("general", Element.ElementType.eText, "DOCUMENT_ID",
+                    form.elements.add(new Element("", Element.ElementType.eText, "DOCUMENT_ID",
                             "Системный код"));
 
-                    form.elements.add(new Element("general", Element.ElementType.eLookUp, "DOCUMENT_TYPE",
+                    form.elements.add(new Element("general", Element.ElementType.eCombo, "DOCUMENT_TYPE",
                             "Тип документа",
                             "DCT_DOCUMENT_TYPE"));
 
@@ -367,11 +367,11 @@ public class FormTemplates {
                     form.elements.add(new Element("general", Element.ElementType.eDateTime, "CLAIM_STARTED",
                             "Дата регистрации дела"));
 
-                    form.elements.add(new Element("general", Element.ElementType.eCombo, "CAUSE_ID",
+                    form.elements.add(new Element("", Element.ElementType.eCombo, "CAUSE_ID",
                             "Тип урегулирования",
                             "DCT_CAUSE_ID"));
 
-                    form.elements.add(new Element("general", Element.ElementType.eCombo, "POLICY_REG",
+                    form.elements.add(new Element("general", Element.ElementType.eText, "POLICY_REG",
                             "№ Договора"));
 
                     form.elements.add(new Element("general", Element.ElementType.eDate, "POLICY_DATE_GIVEN",
@@ -383,31 +383,19 @@ public class FormTemplates {
                     form.elements.add(new Element("general", Element.ElementType.eDate, "POLICY_INSR_END",
                             "конец действия"));
 
-                    form.elements.add(new Element("general", Element.ElementType.eText, "POLICY_REG",
-                            "№ Договора"));
-                    form.elements.add(new Element("general", Element.ElementType.eText, "POLICY_DATE_GIVEN",
-                            "Дата выдачи договора"));
 
-                    form.elements.add(new Element("general", Element.ElementType.eText, "POLICY_INSR_BEGIN",
-                            "Начало действия"));
-
-                    form.elements.add(new Element("general", Element.ElementType.eText, "POLICY_INSR_END",
-                            "Конец действия"));
-
-                    form.elements.add(new Element("general", Element.ElementType.eCombo, "INSR_TYPE",
+                    form.elements.add(new Element("general", Element.ElementType.eLookUp, "INSR_TYPE",
                             "Код продукта страхования",
                             "DCT_INSR_TYPE"));
 
                     form.elements.add(new Element("general", Element.ElementType.eText, "CLIENT_NAME",
                             "ФИО Страхователя"));
 
-                    form.elements.add(new Element("general", Element.ElementType.eText, "CLIENT_NAME",
-                            "ФИО Страхователя"));
 
                     form.elements.add(new Element("general", Element.ElementType.eDateTime, "EVENT_DATE",
                             "Дата страх. случая"));
 
-                    form.elements.add(new Element("general", Element.ElementType.eCombo, "DCT_EVENT_TYPE",
+                    form.elements.add(new Element("general", Element.ElementType.eLookUp, "EVENT_TYPE",
                             "Причина/Событие страх. Случая", "DCT_EVENT_TYPE"));
 
                     form.elements.add(new Element("general", Element.ElementType.eText, "EVENT_PLACE",
@@ -433,7 +421,7 @@ public class FormTemplates {
                             "На какой номер АК было отправлено уведомление о страх. Случае"));
                     form.elements.add(new Element("general", Element.ElementType.eText, "CLAIMANT_PHONE_NO",
                             "Номер телефона застрахованного"));
-                    form.elements.add(new Element("general", Element.ElementType.eText, "SMS_PROVIDER",
+                    form.elements.add(new Element("", Element.ElementType.eText, "SMS_PROVIDER",
                             "СМС провайдер"));
                     form.elements.add(new Element("signature", Element.ElementType.eSignature, "SPECIALIST_SIGN",
                             "Подпись Комисcара"));
@@ -457,10 +445,20 @@ public class FormTemplates {
                     form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "QUESTION_DESC",
                             "Описание вопроса"));
 
-                    form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "QUESTION_ANSWER_TYPE",
+                    form.elements.add(new Element("", Element.ElementType.eText, "QUESTION_ANSWER_TYPE",
                             "Тип ответа"));
                     form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "QUESTION_ANSWER",
                             "Ответ на вопрос", "DCT_QUESTION_ANSWER"));
+
+
+
+                    form.elements.add(new Element("attachments", Element.ElementType.eCombo, "ATTACHMENT_TYPE",
+                            "Тип документа", "DCT_ATTACHMENT_TYPE"));
+                    form.elements.add(new Element("attachments", Element.ElementType.eText, "ATTACHMENT_TYPE",
+                            "Комментарии по документу", "ATTACHMENT_COMMENTS"));
+
+
+
 
 
                     /*
@@ -473,6 +471,8 @@ public class FormTemplates {
 
 
 
+
+
                     //form.elements.add(new Element("object", Element.ElementType.eText, "DOCUMENT_ID",
                     //        "Ссылка на основную запись в таблице общие данные"));
 
@@ -482,279 +482,7 @@ public class FormTemplates {
 
 
 
-                    //////////////////////////////////////
 
-
-
-
-                    /*
-                    form.elements.add(new Element("attachments", Element.ElementType.eText, "DOCUMENT_ID",
-                            "Ссылка на основную запись в таблице общие данные"));
-
-                    form.elements.add(new Element("attachments", Element.ElementType.eText, "OBJECT_ID",
-                            "Системный код/счетчик дела (sequence)" +
-                                    "FireBase"));
-
-                    form.elements.add(new Element("attachments", Element.ElementType.eText, "ATTACHMENT_TYPE",
-                            "Тип документа",
-                            "DCT_ATTACHMENT_TYPE"));
-
-                    form.elements.add(new Element("attachments", Element.ElementType.eText, "ATTACHMENT_COMMENTS",
-                            "Комментарии по документу"));
-
-                    */
-                    /*
-                    attachments.add(new Element(Element.ElementType.eCombo, "DCT_ATTACHMENT_TYPE",
-                            "Тип документа",
-                            new String[]{"Список движимого/недвижимого имущества (ЖД ТС, скважин, Упаковочный лист)",
-                                    "График Строительства, Полная смета затрат",
-                                    "Лицензия на осуществление деятельности",
-                                    "Вид на жительство",
-                                    "Удостоверение лица без гражданства",
-                                    "Миграционная карточка",
-                                    "Виза",
-                                    "Заявление-анкета на страхование",
-                                    "Фотографии осмотра груза при погрузке",
-                                    "Фотографии осмотра груза при разгрузке",
-                                    "Документы, подтверждающие стоимость недвижимости, оборудования, товара",
-                                    "Уведомление ФМ-1 в Комитет – пороговые",
-                                    "Технический паспорт здания (сооружения)",
-                                    "Выписки протокола АС/андеррайтинговое решение",
-                                    "Уведомление ФМ-1 в Комитет – подозрительные",
-                                    "Нотариально заверенная доверенность на совершение юридически значимых действий от имени физ.лица",
-                                    "Адресная справка/иной документ подтверждающий место жительства",
-                                    "Документ о получении образования (диплом, аттестат)",
-                                    "Заявление-анкета агента",
-                                    "Свидетельство о регистрации транспортного средства",
-                                    "Свидетельство о расторжении брака",
-                                    "Свидетельство о браке",
-                                    "Свидетельство о рождении",
-                                    "Свидетельство агента о прохождении минимальной программы обучения",
-                                    "Документ, на основании которого лицо осуществляет функции единоличного исполнительного органа/руководителя/члена коллегиального исполнительного органа",
-                                    "Документ, на основании которого установлен состав высшего органа юридического лица",
-                                    "Документ, на основании которого установлена структура органов юр.лица",
-                                    "Свидетельство об учетной регистрации филиала (представительства) юр.лица",
-                                    "Заявление агента на прохождение минимальной программы обучения",
-                                    "Договор поручения с агентом",
-                                    "Документ (приказ, доверенность), предоставляющий представителю право совершать юридически значимые действия от имени юр. лица",
-                                    "Опись имущества, подлежащего страхованию",
-                                    "РНН - регистрационный номер налогоплательщика",
-                                    "Декларации о промышленной безопасности",
-                                    "Список Застрахованных (при страховании более 1 человека) ДМС/НС",
-                                    "Водительское удостоверение",
-                                    "Пенсионное удостоверение",
-                                    "Удостоверение инвалида I и II группы",
-                                    "Удостоверение личности",
-                                    "Отчет об оценке залогового имущества",
-                                    "Договор страхования",
-                                    "Свидетельство о государственной регистрации юридического лица/ИП",
-                                    "ИИН - индивидуальный идентификационный номер",
-                                    "Фотографии застрахованного объекта",
-                                    "Договор залога",
-                                    "Другие документы",
-                                    "Фотографии с места ДТП",
-                                    "Документы на предоставление льготы",
-                                    "Заявление на сезонную эксплуатацию автомобиля",
-                                    "БИН - бизнес-идентификационный номер",
-                                    "Уведомление о включении в Реестр",
-                                    "Список застрахованных объектов",
-                                    "Акт осмотра",
-                                    "Документ о регистрации от уполномоченного органа",
-                                    "Устав",
-                                    "Справка об отсутствии судимости",
-                                    "Справка о дееспособности",
-                                    "Удостоверение участника Великой отечественной войны или лица, приравненные к участнику ВОВ",
-                                    "Доверенность на право управления ТС",
-                                    "Статистическая карта",
-                                    "Правоустанавливающие документы на объект",
-                                    "Паспорт"}));
-
-
-                    attachments.add(new Element(Element.ElementType.eText, "ATTACHMENT_COMMENTS",
-                            "Комментарии по документу"));
-
-                    attachments.add(new Element(Element.ElementType.eText, "USERNAME",
-                            "Пользователь создавший запись (Login)"));
-                    attachments.add(new Element(Element.ElementType.eText, "REGISTRATION_DATE",
-                            "Системное/Серверное время создания записи"));
-                    attachments.add(new Element(Element.ElementType.eText, "CHANGED_BY",
-                            "Пользователь изменивший запись (Login)"));
-                    attachments.add(new Element(Element.ElementType.eText, "CHANGE_DATE",
-                            "Системное/Серверное время изменения записи"));
-
-                    */
-
-//                    ArrayList<Element> generalInfo = new ArrayList<>();
-//                    ArrayList<Element> insured = new ArrayList<>();
-//                    ArrayList<Element> otherCars = new ArrayList<>();
-//                    ArrayList<Element> secondParticipant = new ArrayList<>();
-//                    ArrayList<Element> thirdParticipant = new ArrayList<>();
-//                    ArrayList<Element> additionalInfo = new ArrayList<>();
-//                    ArrayList<Element> confirmation = new ArrayList<>();
-//
-//                    form.elements.add(new Element(generalInfo, "generalInfo", "Общие данные"));
-//                    form.elements.add(new Element(insured, "insured", "Страхователь"));
-//                    form.elements.add(new Element(otherCars, "otherCars", "Другие участники ДТП"));
-//                    otherCars.add(new Element(secondParticipant, "PARTICIPANTS_INFO", "Участник 2"));
-//                    otherCars.add(new Element(thirdParticipant, "PARTICIPANTS_INFO", "Участник 3"));
-//                    form.elements.add(new Element(additionalInfo, "CLAIM_COMMENT", "Описание повреждений:"));
-//
-//                    generalInfo.add(new Element(Element.ElementType.eText, "INSR_CLASS",
-//                            "Класс страхования"));
-//
-//                    //TODO: WRONG!!! SAMPLE!
-//                    generalInfo.add(new Element(Element.ElementType.eCombo, "DOCUMENT_TYPE", "Тип документа", "DCT_CLAIM_TYPE"));
-//
-//                    generalInfo.add(new Element(Element.ElementType.eDateTime, "EVENT_DATE",
-//                            "Дата и Время ДТП"));
-//
-//                    generalInfo.add(new Element(Element.ElementType.eDateTime, "CLAIM_STARTED",
-//                            "Время поступления вызова"));
-//
-//                    generalInfo.add(new Element(Element.ElementType.eCombo, "DCT_CAUSE_ID", "Тип урегулирования",
-//                            new String[]{"Стандартное урегулирование",
-//                            "Прямое урегулирование", "Ответственное урегулирование"}));
-//
-//                    additionalInfo.add(new Element(Element.ElementType.eCombo, "serviceStation", "Выдано направление на Спец. СТО",
-//                            new String[]{"Да", "Нет"}));
-//
-//                    generalInfo.add(new Element(Element.ElementType.eText, "nameOfProgram",
-//                            "Название программы"));
-//
-//                    generalInfo.add(new Element(Element.ElementType.eText, "SPECIALIST_NAME",
-//                            "ФИО сотрудника, присутствовавшего на ДТП"));
-//
-//
-//                    insured.add(new Element(Element.ElementType.eText, "CLIENT_NAME", "ФИО"));
-//
-//                    form.descriptionFields.add("fullName");
-//
-//                    insured.add(new Element(Element.ElementType.eText, "owner", "собственник"));
-//
-//                    insured.add(new Element(Element.ElementType.eText, "OBJECT_PRODUCTION", "Марка авто"));
-//
-//                    insured.add(new Element(Element.ElementType.eText, "OBJECT_CHASSIS_NO_VIN",
-//                            "Регистрационный номер"));
-//
-//                    insured.add(new Element(Element.ElementType.eText, "EVENT_PLACE",
-//                            "Место ДТП"));
-//
-//                    insured.add(new Element(Element.ElementType.eText, "CLAIMANT_PHONE_NO",
-//                            "Телефон"));
-//
-//                    insured.add(new Element(Element.ElementType.eText, "status",
-//                            "Статус"));
-//
-//                    insured.add(new Element(Element.ElementType.eText, "insuranceCompany",
-//                            "Название страховой компании"));
-//
-//                    insured.add(new Element(Element.ElementType.eText, "POLICY_REG",
-//                            "Номер полиса"));
-//
-//                    insured.add(new Element(Element.ElementType.eDate, "POLICY_DATE_GIVEN",
-//                            "Дата выдачи полиса"));
-//
-//                    insured.add(new Element(Element.ElementType.eDate, "POLICY_INSR_BEGIN",
-//                            "от"));
-//                    insured.add(new Element(Element.ElementType.eDate, "POLICY_INSR_END",
-//                            "до"));
-//
-//
-//                    secondParticipant.add(new Element(Element.ElementType.eText, "PERSON_NAME", "ФИО"));
-//
-//                    secondParticipant.add(new Element(Element.ElementType.eText, "owner2", "собственник"));
-//
-//                    secondParticipant.add(new Element(Element.ElementType.eText, "autoBrand2", "Марка авто"));
-//
-//                    secondParticipant.add(new Element(Element.ElementType.eText, "plateNumber2",
-//                            "Регистрационный номер"));
-//
-//                    secondParticipant.add(new Element(Element.ElementType.eText, "locationOfAccident2",
-//                            "Место ДТП"));
-//
-//                    secondParticipant.add(new Element(Element.ElementType.eText, "phoneNumber2",
-//                            "Телефон"));
-//
-//                    secondParticipant.add(new Element(Element.ElementType.eText, "status2",
-//                            "Статус"));
-//
-//                    secondParticipant.add(new Element(Element.ElementType.eText, "THIRD_PART_INSURER",
-//                            "Название страховой компании"));
-//
-//                    secondParticipant.add(new Element(Element.ElementType.eText, "GUILTY_CONTRACT_NO",
-//                            "Номер полиса"));
-//
-//                    secondParticipant.add(new Element(Element.ElementType.eDate, "GUILTY_CONTRACT_DATE",
-//                            "Дата выдачи полиса"));
-//
-//                    secondParticipant.add(new Element(Element.ElementType.eDate, "periodOfValidityFrom2",
-//                            "от"));
-//                    secondParticipant.add(new Element(Element.ElementType.eDate, "periodOfValidityTo2",
-//                            "до"));
-//
-//
-//                    thirdParticipant.add(new Element(Element.ElementType.eText, "PERSON_NAME", "ФИО"));
-//
-//                    thirdParticipant.add(new Element(Element.ElementType.eText, "owner3", "собственник"));
-//
-//                    thirdParticipant.add(new Element(Element.ElementType.eText, "autoBrand3", "Марка авто"));
-//
-//                    thirdParticipant.add(new Element(Element.ElementType.eText, "plateNumber3",
-//                            "Регистрационный номер"));
-//
-//                    thirdParticipant.add(new Element(Element.ElementType.eText, "locationOfAccident3",
-//                            "Место ДТП"));
-//
-//                    thirdParticipant.add(new Element(Element.ElementType.eText, "phoneNumber3",
-//                            "Телефон"));
-//
-//                    thirdParticipant.add(new Element(Element.ElementType.eText, "status3",
-//                            "Статус"));
-//
-//                    thirdParticipant.add(new Element(Element.ElementType.eText, "THIRD_PART_INSURER",
-//                            "Название страховой компании"));
-//
-//                    thirdParticipant.add(new Element(Element.ElementType.eText, "GUILTY_CONTRACT_NO",
-//                            "Номер полиса"));
-//
-//                    thirdParticipant.add(new Element(Element.ElementType.eDate, "GUILTY_CONTRACT_DATE",
-//                            "Дата выдачи полиса"));
-//
-//                    thirdParticipant.add(new Element(Element.ElementType.eDate, "periodOfValidityFrom3",
-//                            "от"));
-//                    thirdParticipant.add(new Element(Element.ElementType.eDate, "periodOfValidityTo3",
-//                            "до"));
-//
-//
-//                    additionalInfo.add(new Element(Element.ElementType.eText, "descriptionOfDamages",
-//                            "А/м страхователя"));
-//                    additionalInfo.add(new Element(Element.ElementType.eText, "descriptionOfDamagesSecond",
-//                            "2-ой участник"));
-//                    additionalInfo.add(new Element(Element.ElementType.eText, "descriptionOfDamagesThird",
-//                            "3-ий участник"));
-//
-//
-//                    additionalInfo.add(new Element(Element.ElementType.ePlan, "damagePlan", "План повреждений"));
-//
-//                    additionalInfo.add(new Element(Element.ElementType.eText, "medicalAssistance",
-//                            "Наличие пострадавших, обратившихся за мед. помощью"));
-//
-//
-//                    additionalInfo.add(new Element(Element.ElementType.eCombo, "issuedDirection", "Выдано направление в НЭОЦ",
-//                            new String[]{"Да", "Нет"}));
-//                    additionalInfo.add(new Element(Element.ElementType.eCombo, "bookedWithPolice", "Оформлено с Дорожной Полицией",
-//                            new String[]{"Да", "Нет"}));
-//                    additionalInfo.add(new Element(Element.ElementType.eCombo, "serviceStation", "Выдано направление на Спец. СТО",
-//                            new String[]{"Да", "Нет"}));
-//
-//                    additionalInfo.add(new Element(Element.ElementType.eText, "nameOfServiceStation",
-//                            "название"));
-//
-//                    additionalInfo.add(new Element(Element.ElementType.eAnima, "schemeOfAccident", "Схема ДТП"));
-//                    additionalInfo.add(new Element(Element.ElementType.ePlan, "damagePlan", "План повреждений"));
-//                    additionalInfo.add(new Element(Element.ElementType.ePhoto, "generalPhotos", "Фотографии"));
-//
-//                    form.elements.add(new Element(Element.ElementType.eSignature, "CLIENT_SIGN", "Подпись Клиента"));
                     break;
                 default:
                     break;
