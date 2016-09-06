@@ -74,7 +74,7 @@ public class FormsListAdapter extends BaseAdapter {
 
         final Form p = getProduct(position);
 
-        p.updateDescription();
+        //p.updateDescription();
 
 //        ((Switch) view.findViewById(R.id.complete_form)).setChecked(p.formReady);
 //

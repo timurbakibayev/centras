@@ -129,14 +129,14 @@ public class Form {
                     //...
                     if (descriptionFields.contains(_element.fireBaseFieldName))
                         description = description + " " + _element.toString();
-                    if (_element.fireBaseFieldName.equals("phone"))
+                    if (_element.fireBaseFieldName.equals("CLAIMANT_PHONE_NO"))
                         phoneNo = _element.toString();
                 }
             }
             //...
             if (descriptionFields.contains(element.fireBaseFieldName))
                 description = description + " " + element.toString();
-            if (element.fireBaseFieldName.equals("phone"))
+            if (element.fireBaseFieldName.equals("CLAIMANT_PHONE_NO"))
                 phoneNo = element.toString();
         }
         if (description.trim().equals(""))

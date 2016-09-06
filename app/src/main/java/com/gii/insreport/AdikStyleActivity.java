@@ -40,11 +40,11 @@ import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -313,7 +313,7 @@ public class AdikStyleActivity extends AppCompatActivity {
         final String[] signatures = new String[signatureElements.size()];
         for (int i = 0; i < signatureElements.size(); i++) {
             Element element = signatureElements.get(i);
-            signatures[i] = element.description + element.toString();
+            signatures[i] = element.description + "  " + element.toString();
         }
         final AdikStyleActivity adikStyleActivity = this;
         new android.app.AlertDialog.Builder(this)
@@ -610,6 +610,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                         horizontalLLdp1.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
                         TextView captionTVdp1 = new TextView(thisActivity);
                         captionTVdp1.setText(element.description);
+                        captionTVdp1.setMaxWidth(300);
                         captionTVdp1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
                         datePickerIndex++;
@@ -662,6 +663,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                         horizontalLLdp.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
                         TextView captionTVdp = new TextView(thisActivity);
                         captionTVdp.setText(element.description);
+                        captionTVdp.setMaxWidth(300);
                         captionTVdp.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
                         datePickerIndex++;
@@ -895,6 +897,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                         });
                         LL.addView(drawButton1);
                         break;
+                    /*
                     case eCombo:
                         LinearLayout horizontalLLCombo = new LinearLayout(thisActivity);
                         horizontalLLCombo.setOrientation(LinearLayout.HORIZONTAL);
@@ -955,6 +958,39 @@ public class AdikStyleActivity extends AppCompatActivity {
                         }
                         horizontalLLCombo.addView(captionTVCombo);
                         horizontalLLCombo.addView(comboSpinner);
+                        LL.addView(horizontalLLCombo);
+                        break;*/
+                    case eCombo:
+                        LinearLayout horizontalLLCombo = new LinearLayout(thisActivity);
+                        horizontalLLCombo.setOrientation(LinearLayout.VERTICAL);
+                        horizontalLLCombo.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
+
+                        TextView captionTVCombo = new TextView(this);
+                        captionTVCombo.setText(element.description);
+
+                        captionTVCombo.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                        final Button comboButton = new Button(this);
+                        element.container = comboButton;
+                        comboButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                        //TODO: vText should contain the code, show the TEXT of the directory!
+                        comboButton.setText(element.vText);
+                        comboButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button_spinner, null));
+                        comboButton.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_expand_more_black_24dp,0);
+                        if (!element.directory.equals("") &&
+                                InsReport.directories.map.get(element.directory) != null) {
+                            final ArrayList<DirectoryItem> directoryItems = InsReport.directories.map.get(element.directory).items;
+                            if (directoryItems.size() > 0) {
+                                comboButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        openLookUpDialog(comboButton, directoryItems, element);
+                                    }
+                                });
+                            }
+                        }
+                        horizontalLLCombo.addView(captionTVCombo);
+                        horizontalLLCombo.addView(comboButton);
                         LL.addView(horizontalLLCombo);
                         break;
                     case eRadio:
@@ -1093,11 +1129,27 @@ public class AdikStyleActivity extends AppCompatActivity {
         }
     }
 
-    private void openLookUpDialog(EditText lookupEditText, ArrayList<DirectoryItem> directoryItems) {
-        Dialog lookUpDialog = new Dialog(this);
+    private void openLookUpDialog(final Button lookupEditText, ArrayList<DirectoryItem> directoryItems, final Element element) {
+        final Dialog lookUpDialog = new Dialog(this);
         lookUpDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         lookUpDialog.setContentView(getLayoutInflater().inflate(R.layout.lookup
                 , null));
+
+        ListView listView = (ListView)lookUpDialog.findViewById(R.id.ListView007);
+        EditText filterEditText = (EditText)lookUpDialog.findViewById(R.id.filterEditText);
+        final KolesaAdapter kolesaAdapter = new KolesaAdapter(this,directoryItems,filterEditText);
+        listView.setAdapter(kolesaAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //TODO: .code
+                String selectedString = kolesaAdapter.filteredObjects.get(i).name;
+                lookupEditText.setText(selectedString);
+                //TODO: .name
+                element.vText = selectedString;
+                lookUpDialog.dismiss();
+            }
+        });
         lookUpDialog.show();
     }
 
