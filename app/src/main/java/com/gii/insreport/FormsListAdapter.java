@@ -120,7 +120,7 @@ public class FormsListAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     //call _phoneNo
                     if (Build.VERSION.SDK_INT < 23 ||
-                            ActivityCompat.checkSelfPermission(FormsList.formList, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.checkSelfPermission(FormsList.formList, android.Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                         Log.e(TAG, "onClick: call " + _phoneNo.trim());
                         String uri = "tel:" + _phoneNo.trim();
                         Intent intent = new Intent(Intent.ACTION_CALL);
