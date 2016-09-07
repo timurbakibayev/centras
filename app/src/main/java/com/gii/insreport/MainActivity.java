@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                     allLoaded = false;
                     Log.e(TAG, "run: directories are not yet loaded");
                 }
-                if (allLoaded) {
+                if (allLoaded || InsReport.mAuth.getCurrentUser() == null) {
                     timer.cancel();
                     final ProgressBar pb = (ProgressBar)findViewById(R.id.roundProgressbar);
                     pb.getHandler().post(new Runnable() {

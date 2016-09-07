@@ -792,7 +792,10 @@ public class AdikStyleActivity extends AppCompatActivity {
                     case ePlan:
                         final Button planButton = new Button(this);
                         element.container = planButton;
-                        planButton.setText(span2Strings(element.description,element.vPlan.damageDescription), Button.BufferType.SPANNABLE);
+                        planButton.setText(element.vPlan.damageDescription);
+                        planButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button_spinner, null));
+                        planButton.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_expand_more_black_24dp,0);
+
                         planButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -803,6 +806,9 @@ public class AdikStyleActivity extends AppCompatActivity {
                                 startActivityForResult(intent, DAMAGE_PLAN_INTENT);
                             }
                         });
+                        TextView damageTV = new TextView(this);
+                        damageTV.setText(element.description);
+                        LL.addView(damageTV);
                         LL.addView(planButton);
                         break;
                     case ePhoto:
@@ -1169,7 +1175,7 @@ public class AdikStyleActivity extends AppCompatActivity {
         {
             //TODO: Warning: if you start the plan, rotate device and exit activity, currentButton does not exist any more, so, the app crashes!
             if (currentButton != null)
-                currentButton.setText(span2Strings(currentElement.description,currentElement.vPlan.damageDescription), Button.BufferType.SPANNABLE);
+                currentButton.setText(currentElement.vPlan.damageDescription);
         }
         if (requestCode == FREE_DRAW_INTENT)
         {

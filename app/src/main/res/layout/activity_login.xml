@@ -71,7 +71,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Войти или зарегистрироваться"
+                android:text="Войти"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/register_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Зарегистрироваться"
                 android:textStyle="bold" />
 
             <Button

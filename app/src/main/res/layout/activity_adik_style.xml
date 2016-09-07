@@ -80,7 +80,6 @@
             android:text="Фотографии (документы) по делу" />
 
         <Button
-
             android:textSize="10sp"
             android:id="@+id/menuSignature"
             android:layout_width="0dp"

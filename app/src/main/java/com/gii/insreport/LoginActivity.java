@@ -95,10 +95,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         final Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        final Button mRegisterButton = (Button) findViewById(R.id.register_button);
         final Button mResetPasswordButton = (Button) findViewById(R.id.reset_password_button);
         final Button mChangePasswordButton = (Button) findViewById(R.id.change_password_button);
         final Button mSendUserDetailsButton = (Button) findViewById(R.id.send_details_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptLogin();
+            }
+
+        });
+        mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
@@ -120,6 +128,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mEmailView.setVisibility(View.GONE);
             mPasswordView.setVisibility(View.GONE);
             mEmailSignInButton.setVisibility(View.GONE);
+            mRegisterButton.setVisibility(View.GONE);
             mResetPasswordButton.setVisibility(View.GONE);
             mSendUserDetailsButton.setEnabled(true);
             mChangePasswordButton.setEnabled(true);
@@ -136,6 +145,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     signOutButton.setEnabled(false);
                     mChangePasswordButton.setEnabled(false);
                     mEmailSignInButton.setVisibility(View.VISIBLE);
+                    mRegisterButton.setVisibility(View.VISIBLE);
                     mResetPasswordButton.setVisibility(View.VISIBLE);
                 }
             });

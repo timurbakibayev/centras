@@ -38,14 +38,22 @@
                 android:id="@+id/main_img"
                 android:src="@drawable/centraslogo"
                 android:scaleType="fitXY"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"/>
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Сентрас Иншуранс"
+                android:layout_below="@+id/main_img"
+                android:textColor="@android:color/black"
+                android:layout_centerHorizontal="true" />
             <ProgressBar
                 android:id="@+id/roundProgressbar"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"/>
+                android:layout_alignTop="@+id/main_img"
+                android:layout_alignParentEnd="true" />
         </RelativeLayout>
     <include layout="@layout/content_main"  />
     </LinearLayout>
