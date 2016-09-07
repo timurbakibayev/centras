@@ -561,6 +561,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                         addElementsToLL(innerLL,element.elements);
                         outerLL.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy, null));
                         Button expandingButton = new Button(this);
+
                         expandingButton.setText(element.description);
                         expandingButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button, null));
                         //expandingButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_more_black_24dp, null),null,null,null);
