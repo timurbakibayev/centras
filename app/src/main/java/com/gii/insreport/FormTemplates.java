@@ -394,7 +394,7 @@ public class FormTemplates {
                     form.elements.add(new Element("general", Element.ElementType.eDateTime, "EVENT_DATE",
                             "Дата страх. случая"));
 
-                    form.elements.add(new Element("general", Element.ElementType.eLookUp, "EVENT_TYPE",
+                    form.elements.add(new Element("general", Element.ElementType.eCombo, "EVENT_TYPE",
                             "Причина/Событие страх. Случая", "DCT_EVENT_TYPE"));
 
                     form.elements.add(new Element("general", Element.ElementType.eText, "EVENT_PLACE",
@@ -405,13 +405,13 @@ public class FormTemplates {
                     form.elements.add(new Element("general", Element.ElementType.eText, "INITIAL_SUM",
                             "Предварительная сумма (ущерба для страховых случае, стоимости авто для предварительного страхового осмотра)"));
 
-                    form.elements.add(new Element("", Element.ElementType.eDate, "REGISTRATION_DATE",
+                    form.elements.add(new Element("", Element.ElementType.eText, "REGISTRATION_DATE",
                             "Системное/Серверное время создания записи"));
                     form.elements.add(new Element("", Element.ElementType.eText, "USERNAME",
                             "Пользователь создавший запись (Login)"));
                     form.elements.add(new Element("", Element.ElementType.eText, "CHANGED_BY",
                             "Пользователь изменивший запись (Login)"));
-                    form.elements.add(new Element("", Element.ElementType.eDate, "CHANGE_DATE",
+                    form.elements.add(new Element("", Element.ElementType.eText, "CHANGE_DATE",
                             "Системное/Серверное время изменения записи"));
 
                     form.elements.add(new Element("general", Element.ElementType.eText, "OPERATOR_NAME",
@@ -446,15 +446,16 @@ public class FormTemplates {
 
                     form.elements.add(new Element("", Element.ElementType.eText, "QUESTION_ANSWER_TYPE",
                             "Тип ответа"));
-                    form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "QUESTION_ANSWER",
+
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eCombo, "QUESTION_ANSWER",
                             "Ответ на вопрос", "DCT_QUESTION_ANSWER"));
 
 
 
                     form.elements.add(new Element("attachments", Element.ElementType.eCombo, "ATTACHMENT_TYPE",
                             "Тип документа", "DCT_ATTACHMENT_TYPE"));
-                    form.elements.add(new Element("attachments", Element.ElementType.eText, "ATTACHMENT_TYPE",
-                            "Комментарии по документу", "ATTACHMENT_COMMENTS"));
+                    form.elements.add(new Element("attachments", Element.ElementType.eText, "ATTACHMENT_COMMENTS",
+                            "Комментарии по документу"));
 
 
 

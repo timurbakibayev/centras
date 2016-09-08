@@ -137,11 +137,9 @@ public class Element {
                 return ((vDraw.size() == 0)?"":"Подписано");
             case eBoolean:
                 return (vBoolean?description:"");
-            case eRadio:
-            case eCombo:
+            default:
                 return (vText);
         }
-        return "";
     }
 
     public String toStringDirectory() {
@@ -153,28 +151,7 @@ public class Element {
                     return item.name;
             }
         }
-        switch (type) {
-            case eText:
-                return vText;
-            case eDate:
-                return (FillFormActivity.dateOnlyText(vDate));
-            case eDateTime:
-                return (FillFormActivity.dateTimeText(vDate));
-            case eInteger:
-                return ("" + vInteger);
-            case ePlan:
-                return vPlan.damageDescription;
-            case eDraw:
-                return ((vDraw.size() == 0)?"":"Рисунок");
-            case eSignature:
-                return ((vDraw.size() == 0)?"":"Подписано");
-            case eBoolean:
-                return (vBoolean?description:"");
-            case eRadio:
-            case eCombo:
-                return (vText);
-        }
-        return "";
+        return toString();
     }
 
     public String toJson() {
