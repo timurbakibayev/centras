@@ -7,7 +7,11 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ListView;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ServerValue;
+import com.firebase.client.ValueEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -18,6 +22,7 @@ import com.google.firebase.storage.StorageReference;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -36,6 +41,7 @@ public class InsReport extends Application {
     public static StorageReference storageRef;
     public static FirebaseAuth mAuth;
     public static Directories directories;
+    public static ArrayList<FirebaseUserEmail> firebaseUserEmails = new ArrayList<>();
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     public static String userID = "";
@@ -98,6 +104,13 @@ public class InsReport extends Application {
                         if (!mainMenuForm.dataChangeListenerAdded)
                             mainMenuForm.addDataChangeListener();
                     }
+                    ref.child("users/"+user.getUid()+"/email").setValue(user.getEmail().toString());
+                    ref.child("users/"+user.getUid()+"/token").setValue(FirebaseInstanceId.getInstance().getToken());
+                    ref.child("users/"+user.getUid()+"/id").setValue(user.getUid());
+                    ref.child("users/"+user.getUid()+"/lastLogin").setValue(ServerValue.TIMESTAMP);
+                    Date d = new Date();
+                    ref.child("users/"+user.getUid()+"/lastLoginAndroid").setValue(FillFormActivity.dateOnlyTextStrict(d));
+
                 } else {
                     // User is signed out
                     Log.e(TAG, "onAuthStateChanged:signed_out");
@@ -112,8 +125,28 @@ public class InsReport extends Application {
 
         directories = new Directories();
 
+        loadUserBase();
+
         //TODO: REMOVE THIS WHEN RELEASED!!!!!
         //addDummyForms();
+    }
+
+    private void loadUserBase() {
+        ref.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    FirebaseUserEmail newUser = snapshot.getValue(FirebaseUserEmail.class);
+                    firebaseUserEmails.add(newUser);
+                    Log.e(TAG, "onDataChange: found user " + newUser.email);
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
     public static String generateNewId() {

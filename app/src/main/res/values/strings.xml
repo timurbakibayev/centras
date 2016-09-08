@@ -18,6 +18,7 @@
     <string name="error_invalid_password">Пароль слишком короткий</string>
     <string name="error_incorrect_password">Пароль неверный</string>
     <string name="error_field_required">Поле обязательно</string>
-    <string name="title_activity_anima">AnimaActivity</string>
-    <string name="title_activity_photos">photosActivity</string>
+    <string name="title_activity_anima">Анимация</string>
+    <string name="title_activity_photos">Фотографии</string>
+    <string name="title_activity_server_emu">Server Emulator</string>
 </resources>

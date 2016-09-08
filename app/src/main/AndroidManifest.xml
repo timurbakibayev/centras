@@ -72,6 +72,10 @@
         <activity
             android:name=".photosActivity"
             android:label="@string/title_activity_photos"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ServerEmuActivity"
+            android:label="@string/title_activity_server_emu"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

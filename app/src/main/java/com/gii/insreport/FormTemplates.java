@@ -60,10 +60,10 @@ public class FormTemplates {
         form.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_ENGINE_NO",
                 "Номер двигателя"));
 
-        form.elements.add(new Element("object", Element.ElementType.eText, "PRODUCTION_YEAR",
+        form.elements.add(new Element("object", Element.ElementType.eTextNum, "PRODUCTION_YEAR",
                 "Год производства"));
 
-        form.elements.add(new Element("object", Element.ElementType.eText, "PRODUCTION_MONTH",
+        form.elements.add(new Element("object", Element.ElementType.eTextNum, "PRODUCTION_MONTH",
                 "Месяц производства"));
 
         form.elements.add(new Element("object", Element.ElementType.eText, "CAR_COLOUR",
@@ -384,13 +384,12 @@ public class FormTemplates {
                             "конец действия"));
 
 
-                    form.elements.add(new Element("general", Element.ElementType.eLookUp, "INSR_TYPE",
+                    form.elements.add(new Element("general", Element.ElementType.eCombo, "INSR_TYPE",
                             "Код продукта страхования",
                             "DCT_INSR_TYPE"));
 
                     form.elements.add(new Element("general", Element.ElementType.eText, "CLIENT_NAME",
                             "ФИО Страхователя"));
-
 
                     form.elements.add(new Element("general", Element.ElementType.eDateTime, "EVENT_DATE",
                             "Дата страх. случая"));
@@ -419,7 +418,7 @@ public class FormTemplates {
                             "Имя оператора кол-центра"));
                     form.elements.add(new Element("", Element.ElementType.eText, "SEND_SMS",
                             "На какой номер АК было отправлено уведомление о страх. Случае"));
-                    form.elements.add(new Element("general", Element.ElementType.eText, "CLAIMANT_PHONE_NO",
+                    form.elements.add(new Element("general", Element.ElementType.eTextNum, "CLAIMANT_PHONE_NO",
                             "Номер телефона застрахованного"));
                     form.elements.add(new Element("", Element.ElementType.eText, "SMS_PROVIDER",
                             "СМС провайдер"));

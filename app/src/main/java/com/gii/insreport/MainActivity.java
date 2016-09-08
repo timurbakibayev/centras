@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
     Timer timer = new Timer();
 
+    int imgMainClicked = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +41,18 @@ public class MainActivity extends AppCompatActivity {
 
         InsReport.storage = FirebaseStorage.getInstance();
         InsReport.storageRef = InsReport.storage.getReferenceFromUrl("gs://insreport-f39a3.appspot.com");
+
+        ImageView imgMain = (ImageView) findViewById(R.id.main_img);
+        imgMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imgMainClicked++;
+                if (imgMainClicked >= 3 && InsReport.mAuth.getCurrentUser() != null) {
+                    Intent serverIntent = new Intent(thisActivity,ServerEmuActivity.class);
+                    startActivity(serverIntent);
+                }
+            }
+        });
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -196,10 +211,10 @@ public class MainActivity extends AppCompatActivity {
 
     ArrayList<Button> formButtons = new ArrayList<>();
     Button loginButton = null;
+    MainActivity thisActivity = this;
     private void addForms() {
         LinearLayout mainMenuLL = (LinearLayout)findViewById(R.id.mainMenuLL);
         mainMenuLL.removeAllViews();
-        final MainActivity thisActivity = this;
         for (final FormsCollection formsCollection : InsReport.mainMenuForms) {
             Button newMenuButton = new Button(this);
             formButtons.add(newMenuButton);

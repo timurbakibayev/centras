@@ -30,5 +30,6 @@ dependencies {
     compile 'com.google.firebase:firebase-storage:9.4.0'
     compile 'com.google.firebase:firebase-auth:9.4.0'
     compile 'com.google.firebase:firebase-messaging:9.4.0'
+    compile 'com.firebaseui:firebase-ui:0.3.1'
 }
 apply plugin: 'com.google.gms.google-services'

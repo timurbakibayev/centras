@@ -72,7 +72,7 @@ public class AdikStyleActivity extends AppCompatActivity {
     Form currentForm = null;
 
     Calendar calendar = Calendar.getInstance();
-    final EditText[] datePicker = new EditText[100];
+    final Button[] datePicker = new Button[100];
     public int currentDatePicker = -1;
     public EditText currentEditText = null;
     public Button currentButton = null;
@@ -197,7 +197,7 @@ public class AdikStyleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_adik_style);
 
         for (int i = 0; i < datePicker.length; i++)
-            datePicker[i] = new EditText(this);
+            datePicker[i] = new Button(this);
         fireBaseCatalog = getIntent().getStringExtra(InsReport.EXTRA_FIREBASE_CATALOG);
         id_no = getIntent().getStringExtra(InsReport.EXTRA_ID_NO);
         currentForm = null;
@@ -526,7 +526,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                 fieldValue.setMaxLines(5);
                 fieldValue.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT,0.5f));
-                fieldValue.setText(element.toString());
+                fieldValue.setText(element.toStringDirectory());
                 horizontalLLStatic.addView(fieldValue);
                 LL.addView(horizontalLLStatic);
             }
@@ -608,11 +608,10 @@ public class AdikStyleActivity extends AppCompatActivity {
                         break;
                     case eDate:
                         LinearLayout horizontalLLdp1 = new LinearLayout(thisActivity);
-                        horizontalLLdp1.setOrientation(LinearLayout.HORIZONTAL);
+                        horizontalLLdp1.setOrientation(LinearLayout.VERTICAL);
                         horizontalLLdp1.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
                         TextView captionTVdp1 = new TextView(thisActivity);
                         captionTVdp1.setText(element.description);
-                        captionTVdp1.setMaxWidth(300);
                         captionTVdp1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
                         datePickerIndex++;
@@ -620,8 +619,11 @@ public class AdikStyleActivity extends AppCompatActivity {
                         final Element dpElement = element;
                         element.container = datePicker[datePickerIndex];
                         datePicker[datePickerIndex].setText(dateOnlyText(element.vDate));
+                        datePicker[datePickerIndex].setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button_spinner, null));
+                        datePicker[datePickerIndex].setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_expand_more_black_24dp,0);
+
                         datePicker[datePickerIndex].setInputType(InputType.TYPE_NULL);
-                        datePicker[datePickerIndex].setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                        datePicker[datePickerIndex].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
                         datePicker[datePickerIndex].setOnFocusChangeListener(new View.OnFocusChangeListener() {
                             @Override
                             public void onFocusChange(View v, boolean hasFocus) {
@@ -661,11 +663,10 @@ public class AdikStyleActivity extends AppCompatActivity {
                         break;
                     case eDateTime:
                         LinearLayout horizontalLLdp = new LinearLayout(thisActivity);
-                        horizontalLLdp.setOrientation(LinearLayout.HORIZONTAL);
+                        horizontalLLdp.setOrientation(LinearLayout.VERTICAL);
                         horizontalLLdp.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
                         TextView captionTVdp = new TextView(thisActivity);
                         captionTVdp.setText(element.description);
-                        captionTVdp.setMaxWidth(300);
                         captionTVdp.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
                         datePickerIndex++;
@@ -673,8 +674,11 @@ public class AdikStyleActivity extends AppCompatActivity {
                         final Element dpElement1 = element;
                         element.container = datePicker[datePickerIndex];
                         datePicker[datePickerIndex].setText(dateTimeText(element.vDate));
+                        datePicker[datePickerIndex].setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button_spinner, null));
+                        datePicker[datePickerIndex].setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_expand_more_black_24dp,0);
+
                         datePicker[datePickerIndex].setInputType(InputType.TYPE_NULL);
-                        datePicker[datePickerIndex].setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                        datePicker[datePickerIndex].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
                         datePicker[datePickerIndex].setOnFocusChangeListener(new View.OnFocusChangeListener() {
                             @Override
                             public void onFocusChange(View v, boolean hasFocus) {
@@ -714,7 +718,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                         break;
                     case eText:
                         final EditText editText = new EditText(thisActivity);
-                        ImageView speachButton = new ImageView(thisActivity);
+                        //ImageView speachButton = new ImageView(thisActivity);
                         currentEditText = editText;
                         element.container = editText;
                         editText.setText(element.vText);
@@ -753,6 +757,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                         horizontalLL.addView(fieldHint);
                         LinearLayout.LayoutParams loParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                         loParams.gravity = Gravity.CENTER_VERTICAL;
+                        /*
                         speachButton.setLayoutParams(loParams);
                         speachButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_mic_black_24dp, null));
                         speachButton.setOnClickListener(new View.OnClickListener() {
@@ -772,8 +777,53 @@ public class AdikStyleActivity extends AppCompatActivity {
                             speachButton.setVisibility(View.GONE);
 
                         horizontalLL.addView(speachButton);
+                        */
 
                         LL.addView(horizontalLL);
+                        break;
+                    case eTextNum:
+                        final EditText editTextNum = new EditText(thisActivity);
+                        currentEditText = editTextNum;
+                        element.container = editTextNum;
+                        editTextNum.setText(element.vText);
+                        //change the element, but do not save:
+                        editTextNum.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                element.vText = s.toString();
+                            }
+                        });
+                        editTextNum.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                            @Override
+                            public void onFocusChange(View v, boolean hasFocus) {
+                                if (!hasFocus) {
+                                    element.vText = ((EditText)v).getText().toString();
+                                    //saveToCloud();
+                                }
+                            }
+                        });
+                        LinearLayout horizontalLLNum = new LinearLayout(thisActivity);
+                        horizontalLLNum.setOrientation(LinearLayout.HORIZONTAL);
+                        horizontalLLNum.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
+
+                        //ADIK: 06 August 2016:
+                        TextInputLayout fieldHintNum = new TextInputLayout(thisActivity);
+                        fieldHintNum.setHint(element.description);
+                        editTextNum.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        fieldHintNum.setLayoutParams(new LinearLayout.LayoutParams(0,
+                                LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                        fieldHintNum.addView(editTextNum);
+                        horizontalLLNum.addView(fieldHintNum);
+                        LinearLayout.LayoutParams loParamsNum = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        loParamsNum.gravity = Gravity.CENTER_VERTICAL;
+                        //hide button if there is no speech recognition on the device:
+                        LL.addView(horizontalLLNum);
                         break;
                     case eBoolean:
                         final Switch booleanSwitch = new Switch(this);
@@ -879,7 +929,6 @@ public class AdikStyleActivity extends AppCompatActivity {
                                 currentButton = animaButton;
                                 Intent intent = new Intent(thisActivity, AnimaActivity.class);
                                 //InsReport.damagePlanData = element.vPlan;
-                                //TODO: bind the frames...
                                 startActivityForResult(intent, ANIMA_INTENT);
                             }
                         });
@@ -982,7 +1031,15 @@ public class AdikStyleActivity extends AppCompatActivity {
                         element.container = comboButton;
                         comboButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                         //TODO: vText should contain the code, show the TEXT of the directory!
-                        comboButton.setText(element.vText);
+                        if (!element.directory.equals("") &&
+                                InsReport.directories.map.get(element.directory) != null &&
+                                !element.vText.equals("")) {
+                            ArrayList<DirectoryItem> directoryItems1 = InsReport.directories.map.get(element.directory).items;
+                            for (DirectoryItem directoryItem : directoryItems1) {
+                                if (directoryItem.id.equals(element.vText))
+                                    comboButton.setText(directoryItem.name);
+                            }
+                        }
                         comboButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button_spinner, null));
                         comboButton.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_expand_more_black_24dp,0);
                         if (!element.directory.equals("") &&
@@ -1062,18 +1119,9 @@ public class AdikStyleActivity extends AppCompatActivity {
                         LL.addView(horizontalLLRadio);
                         break;
                     case eLookUp:
-                        LinearLayout horizontalLLCombo1 = new LinearLayout(thisActivity);
-                        horizontalLLCombo1.setOrientation(LinearLayout.HORIZONTAL);
-                        horizontalLLCombo1.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
-
-                        TextView captionTVCombo1 = new TextView(this);
-                        captionTVCombo1.setText(element.description);
-
-                        captionTVCombo1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
                         final AutoCompleteTextView lookupEditText = new AutoCompleteTextView(this);
                         element.container = lookupEditText;
-                        lookupEditText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                        //lookupEditText.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
                         /*
                         if (!element.directory.equals("")) {
                             lookupEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -1127,9 +1175,13 @@ public class AdikStyleActivity extends AppCompatActivity {
 
                         lookupEditText.setAdapter(adapter);
 
-                        horizontalLLCombo1.addView(captionTVCombo1);
-                        horizontalLLCombo1.addView(lookupEditText);
-                        LL.addView(horizontalLLCombo1);
+                        TextInputLayout fieldHintAuto = new TextInputLayout(thisActivity);
+                        fieldHintAuto.setHint(element.description);
+                        fieldHintAuto.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                        fieldHintAuto.addView(lookupEditText);
+
+                        LL.addView(fieldHintAuto);
                         break;
                     default:
                         break;
@@ -1154,7 +1206,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                 String selectedString = kolesaAdapter.filteredObjects.get(i).name;
                 lookupEditText.setText(selectedString);
                 //TODO: .name
-                element.vText = selectedString;
+                element.vText = kolesaAdapter.filteredObjects.get(i).id;
                 lookUpDialog.dismiss();
             }
         });

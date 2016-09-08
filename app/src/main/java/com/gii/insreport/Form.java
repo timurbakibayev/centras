@@ -182,6 +182,7 @@ public class Form {
                 if (input.get(element.fireBaseFieldName) != null) {
                     element.serverStatic = true;
                     String value = input.get(element.fireBaseFieldName);
+                    element.vText = value;
                     if (element.type == Element.ElementType.eText)
                         element.vText = value;
                     if (element.type == Element.ElementType.eDate || element.type == Element.ElementType.eDateTime) {

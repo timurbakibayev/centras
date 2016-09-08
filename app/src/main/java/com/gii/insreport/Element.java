@@ -144,6 +144,39 @@ public class Element {
         return "";
     }
 
+    public String toStringDirectory() {
+        if (!directory.equals("") &&
+                InsReport.directories.map.get(directory) != null) {
+            Directory curDir = InsReport.directories.map.get(directory);
+            for (DirectoryItem item : curDir.items) {
+                if (item.id.equals(vText))
+                    return item.name;
+            }
+        }
+        switch (type) {
+            case eText:
+                return vText;
+            case eDate:
+                return (FillFormActivity.dateOnlyText(vDate));
+            case eDateTime:
+                return (FillFormActivity.dateTimeText(vDate));
+            case eInteger:
+                return ("" + vInteger);
+            case ePlan:
+                return vPlan.damageDescription;
+            case eDraw:
+                return ((vDraw.size() == 0)?"":"Рисунок");
+            case eSignature:
+                return ((vDraw.size() == 0)?"":"Подписано");
+            case eBoolean:
+                return (vBoolean?description:"");
+            case eRadio:
+            case eCombo:
+                return (vText);
+        }
+        return "";
+    }
+
     public String toJson() {
         switch (type) {
             case eText:
@@ -231,7 +264,7 @@ public class Element {
     }
 
     public enum ElementType {
-        eInteger, eBoolean, ePhoto, eText, eCombo, eRadio, eDate, eDateTime, eGroup, eDraw, ePlan, eSignature, eAnima, eLookUp, eParticipant;
+        eInteger, eBoolean, ePhoto, eText, eCombo, eRadio, eDate, eDateTime, eGroup, eDraw, ePlan, eSignature, eAnima, eLookUp, eParticipant, eTextNum;
     }
 
     @JsonIgnore

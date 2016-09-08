@@ -7,6 +7,8 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,6 +49,12 @@ public class Directories {
                             //newDir.itemMap = postSnapshot.getValue(newDir.itemMap.getClass());
                             //newDir.mapToArrayList();
                             newDir.name = postSnapshot.getKey();
+                            Collections.sort(newDir.items, new Comparator<DirectoryItem>() {
+                                @Override
+                                public int compare(DirectoryItem o, DirectoryItem t1) {
+                                    return (o.name.compareTo(t1.name));
+                                }
+                            });
                             map.put(postSnapshot.getKey(),newDir);
                         }
 

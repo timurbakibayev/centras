@@ -91,6 +91,7 @@ public class FormsCollection {
                             ((FormsListAdapter)(InsReport.currentListView.getAdapter())).notifyDataSetChanged();
 
                         loadComplete = true;
+
                     }
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
