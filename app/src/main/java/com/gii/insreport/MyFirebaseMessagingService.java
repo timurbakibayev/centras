@@ -1,6 +1,9 @@
 package com.gii.insreport;
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
@@ -27,7 +30,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.e(TAG, "onMessageReceived: Push Notification Received!");
-        sendNotification("Новое сообщение с сервера");
+
         // [START_EXCLUDE]
         // There are two types of messages data messages and notification messages. Data messages are handled
         // here in onMessageReceived whether the app is in the foreground or background. Data messages are the type
@@ -52,6 +55,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
 
+
+        Intent intent = new Intent(this,ContactFormWidgetProvider.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+// Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
+// since it seems the onUpdate() is only fired on that:
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance
+                (this);
+        ComponentName thisAppWidgetComponentName =
+                new ComponentName(this.getPackageName(),getClass().getName()
+                );
+        int[] Ids = appWidgetManager.getAppWidgetIds(
+                thisAppWidgetComponentName);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS,Ids);
+        intent.putExtra("name",remoteMessage.getData().get("name"));
+        intent.putExtra("phone",remoteMessage.getData().get("phone"));
+        intent.putExtra("address",remoteMessage.getData().get("address"));
+        intent.setAction("Updated from notification!");
+        sendBroadcast(intent);
+
+        String t = "";
+        if (remoteMessage.getData().get("name") != null)
+            t = remoteMessage.getData().get("name");
+
+        sendNotification(t);
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
@@ -70,8 +97,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                //.setSmallIcon(R.drawable.ic_stat_ic_notification)
-                .setContentTitle("FCM Message")
+                .setSmallIcon(R.drawable.centraslogo)
+                .setContentTitle("Новый страховой случай")
                 .setContentText(messageBody)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
@@ -81,5 +108,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        Log.e(TAG, "sendNotification: hm...");
     }
 }

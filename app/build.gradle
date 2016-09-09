@@ -31,5 +31,7 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:9.4.0'
     compile 'com.google.firebase:firebase-messaging:9.4.0'
     compile 'com.firebaseui:firebase-ui:0.3.1'
+    compile 'org.json:json:20160212'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
 }
 apply plugin: 'com.google.gms.google-services'

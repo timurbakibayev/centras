@@ -100,6 +100,8 @@ public class ServerEmuActivity extends AppCompatActivity  {
         });
     }
 
+    FCMNotify fcmNotify = new FCMNotify();
+
     private void sendTheForm(String whois, View view) {
         for (FirebaseUserEmail firebaseUserEmail : InsReport.firebaseUserEmails) {
             if (firebaseUserEmail.email.equals(whois)) {
@@ -109,11 +111,22 @@ public class ServerEmuActivity extends AppCompatActivity  {
                         .setAction("Show command", null).show();
                 Firebase sendTo = InsReport.ref.child("forms/incident/"+firebaseUserEmail.id+"/"+formId);
                 Map<String,String> input = new HashMap<>();
-                for (InputField inputField : inputFields)
-                    input.put(inputField.fieldName,inputField.fieldValue);
+                String name = "";
+                String phone = "";
+                String address = "";
+                for (InputField inputField : inputFields) {
+                    input.put(inputField.fieldName, inputField.fieldValue);
+                    if (inputField.fieldName.toUpperCase().contains("CLIENT_NAME"))
+                        name = inputField.fieldValue;
+                    if (inputField.fieldName.toUpperCase().contains("PHONE"))
+                        phone = inputField.fieldValue;
+                    if (inputField.fieldName.toUpperCase().contains("PLACE"))
+                        address = inputField.fieldValue;
+                }
                 sendTo.child("input").setValue(input);
                 sendTo.child("dateCreated").setValue(ServerValue.TIMESTAMP);
                 sendTo.child("id").setValue(formId);
+                fcmNotify.trySendNotification(firebaseUserEmail.id,name,phone,address);
             }
         }
     }

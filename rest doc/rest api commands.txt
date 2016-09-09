@@ -39,6 +39,10 @@ curl --insecure --header 'Authorization: key=AIzaSyCCpeRFK0PoHkuo08VqZiVkoVqB0US
 send to Dauren:
 curl --insecure --header 'Authorization: key=AIzaSyCCpeRFK0PoHkuo08VqZiVkoVqB0USoZNQ' --header 'Content-Type:application/json' -d '{"notification":{"title":"New accident!","body":"Hi, Dauren!", "sound" : "default"},"to" : "/topics/wo6npz1PuMVFieuiZFjgCNYOwa12"}' "https://fcm.googleapis.com/fcm/send"
 
+send a push with all data to my phone:
+ curl --insecure --header 'Authorization: key=AIzaSyCCpeRFK0PoHkuo08VqZiVkoVqB0USoZNQ' --header 'Content-Type:application/json' -d '{"data":{"name":"Arnold Schwarzenegger","phone":"555-12751", "address" : "California"},"to" : "/topics/5ARsewRkMeTL9kRLHVIkwnKbq812"}' "https://fcm.googleapis.com/fcm/send"
+
+
 check subscriptions of a user (IID_TOKEN needed):
 my device:  
 curl -X Get -H"Authorization:key=AIzaSyCCpeRFK0PoHkuo08VqZiVkoVqB0USoZNQ" "https://iid.googleapis.com/iid/info/dfxK0I7UFuI:APA91bFoMSETFVfqkpKh7tqSPCezRSBXVpgsqq_wdg9j3ScAqp4VNJ3atRwHF4N2xXa6jr76r11_6X_SBWSmG57fQfkL9OXKgxN5qePGlIdrFj-Tyh3fvOxVSkl0lXfd0Zz24aemH6PN?details=true"

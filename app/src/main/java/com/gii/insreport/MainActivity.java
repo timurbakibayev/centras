@@ -120,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+
     public void grantStoragePermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (this.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -280,6 +282,7 @@ public class MainActivity extends AppCompatActivity {
             }
             loginButton.setVisibility(View.VISIBLE);
         }
+        //TODO: Consider adding '".indexOn": "dateCreated"' at /forms/incident/5ARsewRkMeTL9kRLHVIkwnKbq812 to your security and Firebase rules for better performance
 
     }
 }
