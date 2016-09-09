@@ -12,13 +12,13 @@ public class FormTemplates {
         element.elements.add(new Element("participant", Element.ElementType.eText, "PERSON_NAME",
                 "ФИО персоны"));
 
-        element.elements.add(new Element("participant", Element.ElementType.eText, "PERSON_TYPE",
+        element.elements.add(new Element("participant", Element.ElementType.eCombo, "PERSON_TYPE",
                 "Тип персоны", "DCT_PERSON_TYPE"));
 
-        element.elements.add(new Element("participant", Element.ElementType.eText, "PERSON_IIN",
+        element.elements.add(new Element("participant", Element.ElementType.eTextNum, "PERSON_IIN",
                 "Иин персоны"));
 
-        element.elements.add(new Element("participant", Element.ElementType.eText, "GUILT_PERCENTAGE",
+        element.elements.add(new Element("participant", Element.ElementType.eTextNum, "GUILT_PERCENTAGE",
                 "% виновности"));
 
         element.elements.add(new Element("participant", Element.ElementType.eText, "GUILTY_CONTRACT_NO",
@@ -68,7 +68,6 @@ public class FormTemplates {
 
         form.elements.add(new Element("object", Element.ElementType.eText, "CAR_COLOUR",
                 "Цвет объекта"));
-
     }
 
     public static void applyTemplate(Form form, String fireBaseCatalog) {
@@ -402,7 +401,7 @@ public class FormTemplates {
                     form.elements.add(new Element("general", Element.ElementType.eText, "EVENT_DESCRIPTION",
                             "Описание события"));
 
-                    form.elements.add(new Element("general", Element.ElementType.eText, "INITIAL_SUM",
+                    form.elements.add(new Element("general", Element.ElementType.eTextNum, "INITIAL_SUM",
                             "Предварительная сумма (ущерба для страховых случае, стоимости авто для предварительного страхового осмотра)"));
 
                     form.elements.add(new Element("", Element.ElementType.eText, "REGISTRATION_DATE",
@@ -416,7 +415,7 @@ public class FormTemplates {
 
                     form.elements.add(new Element("general", Element.ElementType.eText, "OPERATOR_NAME",
                             "Имя оператора кол-центра"));
-                    form.elements.add(new Element("", Element.ElementType.eText, "SEND_SMS",
+                    form.elements.add(new Element("", Element.ElementType.eTextNum, "SEND_SMS",
                             "На какой номер АК было отправлено уведомление о страх. Случае"));
                     form.elements.add(new Element("general", Element.ElementType.eTextNum, "CLAIMANT_PHONE_NO",
                             "Номер телефона застрахованного"));
