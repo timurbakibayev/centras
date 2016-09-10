@@ -17,10 +17,10 @@ public class ContactFormWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         final int count = appWidgetIds.length;
 
-        String lastPressed = InsReport.sharedPref.getString("lastPressed","");
-        String personName = InsReport.sharedPref.getString("personName","");
-        String personPhone = InsReport.sharedPref.getString("personPhone","");
-        String personAddress = InsReport.sharedPref.getString("personAddress","");
+        String lastPressed = InsReport.sharedPref.getString("lastPressed", "");
+        String personName = InsReport.sharedPref.getString("personName", "");
+        String personPhone = InsReport.sharedPref.getString("personPhone", "");
+        String personAddress = InsReport.sharedPref.getString("personAddress", "");
 
         for (int i = 0; i < count; i++) {
             int widgetId = appWidgetIds[i];
@@ -36,8 +36,14 @@ public class ContactFormWidgetProvider extends AppWidgetProvider {
                 remoteViews.setOnClickPendingIntent(R.id.actionButtonCall, pendingIntent);
 
             //Google Maps
-            Intent intentMaps = new Intent(Intent.ACTION_VIEW,
-                    Uri.parse("geo:0,0?q=" + Uri.encode(personAddress)));
+
+            Intent intentMaps = new Intent(Intent.ACTION_VIEW);
+            String location = personAddress.replaceAll(" ", "+");
+            Uri locationUri = Uri.parse("geo:0,0?").buildUpon()
+                    .appendQueryParameter("q", location)
+                    .build();
+
+            intentMaps.setData(locationUri);
             //intentMaps.setPackage("com.google.android.apps.maps");
             PendingIntent pendingIntent1 = PendingIntent.getActivity(context, 0, intentMaps, 0);
             if (!personAddress.trim().equals(""))
@@ -52,7 +58,7 @@ public class ContactFormWidgetProvider extends AppWidgetProvider {
                 (context);
 
         ComponentName thisAppWidgetComponentName =
-                new ComponentName(context.getPackageName(),getClass().getName()
+                new ComponentName(context.getPackageName(), getClass().getName()
                 );
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
                 thisAppWidgetComponentName);
@@ -64,14 +70,14 @@ public class ContactFormWidgetProvider extends AppWidgetProvider {
         super.onReceive(context, intent);
 
         if (intent.getStringExtra("name") != null)
-            InsReport.savePref("personName",intent.getStringExtra("name"));
+            InsReport.savePref("personName", intent.getStringExtra("name"));
         if (intent.getStringExtra("phone") != null)
-            InsReport.savePref("personPhone",intent.getStringExtra("phone"));
+            InsReport.savePref("personPhone", intent.getStringExtra("phone"));
         if (intent.getStringExtra("address") != null)
-            InsReport.savePref("personAddress",intent.getStringExtra("address"));
+            InsReport.savePref("personAddress", intent.getStringExtra("address"));
 
         //if ("address".equals(intent.getAction())) {
-            onUpdate(context);
+        onUpdate(context);
         //}
     }
 }
