@@ -49,12 +49,11 @@ public class InsReport extends Application {
 
     public static MainActivity mainActivity;
 
-
     public static DamagePlanData damagePlanData = new DamagePlanData();
     public static ArrayList<FormsCollection> mainMenuForms = new ArrayList<>();
     public static FormsCollection preInsuranceFormsCollection = new FormsCollection();
     public static FormsCollection incidentFormsCollection = new FormsCollection();
-    public static int currentFormNo = -1;
+    public static Form formToBeAccepted = null;
 
     public static Element currentElement = null;
     public static Form currentForm= null;

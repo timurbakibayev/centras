@@ -8,6 +8,16 @@ public class DirectoryItem {
     public String name = "";
     public String status = "";
 
+    public DirectoryItem() {
+
+    }
+
+    public DirectoryItem(String id, String name) {
+        this.id = id;
+        this.name = name;
+        this.status = "Y";
+    }
+
     public String getId() {
         return id;
     }

@@ -1,7 +1,10 @@
 package com.gii.insreport;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.firebase.client.Firebase;
+import com.firebase.client.ServerValue;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -22,11 +25,14 @@ public class Form {
     public String fireBaseCatalog = "";
     public Date dateCreated = new Date();
     public Date dateModified = new Date();
+    public Date dateAccepted = null;
 
     @JsonIgnore
     public ArrayList<String> descriptionFields = new ArrayList<>();
 
     public boolean formReady = false;
+
+    public String status = "";
 
     public String phoneNo = "";
 
@@ -115,14 +121,22 @@ public class Form {
 
     public void saveToCloud() {
         updateDescription();
-        ref.child("forms/" + fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + id).
-                setValue(this);
+        if (!fireBaseCatalog.equals("")) {
+            ref.child("forms/" + fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + id).
+                    setValue(this);
+            //TODO: ONLY IF IT REALLY WAS MODIFIED!
+            ref.child("forms/" + fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + id + "/dateModified").
+                    setValue(ServerValue.TIMESTAMP);
+            Log.e(TAG, "saveToCloud: " + "forms/" + fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + id);
+        } else
+            Log.e(TAG, "NOT saveToCloud: " + id);
         //now save raw data (ungroup and save):
 
     }
 
     public void updateDescription() {
         description = id + " ";
+        String firebaseFieldClientName = "CLIENT_NAME";
         for (Element element : elements) {
             if (element.type == Element.ElementType.eGroup) {
                 for (Element _element : element.elements) {
@@ -131,6 +145,8 @@ public class Form {
                         description = description + " " + _element.toString();
                     if (_element.fireBaseFieldName.equals("CLAIMANT_PHONE_NO"))
                         phoneNo = _element.toString();
+                    if (element.fireBaseFieldName.equals(firebaseFieldClientName))
+                        description = element.toString();
                 }
             }
             //...
@@ -138,7 +154,12 @@ public class Form {
                 description = description + " " + element.toString();
             if (element.fireBaseFieldName.equals("CLAIMANT_PHONE_NO"))
                 phoneNo = element.toString();
+            if (element.fireBaseFieldName.equals(firebaseFieldClientName))
+                description = element.toString();
         }
+        if (input.get(firebaseFieldClientName) != null &&
+                !input.get(firebaseFieldClientName).equals(""))
+            description = input.get(firebaseFieldClientName);
         if (description.trim().equals(""))
             description = "Новая форма";
     }
@@ -230,5 +251,9 @@ public class Form {
 
     public Element getObjects() {
         return objects;
+    }
+
+    public String getStatus() {
+        return status;
     }
 }

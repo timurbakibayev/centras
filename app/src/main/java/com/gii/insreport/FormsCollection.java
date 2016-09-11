@@ -53,6 +53,7 @@ public class FormsCollection {
                                 Log.e(TAG, "onDataChange: processing another item..." + newForm.id);
                                 //newForm.validate();
                                 if (newForm.elements.size() == 0) {
+                                    /*
                                     Log.e(TAG, "onDataChange: applying template for " + newForm.id);
                                     FormTemplates.applyTemplate(newForm, fireBaseCatalog);
                                     Log.e(TAG, "onDataChange: done applying. updating description...");
@@ -61,19 +62,24 @@ public class FormsCollection {
                                     newForm.validate();
                                     Log.e(TAG, "onDataChange: saving to cloud");
                                     newForm.saveToCloud();
+                                    */
+                                    InsReport.formToBeAccepted = newForm;
+                                    newForm.fireBaseCatalog = fireBaseCatalog;
                                 }
                                 boolean exists = false;
                                 for (int i = 0; i < forms.size(); i++) {
-                                    Form form = forms.get(i);
-                                    if (form.id.equals(newForm.id)) {
-                                        //forms.set(i,newForm);
+                                    if (forms.get(i).id.equals(newForm.id)) {
+                                        forms.set(i,newForm);
                                         exists = true;
                                     }
+                                    if (InsReport.formToBeAccepted != null &&
+                                            InsReport.formToBeAccepted.id.equals(forms.get(i).id))
+                                        InsReport.formToBeAccepted = newForm;
                                 }
                                 if (!exists)
                                     forms.add(newForm);
                             } catch (Exception e) {
-                                Log.e(TAG, "onDataChange: PROBLEMS CASTING FROM DB!!! : " + postSnapshot.getKey());
+                                Log.e(TAG, "onDataChange: PROBLEMS CASTING FROM DB!!! : " + postSnapshot.getKey() + ", " + e.getMessage());
                             }
                         }
 

@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class FormsList extends AppCompatActivity {
@@ -105,11 +106,8 @@ public class FormsList extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                if(view.getId() == )
-                InsReport.currentFormNo = position;
-                Intent intent = new Intent(thisActivity, AdikStyleActivity.class);
-                intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, fireBaseCatalog);
-                intent.putExtra(InsReport.EXTRA_ID_NO, currentFormsCollection.forms.get(position).id);
-                startActivity(intent);
+
+                openTheForm(currentFormsCollection.forms.get(position).id);
             }
         });
     }
@@ -195,10 +193,7 @@ public class FormsList extends AppCompatActivity {
                     } else {
                         mItemPressed = false;
                         String s = ((TextView) view.findViewById(R.id.textViewID)).getText().toString();
-                        Intent intent = new Intent(thisActivity, AdikStyleActivity.class);
-                        intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, fireBaseCatalog);
-                        intent.putExtra(InsReport.EXTRA_ID_NO, s);
-                        startActivity(intent);
+                        openTheForm(s);
                     }
                 }
                 break;
@@ -449,15 +444,44 @@ public class FormsList extends AppCompatActivity {
         newForm.generateNewId();
         FormTemplates.selectionTypes = selectionType;
         FormTemplates.applyTemplate(newForm, fireBaseCatalog);
-
+        newForm.dateAccepted = new Date();
+        newForm.dateCreated = new Date();
+        newForm.status = "accept";
         currentFormsCollection.forms.add(newForm);
         ((FormsListAdapter) ((ListView) findViewById(R.id.listView)).getAdapter()).notifyDataSetChanged();
-        InsReport.currentFormNo = currentFormsCollection.forms.size() - 1;
-        Intent intent = new Intent(this, AdikStyleActivity.class);
-        intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, fireBaseCatalog);
-        intent.putExtra(InsReport.EXTRA_ID_NO, newForm.id);
-        intent.putExtra(InsReport.INCIDENT_TYPE, selectionType);
-        startActivity(intent);
+        openTheForm(newForm.id);
+    }
+
+    public void openTheForm(String id) {
+        Form currentForm = null;
+        for (FormsCollection formsCollection : InsReport.mainMenuForms) {
+            if (formsCollection.fireBaseCatalog.equals(fireBaseCatalog)) {
+                for (Form form : formsCollection.forms) {
+                    if (form.id.equals(id)) {
+                        currentForm = form;
+                    }
+                }
+            }
+        }
+
+        if (currentForm != null) {
+            if (currentForm.status.equals("")) {
+                if (!currentForm.formReady)
+                    InsReport.mainActivity.acceptOrRejectDialogShow(currentForm,this);
+            }
+            if (currentForm.status.equals("accept") &&
+                    !currentForm.formReady) {
+                Intent intent = new Intent(thisActivity, AdikStyleActivity.class);
+                intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, fireBaseCatalog);
+                intent.putExtra(InsReport.EXTRA_ID_NO, id);
+                startActivity(intent);
+            }
+            if (currentForm.formReady) {
+                snackBar("Форма уже отправлена на сервер!");
+            } else if (!currentForm.status.equals("accept")) {
+                snackBar("Форма не была принята!");
+            }
+        }
     }
 
     public void snackBar(String message) {

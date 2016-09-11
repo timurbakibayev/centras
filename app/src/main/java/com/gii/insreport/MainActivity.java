@@ -1,6 +1,8 @@
 package com.gii.insreport;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -13,11 +15,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.firebase.client.ServerValue;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -75,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
         });
 */
         addForms();
-        refreshDescriptions();
 
         grantStoragePermission();
         grantCameraPermission();
@@ -110,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
                             for (Button formButton : formButtons) {
                                 formButton.setEnabled(true);
                             }
+                            checkNewForms(thisActivity);
                         }
                     });
                     Log.e(TAG, "run: ALL LOADED");
@@ -207,7 +212,10 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        refreshDescriptions();
+        Log.e(TAG, "onResume: YES");
+
+        if (InsReport.directories.loaded)
+            checkNewForms(this);
     }
 
 
@@ -252,9 +260,100 @@ public class MainActivity extends AppCompatActivity {
         mainMenuLL.addView(newMenuButton);
     }
 
-    private void refreshDescriptions() {
-        //((Button)findViewById(R.id.button_add_plan)).setText("План повреждений\n\n" + InsReport.damagePlanData.damageDescription);
+    public void checkNewForms(Activity context) {
+        if (InsReport.formToBeAccepted != null &&
+                InsReport.formToBeAccepted.status.equals("")) {
+            acceptOrRejectDialogShow(InsReport.formToBeAccepted, context);
+        }
     }
+
+    public void acceptOrRejectDialogShow(final Form form, Activity context) {
+        final Dialog acceptOrRejectDialog = new Dialog(context);
+        acceptOrRejectDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        acceptOrRejectDialog.setContentView(context.getLayoutInflater().inflate(R.layout.accept_reject
+                , null));
+
+        String headerText = "";
+        final String phoneNo;
+        final String address;
+
+        //TODO: scan the elements
+        //Внимание! Если создать форму с нуля, а не с сервера, то данные не подтягиваются!
+        //Надо: просканировать elements формы, найти эти данные и записать их в input!
+        //Примерно так:
+        //for (Element element : form.elements) {
+        //    if (element.fireBaseFieldName.equals("dddd"))
+        //        form.input.put("dddd",element.toString());
+        //}
+
+        if (form.input.get("CLIENT_NAME") != null)
+            headerText += form.input.get("CLIENT_NAME") + "\n";
+        if (form.input.get("CLAIMANT_PHONE_NO") != null) {
+            headerText += "Телефон: " + form.input.get("CLAIMANT_PHONE_NO") + "\n";
+            phoneNo = form.input.get("CLAIMANT_PHONE_NO");
+        } else
+            phoneNo = "";
+        if (form.input.get("EVENT_PLACE") != null) {
+            headerText += "Адрес: " + form.input.get("EVENT_PLACE") + "\n";
+            address = form.input.get("EVENT_PLACE");
+        } else
+            address = "";
+
+        ((TextView)acceptOrRejectDialog.findViewById(R.id.textHeader)).setText(headerText);
+
+        ((Button)acceptOrRejectDialog.findViewById(R.id.buttonAccept)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //if this is first time, save the time of accept/reject
+                if (form.status.equals(""))
+                    InsReport.ref.child("forms/" + form.fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + form.id + "/dateAccepted").
+                            setValue(ServerValue.TIMESTAMP);
+                form.status = "accept";
+                if (form.elements.size() == 0) {
+                    FormTemplates.applyTemplate(form, form.fireBaseCatalog);
+                    form.updateDescription();
+                    form.validate();
+                }
+                form.saveToCloud();
+                acceptOrRejectDialog.dismiss();
+            }
+        });
+
+        ((Button)acceptOrRejectDialog.findViewById(R.id.buttonReject)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //if this is first time, save the time of accept/reject
+                if (form.status.equals(""))
+                    InsReport.ref.child("forms/" + form.fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + form.id + "/dateAccepted").
+                            setValue(ServerValue.TIMESTAMP);
+                form.status = "reject";
+                form.saveToCloud();
+                acceptOrRejectDialog.dismiss();
+            }
+        });
+
+        ((Button)acceptOrRejectDialog.findViewById(R.id.buttonCall)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: make a call to phoneNo
+                //здесь переменная phoneNo уже содержит телефон
+            }
+        });
+
+        ((Button)acceptOrRejectDialog.findViewById(R.id.buttonMap)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: open map intent to address
+                //здесь переменная address уже содержит адрес
+            }
+        });
+
+
+
+        acceptOrRejectDialog.show();
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

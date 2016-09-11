@@ -3,6 +3,7 @@ package com.gii.insreport;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
@@ -109,6 +110,29 @@ public class FormsListAdapter extends BaseAdapter {
             ((ImageView) view.findViewById(R.id.imageInListView)).setVisibility(View.GONE);
         else
             ((ImageView) view.findViewById(R.id.imageInListView)).setVisibility(View.VISIBLE);
+
+        int color = Color.BLACK;
+        ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.BLUE);
+        ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.BLUE);
+
+        if (p.status.equals("accept")) {
+            color = Color.GREEN;
+        }
+        if (p.status.equals("reject")) {
+            color = Color.RED;
+            ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.LTGRAY);
+            ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.LTGRAY);
+        }
+
+        ((ImageView)view.findViewById(R.id.openAcceptOrReject)).setColorFilter(color);
+
+        ((ImageView)view.findViewById(R.id.openAcceptOrReject)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!p.formReady)
+                    InsReport.mainActivity.acceptOrRejectDialogShow(p,FormsList.formList);
+            }
+        });
 
         if (p.phoneNo.equals(""))
             ((ImageView) view.findViewById(R.id.imageCallInListView)).setVisibility(View.GONE);
