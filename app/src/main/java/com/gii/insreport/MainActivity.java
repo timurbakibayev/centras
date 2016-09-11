@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -21,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.ServerValue;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 imgMainClicked++;
                 if (imgMainClicked >= 3 && InsReport.mAuth.getCurrentUser() != null) {
-                    Intent serverIntent = new Intent(thisActivity,ServerEmuActivity.class);
+                    Intent serverIntent = new Intent(thisActivity, ServerEmuActivity.class);
                     startActivity(serverIntent);
                 }
             }
@@ -106,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (allLoaded || InsReport.mAuth.getCurrentUser() == null) {
                     timer.cancel();
-                    final ProgressBar pb = (ProgressBar)findViewById(R.id.roundProgressbar);
+                    final ProgressBar pb = (ProgressBar) findViewById(R.id.roundProgressbar);
                     pb.getHandler().post(new Runnable() {
                         @Override
                         public void run() {
@@ -125,8 +127,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     public void grantStoragePermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (this.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -136,12 +136,11 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 //Log.v(TAG,"Permission is revoked");
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                return ;
+                return;
             }
-        }
-        else { //permission is automatically granted on sdk<23 upon installation
+        } else { //permission is automatically granted on sdk<23 upon installation
             //Log.v(TAG,"Permission is granted");
-            return ;
+            return;
         }
     }
 
@@ -154,12 +153,11 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 //Log.v(TAG,"Permission is revoked");
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, 1);
-                return ;
+                return;
             }
-        }
-        else { //permission is automatically granted on sdk<23 upon installation
+        } else { //permission is automatically granted on sdk<23 upon installation
             //Log.v(TAG,"Permission is granted");
-            return ;
+            return;
         }
     }
 
@@ -172,12 +170,11 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 //Log.v(TAG,"Permission is revoked");
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CALL_PHONE}, 1);
-                return ;
+                return;
             }
-        }
-        else { //permission is automatically granted on sdk<23 upon installation
+        } else { //permission is automatically granted on sdk<23 upon installation
             //Log.v(TAG,"Permission is granted");
-            return ;
+            return;
         }
     }
 
@@ -222,15 +219,16 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Button> formButtons = new ArrayList<>();
     Button loginButton = null;
     MainActivity thisActivity = this;
+
     private void addForms() {
-        LinearLayout mainMenuLL = (LinearLayout)findViewById(R.id.mainMenuLL);
+        LinearLayout mainMenuLL = (LinearLayout) findViewById(R.id.mainMenuLL);
         mainMenuLL.removeAllViews();
         for (final FormsCollection formsCollection : InsReport.mainMenuForms) {
             Button newMenuButton = new Button(this);
             formButtons.add(newMenuButton);
             newMenuButton.setText(formsCollection.description);
             final float scale = getResources().getDisplayMetrics().density;
-            newMenuButton.setHeight((int)(96 * scale + 0.5f));
+            newMenuButton.setHeight((int) (96 * scale + 0.5f));
             newMenuButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -248,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
         formButtons.add(newMenuButton);
         newMenuButton.setText("АВТОРИЗАЦИЯ");
         final float scale = getResources().getDisplayMetrics().density;
-        newMenuButton.setHeight((int)(96 * scale + 0.5f));
+        newMenuButton.setHeight((int) (96 * scale + 0.5f));
         newMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -299,9 +297,9 @@ public class MainActivity extends AppCompatActivity {
         } else
             address = "";
 
-        ((TextView)acceptOrRejectDialog.findViewById(R.id.textHeader)).setText(headerText);
+        ((TextView) acceptOrRejectDialog.findViewById(R.id.textHeader)).setText(headerText);
 
-        ((Button)acceptOrRejectDialog.findViewById(R.id.buttonAccept)).setOnClickListener(new View.OnClickListener() {
+        ((Button) acceptOrRejectDialog.findViewById(R.id.buttonAccept)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //if this is first time, save the time of accept/reject
@@ -319,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ((Button)acceptOrRejectDialog.findViewById(R.id.buttonReject)).setOnClickListener(new View.OnClickListener() {
+        ((Button) acceptOrRejectDialog.findViewById(R.id.buttonReject)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //if this is first time, save the time of accept/reject
@@ -332,27 +330,47 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ((Button)acceptOrRejectDialog.findViewById(R.id.buttonCall)).setOnClickListener(new View.OnClickListener() {
+        ((Button) acceptOrRejectDialog.findViewById(R.id.buttonCall)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO: make a call to phoneNo
                 //здесь переменная phoneNo уже содержит телефон
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" + phoneNo.trim()));
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
             }
         });
 
-        ((Button)acceptOrRejectDialog.findViewById(R.id.buttonMap)).setOnClickListener(new View.OnClickListener() {
+        ((Button) acceptOrRejectDialog.findViewById(R.id.buttonMap)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO: open map intent to address
                 //здесь переменная address уже содержит адрес
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+
+                String locationStr = address.replaceAll(" ", "+");
+
+                Uri locationUri = Uri.parse("geo:0,0?").buildUpon()
+                        .appendQueryParameter("q", locationStr)
+                        .build();
+                intent.setData(locationUri);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                    Toast.makeText(MainActivity.this, locationStr, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this,
+                            "Нет карты", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
 
-
         acceptOrRejectDialog.show();
     }
-
 
 
     @Override
@@ -362,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public  void refreshUser() {
+    public void refreshUser() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         FirebaseUser user = InsReport.mAuth.getCurrentUser();
         if (user != null) {
@@ -372,8 +390,7 @@ public class MainActivity extends AppCompatActivity {
                 formButton.setVisibility(View.VISIBLE);
             }
             loginButton.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             toolbar.setSubtitle("Offline");
             InsReport.userID = "Incognito";
             for (Button formButton : formButtons) {

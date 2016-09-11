@@ -178,12 +178,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private void savePassword(String email, String password) {
         SharedPreferences preferences = getSharedPreferences("emailPasswordInsurance", MODE_PRIVATE);
-        SharedPreferences.Editor edit= preferences.edit();
+        SharedPreferences.Editor edit = preferences.edit();
         edit.putString("email", email);
         edit.putString("password", password);
         edit.commit();
     }
-
 
 
     private void populateAutoComplete() {
@@ -368,8 +367,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                                 Toast.LENGTH_LONG).show();
                                 }
                             });
-                        } else
-                        if (!isPasswordValid(newPassword1.getText().toString()))
+                        } else if (!isPasswordValid(newPassword1.getText().toString()))
                             Toast.makeText(getApplicationContext(), getString(R.string.error_invalid_password),
                                     Toast.LENGTH_LONG).show();
                         else
@@ -458,7 +456,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             focusView.requestFocus();
         } else {
             showProgress(true);
-            loginFirebase(email,password);
+            loginFirebase(email, password);
         }
     }
 
@@ -469,22 +467,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             savePassword(email, password);
             Map<String, String> map = new HashMap<String, String>();
             map.put("provider", authData.getProvider());
-            if(authData.getProviderData().containsKey("displayName")) {
+            if (authData.getProviderData().containsKey("displayName")) {
                 map.put("displayName", authData.getProviderData().get("displayName").toString());
             }
-            if(authData.getProviderData().containsKey("email")) {
+            if (authData.getProviderData().containsKey("email")) {
                 map.put("email", authData.getProviderData().get("email").toString());
             }
             InsReport.ref.child("users").child(authData.getUid()).setValue(map);
             finish();
         }
+
         @Override
         public void onAuthenticationError(FirebaseError firebaseError) {
             switch (firebaseError.getCode()) {
                 case FirebaseError.USER_DOES_NOT_EXIST:
                     Log.e(TAG, "onAuthenticationError: USER DOES NOT EXIST");
                     if (!signedUp)
-                        signUp(email,password);
+                        signUp(email, password);
                     signedUp = true;
                     break;
                 case FirebaseError.INVALID_PASSWORD:
@@ -494,7 +493,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     break;
                 default:
                     // handle other errors
-                    Toast.makeText(getApplicationContext(),firebaseError.getMessage(),Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), firebaseError.getMessage(), Toast.LENGTH_LONG).show();
                     break;
             }
 
@@ -520,7 +519,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         return;
                     }
                     if (task.getException().getMessage().contains("no user record")) {
-                        signUp(email,password);
+                        signUp(email, password);
                         return;
                     }
                     if (task.getException().getMessage().contains("password is invalid")) {
@@ -545,8 +544,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void signUp(final String email, final String password) {
-        Log.e("Firebase","Registered user:" + " trying to sign up");
-        InsReport.mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        Log.e("Firebase", "Registered user:" + " trying to sign up");
+        InsReport.mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 Log.e(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
@@ -557,13 +556,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     showProgress(false);
                 } else {
                     Toast.makeText(getApplicationContext(), "Регистрация ОК",
-                    Toast.LENGTH_LONG).show();
-                    InsReport.mAuth.signInWithEmailAndPassword(email,password);
+                            Toast.LENGTH_LONG).show();
+                    InsReport.mAuth.signInWithEmailAndPassword(email, password);
                     showProgress(false);
                 }
             }
         });
     }
+
     private boolean isEmailValid(String email) {
         return email.contains("@") && email.contains(".");
     }
