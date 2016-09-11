@@ -7,13 +7,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.Toast;
 
-public class VehicleDamageActivity extends AppCompatActivity {
+public class VehicleDamageActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     public static VehicleDamageView vehicleDamageView;
+    Spinner spinner;
 
 
 
@@ -35,9 +40,17 @@ public class VehicleDamageActivity extends AppCompatActivity {
             }
         });
 
+        spinner = new Spinner(this);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.cars_array, android.R.layout.simple_spinner_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(this);
+//
         if (vehicleDamageView == null) {
             vehicleDamageView = new VehicleDamageView(this);
-
         }
 
         vehicleDamageView.bindActivity(this);
@@ -47,7 +60,10 @@ public class VehicleDamageActivity extends AppCompatActivity {
         if (parent != null) {
             parent.removeAllViews();
         }
+
         ((RelativeLayout)findViewById(R.id.vehicleViewSubstitute)).addView(vehicleDamageView);
+        ((RelativeLayout)findViewById(R.id.vehicleViewSubstitute)).addView(spinner);
+
 
     }
 
@@ -91,6 +107,48 @@ public class VehicleDamageActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int whichButton) {
             }
         }).show();
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        Toast.makeText(VehicleDamageActivity.this, adapterView.getItemAtPosition(i).toString(),
+                Toast.LENGTH_SHORT).show();
+        String type = adapterView.getItemAtPosition(i).toString();
+        if(type.equalsIgnoreCase("Автобус")){
+            VehicleDamageView.carType = "Bus";
+            vehicleDamageView.loadResources(this);
+            ViewGroup parent = (ViewGroup)vehicleDamageView.getParent();
+            if (parent != null) {
+                parent.removeAllViews();
+            }
+            ((RelativeLayout)findViewById(R.id.vehicleViewSubstitute)).addView(vehicleDamageView);
+            ((RelativeLayout)findViewById(R.id.vehicleViewSubstitute)).addView(spinner);
+        }else if(type.equalsIgnoreCase("Грузовик")){
+            VehicleDamageView.carType = "Truck";
+            vehicleDamageView.loadResources(this);
+            ViewGroup parent = (ViewGroup)vehicleDamageView.getParent();
+            if (parent != null) {
+                parent.removeAllViews();
+            }
+            ((RelativeLayout)findViewById(R.id.vehicleViewSubstitute)).addView(vehicleDamageView);
+            ((RelativeLayout)findViewById(R.id.vehicleViewSubstitute)).addView(spinner);
+        }else if(type.equalsIgnoreCase("Мотоцикл")){
+            VehicleDamageView.carType = "Bike";
+            vehicleDamageView.loadResources(this);
+            ViewGroup parent = (ViewGroup)vehicleDamageView.getParent();
+            if (parent != null) {
+                parent.removeAllViews();
+            }
+            ((RelativeLayout)findViewById(R.id.vehicleViewSubstitute)).addView(vehicleDamageView);
+            ((RelativeLayout)findViewById(R.id.vehicleViewSubstitute)).addView(spinner);
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        Toast.makeText(this, "Does it work ?", Toast.LENGTH_SHORT).show();
 
     }
 

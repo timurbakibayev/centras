@@ -21,4 +21,15 @@
     <string name="title_activity_anima">Анимация</string>
     <string name="title_activity_photos">Фотографии</string>
     <string name="title_activity_server_emu">Server Emulator</string>
+
+
+
+
+    <string-array name="cars_array">
+        <item>Машина</item>
+        <item>Грузовик</item>
+        <item>Автобус</item>
+        <item>Мотоцикл</item>
+    </string-array>
+
 </resources>
