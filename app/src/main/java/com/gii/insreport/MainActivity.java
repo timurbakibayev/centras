@@ -340,6 +340,7 @@ public class MainActivity extends AppCompatActivity {
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     startActivity(intent);
                 }
+                acceptOrRejectDialog.dismiss();
             }
         });
 
@@ -364,6 +365,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this,
                             "Нет карты", Toast.LENGTH_SHORT).show();
                 }
+                acceptOrRejectDialog.dismiss();
 
             }
         });

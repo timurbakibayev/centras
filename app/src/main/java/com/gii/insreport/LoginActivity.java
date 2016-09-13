@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                attemptRegister();
             }
         });
         mResetPasswordButton.setOnClickListener(new OnClickListener() {
@@ -421,6 +421,46 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    private void attemptRegister() {
+        Log.e(TAG, "attemptRegister: ");
+        if (mAuthTask != null) {
+            return;
+        }
+
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
+
+        email = mEmailView.getText().toString();
+        password = mPasswordView.getText().toString();
+
+        boolean cancel = false;
+        View focusView = null;
+
+        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+            mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
+        }
+
+        if (TextUtils.isEmpty(email)) {
+            mEmailView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancel = true;
+        } else if (!isEmailValid(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+            cancel = true;
+        }
+
+        if (cancel) {
+            focusView.requestFocus();
+        } else {
+            showProgress(true);
+            signUp(email, password);
+        }
+
+    }
+
     private void attemptLogin() {
         Log.e(TAG, "attemptLogin: ");
         if (mAuthTask != null) {
@@ -482,9 +522,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             switch (firebaseError.getCode()) {
                 case FirebaseError.USER_DOES_NOT_EXIST:
                     Log.e(TAG, "onAuthenticationError: USER DOES NOT EXIST");
-                    if (!signedUp)
-                        signUp(email, password);
-                    signedUp = true;
+                    //if (!signedUp)
+                    Toast.makeText(getApplicationContext(),
+                                "Пользователь не существует!", Toast.LENGTH_LONG)
+                                .show();
+                        //signUp(email, password);
+                    //signedUp = true;
                     break;
                 case FirebaseError.INVALID_PASSWORD:
                     Toast.makeText(getApplicationContext(),
@@ -519,7 +562,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         return;
                     }
                     if (task.getException().getMessage().contains("no user record")) {
-                        signUp(email, password);
+                        //signUp(email, password);
+                        Toast.makeText(getApplicationContext(), "Пользователь не существует!",
+                                Toast.LENGTH_LONG).show();
+                        showProgress(false);
                         return;
                     }
                     if (task.getException().getMessage().contains("password is invalid")) {
