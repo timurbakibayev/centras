@@ -1,6 +1,9 @@
 package com.gii.insreport;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -127,6 +130,37 @@ public class ServerEmuActivity extends AppCompatActivity  {
                 sendTo.child("dateCreated").setValue(ServerValue.TIMESTAMP);
                 sendTo.child("id").setValue(formId);
                 fcmNotify.trySendNotification(firebaseUserEmail.id,name,phone,address);
+                //DONE! Now show the curl queries:
+                LinearLayout linearLayout = new LinearLayout(this);
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+                TextView tvNotifyCaption = new TextView(this);
+                tvNotifyCaption.setText("GCM Notification:");
+                tvNotifyCaption.setTextColor(Color.RED);
+                final TextView tvNotify = new TextView(this);
+                tvNotify.setText(fcmNotify.tryGetNotificationString(firebaseUserEmail.id,name,phone,address));
+
+                TextView tvDataCaption = new TextView(this);
+                tvDataCaption.setText("Firebase new form:");
+                tvDataCaption.setTextColor(Color.RED);
+                final TextView tvData = new TextView(this);
+                tvData.setText(
+                        fcmNotify.tryGetFormDataString(firebaseUserEmail.id,formId,input)
+                        );
+
+                linearLayout.addView(tvNotifyCaption);
+                linearLayout.addView(tvNotify);
+                linearLayout.addView(tvDataCaption);
+                linearLayout.addView(tvData);
+                new AlertDialog.Builder(this).setTitle("Notification:").setView(linearLayout).
+                        setPositiveButton("Копировать в Буфер", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("Text Label", tvNotify.getText().toString() + "\n\n" + tvData.getText().toString());
+                                clipboard.setPrimaryClip(clip);
+                            }
+                        }).
+                        show();
             }
         }
     }

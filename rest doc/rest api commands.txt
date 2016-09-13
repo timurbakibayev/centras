@@ -33,6 +33,9 @@ curl -X PUT -d '{"description" : "terminal",
 "autoBrand" : "Jeep Grand Cherokee"}
 }' "https://insreport-f39a3.firebaseio.com/forms/incident/wo6npz1PuMVFieuiZFjgCNYOwa12/.json"
 
+Сгенерированный запрос:
+curl -X PUT -d '{"description" : "fromServer", "id" : "forma13178","dateCreated": {".sv" : "timestamp"}, "input" : {"CLAIMANT_PHONE_NO":"87017520295","CLIENT_NAME":"Ivan","OPERATOR_NAME":"dsdsds","DOCUMENT_TYPE":"1","INSR_TYPE":"3003","POLICY_REG":"sasasa","DOCUMENT_ID":"A2128506-12\/09","POLICY_INSR_BEGIN":"1471430147665","EVENT_PLACE":"Gagarin 30","CLAIM_REGID":"21212e56\/2016"}}' "https://insreport-f39a3.firebaseio.com/forms/incident/DoamXM8LRQazDI5zW5b8CK8zhjG3/forma13178/.json"
+
 send a push notification to a user
 curl --insecure --header 'Authorization: key=AIzaSyCCpeRFK0PoHkuo08VqZiVkoVqB0USoZNQ' --header 'Content-Type:application/json' -d '{"notification":{"title":"New accident!","body":"You have got a new form", "sound" : "default"},"to" : "/topics/5ARsewRkMeTL9kRLHVIkwnKbq812"}' "https://fcm.googleapis.com/fcm/send"
 
@@ -40,8 +43,10 @@ send to Dauren:
 curl --insecure --header 'Authorization: key=AIzaSyCCpeRFK0PoHkuo08VqZiVkoVqB0USoZNQ' --header 'Content-Type:application/json' -d '{"notification":{"title":"New accident!","body":"Hi, Dauren!", "sound" : "default"},"to" : "/topics/wo6npz1PuMVFieuiZFjgCNYOwa12"}' "https://fcm.googleapis.com/fcm/send"
 
 send a push with all data to my phone:
- curl --insecure --header 'Authorization: key=AIzaSyCCpeRFK0PoHkuo08VqZiVkoVqB0USoZNQ' --header 'Content-Type:application/json' -d '{"data":{"name":"Arnold Schwarzenegger","phone":"555-12751", "address" : "California"},"to" : "/topics/5ARsewRkMeTL9kRLHVIkwnKbq812"}' "https://fcm.googleapis.com/fcm/send"
+curl --insecure --header 'Authorization: key=AIzaSyCCpeRFK0PoHkuo08VqZiVkoVqB0USoZNQ' --header 'Content-Type:application/json' -d '{"data":{"name":"Arnold Schwarzenegger","phone":"555-12751", "address" : "California"},"to" : "/topics/5ARsewRkMeTL9kRLHVIkwnKbq812"}
 
+generated: 
+curl --insecure --header 'Authorization: key=AIzaSyCCpeRFK0PoHkuo08VqZiVkoVqB0USoZNQ' --header 'Content-Type:application/json' -d '{"to":"\/topics\/DoamXM8LRQazDI5zW5b8CK8zhjG3","priority":"high","data":{"name":"Abdik","phone":"87017520295","address":"Gagrin 30"}}' "https://fcm.googleapis.com/fcm/send"
 
 check subscriptions of a user (IID_TOKEN needed):
 my device:  

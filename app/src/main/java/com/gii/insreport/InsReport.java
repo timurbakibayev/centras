@@ -131,9 +131,10 @@ public class InsReport extends Application {
     }
 
     private void loadUserBase() {
-        ref.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.child("users").addValueEventListener( new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                firebaseUserEmails.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     FirebaseUserEmail newUser = snapshot.getValue(FirebaseUserEmail.class);
                     firebaseUserEmails.add(newUser);
