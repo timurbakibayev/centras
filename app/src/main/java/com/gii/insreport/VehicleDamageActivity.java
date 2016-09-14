@@ -142,6 +142,15 @@ public class VehicleDamageActivity extends AppCompatActivity implements AdapterV
             }
             ((RelativeLayout)findViewById(R.id.vehicleViewSubstitute)).addView(vehicleDamageView);
             ((RelativeLayout)findViewById(R.id.vehicleViewSubstitute)).addView(spinner);
+        }else if(type.equalsIgnoreCase("Машина")){
+            VehicleDamageView.carType = "Car";
+            vehicleDamageView.loadResources(this);
+            ViewGroup parent = (ViewGroup)vehicleDamageView.getParent();
+            if (parent != null) {
+                parent.removeAllViews();
+            }
+            ((RelativeLayout)findViewById(R.id.vehicleViewSubstitute)).addView(vehicleDamageView);
+            ((RelativeLayout)findViewById(R.id.vehicleViewSubstitute)).addView(spinner);
         }
 
     }

@@ -112,7 +112,6 @@ public class VehicleDamageView extends View {
 //        spinner.setAdapter(adapter);
 
 
-
         white = new Paint();
         white.setColor(Color.WHITE);
         white.setStrokeWidth(2);
@@ -146,7 +145,11 @@ public class VehicleDamageView extends View {
             case "Truck":
                 vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(), R.drawable.truck);
                 break;
+//            case "Car":
+//                vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(), R.drawable.limousine_plan_open);
+//                break;
             default:
+            case "Car":
                 vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(), R.drawable.limousine_plan_open);
         }
 //        vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(),R.drawable.bike);
