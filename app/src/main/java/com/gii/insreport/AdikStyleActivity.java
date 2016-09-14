@@ -955,69 +955,6 @@ public class AdikStyleActivity extends AppCompatActivity {
                         });
                         LL.addView(drawButton1);
                         break;
-                    /*
-                    case eCombo:
-                        LinearLayout horizontalLLCombo = new LinearLayout(thisActivity);
-                        horizontalLLCombo.setOrientation(LinearLayout.HORIZONTAL);
-                        horizontalLLCombo.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
-
-                        TextView captionTVCombo = new TextView(this);
-                        captionTVCombo.setText(element.description);
-
-                        captionTVCombo.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-                        final Spinner comboSpinner = new Spinner(this);
-                        element.container = comboSpinner;
-                        comboSpinner.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-
-                        if (!element.directory.equals("") &&
-                                InsReport.directories.map.get(element.directory) != null) {
-                            final ArrayList<DirectoryItem> directoryItems = InsReport.directories.map.get(element.directory).items;
-                            if (directoryItems.size() > 0) {
-                                element.comboItems = new ArrayList<String>();
-                                for (DirectoryItem directoryItem : directoryItems) {
-                                    element.comboItems.add(directoryItem.name);
-                                }
-                                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(thisActivity, android.R.layout.simple_spinner_dropdown_item, element.comboItems);
-                                comboSpinner.setAdapter(spinnerArrayAdapter);
-                                for (int j = 0; j < directoryItems.size(); j++)
-                                    if (directoryItems.get(j).id.equals(element.vText))
-                                        comboSpinner.setSelection(j);
-                                comboSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                    @Override
-                                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                        element.vText = directoryItems.get(comboSpinner.getSelectedItemPosition()).id;
-                                        element.vInteger = comboSpinner.getSelectedItemPosition();
-                                        //saveToCloud();
-                                    }
-                                    @Override
-                                    public void onNothingSelected(AdapterView<?> parent) {
-
-                                    }
-                                });
-                            }
-                        } else {
-                            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, element.comboItems);
-                            comboSpinner.setAdapter(spinnerArrayAdapter);
-                            comboSpinner.setSelection(element.vInteger);
-                            comboSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                @Override
-                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                    element.vText = comboSpinner.getSelectedItem().toString();
-                                    element.vInteger = comboSpinner.getSelectedItemPosition();
-                                    //saveToCloud();
-                                }
-
-                                @Override
-                                public void onNothingSelected(AdapterView<?> parent) {
-
-                                }
-                            });
-                        }
-                        horizontalLLCombo.addView(captionTVCombo);
-                        horizontalLLCombo.addView(comboSpinner);
-                        LL.addView(horizontalLLCombo);
-                        break;*/
                     case eCombo:
                         LinearLayout horizontalLLCombo = new LinearLayout(thisActivity);
                         horizontalLLCombo.setOrientation(LinearLayout.VERTICAL);
@@ -1031,7 +968,6 @@ public class AdikStyleActivity extends AppCompatActivity {
                         final Button comboButton = new Button(this);
                         element.container = comboButton;
                         comboButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                        //TODO: vText should contain the code, show the TEXT of the directory!
                         if (!element.directory.equals("") &&
                                 InsReport.directories.map.get(element.directory) != null &&
                                 !element.vText.equals("")) {
@@ -1058,6 +994,49 @@ public class AdikStyleActivity extends AppCompatActivity {
                         horizontalLLCombo.addView(captionTVCombo);
                         horizontalLLCombo.addView(comboButton);
                         LL.addView(horizontalLLCombo);
+                        break;
+                    case eComboMulti:
+                        TextView captionTVComboMulti = new TextView(this);
+                        captionTVComboMulti.setText(element.description);
+
+                        captionTVComboMulti.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                        final Button comboButtonMulti = new Button(this);
+                        element.container = comboButtonMulti;
+                        comboButtonMulti.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                        if (!element.directory.equals("") &&
+                                InsReport.directories.map.get(element.directory) != null &&
+                                !element.vText.equals("")) {
+                            ArrayList<DirectoryItem> directoryItems1 = InsReport.directories.map.get(element.directory).items;
+                            String[] codes = element.vText.split(";");
+                            String compoundText = "";
+                            for (String code : codes) {
+                                for (DirectoryItem directoryItem : directoryItems1) {
+                                    if (directoryItem.id.equals(code)) {
+                                        if (!compoundText.equals(""))
+                                            compoundText += ", ";
+                                        compoundText += directoryItem.name;
+                                    }
+                                }
+                            }
+                            comboButtonMulti.setText(compoundText);
+                        }
+                        comboButtonMulti.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button_spinner, null));
+                        comboButtonMulti.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_expand_more_black_24dp,0);
+                        if (!element.directory.equals("") &&
+                                InsReport.directories.map.get(element.directory) != null) {
+                            final ArrayList<DirectoryItem> directoryItems = InsReport.directories.map.get(element.directory).items;
+                            if (directoryItems.size() > 0) {
+                                comboButtonMulti.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        openLookUpDialogMulti(comboButtonMulti, directoryItems, element);
+                                    }
+                                });
+                            }
+                        }
+                        LL.addView(captionTVComboMulti);
+                        LL.addView(comboButtonMulti);
                         break;
                     case eRadio:
                         LinearLayout horizontalLLRadio = new LinearLayout(thisActivity);
@@ -1213,6 +1192,48 @@ public class AdikStyleActivity extends AppCompatActivity {
         });
         lookUpDialog.show();
     }
+
+    private void openLookUpDialogMulti(final Button lookupEditText, final ArrayList<DirectoryItem> directoryItems, final Element element) {
+        final Dialog lookUpDialogMulti = new Dialog(this);
+        lookUpDialogMulti.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        lookUpDialogMulti.setContentView(getLayoutInflater().inflate(R.layout.lookup_multi
+                , null));
+
+        ListView listView = (ListView)lookUpDialogMulti.findViewById(R.id.ListView007);
+        EditText filterEditText = (EditText)lookUpDialogMulti.findViewById(R.id.filterEditText);
+        final KolesaAdapterMulti kolesaAdapterMulti = new KolesaAdapterMulti(this,directoryItems,filterEditText,element.vText);
+        listView.setAdapter(kolesaAdapterMulti);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //TODO: .code
+            }
+        });
+
+        ((Button)lookUpDialogMulti.findViewById(R.id.buttonOKMulti)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String selectedString = "";
+                String selectedText = "";
+                for (String selectedId : kolesaAdapterMulti.selectedIds) {
+                    if (!selectedString.equals("")) {
+                        selectedString += ";";
+                        selectedText += ", ";
+                    }
+                    selectedString += selectedId;
+                    for (DirectoryItem directoryItem : directoryItems) {
+                        if (directoryItem.id.equals(selectedId))
+                            selectedText += directoryItem.name;
+                    }
+                }
+                element.vText = selectedString;
+                lookupEditText.setText(selectedText);
+                lookUpDialogMulti.dismiss();
+            }
+        });
+        lookUpDialogMulti.show();
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)

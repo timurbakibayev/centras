@@ -359,7 +359,7 @@ public class FormTemplates {
                     form.elements.add(new Element("general", Element.ElementType.eText, "CLAIM_REGID",
                             "Номер дела"));
 
-                    form.elements.add(new Element("general", Element.ElementType.eCombo, "CLAIM_TYPE",
+                    form.elements.add(new Element("general", Element.ElementType.eComboMulti, "CLAIM_TYPE",
                             "Тип дела",
                             "DCT_CLAIM_TYPE"));
 
