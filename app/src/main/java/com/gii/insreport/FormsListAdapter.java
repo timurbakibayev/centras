@@ -11,6 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -66,7 +69,7 @@ public class FormsListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, final ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            view = lInflater.inflate(R.layout.listitem, parent, false);
+            view = lInflater.inflate(R.layout.listitem2, parent, false);
         }
 
         if(view != convertView){
@@ -96,7 +99,7 @@ public class FormsListAdapter extends BaseAdapter {
 
         ((TextView) view.findViewById(R.id.textView1)).setText(p.description);
         ((TextView) view.findViewById(R.id.textViewID)).setText(p.id);
-        ((ImageView) view.findViewById(R.id.checkReady)).setVisibility(p.formReady?View.VISIBLE:View.GONE);
+        ((ImageView) view.findViewById(R.id.checkReady)).setVisibility(p.formReady?View.VISIBLE:View.INVISIBLE);
         String photoInfo = "";
         int photoCount = p.numberOfPhotos();
         if (photoCount > 0)
@@ -112,16 +115,25 @@ public class FormsListAdapter extends BaseAdapter {
             ((ImageView) view.findViewById(R.id.imageInListView)).setVisibility(View.VISIBLE);
 
         int color = Color.BLACK;
-        ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.BLUE);
-        ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.BLUE);
+        ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.BLACK);
+        ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.BLACK);
 
         if (p.status.equals("accept")) {
-            color = Color.GREEN;
+//            color = Color.GREEN;
+            color = ctx.getResources().getColor(R.color.colorGreen);
+//            color = ctx.getColor(R.color.colorGreen);
         }
         if (p.status.equals("reject")) {
-            color = Color.RED;
-            ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.LTGRAY);
-            ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.LTGRAY);
+//            color = Color.RED;
+            color = ctx.getResources().getColor(R.color.colorPrimaryDark);
+            final Animation animation = new AlphaAnimation(1, 0);
+            animation.setDuration(1000);
+            animation.setInterpolator(new LinearInterpolator());
+            animation.setRepeatCount(Animation.INFINITE);
+            animation.setRepeatMode(Animation.REVERSE);
+            ((ImageView)view.findViewById(R.id.openAcceptOrReject)).setAnimation(animation);
+            ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.rgb(70, 70, 70));
+            ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.rgb(70, 70, 70));
         }
 
         ((ImageView)view.findViewById(R.id.openAcceptOrReject)).setColorFilter(color);
