@@ -1,6 +1,7 @@
 package com.gii.insreport;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.Date;
@@ -19,6 +21,7 @@ import java.util.Date;
 public class photosActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 17;
+    private static final int REQUEST_IMAGE_GALLERY = 34;
 
     Element element = InsReport.currentElement;
     Form currentForm = InsReport.currentForm;
@@ -47,11 +50,27 @@ public class photosActivity extends AppCompatActivity {
             }
         });
 
+        ((FloatingActionButton) findViewById(R.id.galleryFab)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                takeFromGallery();
+            }
+        });
+
         picturesLL = (LinearLayout)findViewById(R.id.photoLLNew);
 
         for (Element el : element.elements)
             cameraAndPictures.getPicFromFirebase(el,picturesLL);
 
+    }
+
+
+    private void takeFromGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,
+                "Select Picture"), REQUEST_IMAGE_GALLERY);
     }
 
     private void takeAPicture() {
@@ -69,7 +88,7 @@ public class photosActivity extends AppCompatActivity {
     {
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            final String id = CameraAndPictures.savePictureToFirebase();
+            final String id = CameraAndPictures.savePictureToFirebase(Environment.getExternalStorageDirectory()+ File.separator + "image.jpg");
             if (CameraAndPictures.bitmap != null) {
                 InsReport.bitmapsNeedToBeRecycled.add(CameraAndPictures.bitmap);
                 ImageView newImage = new ImageView(this);
@@ -90,6 +109,48 @@ public class photosActivity extends AppCompatActivity {
                 descriptionAndDate.setText(newPhotoElement.description + "  " + FillFormActivity.dateTimeText(newPhotoElement.vDate));
                 picturesLL.addView(descriptionAndDate);
 
+            }
+        }
+
+        if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK) {
+            if (data != null) {
+                String selectedImagePath = "";
+                Uri selectedImage = data.getData();
+                String[] filePath = { MediaStore.Images.Media.DATA };
+                Cursor c = getContentResolver().query(selectedImage, filePath,
+                        null, null, null);
+                c.moveToFirst();
+                int columnIndex = c.getColumnIndex(filePath[0]);
+                selectedImagePath = c.getString(columnIndex);
+                c.close();
+
+                if (selectedImagePath != null) {
+                    final String id = CameraAndPictures.savePictureToFirebase(selectedImagePath);
+                    if (CameraAndPictures.bitmap != null) {
+                        InsReport.bitmapsNeedToBeRecycled.add(CameraAndPictures.bitmap);
+                        ImageView newImage = new ImageView(this);
+                        newImage.setImageBitmap(CameraAndPictures.bitmap);
+                        newImage.setAdjustViewBounds(true);
+                        newImage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                cameraAndPictures.showZoomed(picturesLL, CameraAndPictures.bitmap);
+                            }
+                        });
+                        picturesLL.addView(newImage);
+                        Element newPhotoElement = new Element();
+                        newPhotoElement.vText = id;
+                        newPhotoElement.vDate = new Date();
+                        element.elements.add(newPhotoElement);
+                        TextView descriptionAndDate = new TextView(this);
+                        descriptionAndDate.setText(newPhotoElement.description + "  " + FillFormActivity.dateTimeText(newPhotoElement.vDate));
+                        picturesLL.addView(descriptionAndDate);
+
+                    }
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "Cancelled",
+                        Toast.LENGTH_SHORT).show();
             }
         }
 

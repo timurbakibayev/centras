@@ -889,7 +889,7 @@ public class FillFormActivity extends AppCompatActivity {
             }
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            final String id = CameraAndPictures.savePictureToFirebase();
+            final String id = CameraAndPictures.savePictureToFirebase(Environment.getExternalStorageDirectory()+ File.separator + "image.jpg");
             if (CameraAndPictures.bitmap != null) {
                 InsReport.bitmapsNeedToBeRecycled.add(CameraAndPictures.bitmap);
                 ImageView newImage = new ImageView(this);

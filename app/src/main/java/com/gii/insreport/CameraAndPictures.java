@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -29,8 +28,8 @@ public class CameraAndPictures {
         return  (new BigInteger(64, random).toString(32));
     }
 
-    public static String savePictureToFirebase() {
-        File file = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg");
+    public static String savePictureToFirebase(String filename) {
+        File file = new File(filename);
         //Uri fileUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg"));
         bitmap = decodeSampledBitmapFromFile(file.getAbsolutePath(), 700, 700); //i guess, 640x480 would be enough
         String id = generateNewId();
