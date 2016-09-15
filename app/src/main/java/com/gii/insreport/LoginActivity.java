@@ -127,6 +127,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (user != null) {
             mEmailView.setVisibility(View.GONE);
             mPasswordView.setVisibility(View.GONE);
+            findViewById(R.id.passwordTextInputLayour).setVisibility(View.GONE);
             mEmailSignInButton.setVisibility(View.GONE);
             mRegisterButton.setVisibility(View.GONE);
             mResetPasswordButton.setVisibility(View.GONE);
@@ -142,6 +143,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     InsReport.mAuth.signOut();
                     mEmailView.setVisibility(View.VISIBLE);
                     mPasswordView.setVisibility(View.VISIBLE);
+                    findViewById(R.id.passwordTextInputLayour).setVisibility(View.VISIBLE);
                     signOutButton.setEnabled(false);
                     mChangePasswordButton.setEnabled(false);
                     mEmailSignInButton.setVisibility(View.VISIBLE);
@@ -436,7 +438,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         boolean cancel = false;
         View focusView = null;
 
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (!isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -476,7 +478,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         boolean cancel = false;
         View focusView = null;
 
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (!isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
