@@ -27,6 +27,8 @@ import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Timur on 20-Jul-16.
@@ -42,6 +44,13 @@ public class VehicleDamageView extends View {
     Bitmap[] vehicleImage;
     Rect[] vehicleImageSourceRect;
     Rect[] vehicleImageDestRect;
+
+    Map<String,DamagePlanData> saves = new HashMap<>();
+
+    public void saveResources(VehicleDamageActivity vehicleDamageActivity) {
+        saves.put(carType,InsReport.damagePlanData);
+
+    }
 
 
     public enum DamagePlanState {
@@ -160,7 +169,7 @@ public class VehicleDamageView extends View {
             vehicleImageSourceRect[i] = new Rect(0, 0, vehicleImage[i].getWidth(), vehicleImage[i].getHeight());
             vehicleImageDestRect[i] = new Rect(0, 0, vehicleImage[i].getWidth(), vehicleImage[i].getHeight());
         }
-        loadCommonDamages();
+        loadCommonDamages(carType);
     }
 
 
@@ -236,9 +245,9 @@ public class VehicleDamageView extends View {
 
     ArrayList<DamageMark> commonDamageMarks = new ArrayList<>();
 
-    private void loadCommonDamages() {
-        ref.child("youfix/commonDamages/" + vehicleNo).
-                addValueEventListener(new ValueEventListener() {
+    private void loadCommonDamages(String carType) {
+        ref.child("youfix/commonDamages_"+carType).
+                addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         commonDamageMarks.clear();
@@ -380,7 +389,7 @@ public class VehicleDamageView extends View {
                                     exists = true;
                             //ref.child("youfix/anima/" + prefs.getString("AndroidID", "") + "/" + url).
                             if (!exists)
-                                ref.child("youfix/commonDamages/" + vehicleNo + "/" + InsReport.damagePlanData.damageMarks.get(finalDamageNo).id).
+                                ref.child("youfix/commonDamages_" + carType + "/" + InsReport.damagePlanData.damageMarks.get(finalDamageNo).id).
                                         setValue(InsReport.damagePlanData.damageMarks.get(finalDamageNo));
                         }
                     }

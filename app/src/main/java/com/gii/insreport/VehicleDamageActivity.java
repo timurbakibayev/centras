@@ -115,6 +115,7 @@ public class VehicleDamageActivity extends AppCompatActivity implements AdapterV
         Toast.makeText(VehicleDamageActivity.this, adapterView.getItemAtPosition(i).toString(),
                 Toast.LENGTH_SHORT).show();
         String type = adapterView.getItemAtPosition(i).toString();
+        vehicleDamageView.saveResources(this);
         if(type.equalsIgnoreCase("Автобус")){
             VehicleDamageView.carType = "Bus";
             vehicleDamageView.loadResources(this);
@@ -124,7 +125,7 @@ public class VehicleDamageActivity extends AppCompatActivity implements AdapterV
             }
             ((RelativeLayout)findViewById(R.id.vehicleViewSubstitute)).addView(vehicleDamageView);
             ((RelativeLayout)findViewById(R.id.vehicleViewSubstitute)).addView(spinner);
-        }else if(type.equalsIgnoreCase("Грузовик")){
+        } else if(type.equalsIgnoreCase("Грузовик")) {
             VehicleDamageView.carType = "Truck";
             vehicleDamageView.loadResources(this);
             ViewGroup parent = (ViewGroup)vehicleDamageView.getParent();
