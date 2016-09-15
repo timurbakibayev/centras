@@ -12,10 +12,10 @@ public class FormTemplates {
         element.elements.add(new Element("participant", Element.ElementType.eText, "PERSON_NAME",
                 "ФИО персоны"));
 
-        element.elements.add(new Element("participant", Element.ElementType.eCombo, "PERSON_TYPE",
+        element.elements.add(new Element("participant", Element.ElementType.eComboMulti, "PERSON_TYPE",
                 "Тип персоны", "DCT_PERSON_TYPE"));
 
-        element.elements.add(new Element("participant", Element.ElementType.eComboMulti, "PERSON_IIN",
+        element.elements.add(new Element("participant", Element.ElementType.eTextNum, "PERSON_IIN",
                 "Иин персоны"));
 
         element.elements.add(new Element("participant", Element.ElementType.eTextNum, "GUILT_PERCENTAGE",
