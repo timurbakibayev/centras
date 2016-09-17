@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         InsReport.storageRef = InsReport.storage.getReferenceFromUrl("gs://insreport-f39a3.appspot.com");
 
         ImageView imgMain = (ImageView) findViewById(R.id.main_img);
+        /*
         imgMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        */
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                                 formButton.setEnabled(true);
                             }
                             checkNewForms(thisActivity);
+                            checkIfNeededToFindByPhone();
                         }
                     });
                     Log.e(TAG, "run: ALL LOADED");
@@ -211,8 +214,30 @@ public class MainActivity extends AppCompatActivity {
 
         Log.e(TAG, "onResume: YES");
 
-        if (InsReport.directories.loaded)
+        if (InsReport.directories.loaded) {
             checkNewForms(this);
+            checkIfNeededToFindByPhone();
+        }
+    }
+
+    private void checkIfNeededToFindByPhone() {
+        if (getIntent().hasExtra("findByPhone")) {
+            String phoneNo = getIntent().getExtras().getString("findByPhone");
+            if (phoneNo != null && !phoneNo.equals("")) {
+                for (Form form : InsReport.incidentFormsCollection.forms) {
+                    if (form.status.equals("accept") &&
+                            form.phoneNo.equals(phoneNo) ||
+                            (form.input.get("CLAIMANT_PHONE_NO") != null &&
+                                    form.input.get("CLAIMANT_PHONE_NO").equals(phoneNo))
+                            ) {
+                        //here open the form
+                        openTheForm(form,this);
+                        getIntent().removeExtra("findByPhone");
+                        break;
+                    }
+                }
+            }
+        }
     }
 
 
@@ -221,13 +246,13 @@ public class MainActivity extends AppCompatActivity {
     MainActivity thisActivity = this;
 
     private void addForms() {
+        final float scale = getResources().getDisplayMetrics().density;
         LinearLayout mainMenuLL = (LinearLayout) findViewById(R.id.mainMenuLL);
         mainMenuLL.removeAllViews();
         for (final FormsCollection formsCollection : InsReport.mainMenuForms) {
             Button newMenuButton = new Button(this);
             formButtons.add(newMenuButton);
             newMenuButton.setText(formsCollection.description);
-            final float scale = getResources().getDisplayMetrics().density;
             newMenuButton.setHeight((int) (96 * scale + 0.5f));
             newMenuButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -241,11 +266,23 @@ public class MainActivity extends AppCompatActivity {
             newMenuButton.setEnabled(false);
             mainMenuLL.addView(newMenuButton);
         }
+        Button serverButton = new Button(this);
+        serverButton.setText("Эмулятор сервера");
+        serverButton.setHeight((int) (96 * scale + 0.5f));
+        serverButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent serverIntent = new Intent(thisActivity, ServerEmuActivity.class);
+                startActivity(serverIntent);
+            }
+        });
+        formButtons.add(serverButton);
+        serverButton.setEnabled(false);
+        mainMenuLL.addView(serverButton);
 
         Button newMenuButton = new Button(this);
         formButtons.add(newMenuButton);
         newMenuButton.setText("АВТОРИЗАЦИЯ");
-        final float scale = getResources().getDisplayMetrics().density;
         newMenuButton.setHeight((int) (96 * scale + 0.5f));
         newMenuButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,6 +291,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1);
             }
         });
+
         loginButton = newMenuButton;
         mainMenuLL.addView(newMenuButton);
     }
@@ -265,7 +303,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void acceptOrRejectDialogShow(final Form form, Activity context) {
+    public void openTheForm(Form form, Activity context) {
+        Intent intent = new Intent(thisActivity, AdikStyleActivity.class);
+        intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, form.fireBaseCatalog);
+        intent.putExtra(InsReport.EXTRA_ID_NO, form.id);
+        startActivity(intent);
+    }
+
+    public void acceptOrRejectDialogShow(final Form form, final Activity context) {
         final Dialog acceptOrRejectDialog = new Dialog(context);
         acceptOrRejectDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         acceptOrRejectDialog.setContentView(context.getLayoutInflater().inflate(R.layout.accept_reject
@@ -314,6 +359,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 form.saveToCloud();
                 acceptOrRejectDialog.dismiss();
+                openTheForm(form, context);
             }
         });
 

@@ -268,7 +268,12 @@ public class AdikStyleActivity extends AppCompatActivity {
         final String[] photos = new String[photoElements.size()];
         for (int i = 0; i < photoElements.size(); i++) {
             Element element = photoElements.get(i);
-            photos[i] = element.description + " (" + element.elements.size() + " фото)";
+            int k = 0;
+            for (Element element1 : element.elements) {
+                if (!element1.deleted)
+                    k++;
+            }
+            photos[i] = element.description + " (" + k + " фото)";
         }
         final AdikStyleActivity adikStyleActivity = this;
         new android.app.AlertDialog.Builder(this)
@@ -289,7 +294,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                                 dialog.dismiss();
                                 InsReport.currentElement = photoElements.get(which);
                                 InsReport.currentForm = currentForm;
-                                Intent intent = new Intent(thisActivity, photosActivity.class);
+                                Intent intent = new Intent(thisActivity, PhotosActivity.class);
                                 startActivity(intent);
                                 break;
                         }

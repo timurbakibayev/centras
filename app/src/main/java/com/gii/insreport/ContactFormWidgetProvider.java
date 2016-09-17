@@ -29,6 +29,15 @@ public class ContactFormWidgetProvider extends AppWidgetProvider {
                     R.layout.widget_layout);
             remoteViews.setTextViewText(R.id.widget_textview, personName + "\nТелефон: " + personPhone + "\nАдрес: " + personAddress);
 
+
+            if (!personPhone.equals("")) {
+                Intent intentMA = new Intent(context, MainActivity.class);
+                intentMA.putExtra("findByPhone", personPhone);
+                PendingIntent configPendingIntent = PendingIntent.getActivity(context, 0, intentMA, 0);
+                remoteViews.setOnClickPendingIntent(R.id.widget_textview, configPendingIntent);
+            }
+
+
             Intent intentCall = new Intent(Intent.ACTION_CALL);
             intentCall.setData(Uri.parse("tel:" + personPhone.trim()));
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intentCall, 0);

@@ -317,7 +317,7 @@ public class FormsList extends AppCompatActivity {
                         // exist in the start state, so we must calculate their starting position
                         // based on whether they're coming in from the bottom (i > 0) or top.
                         int childHeight = child.getHeight() + listView.getDividerHeight();
-                        startTop = top + (i > 0 ? childHeight : -childHeight);
+                        startTop = top;// + (i > 0 ? childHeight : -childHeight);
                     }
                     int delta = startTop - top;
                     if (delta != 0) {
@@ -333,6 +333,11 @@ public class FormsList extends AppCompatActivity {
                                 null;
                         firstAnimation = false;
                         moveView(child, 0, 0, delta, 0, endAction);
+                    } else {
+                        mBackgroundContainer.hideBackground();
+                        mSwiping = false;
+                        mAnimating = false;
+                        InsReport.currentListView.setEnabled(true);
                     }
                 }
                 mItemIdTopMap.clear();

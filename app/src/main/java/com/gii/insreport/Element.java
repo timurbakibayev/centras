@@ -100,6 +100,7 @@ public class Element {
         this.vText = element.vText;
         this.fireBaseFieldName = element.fireBaseFieldName;
         this.content = element.toString();
+        this.deleted = element.deleted;
     }
 
     public String collectData(ArrayList<String> descriptionFields) {
@@ -250,6 +251,7 @@ public class Element {
     public String content = "";
     public String directory = "";
 
+    public boolean deleted = false;
     public ArrayList<String> comboItems = new ArrayList<>();
     public ArrayList<Frame> frames = new ArrayList<>();
     public ElementType type = ElementType.eText;
@@ -401,5 +403,7 @@ public class Element {
         return category;
     }
 
-
+    public boolean isDeleted() {
+        return deleted;
+    }
 }

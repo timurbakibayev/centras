@@ -149,6 +149,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     mEmailSignInButton.setVisibility(View.VISIBLE);
                     mRegisterButton.setVisibility(View.VISIBLE);
                     mResetPasswordButton.setVisibility(View.VISIBLE);
+                    for (FormsCollection mainMenuForm : InsReport.mainMenuForms) {
+                        mainMenuForm.dataChangeListenerAdded = false;
+                        mainMenuForm.forms.clear();
+                    }
                 }
             });
             final LoginActivity thisActivity = this;

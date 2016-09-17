@@ -1,12 +1,16 @@
 package com.gii.insreport;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.support.design.widget.TextInputLayout;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -40,7 +44,7 @@ public class CameraAndPictures {
         return id;
     }
 
-    public void getPicFromFirebase(final Element element, final LinearLayout linearLayout) {
+    public void getPicFromFirebase(final Element element, final Form form, final LinearLayout linearLayout) {
 
         InsReport.ref.child("images/" + element.vText).
                 addValueEventListener(new ValueEventListener() {
@@ -65,9 +69,7 @@ public class CameraAndPictures {
                             });
                             theImageView.setAdjustViewBounds(true);
                             linearLayout.addView(theImageView);
-                            TextView descriptionAndDate = new TextView(linearLayout.getContext());
-                            descriptionAndDate.setText(element.description + "  " + FillFormActivity.dateTimeText(element.vDate));
-                            linearLayout.addView(descriptionAndDate);
+                            linearLayout.addView(descriptionTextView(element,form,theImageView,linearLayout.getContext()));
                         }
                     }
                     @Override
@@ -75,6 +77,64 @@ public class CameraAndPictures {
                         Log.e("Firebase", "The read failed 4: " + firebaseError.getMessage());
                     }
                 });
+    }
+
+    public TextView descriptionTextView(final Element element, final Form form, final ImageView imageView, final Context context) {
+        final TextView descriptionAndDate = new TextView(context);
+        descriptionAndDate.setTextColor(Color.BLACK);
+        if (element.description.equals(""))
+            element.description = "Без описания";
+        descriptionAndDate.setText(element.description + "\n" + FillFormActivity.dateTimeText(element.vDate) + "\n\n");
+        descriptionAndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (element.deleted) {
+                    imageView.setVisibility(View.VISIBLE);
+                    descriptionAndDate.setTextColor(Color.BLACK);
+                    descriptionAndDate.setText(element.description + "\n" + FillFormActivity.dateTimeText(element.vDate) + "\n\n");
+                    element.deleted = false;
+                    form.saveToCloud();
+                    return;
+                }
+                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                final EditText editText = new EditText(context);
+                //ImageView speachButton = new ImageView(thisActivity);
+                final String prevValue = element.description;
+                editText.setText(element.description);
+                TextInputLayout fieldHint = new TextInputLayout(context);
+                fieldHint.setHint("Описание фотографии");
+                fieldHint.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+                fieldHint.addView(editText);
+                final ScrollView photoDescriptionScrollView = new ScrollView(context);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(100,30,100,30);
+                photoDescriptionScrollView.setLayoutParams(lp);
+                photoDescriptionScrollView.addView(fieldHint);
+                builder
+                        .setView(photoDescriptionScrollView)
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                element.description = editText.getText().toString();
+                                form.saveToCloud();
+                                descriptionAndDate.setText(element.description + "\n" + FillFormActivity.dateTimeText(element.vDate) + "\n\n");
+                            }
+                        }).setNegativeButton("Удалить", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                            element.deleted = true;
+                            descriptionAndDate.setText("Удалено. Нажмите для воостановления. \n" + element.description + "\n" + FillFormActivity.dateTimeText(element.vDate) + "\n\n");
+                            descriptionAndDate.setTextColor(Color.RED);
+                            imageView.setVisibility(View.GONE);
+                            form.saveToCloud();
+                    }
+                })
+
+                        .show();
+            }
+        });
+        return descriptionAndDate;
     }
 
     public void getPicFromFirebase(String photoID, final LinearLayout linearLayout) {

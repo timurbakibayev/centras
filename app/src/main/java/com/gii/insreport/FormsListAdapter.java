@@ -33,6 +33,11 @@ public class FormsListAdapter extends BaseAdapter {
     View.OnTouchListener mTouchLsitener;
     FormsListAdapter(Context context, ArrayList<Form> forms, View.OnTouchListener listener) {
 
+        animation.setDuration(1000);
+        animation.setInterpolator(new LinearInterpolator());
+        animation.setRepeatCount(Animation.INFINITE);
+        animation.setRepeatMode(Animation.REVERSE);
+
         ctx = context;
         objects = forms;
         lInflater = (LayoutInflater) ctx
@@ -65,6 +70,22 @@ public class FormsListAdapter extends BaseAdapter {
         return false;
     }
 
+    final Animation animation = new AlphaAnimation(1, 0);
+
+    /*
+@Override
+public int getViewTypeCount() {
+
+    return getCount();
+}
+
+@Override
+public int getItemViewType(int position) {
+
+    return position;
+}
+
+*/
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
         View view = convertView;
@@ -97,9 +118,17 @@ public class FormsListAdapter extends BaseAdapter {
 //            }
 //        });
 
+        if (p.description.equals("")) {
+            if (p.input.get("CLIENT_NAME") != null)
+                p.description += p.input.get("CLIENT_NAME") + "\n";
+            if (p.input.get("CLAIMANT_PHONE_NO") != null) {
+                p.phoneNo = p.input.get("CLAIMANT_PHONE_NO");
+            }
+        }
+
         ((TextView) view.findViewById(R.id.textView1)).setText(p.description);
         ((TextView) view.findViewById(R.id.textViewID)).setText(p.id);
-        ((ImageView) view.findViewById(R.id.checkReady)).setVisibility(p.formReady?View.VISIBLE:View.INVISIBLE);
+        (view.findViewById(R.id.checkReady)).setVisibility(p.formReady?View.VISIBLE:View.INVISIBLE);
         String photoInfo = "";
         int photoCount = p.numberOfPhotos();
         if (photoCount > 0)
@@ -110,30 +139,27 @@ public class FormsListAdapter extends BaseAdapter {
         ((ProgressBar) view.findViewById(R.id.progressBar)).setProgress(p.filledPercent());
 
         if (!p.signed())
-            ((ImageView) view.findViewById(R.id.imageInListView)).setVisibility(View.GONE);
+            (view.findViewById(R.id.imageInListView)).setVisibility(View.GONE);
         else
-            ((ImageView) view.findViewById(R.id.imageInListView)).setVisibility(View.VISIBLE);
+            (view.findViewById(R.id.imageInListView)).setVisibility(View.VISIBLE);
 
         int color = Color.BLACK;
         ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.BLACK);
         ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.BLACK);
 
         if (p.status.equals("accept")) {
-//            color = Color.GREEN;
-            color = ctx.getResources().getColor(R.color.colorGreen);
+            color = Color.GREEN;
+            //color = ctx.getResources().getColor(R.color.colorGreen);
 //            color = ctx.getColor(R.color.colorGreen);
         }
         if (p.status.equals("reject")) {
 //            color = Color.RED;
             color = ctx.getResources().getColor(R.color.colorPrimaryDark);
-            final Animation animation = new AlphaAnimation(1, 0);
-            animation.setDuration(1000);
-            animation.setInterpolator(new LinearInterpolator());
-            animation.setRepeatCount(Animation.INFINITE);
-            animation.setRepeatMode(Animation.REVERSE);
-            ((ImageView)view.findViewById(R.id.openAcceptOrReject)).setAnimation(animation);
+            (view.findViewById(R.id.openAcceptOrReject)).setAnimation(animation);
             ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.rgb(70, 70, 70));
             ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.rgb(70, 70, 70));
+        } else {
+            (view.findViewById(R.id.openAcceptOrReject)).setAnimation(null);
         }
 
         ((ImageView)view.findViewById(R.id.openAcceptOrReject)).setColorFilter(color);

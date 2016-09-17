@@ -12,13 +12,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.util.Date;
 
-public class photosActivity extends AppCompatActivity {
+public class PhotosActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 17;
     private static final int REQUEST_IMAGE_GALLERY = 34;
@@ -60,14 +59,15 @@ public class photosActivity extends AppCompatActivity {
         picturesLL = (LinearLayout)findViewById(R.id.photoLLNew);
 
         for (Element el : element.elements)
-            cameraAndPictures.getPicFromFirebase(el,picturesLL);
-
+            if (!el.deleted)
+                cameraAndPictures.getPicFromFirebase(el,currentForm,picturesLL);
     }
 
 
     private void takeFromGallery() {
         Intent intent = new Intent();
         intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,
                 "Select Picture"), REQUEST_IMAGE_GALLERY);
@@ -101,13 +101,12 @@ public class photosActivity extends AppCompatActivity {
                     }
                 });
                 picturesLL.addView(newImage);
-                Element newPhotoElement = new Element();
+                final Element newPhotoElement = new Element();
                 newPhotoElement.vText = id;
                 newPhotoElement.vDate = new Date();
                 element.elements.add(newPhotoElement);
-                TextView descriptionAndDate = new TextView(this);
-                descriptionAndDate.setText(newPhotoElement.description + "  " + FillFormActivity.dateTimeText(newPhotoElement.vDate));
-                picturesLL.addView(descriptionAndDate);
+                final PhotosActivity thisActivity = this;
+                picturesLL.addView(cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity));
 
             }
         }
@@ -138,14 +137,12 @@ public class photosActivity extends AppCompatActivity {
                             }
                         });
                         picturesLL.addView(newImage);
-                        Element newPhotoElement = new Element();
+                        final Element newPhotoElement = new Element();
                         newPhotoElement.vText = id;
                         newPhotoElement.vDate = new Date();
                         element.elements.add(newPhotoElement);
-                        TextView descriptionAndDate = new TextView(this);
-                        descriptionAndDate.setText(newPhotoElement.description + "  " + FillFormActivity.dateTimeText(newPhotoElement.vDate));
-                        picturesLL.addView(descriptionAndDate);
-
+                        final PhotosActivity thisActivity = this;
+                        picturesLL.addView(cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity));
                     }
                 }
             } else {
