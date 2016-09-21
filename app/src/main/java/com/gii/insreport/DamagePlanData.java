@@ -8,4 +8,5 @@ import java.util.ArrayList;
 public class DamagePlanData {
     public ArrayList<DamageMark> damageMarks = new ArrayList<>();
     public String damageDescription = "";
+    public int vehicleNo = 0;
 }

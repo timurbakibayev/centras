@@ -23,6 +23,8 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -109,7 +111,7 @@ public class InsReport extends Application {
                     ref.child("users/"+user.getUid()+"/lastLogin").setValue(ServerValue.TIMESTAMP);
                     Date d = new Date();
                     ref.child("users/"+user.getUid()+"/lastLoginAndroid").setValue(FillFormActivity.dateOnlyTextStrict(d));
-
+                    logFirebase("login");
                 } else {
                     // User is signed out
                     Log.e(TAG, "onAuthStateChanged:signed_out");
@@ -223,5 +225,19 @@ public class InsReport extends Application {
 
         mainMenuForms.add(preInsuranceFormsCollection);
         mainMenuForms.add(incidentFormsCollection);
+    }
+
+    public static void logFirebase(String logText) {
+        Map<String,Object> log = new HashMap<>();
+        if (user != null) {
+            log.put("User:",user.getEmail().toString());
+            log.put("ServerTime:",ServerValue.TIMESTAMP);
+            Date d = new Date();
+            log.put("TextTime:",FillFormActivity.dateOnlyTextStrict(d));
+            log.put("Text:",logText);
+
+            ref.child("log/"+FillFormActivity.dateToYYMMDD(d) + "/" + user.getEmail().toString().replaceAll("[^A-Za-z]+", "")).
+                    push().setValue(log);
+        }
     }
 }

@@ -185,6 +185,7 @@ public int getItemViewType(int position) {
                             ActivityCompat.checkSelfPermission(FormsList.formList, android.Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                         Log.e(TAG, "onClick: call " + _phoneNo.trim());
                         String uri = "tel:" + _phoneNo.trim();
+                        InsReport.logFirebase("Make a call from list: " + p.fireBaseCatalog + " form no. " + p.id + ", TEL: " + _phoneNo);
                         Intent intent = new Intent(Intent.ACTION_CALL);
                         intent.setData(Uri.parse(uri));
                         FormsList.formList.startActivity(intent);

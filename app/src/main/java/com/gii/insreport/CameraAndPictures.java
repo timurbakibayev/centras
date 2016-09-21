@@ -41,6 +41,7 @@ public class CameraAndPictures {
         //does not work offline :(
         //UploadTask uploadTask = InsReport.storageRef.child("images/" + id + ".jpg").putFile(fileUri);
         InsReport.ref.child("images/" + id).setValue(encodeToBase64(bitmap,Bitmap.CompressFormat.JPEG,70));
+        InsReport.logFirebase("New picture saved: " + id);
         return id;
     }
 

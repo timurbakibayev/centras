@@ -187,6 +187,18 @@ public class FillFormActivity extends AppCompatActivity {
         return (day + " " + monthName[monthNo] + " " + year + ", " + cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE));
     }
 
+    public static String dateToYYMMDD(Date date) {
+        if (date == null)
+            return "";
+        Calendar cal = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+        cal.setTime(date);
+        String year = "" + cal.get(Calendar.YEAR);
+        int monthNo = cal.get(Calendar.MONTH);
+        String day = "" + cal.get(Calendar.DAY_OF_MONTH);
+        return (year + "_" + monthNo +"/"+ day);
+    }
+
     static String[] monthName = {"января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"};
 
 

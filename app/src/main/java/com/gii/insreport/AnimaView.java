@@ -53,7 +53,10 @@ public class AnimaView extends View {
         postInvalidate();
     }
 
-    public void takePicture() {
+    public void takeSnapshot() {
+        //TODO: ADD THIS TO FORMS!
+        //TODO: Show the snapshots in Photo!
+
         final Bitmap screenShot = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_4444);
         Canvas canvas = new Canvas(screenShot);
         appState = AppState.idle;

@@ -39,6 +39,7 @@ public class FormsCollection {
 
 
     public void addDataChangeListener() {
+        InsReport.logFirebase("Retrieving data from: " + "forms/" + fireBaseCatalog + "/" + InsReport.user.getUid());
         Query queryRef = InsReport.ref.child("forms/" + fireBaseCatalog + "/" + InsReport.user.getUid()).orderByChild("dateCreated").limitToLast(10); //how many forms do we see
         queryRef.
                 addValueEventListener(new ValueEventListener() {
@@ -80,6 +81,8 @@ public class FormsCollection {
                                     forms.add(newForm);
                             } catch (Exception e) {
                                 Log.e(TAG, "onDataChange: PROBLEMS CASTING FROM DB!!! : " + postSnapshot.getKey() + ", " + e.getMessage());
+                                InsReport.logFirebase("ERROR FORM: " + "forms/" + fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + postSnapshot.getKey());
+
                             }
                         }
 

@@ -38,6 +38,7 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -48,6 +49,7 @@ import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -255,6 +257,85 @@ public class AdikStyleActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showManySignatures();
+            }
+        });
+
+
+        ((ImageButton)findViewById(R.id.call_adik)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (currentForm.input.get("CLAIMANT_PHONE_NO") != null) {
+                    currentForm.phoneNo = currentForm.input.get("CLAIMANT_PHONE_NO");
+
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" + currentForm.phoneNo.trim()));
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    InsReport.logFirebase("Make a call from inside the form: " + currentForm.fireBaseCatalog + " form no. " + currentForm.id + ", TEL: " + currentForm.phoneNo);
+                    startActivity(intent);
+                }
+            }}});
+
+        final String address;
+
+        if (currentForm != null) {
+            if (currentForm.input.get("EVENT_PLACE") != null) {
+                address = currentForm.input.get("EVENT_PLACE");
+            } else
+                address = "";
+        } else address = "";
+
+        ((ImageButton)findViewById(R.id.map_adik)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+
+                String locationStr = address.replaceAll(" ", "+");
+
+                Uri locationUri = Uri.parse("geo:0,0?").buildUpon()
+                        .appendQueryParameter("q", locationStr)
+                        .build();
+                intent.setData(locationUri);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    InsReport.logFirebase("Open a map from inside the form: " + currentForm.fireBaseCatalog + " form no. " + currentForm.id + ", Location: " + locationStr);
+                    startActivity(intent);
+                    Toast.makeText(thisActivity, locationStr, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(thisActivity,
+                            "Нет карты", Toast.LENGTH_SHORT).show();
+                }
+
+            }});
+
+
+        ((ImageButton)findViewById(R.id.ready_adik)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                new AlertDialog.Builder(thisActivity).setTitle("Форма полностью готова?")
+                        .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                currentForm.formReady = true;
+                                currentForm.saveToCloud();
+                                finish();
+                            }
+                        }).
+                        setNeutralButton("Нет", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        currentForm.saveToCloud();
+                    }
+                }).
+                        show();
+
             }
         });
     }
@@ -859,6 +940,8 @@ public class AdikStyleActivity extends AppCompatActivity {
                                 currentButton = planButton;
                                 Intent intent = new Intent(thisActivity, VehicleDamageActivity.class);
                                 InsReport.damagePlanData = element.vPlan;
+                                InsReport.currentElement = element;
+                                InsReport.logFirebase("Open Damage Plan: " + currentForm.id);
                                 startActivityForResult(intent, DAMAGE_PLAN_INTENT);
                             }
                         });
@@ -1310,6 +1393,7 @@ public class AdikStyleActivity extends AppCompatActivity {
         currentForm.updateDescription();
         currentForm.validate();
         currentForm.saveToCloud();
+        InsReport.logFirebase("Saving: " + currentForm.id + ", " + currentForm.description);
         setTitle(currentForm.description);
     }
 

@@ -87,7 +87,7 @@ public class AnimaActivity extends AppCompatActivity {
         photoFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                animaView.takePicture();
+                animaView.takeSnapshot();
                 //animaView.currentFrame.strokes.clear();
                 //animaView.currentFrame.icons.clear();
                 //animaView.postInvalidate();

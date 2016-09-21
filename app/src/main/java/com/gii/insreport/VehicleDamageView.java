@@ -11,14 +11,18 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.media.MediaActionSound;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -40,8 +44,8 @@ public class VehicleDamageView extends View {
     public static String carType = "";
 
     VehicleDamageActivity vehicleDamageActivity;
-    Spinner spinner;
     Bitmap[] vehicleImage;
+    String[] vehicleImageCaption;
     Rect[] vehicleImageSourceRect;
     Rect[] vehicleImageDestRect;
 
@@ -66,7 +70,7 @@ public class VehicleDamageView extends View {
 
     public int currentDamageNo = -1;
 
-    public int vehicleNo = 0;
+    //public int InsReport.damagePlanData.vehicleNo = 0;
 
     Paint white = new Paint();
     Paint gray = new Paint();
@@ -75,20 +79,25 @@ public class VehicleDamageView extends View {
 
     Point centerPoint = new Point(0, 0);
 
+    int canvasWidth = 0;
+    int canvasHeight = 0;
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawLine(0, 0, 100, 100, green);
+
+        canvasWidth = canvas.getWidth();
+        canvasHeight = canvas.getHeight();
         int step = canvas.getWidth() / 30;
 
-        if (vehicleImageDestRect[vehicleNo].width() != canvas.getWidth()) {
-            vehicleImageDestRect[vehicleNo].set(0, 0, canvas.getWidth(),
-                    (int) ((float) canvas.getWidth() / vehicleImage[vehicleNo].getWidth() * vehicleImage[vehicleNo].getHeight()));
+        if (vehicleImageDestRect[InsReport.damagePlanData.vehicleNo].width() != canvas.getWidth()) {
+            vehicleImageDestRect[InsReport.damagePlanData.vehicleNo].set(0, 0, canvas.getWidth(),
+                    (int) ((float) canvas.getWidth() / vehicleImage[InsReport.damagePlanData.vehicleNo].getWidth() * vehicleImage[InsReport.damagePlanData.vehicleNo].getHeight()));
         }
-        canvas.drawBitmap(vehicleImage[vehicleNo], vehicleImageSourceRect[vehicleNo], vehicleImageDestRect[vehicleNo], null);
+        canvas.drawBitmap(vehicleImage[InsReport.damagePlanData.vehicleNo], vehicleImageSourceRect[InsReport.damagePlanData.vehicleNo], vehicleImageDestRect[InsReport.damagePlanData.vehicleNo], null);
         for (DamageMark damageMark : InsReport.damagePlanData.damageMarks) {
-            centerPoint.set((int) (damageMark.relativeCoordinates.x * vehicleImageDestRect[vehicleNo].width() + vehicleImageDestRect[vehicleNo].left),
-                    (int) (damageMark.relativeCoordinates.y * vehicleImageDestRect[vehicleNo].height() + vehicleImageDestRect[vehicleNo].top));
+            centerPoint.set((int) (damageMark.relativeCoordinates.x * vehicleImageDestRect[InsReport.damagePlanData.vehicleNo].width() + vehicleImageDestRect[InsReport.damagePlanData.vehicleNo].left),
+                    (int) (damageMark.relativeCoordinates.y * vehicleImageDestRect[InsReport.damagePlanData.vehicleNo].height() + vehicleImageDestRect[InsReport.damagePlanData.vehicleNo].top));
             damageMark.toDraw.set(centerPoint.x - step, centerPoint.y - step, centerPoint.x + step, centerPoint.y + step);
             canvas.drawLine(damageMark.toDraw.left, damageMark.toDraw.top, damageMark.toDraw.right, damageMark.toDraw.bottom, red);
             canvas.drawLine(damageMark.toDraw.right, damageMark.toDraw.top, damageMark.toDraw.left, damageMark.toDraw.bottom, red);
@@ -108,19 +117,8 @@ public class VehicleDamageView extends View {
 
     }
 
+    Spinner spinner;
     public void loadResources(Context context) {
-        //this.vehicleDamageActivity = vehicleDamageActivity;
-//        final LinearLayout layout = new LinearLayout(vehicleDamageActivity);
-//        layout.setOrientation(LinearLayout.VERTICAL);
-
-//        Spinner spinner = new Spinner(context);
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context,
-//                R.array.cars_array, android.R.layout.simple_spinner_item);
-//
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinner.setAdapter(adapter);
-
-
         white = new Paint();
         white.setColor(Color.WHITE);
         white.setStrokeWidth(2);
@@ -140,28 +138,21 @@ public class VehicleDamageView extends View {
         red.setStrokeWidth(10);
         red.setStyle(Paint.Style.FILL_AND_STROKE);
         red.setStrokeCap(Paint.Cap.ROUND);
-        vehicleImage = new Bitmap[3];
-//
-        vehicleImage[2] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(), R.drawable.limousine_plan_open);
-        vehicleImage[1] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(), R.drawable.jeep_plan);
-        switch (carType) {
-            case "Bike":
-                vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(), R.drawable.bike);
-                break;
-            case "Bus":
-                vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(), R.drawable.bus);
-                break;
-            case "Truck":
-                vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(), R.drawable.truck);
-                break;
-//            case "Car":
-//                vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(), R.drawable.limousine_plan_open);
-//                break;
-            default:
-            case "Car":
-                vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(), R.drawable.limousine_plan_open);
-        }
-//        vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(),R.drawable.bike);
+        vehicleImage = new Bitmap[4];
+        vehicleImageCaption = new String[4];
+
+        vehicleImage[0] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(), R.drawable.limousine_plan_open);
+        vehicleImageCaption[0] = "Легковой автомобиль";
+
+        vehicleImage[1] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(), R.drawable.bike);
+        vehicleImageCaption[1] = "Мотоцикл";
+
+        vehicleImage[2] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(), R.drawable.truck);
+        vehicleImageCaption[2] = "Грузовой автомобиль";
+
+        vehicleImage[3] = BitmapFactory.decodeResource(vehicleDamageActivity.getResources(), R.drawable.bus);
+        vehicleImageCaption[3] = "Автобус";
+
 
         vehicleImageDestRect = new Rect[vehicleImage.length];
         vehicleImageSourceRect = new Rect[vehicleImage.length];
@@ -169,7 +160,32 @@ public class VehicleDamageView extends View {
             vehicleImageSourceRect[i] = new Rect(0, 0, vehicleImage[i].getWidth(), vehicleImage[i].getHeight());
             vehicleImageDestRect[i] = new Rect(0, 0, vehicleImage[i].getWidth(), vehicleImage[i].getHeight());
         }
-        loadCommonDamages(carType);
+        loadCommonDamages(InsReport.damagePlanData.vehicleNo);
+
+        if (spinner != null) {
+            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(vehicleDamageActivity,
+                    R.layout.actionbar_spinner,
+                    vehicleImageCaption);
+            spinnerArrayAdapter.setDropDownViewResource(R.layout.actionbar_spinner_dropdown);
+            spinner.setAdapter(spinnerArrayAdapter);
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    ((TextView) adapterView.getChildAt(0)).setTextColor(Color.WHITE);
+                    InsReport.damagePlanData.vehicleNo = i;
+                    loadCommonDamages(InsReport.damagePlanData.vehicleNo);
+                    postInvalidate();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+
+            spinner.setSelection(InsReport.damagePlanData.vehicleNo);
+            Log.e(TAG, "loadResources: " + vehicleImageCaption );
+        }
     }
 
 
@@ -217,8 +233,8 @@ public class VehicleDamageView extends View {
 
                 if (currentDamageNo == -1) {
                     DamageMark newDamageMark = new DamageMark();
-                    newDamageMark.relativeCoordinates.set((event.getX() - vehicleImageDestRect[vehicleNo].left) / vehicleImageDestRect[vehicleNo].width(),
-                            (event.getY() - vehicleImageDestRect[vehicleNo].top) / vehicleImageDestRect[vehicleNo].height());
+                    newDamageMark.relativeCoordinates.set((event.getX() - vehicleImageDestRect[InsReport.damagePlanData.vehicleNo].left) / vehicleImageDestRect[InsReport.damagePlanData.vehicleNo].width(),
+                            (event.getY() - vehicleImageDestRect[InsReport.damagePlanData.vehicleNo].top) / vehicleImageDestRect[InsReport.damagePlanData.vehicleNo].height());
                     InsReport.damagePlanData.damageMarks.add(newDamageMark);
                     Log.e(TAG, "onTouchEventIdle: new Mark: " + newDamageMark.relativeCoordinates.x + "," + newDamageMark.relativeCoordinates.y);
                     currentDamageNo = InsReport.damagePlanData.damageMarks.size() - 1;
@@ -226,8 +242,8 @@ public class VehicleDamageView extends View {
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (currentDamageNo != -1) {
-                    InsReport.damagePlanData.damageMarks.get(currentDamageNo).relativeCoordinates.set((event.getX() - vehicleImageDestRect[vehicleNo].left) / vehicleImageDestRect[vehicleNo].width(),
-                            (event.getY() - vehicleImageDestRect[vehicleNo].top) / vehicleImageDestRect[vehicleNo].height());
+                    InsReport.damagePlanData.damageMarks.get(currentDamageNo).relativeCoordinates.set((event.getX() - vehicleImageDestRect[InsReport.damagePlanData.vehicleNo].left) / vehicleImageDestRect[InsReport.damagePlanData.vehicleNo].width(),
+                            (event.getY() - vehicleImageDestRect[InsReport.damagePlanData.vehicleNo].top) / vehicleImageDestRect[InsReport.damagePlanData.vehicleNo].height());
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -243,10 +259,25 @@ public class VehicleDamageView extends View {
 
     }
 
+
+    public void takeSnapshot() {
+        final Bitmap screenShot = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_4444);
+        Canvas canvas = new Canvas(screenShot);
+        draw(canvas);
+
+        String id = CameraAndPictures.generateNewId();
+        InsReport.ref.child("images/" + id).setValue(CameraAndPictures.encodeToBase64(screenShot,Bitmap.CompressFormat.JPEG,70));
+        InsReport.currentElement.vText = id;
+
+        MediaActionSound sound = new MediaActionSound();
+        sound.play(MediaActionSound.SHUTTER_CLICK);
+    }
+
+
     ArrayList<DamageMark> commonDamageMarks = new ArrayList<>();
 
-    private void loadCommonDamages(String carType) {
-        ref.child("youfix/commonDamages_"+carType).
+    private void loadCommonDamages(int vehicleNo) {
+        ref.child("youfix/commonDamages_"+vehicleNo).
                 addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
@@ -389,12 +420,14 @@ public class VehicleDamageView extends View {
                                     exists = true;
                             //ref.child("youfix/anima/" + prefs.getString("AndroidID", "") + "/" + url).
                             if (!exists)
-                                ref.child("youfix/commonDamages_" + carType + "/" + InsReport.damagePlanData.damageMarks.get(finalDamageNo).id).
+                                ref.child("youfix/commonDamages_" + InsReport.damagePlanData.vehicleNo + "/" + InsReport.damagePlanData.damageMarks.get(finalDamageNo).id).
                                         setValue(InsReport.damagePlanData.damageMarks.get(finalDamageNo));
                         }
                     }
-                }).setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+                }).setNegativeButton("Удалить", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
+                InsReport.damagePlanData.damageMarks.remove(finalDamageNo);
+                postInvalidate();
             }
         }).show();
 

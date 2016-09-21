@@ -447,6 +447,7 @@ public class FormsList extends AppCompatActivity {
         //fireBaseCatalog is accessible. Now we need to prepare the corresponding template
         Form newForm = new Form();
         newForm.generateNewId();
+        InsReport.logFirebase("Create new " + fireBaseCatalog + " form no. " + newForm.id);
         FormTemplates.selectionTypes = selectionType;
         FormTemplates.applyTemplate(newForm, fireBaseCatalog);
         newForm.dateAccepted = new Date();
@@ -479,6 +480,7 @@ public class FormsList extends AppCompatActivity {
                 Intent intent = new Intent(thisActivity, AdikStyleActivity.class);
                 intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, fireBaseCatalog);
                 intent.putExtra(InsReport.EXTRA_ID_NO, id);
+                InsReport.logFirebase("Open " + fireBaseCatalog + " form no. " + id);
                 startActivity(intent);
             }
             if (currentForm.formReady) {

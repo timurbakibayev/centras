@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         InsReport.storage = FirebaseStorage.getInstance();
-        InsReport.storageRef = InsReport.storage.getReferenceFromUrl("gs://insreport-f39a3.appspot.com");
+        //InsReport.storageRef = InsReport.storage.getReferenceFromUrl("gs://insreport-f39a3.appspot.com");
 
         ImageView imgMain = (ImageView) findViewById(R.id.main_img);
         /*
@@ -260,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(thisActivity, FormsList.class);
                     String message = formsCollection.fireBaseCatalog;
                     intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, message);
+                    InsReport.logFirebase("Opening " + formsCollection.fireBaseCatalog);
                     startActivity(intent);
                 }
             });
@@ -358,6 +359,7 @@ public class MainActivity extends AppCompatActivity {
                     form.validate();
                 }
                 form.saveToCloud();
+                InsReport.logFirebase("Accepted " + form.fireBaseCatalog + " form no. " + form.id);
                 acceptOrRejectDialog.dismiss();
                 openTheForm(form, context);
             }
@@ -371,6 +373,7 @@ public class MainActivity extends AppCompatActivity {
                     InsReport.ref.child("forms/" + form.fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + form.id + "/dateAccepted").
                             setValue(ServerValue.TIMESTAMP);
                 form.status = "reject";
+                InsReport.logFirebase("Rejected " + form.fireBaseCatalog + " form no. " + form.id);
                 form.saveToCloud();
                 acceptOrRejectDialog.dismiss();
             }
@@ -384,6 +387,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_CALL);
                 intent.setData(Uri.parse("tel:" + phoneNo.trim()));
                 if (intent.resolveActivity(getPackageManager()) != null) {
+                    InsReport.logFirebase("Make a call from accept-reject dialog: " + form.fireBaseCatalog + " form no. " + form.id + ", TEL: " + phoneNo);
                     startActivity(intent);
                 }
                 acceptOrRejectDialog.dismiss();
@@ -405,6 +409,7 @@ public class MainActivity extends AppCompatActivity {
                         .build();
                 intent.setData(locationUri);
                 if (intent.resolveActivity(getPackageManager()) != null) {
+                    InsReport.logFirebase("Open a map from app: " + form.fireBaseCatalog + " form no. " + form.id + ", Location: " + locationStr);
                     startActivity(intent);
                     Toast.makeText(MainActivity.this, locationStr, Toast.LENGTH_SHORT).show();
                 } else {
