@@ -21,8 +21,27 @@
     <string name="title_activity_anima">Анимация</string>
     <string name="title_activity_photos">Фотографии</string>
     <string name="title_activity_server_emu">Server Emulator</string>
+    
+    
+    <!--PreInsurance-->
+    <string name="general">Заявление на проведение осмотра имущества</string>
+    <string name="object_of_insurance">Объект страхования</string>
+    <string name="documents">Документы по объеку</string>
+    <string name="photo">Фотографии</string>
 
+    <!--AcceptReject-->
+    <string name="call"> Позвонить</string>
+    <string name="on_map"> На Карте</string>
+    <string name="decline"> Отклонить</string>
+    <string name="accept"> Принять</string>
 
+    <!--Insurance-->
+    <string name="general_info">Общие данные</string>
+    <string name="additional_info">Дополнительная информация по делу</string>
+    <string name="participants_info">Данные по участникам</string>
+    <string name="objects_info">Данные по объектам</string>
+    <string name="photos_and_documents">Фотографии (документы) по делу</string>
+    <string name="signature">Подпись</string>
 
 
     <string-array name="cars_array">

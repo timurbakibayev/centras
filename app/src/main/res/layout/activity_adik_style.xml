@@ -75,7 +75,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableTop="@drawable/ic_assignment_black_24dp"
-                android:text="Общие данные" />
+                android:text="@string/general_info" />
             <Button
 
                 android:textSize="10sp"
@@ -84,7 +84,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableTop="@drawable/ic_add_black_24dp"
-                android:text="Дополнительная информация по делу" />
+                android:text="@string/additional_info" />
         </LinearLayout>
 
         <LinearLayout
@@ -101,7 +101,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableTop="@drawable/ic_people_black_24dp"
-                android:text="Данные по участникам" />
+                android:text="@string/participants_info" />
 
             <Button
 
@@ -111,11 +111,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableTop="@drawable/ic_directions_car_black_24dp"
-                android:text="Данные по объектам" />
+                android:text="@string/objects_info" />
         </LinearLayout>
 
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -129,7 +128,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableTop="@drawable/ic_perm_media_black_24dp"
-                android:text="Фотографии (документы) по делу" />
+                android:text="@string/photos_and_documents" />
 
             <Button
                 android:textSize="10sp"
@@ -138,7 +137,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableTop="@drawable/ic_border_color_black_24dp"
-                android:text="Подпись" />
+                android:text="@string/signature" />
         </LinearLayout>
 
     </LinearLayout>
