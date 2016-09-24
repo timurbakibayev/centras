@@ -197,11 +197,16 @@ public class AdikStyleActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_adik_style);
 
         for (int i = 0; i < datePicker.length; i++)
             datePicker[i] = new Button(this);
         fireBaseCatalog = getIntent().getStringExtra(InsReport.EXTRA_FIREBASE_CATALOG);
+
+        if (fireBaseCatalog.equalsIgnoreCase("incident"))
+            setContentView(R.layout.activity_adik_style);
+        if (fireBaseCatalog.equalsIgnoreCase("preinsurance"))
+            setContentView(R.layout.activity_pre_insurance);
+
         id_no = getIntent().getStringExtra(InsReport.EXTRA_ID_NO);
         currentForm = null;
         for (FormsCollection formsCollection : InsReport.mainMenuForms) {
@@ -221,61 +226,110 @@ public class AdikStyleActivity extends AppCompatActivity {
             buildTheForm(currentForm);
         }
 
-        ((Button)findViewById(R.id.AButtonGeneral)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTheFragment("general","Общие сведения");
-            }
-        });
-        ((Button)findViewById(R.id.menuExtraInfo)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTheFragment("additionalInfo","Дополнительная информация");
-            }
-        });
-        ((Button)findViewById(R.id.menuObjects)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //showTheFragment("object","Информация по объектам");
-                showManyObjects();
-            }
-        });
-        ((Button)findViewById(R.id.menuParticipants)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showManyParticipants();
-            }
-        });
+        if (fireBaseCatalog.equalsIgnoreCase("incident")) {
 
-        ((Button)findViewById(R.id.menuPhotos)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showManyPhotos();
-            }
-        });
+            ((Button) findViewById(R.id.AButtonGeneral)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showTheFragment("general", "Общие сведения");
+                }
+            });
+            ((Button) findViewById(R.id.menuExtraInfo)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showTheFragment("additionalInfo", "Дополнительная информация");
+                }
+            });
+            ((Button) findViewById(R.id.menuObjects)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //showTheFragment("object","Информация по объектам");
+                    showManyObjects();
+                }
+            });
+            ((Button) findViewById(R.id.menuParticipants)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showManyParticipants();
+                }
+            });
 
-        ((Button)findViewById(R.id.menuSignature)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showManySignatures();
-            }
-        });
+            ((Button) findViewById(R.id.menuPhotos)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showManyPhotos();
+                }
+            });
+
+            ((Button) findViewById(R.id.menuSignature)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showManySignatures();
+                }
+            });
+        }
+
+        if (fireBaseCatalog.equalsIgnoreCase("preinsurance")) {
+            ((Button) findViewById(R.id.BButtonGeneral)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showTheFragment("general", "Заявление");
+                }
+            });
+            ((Button) findViewById(R.id.BMenuDocuments)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //showTheFragment("additionalInfo", "Дополнительная информация");
+                    //TODO: Documents!!!
+                }
+            });
+            ((Button) findViewById(R.id.BMenuObjects)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //showTheFragment("object","Информация по объектам");
+                    showManyObjects();
+                }
+            });
+            /*
+            ((Button) findViewById(R.id.menuParticipants)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showManyParticipants();
+                }
+            });
+            */
+
+            ((Button) findViewById(R.id.BButtonPhoto)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showManyPhotos();
+                }
+            });
+
+            ((Button) findViewById(R.id.BMenuSignature)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showManySignatures();
+                }
+            });
+
+        }
 
 
         ((ImageButton)findViewById(R.id.call_adik)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        @Override
+        public void onClick(View view) {
 
-                if (currentForm.input.get("CLAIMANT_PHONE_NO") != null) {
-                    currentForm.phoneNo = currentForm.input.get("CLAIMANT_PHONE_NO");
+            if (currentForm.input.get("CLAIMANT_PHONE_NO") != null) {
+                currentForm.phoneNo = currentForm.input.get("CLAIMANT_PHONE_NO");
 
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + currentForm.phoneNo.trim()));
-                if (intent.resolveActivity(getPackageManager()) != null) {
-                    InsReport.logFirebase("Make a call from inside the form: " + currentForm.fireBaseCatalog + " form no. " + currentForm.id + ", TEL: " + currentForm.phoneNo);
-                    startActivity(intent);
-                }
-            }}});
+            Intent intent = new Intent(Intent.ACTION_CALL);
+            intent.setData(Uri.parse("tel:" + currentForm.phoneNo.trim()));
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                InsReport.logFirebase("Make a call from inside the form: " + currentForm.fireBaseCatalog + " form no. " + currentForm.id + ", TEL: " + currentForm.phoneNo);
+                startActivity(intent);
+            }
+        }}});
 
         final String address;
 
