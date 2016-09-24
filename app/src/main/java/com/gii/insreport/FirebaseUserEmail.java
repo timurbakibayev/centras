@@ -1,6 +1,8 @@
 package com.gii.insreport;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Timur_hnimdvi on 07-Sep-16.
@@ -11,6 +13,7 @@ public class FirebaseUserEmail {
     public Date lastLogin = new Date();
     public String lastLoginAndroid = "";
     public String token = "";
+    public Map<String,String> devices = new HashMap<>();
     public FirebaseUserEmail() {
 
     };

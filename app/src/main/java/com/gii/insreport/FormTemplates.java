@@ -35,6 +35,9 @@ public class FormTemplates {
 
         form.elements.add(new Element("object", Element.ElementType.ePlan, "DAMAGE_PLAN", "Повреждения"));
 
+        form.elements.add(new Element("object", Element.ElementType.ePhoto,"photoDocuments","Фото документов"));
+        form.elements.add(new Element("object", Element.ElementType.ePhoto,"photoDamages","Фото повреждения"));
+
         form.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_TYPE",
                 "тип объекта",
                 "DCT_OBJECT_TYPE"));

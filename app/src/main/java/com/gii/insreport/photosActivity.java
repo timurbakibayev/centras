@@ -118,6 +118,9 @@ public class PhotosActivity extends AppCompatActivity {
                 String[] filePath = { MediaStore.Images.Media.DATA };
                 Cursor c = getContentResolver().query(selectedImage, filePath,
                         null, null, null);
+                if (c == null)
+                    return;
+
                 c.moveToFirst();
                 int columnIndex = c.getColumnIndex(filePath[0]);
                 selectedImagePath = c.getString(columnIndex);

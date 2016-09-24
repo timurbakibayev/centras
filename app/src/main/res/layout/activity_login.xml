@@ -118,7 +118,15 @@
                 android:layout_marginTop="16dp" android:text="Выйти"
                 android:textStyle="bold" android:enabled="false" />
 
+            <Button android:id="@+id/rename_button" style="?android:textAppearanceSmall"
+                android:layout_width = "match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" android:text="Переименовать устройство"
+                android:textStyle="bold" />
 
+            <Button android:id="@+id/block_button" style="?android:textAppearanceSmall"
+                android:layout_width = "match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" android:text="Блокировать это или другое устройство"
+                android:textStyle="bold" android:enabled="false"/>
 
         </LinearLayout>
     </ScrollView>

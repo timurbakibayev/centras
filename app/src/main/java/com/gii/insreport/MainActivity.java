@@ -3,6 +3,7 @@ package com.gii.insreport;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -26,6 +28,7 @@ import android.widget.Toast;
 
 import com.firebase.client.ServerValue;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
@@ -71,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        checkDeviceName(this);
 
 /*        ((Button)findViewById(R.id.button_add_plan)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +132,58 @@ public class MainActivity extends AppCompatActivity {
             }
         }, 1000, 1000);
 
+    }
+
+    static boolean dontCheckTwice = false;
+    public static void checkDeviceName(Context context) {
+        if (dontCheckTwice)
+            return;
+        Log.e(TAG, "checkDeviceName: entry" );
+        if (!InsReport.sharedPref.getString("devicename","").equals(""))
+            return;
+        Log.e(TAG, "checkDeviceName: need a new name");
+        showDeviceNameDialog(context);
+    }
+
+    public static void showDeviceNameDialog(Context context) {
+        if (InsReport.user == null)
+            return;
+        dontCheckTwice = true;
+        final Dialog deviceNameDialog = new Dialog(context);
+        final EditText deviceNameET = new EditText(context);
+        deviceNameET.setText(InsReport.sharedPref.getString("devicename",""));
+        TextView captionTV = new TextView(context);
+        captionTV.setText("Введите название устройства, например 'Samsung s5' или 'Планшет Арман'. " +
+                "Это необходимо для возможности " +
+                "блокировки устройства при потере.");
+        Button positiveButton = new Button(context);
+        positiveButton.setText("OK");
+        LinearLayout deviceNameLL = new LinearLayout(context);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(50,50,50,50);
+        deviceNameLL.setLayoutParams(lp);
+        deviceNameLL.setOrientation(LinearLayout.VERTICAL);
+        deviceNameLL.addView(captionTV);
+        deviceNameLL.addView(deviceNameET);
+        deviceNameLL.addView(positiveButton);
+        //deviceNameDialog.setTitle("Введите название устройства, например 'Телефон Samsung' или 'Планшет Армана'");
+        deviceNameDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        deviceNameDialog.setContentView(deviceNameLL);
+        deviceNameDialog.show();
+        positiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String newName = deviceNameET.getText().toString();
+                if (!newName.equals("")) {
+                    InsReport.savePref("devicename", newName);
+                    InsReport.ref.child("users/"+InsReport.user.getUid()+"/devices/" + FirebaseInstanceId.getInstance().getToken().replaceAll("[^0-9]+", "")).setValue(
+                            InsReport.sharedPref.getString("devicename","Неизвестное устройство"));
+                    deviceNameDialog.dismiss();
+                    InsReport.logFirebase("Device renamed to: " + newName);
+                }
+            }
+        });
     }
 
 

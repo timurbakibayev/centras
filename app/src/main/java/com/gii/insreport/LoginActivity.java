@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -25,6 +26,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -35,8 +37,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -62,10 +66,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     FirebaseUser user;
 
+    private static Map<String,String> devices = new HashMap<>();
+
     private static final int REQUEST_READ_CONTACTS = 0;
     private static final String TAG = "LoginActivity.java";
 
     private UserLoginTask mAuthTask = null;
+
+    final LoginActivity thisActivity = this;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -99,6 +107,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         final Button mResetPasswordButton = (Button) findViewById(R.id.reset_password_button);
         final Button mChangePasswordButton = (Button) findViewById(R.id.change_password_button);
         final Button mSendUserDetailsButton = (Button) findViewById(R.id.send_details_button);
+        final Button mBlockButton = (Button) findViewById(R.id.block_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,6 +143,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mSendUserDetailsButton.setEnabled(true);
             mChangePasswordButton.setEnabled(true);
             signOutButton.setEnabled(true);
+            mBlockButton.setEnabled(true);
             signOutButton.setText("Выйти (" + user.getEmail() + ")");
             final String uId = user.getUid();
             signOutButton.setOnClickListener(new OnClickListener() {
@@ -145,6 +155,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     mPasswordView.setVisibility(View.VISIBLE);
                     findViewById(R.id.passwordTextInputLayour).setVisibility(View.VISIBLE);
                     signOutButton.setEnabled(false);
+                    mBlockButton.setEnabled(false);
                     mChangePasswordButton.setEnabled(false);
                     mEmailSignInButton.setVisibility(View.VISIBLE);
                     mRegisterButton.setVisibility(View.VISIBLE);
@@ -155,7 +166,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     }
                 }
             });
-            final LoginActivity thisActivity = this;
+
             mSendUserDetailsButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -177,9 +188,99 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     changePassword();
                 }
             });
+
+            InsReport.ref.child("users/"+user.getUid() + "/devices").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        devices.put(snapshot.getKey(),snapshot.getValue(String.class));
+                    }
+                    Log.e(TAG, "onDataChange devices: " + devices.size() + " elements");
+                    for (Map.Entry<String, String> device : devices.entrySet()) {
+                        Log.e(TAG, "onDataChange new device: " + device.getValue());
+                    }
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
         }
 
         loadPassword();
+
+        findViewById(R.id.rename_button).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.showDeviceNameDialog(thisActivity);
+            }
+        });
+
+        findViewById(R.id.block_button).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (devices.size() == 0)
+                    return;
+                //MainActivity.showDeviceNameDialog(thisActivity);
+                final Dialog blockDialog = new Dialog(thisActivity);
+                TextView captionTV = new TextView(thisActivity);
+                captionTV.setText("Блокировка устройства. Используйте при потере телефона или планшета.");
+                Button cancelButton = new Button(thisActivity);
+                cancelButton.setText("ОТМЕНА");
+                LinearLayout blockDialogLinLayout = new LinearLayout(thisActivity);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(50,50,50,50);
+                blockDialogLinLayout.setLayoutParams(lp);
+                blockDialogLinLayout.setOrientation(LinearLayout.VERTICAL);
+                blockDialogLinLayout.addView(captionTV);
+
+                //list the devices begin;
+                for (Map.Entry<String, String> device : devices.entrySet()) {
+                    Button newButton = new Button(thisActivity);
+                    newButton.setText(device.getValue());
+                    final String deviceToken = device.getKey();
+                    final String deviceName = device.getValue();
+                    blockDialogLinLayout.addView(newButton);
+                    newButton.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            blockDialog.dismiss();
+                            new android.support.v7.app.AlertDialog.Builder(thisActivity).setTitle("Заблокировать " + deviceName + "?")
+                                    .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            InsReport.ref.child("block/"+deviceToken).setValue("Blocked by " + InsReport.user.getEmail());
+                                            InsReport.ref.child("users/"+InsReport.user.getUid()+"/devices/"+deviceToken).setValue(null);
+                                            devices.remove(deviceToken);
+                                        }
+                                    }).
+                                    setNeutralButton("Нет", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        }
+                                    })
+                                    .
+                                    show();
+                        }
+                    });
+                }
+                //list the devices end;
+
+                blockDialogLinLayout.addView(cancelButton);
+                blockDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+                blockDialog.setContentView(blockDialogLinLayout);
+                blockDialog.show();
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+            }
+        });
     }
 
     private void savePassword(String email, String password) {

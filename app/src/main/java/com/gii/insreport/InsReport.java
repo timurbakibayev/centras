@@ -94,6 +94,8 @@ public class InsReport extends Application {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 InsReport.user = user;
+                if (FirebaseInstanceId.getInstance().getToken() != null)
+                    checkBlock(FirebaseInstanceId.getInstance().getToken().replaceAll("[^0-9]+", ""));
                 if (user != null) {
                     // User is signed in
                     Log.e(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
@@ -111,6 +113,9 @@ public class InsReport extends Application {
                     ref.child("users/"+user.getUid()+"/lastLogin").setValue(ServerValue.TIMESTAMP);
                     Date d = new Date();
                     ref.child("users/"+user.getUid()+"/lastLoginAndroid").setValue(FillFormActivity.dateOnlyTextStrict(d));
+                    ref.child("users/"+user.getUid()+"/devices/" + FirebaseInstanceId.getInstance().getToken().replaceAll("[^0-9]+", "")).setValue(
+                            sharedPref.getString("devicename","Неизвестное устройство"));
+                    MainActivity.checkDeviceName(mainActivity);
                     logFirebase("login");
                 } else {
                     // User is signed out
@@ -230,14 +235,34 @@ public class InsReport extends Application {
     public static void logFirebase(String logText) {
         Map<String,Object> log = new HashMap<>();
         if (user != null) {
-            log.put("User:",user.getEmail().toString());
-            log.put("ServerTime:",ServerValue.TIMESTAMP);
+            log.put("User",user.getEmail().toString());
+            log.put("ServerTime",ServerValue.TIMESTAMP);
             Date d = new Date();
-            log.put("TextTime:",FillFormActivity.dateOnlyTextStrict(d));
-            log.put("Text:",logText);
+            log.put("TextTime",FillFormActivity.dateOnlyTextStrict(d));
+            log.put("Text",logText);
+            log.put("Device ID",FirebaseInstanceId.getInstance().getToken());
 
             ref.child("log/"+FillFormActivity.dateToYYMMDD(d) + "/" + user.getEmail().toString().replaceAll("[^A-Za-z]+", "")).
                     push().setValue(log);
         }
+    }
+
+    public void checkBlock(String token) {
+        ref.child("block/"+token).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists())
+                    Log.e(TAG, "checkBlock: device is not blocked");
+                else {
+                    Log.e(TAG, "checkBlock: DEVICE IS BLOCKED! QUIT!");
+                    System.exit(0);
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 }

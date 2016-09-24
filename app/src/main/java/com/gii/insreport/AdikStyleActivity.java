@@ -67,6 +67,7 @@ public class AdikStyleActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 17;
     private static final int FREE_DRAW_INTENT = 19;
     private static final int ANIMA_INTENT = 21;
+    private static final int REQUEST_ELEMENT_PHOTO = 29;
 
 
     String fireBaseCatalog = "";
@@ -537,6 +538,12 @@ public class AdikStyleActivity extends AppCompatActivity {
 
     Map<String,LinearLayout> linearLayoutForFragment = new HashMap<>();
     private void showTheFragment(String menuName, String title) {
+        if (linearLayoutForFragment.get(menuName) == null) {
+            FormTemplates.applyTemplate(currentForm, currentForm.fireBaseCatalog);
+            buildTheForm(currentForm);
+        }
+        if (linearLayoutForFragment.get(menuName) == null) //if template did not help, exit
+            return;
         ViewGroup parent = (ViewGroup)linearLayoutForFragment.get(menuName).getParent();
 
         if (parent != null)
@@ -951,30 +958,30 @@ public class AdikStyleActivity extends AppCompatActivity {
                         LL.addView(planButton);
                         break;
                     case ePhoto:
-                        final HorizontalScrollView scrollViewPhoto = new HorizontalScrollView(this);
-                        element.container = scrollViewPhoto;
-                        scrollViewPhoto.setHorizontalScrollBarEnabled(true);
-                        scrollViewPhoto.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 200));
-                        final LinearLayout linearLayoutPhoto = new LinearLayout(this);
-                        linearLayoutPhoto.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
-                        linearLayoutPhoto.setOrientation(LinearLayout.HORIZONTAL);
-                        //here request the pictures from the cloud into linearLayoutPhoto:
-                        for (String photoID : element.vPhotos)
-                            cameraAndPictures.getPicFromFirebase(photoID,linearLayoutPhoto);
-                        final Button takePhotoButton = new Button(this);
-                        takePhotoButton.setText("Камера+");
-                        takePhotoButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
-                        takePhotoButton.setOnClickListener(new View.OnClickListener() {
+                        final Button photoButton = new Button(this);
+                        element.container = photoButton;
+                        int count = 0;
+                        for (Element element1 : element.elements) {
+                            if (!element1.deleted)
+                                count++;
+                        }
+                        photoButton.setText(count + " фото");
+                        photoButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button_spinner, null));
+                        photoButton.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_expand_more_black_24dp,0);
+
+                        photoButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                currentElement = element;
-                                currentLinearLayout = linearLayoutPhoto;
-                                takePhoto();
+                                InsReport.currentElement = element;
+                                InsReport.currentForm = currentForm;
+                                Intent intentPhoto = new Intent(thisActivity, PhotosActivity.class);
+                                startActivityForResult(intentPhoto,REQUEST_ELEMENT_PHOTO);
                             }
                         });
-                        linearLayoutPhoto.addView(takePhotoButton);
-                        scrollViewPhoto.addView(linearLayoutPhoto);
-                        LL.addView(scrollViewPhoto);
+                        TextView photoTV = new TextView(this);
+                        photoTV.setText(element.description);
+                        LL.addView(photoTV);
+                        LL.addView(photoButton);
                         break;
                     case eDraw:
                         final Button drawButton = new Button(this);
@@ -1349,6 +1356,15 @@ public class AdikStyleActivity extends AppCompatActivity {
             //    currentButton.setCompoundDrawablesWithIntrinsicBounds(currentElement.getBitmapDrawable(this), null, null, null);
             //}
         }
+        if (requestCode == REQUEST_ELEMENT_PHOTO) {
+            int count = 0;
+            for (Element element : InsReport.currentElement.elements) {
+                if (!element.deleted)
+                    count++;
+            }
+            ((Button)InsReport.currentElement.container).setText(count + " фото");
+        }
+
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             final String id = CameraAndPictures.savePictureToFirebase(Environment.getExternalStorageDirectory()+ File.separator + "image.jpg");
             if (CameraAndPictures.bitmap != null) {
