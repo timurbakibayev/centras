@@ -51,7 +51,6 @@
         android:background="#FFBABABA" />
 
     <LinearLayout
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -80,8 +79,20 @@
             android:layout_weight="1"
             android:drawableLeft="@drawable/ic_done_black_24dp"
             android:text="@string/accept" />
-
-
     </LinearLayout>
+    <View
+        android:layout_marginTop="6dp"
+        android:background="@color/colorDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+    <Button
+        android:id="@+id/send_sms"
+        android:drawableRight="@drawable/ic_chat_black_24dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:drawablePadding="6dp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/send_sms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

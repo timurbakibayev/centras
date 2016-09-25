@@ -135,11 +135,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     static boolean dontCheckTwice = false;
+
     public static void checkDeviceName(Context context) {
         if (dontCheckTwice)
             return;
-        Log.e(TAG, "checkDeviceName: entry" );
-        if (!InsReport.sharedPref.getString("devicename","").equals(""))
+        Log.e(TAG, "checkDeviceName: entry");
+        if (!InsReport.sharedPref.getString("devicename", "").equals(""))
             return;
         Log.e(TAG, "checkDeviceName: need a new name");
         showDeviceNameDialog(context);
@@ -151,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
         dontCheckTwice = true;
         final Dialog deviceNameDialog = new Dialog(context);
         final EditText deviceNameET = new EditText(context);
-        deviceNameET.setText(InsReport.sharedPref.getString("devicename",""));
+        deviceNameET.setText(InsReport.sharedPref.getString("devicename", ""));
         TextView captionTV = new TextView(context);
         captionTV.setText("Введите название устройства, например 'Samsung s5' или 'Планшет Арман'. " +
                 "Это необходимо для возможности " +
@@ -161,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout deviceNameLL = new LinearLayout(context);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.setMargins(50,50,50,50);
+        lp.setMargins(50, 50, 50, 50);
         deviceNameLL.setLayoutParams(lp);
         deviceNameLL.setOrientation(LinearLayout.VERTICAL);
         deviceNameLL.addView(captionTV);
@@ -177,8 +178,8 @@ public class MainActivity extends AppCompatActivity {
                 String newName = deviceNameET.getText().toString();
                 if (!newName.equals("")) {
                     InsReport.savePref("devicename", newName);
-                    InsReport.ref.child("users/"+InsReport.user.getUid()+"/devices/" + FirebaseInstanceId.getInstance().getToken().replaceAll("[^0-9]+", "")).setValue(
-                            InsReport.sharedPref.getString("devicename","Неизвестное устройство"));
+                    InsReport.ref.child("users/" + InsReport.user.getUid() + "/devices/" + FirebaseInstanceId.getInstance().getToken().replaceAll("[^0-9]+", "")).setValue(
+                            InsReport.sharedPref.getString("devicename", "Неизвестное устройство"));
                     deviceNameDialog.dismiss();
                     InsReport.logFirebase("Device renamed to: " + newName);
                 }
@@ -288,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
                                     form.input.get("CLAIMANT_PHONE_NO").equals(phoneNo))
                             ) {
                         //here open the form
-                        openTheForm(form,this);
+                        openTheForm(form, this);
                         getIntent().removeExtra("findByPhone");
                         break;
                     }
@@ -448,6 +449,16 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
                 acceptOrRejectDialog.dismiss();
+            }
+        });
+
+        //Add sms not sure how to connect to firebase
+        (acceptOrRejectDialog.findViewById(R.id.send_sms)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                acceptOrRejectDialog.dismiss();
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms",
+                        phoneNo.trim(), null)));
             }
         });
 
