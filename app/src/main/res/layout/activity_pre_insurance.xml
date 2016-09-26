@@ -17,126 +17,125 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
             android:layoutDirection="rtl"
-            >
+            app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <ImageButton
                 android:id="@+id/call_adik"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layoutDirection="rtl"
                 android:src="@drawable/ic_call_black_24dp"
-                android:tint="@android:color/white"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layoutDirection="rtl"/>
+                android:tint="@android:color/white" />
 
             <ImageButton
                 android:id="@+id/map_adik"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layoutDirection="rtl"
                 android:src="@drawable/ic_pin_drop_black_24dp"
-                android:tint="@android:color/white"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layoutDirection="rtl"/>
+                android:tint="@android:color/white" />
 
             <ImageButton
                 android:id="@+id/ready_adik"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layoutDirection="rtl"
                 android:src="@drawable/ic_done_black_24dp"
-                android:tint="@android:color/white"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layoutDirection="rtl"/>
+                android:tint="@android:color/white" />
 
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:paddingTop="@dimen/activity_vertical_margin" >
+        android:paddingTop="@dimen/activity_vertical_margin"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
-        <Button
-
-            android:textSize="10sp"
-            android:id="@+id/BButtonGeneral"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_assignment_black_24dp"
-            android:text="@string/general" />
+            android:orientation="horizontal">
 
-        <Button
-            android:textSize="10sp"
-            android:id="@+id/BMenuObjects"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            <Button
+
+                android:id="@+id/BButtonGeneral"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_assignment_black_24dp"
+                android:text="@string/general"
+                android:textSize="10sp" />
+
+            <Button
+                android:id="@+id/BMenuObjects"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_directions_car_black_24dp"
+                android:text="@string/object_of_insurance"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_directions_car_black_24dp"
-            android:text="@string/object_of_insurance" />
-    </LinearLayout>
+            android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+            <Button
 
-        <Button
+                android:id="@+id/BMenuDocuments"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_description_black_24dp"
+                android:text="@string/documents"
+                android:textSize="10sp" />
 
-            android:textSize="10sp"
-            android:id="@+id/BMenuDocuments"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            <Button
+                android:id="@+id/BButtonPhoto"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_perm_media_black_24dp"
+                android:text="@string/photo"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_description_black_24dp"
-            android:text="@string/documents" />
+            android:orientation="horizontal">
 
-        <Button
-            android:textSize="10sp"
-            android:id="@+id/BButtonPhoto"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/ic_perm_media_black_24dp"
-            android:text="@string/photo" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/BMenuSignature"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_border_color_black_24dp"
+                android:text="@string/signature"
+                android:textSize="10sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
-        <Button
-            android:textSize="10sp"
-            android:id="@+id/BMenuSignature"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/ic_border_color_black_24dp"
-            android:text="@string/signature" />
-
-        <Button
-            android:textSize="10sp"
-            android:id="@+id/menuSignature"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:drawableTop="@drawable/ic_assignment_black_24dp"
-            android:text="Я не знаю" />
+            <Button
+                android:id="@+id/BInsured"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/ic_assignment_black_24dp"
+                android:text="@string/insured"
+                android:textSize="10sp" />
         </LinearLayout>
 
     </LinearLayout>

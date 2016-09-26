@@ -26,8 +26,9 @@
     <!--PreInsurance-->
     <string name="general">Заявление на проведение осмотра имущества</string>
     <string name="object_of_insurance">Объект страхования</string>
-    <string name="documents">Документы по объеку</string>
+    <string name="documents">Документы по объекту</string>
     <string name="photo">Фотографии</string>
+    <string name="insured">Застрахованные</string>
 
     <!--AcceptReject-->
     <string name="call"> Позвонить</string>
@@ -43,6 +44,7 @@
     <string name="objects_info">Данные по объектам</string>
     <string name="photos_and_documents">Фотографии (документы) по делу</string>
     <string name="signature">Подпись</string>
+
 
 
     <string-array name="cars_array">

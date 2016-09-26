@@ -17,6 +17,10 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.Date;
 
+/**
+ * Created by Acer on 9/27/2016.
+ */
+
 public class PhotosActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 17;
@@ -189,3 +193,4 @@ public class PhotosActivity extends AppCompatActivity {
     }
 
 }
+

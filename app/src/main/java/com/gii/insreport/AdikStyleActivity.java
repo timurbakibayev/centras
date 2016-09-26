@@ -97,7 +97,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                     datePicker[currentDatePicker].setText(dateTimeText(calendar.getTime()));
                     currentDateElement.vDate.setTime(calendar.getTime().getTime());
                     new TimePickerDialog(thisActivity, timeTo, calendar
-                            .get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),true).show();
+                            .get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
                 }
 
             };
@@ -174,13 +174,13 @@ public class AdikStyleActivity extends AppCompatActivity {
         //TODO: test
         if (today.compareTo(cal) == 0)
             return "Сегодня";
-        today.add(Calendar.DAY_OF_MONTH,-1);
+        today.add(Calendar.DAY_OF_MONTH, -1);
         if (today.compareTo(cal) == 0)
             return "Вчера";
         return (day + " " + monthName[monthNo] + " " + year);
     }
 
-    static String[] monthName = {"января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"};
+    static String[] monthName = {"января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"};
 
 
     public static String timeText(Date date) {
@@ -279,7 +279,7 @@ public class AdikStyleActivity extends AppCompatActivity {
             ((Button) findViewById(R.id.BMenuDocuments)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //showTheFragment("additionalInfo", "Дополнительная информация");
+                    showTheFragment("documents", getString(R.string.documents));
                     //TODO: Documents!!!
                 }
             });
@@ -288,6 +288,13 @@ public class AdikStyleActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     //showTheFragment("object","Информация по объектам");
                     showManyObjects();
+                }
+            });
+            ((Button) findViewById(R.id.BInsured)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showTheFragment("insured",getString(R.string.insured));
+//                    showManyObjects();
                 }
             });
             /*
@@ -316,20 +323,22 @@ public class AdikStyleActivity extends AppCompatActivity {
         }
 
 
-        ((ImageButton)findViewById(R.id.call_adik)).setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
+        ((ImageButton) findViewById(R.id.call_adik)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-            if (currentForm.input.get("CLAIMANT_PHONE_NO") != null) {
-                currentForm.phoneNo = currentForm.input.get("CLAIMANT_PHONE_NO");
+                if (currentForm.input.get("CLAIMANT_PHONE_NO") != null) {
+                    currentForm.phoneNo = currentForm.input.get("CLAIMANT_PHONE_NO");
 
-            Intent intent = new Intent(Intent.ACTION_CALL);
-            intent.setData(Uri.parse("tel:" + currentForm.phoneNo.trim()));
-            if (intent.resolveActivity(getPackageManager()) != null) {
-                InsReport.logFirebase("Make a call from inside the form: " + currentForm.fireBaseCatalog + " form no. " + currentForm.id + ", TEL: " + currentForm.phoneNo);
-                startActivity(intent);
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel:" + currentForm.phoneNo.trim()));
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        InsReport.logFirebase("Make a call from inside the form: " + currentForm.fireBaseCatalog + " form no. " + currentForm.id + ", TEL: " + currentForm.phoneNo);
+                        startActivity(intent);
+                    }
+                }
             }
-        }}});
+        });
 
         final String address;
 
@@ -340,7 +349,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                 address = "";
         } else address = "";
 
-        ((ImageButton)findViewById(R.id.map_adik)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton) findViewById(R.id.map_adik)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -361,10 +370,11 @@ public class AdikStyleActivity extends AppCompatActivity {
                             "Нет карты", Toast.LENGTH_SHORT).show();
                 }
 
-            }});
+            }
+        });
 
 
-        ((ImageButton)findViewById(R.id.ready_adik)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton) findViewById(R.id.ready_adik)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -384,11 +394,11 @@ public class AdikStyleActivity extends AppCompatActivity {
                             }
                         })
                         .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        currentForm.saveToCloud();
-                    }
-                }).
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                currentForm.saveToCloud();
+                            }
+                        }).
                         show();
 
             }
@@ -523,9 +533,9 @@ public class AdikStyleActivity extends AppCompatActivity {
                                 InsReport.currentElement = currentForm.participants.elements.get(which);
                                 LinearLayout newLL = new LinearLayout(adikStyleActivity);
                                 newLL.setOrientation(LinearLayout.VERTICAL);
-                                addElementsToLL(newLL,InsReport.currentElement.elements);
-                                linearLayoutForFragment.put("specific",newLL);
-                                showTheFragment("specific",InsReport.currentElement.description);
+                                addElementsToLL(newLL, InsReport.currentElement.elements);
+                                linearLayoutForFragment.put("specific", newLL);
+                                showTheFragment("specific", InsReport.currentElement.description);
                                 break;
                         }
                     }
@@ -573,9 +583,9 @@ public class AdikStyleActivity extends AppCompatActivity {
                                 InsReport.currentElement = currentForm.objects.elements.get(which);
                                 LinearLayout newLL = new LinearLayout(adikStyleActivity);
                                 newLL.setOrientation(LinearLayout.VERTICAL);
-                                addElementsToLL(newLL,InsReport.currentElement.elements);
-                                linearLayoutForFragment.put("specific",newLL);
-                                showTheFragment("specific",InsReport.currentElement.description);
+                                addElementsToLL(newLL, InsReport.currentElement.elements);
+                                linearLayoutForFragment.put("specific", newLL);
+                                showTheFragment("specific", InsReport.currentElement.description);
                                 break;
                         }
                     }
@@ -590,7 +600,8 @@ public class AdikStyleActivity extends AppCompatActivity {
     }
 
 
-    Map<String,LinearLayout> linearLayoutForFragment = new HashMap<>();
+    Map<String, LinearLayout> linearLayoutForFragment = new HashMap<>();
+
     private void showTheFragment(String menuName, String title) {
         if (linearLayoutForFragment.get(menuName) == null) {
             FormTemplates.applyTemplate(currentForm, currentForm.fireBaseCatalog);
@@ -598,14 +609,14 @@ public class AdikStyleActivity extends AppCompatActivity {
         }
         if (linearLayoutForFragment.get(menuName) == null) //if template did not help, exit
             return;
-        ViewGroup parent = (ViewGroup)linearLayoutForFragment.get(menuName).getParent();
+        ViewGroup parent = (ViewGroup) linearLayoutForFragment.get(menuName).getParent();
 
         if (parent != null)
             parent.removeAllViews();
 
         ScrollView scrollView = new ScrollView(this);
         int padding = (int) getResources().getDimension(R.dimen.activity_vertical_margin);
-        scrollView.setPadding(padding, 0,  padding, 0);
+        scrollView.setPadding(padding, 0, padding, 0);
         scrollView.addView(linearLayoutForFragment.get(menuName));
 
         new AlertDialog.Builder(this).setTitle(title).setView(scrollView)
@@ -644,7 +655,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                     elements.add(element);
                 }
             }
-            addElementsToLL(linearLayoutEntry.getValue(),elements);
+            addElementsToLL(linearLayoutEntry.getValue(), elements);
         }
     }
 
@@ -665,14 +676,14 @@ public class AdikStyleActivity extends AppCompatActivity {
                 TextView fieldName = new TextView(this);
                 fieldName.setMaxLines(5);
                 fieldName.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT,0.5f));
+                        LinearLayout.LayoutParams.WRAP_CONTENT, 0.5f));
                 fieldName.setText(element.description);
                 horizontalLLStatic.addView(fieldName);
 
                 TextView fieldValue = new TextView(this);
                 fieldValue.setMaxLines(5);
                 fieldValue.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT,0.5f));
+                        LinearLayout.LayoutParams.WRAP_CONTENT, 0.5f));
                 fieldValue.setText(element.toStringDirectory());
                 horizontalLLStatic.addView(fieldValue);
                 LL.addView(horizontalLLStatic);
@@ -686,18 +697,18 @@ public class AdikStyleActivity extends AppCompatActivity {
                         LinearLayout outerLL = new LinearLayout(this);
                         element.container = outerLL;
                         final LinearLayout innerLL = new LinearLayout(this);
-                        final ProgressBar progressBar = new ProgressBar(this,null,
+                        final ProgressBar progressBar = new ProgressBar(this, null,
                                 android.R.attr.progressBarStyleHorizontal);
                         progressBar.setProgress(30);
                         innerLL.setOrientation(LinearLayout.VERTICAL);
                         LinearLayout.LayoutParams innerLL_lp = (new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                        innerLL_lp.setMargins(10,10,10,10);
+                        innerLL_lp.setMargins(10, 10, 10, 10);
                         innerLL.setLayoutParams(innerLL_lp);
                         outerLL.setOrientation(LinearLayout.VERTICAL);
                         final float scale = getResources().getDisplayMetrics().density;
                         LinearLayout.LayoutParams lp = null;
                         if (LL.getOrientation() == LinearLayout.HORIZONTAL)
-                            lp = new LinearLayout.LayoutParams((int)(500 * scale), LinearLayout.LayoutParams.WRAP_CONTENT);
+                            lp = new LinearLayout.LayoutParams((int) (500 * scale), LinearLayout.LayoutParams.WRAP_CONTENT);
                         else
                             lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                         lp.rightMargin = 20;
@@ -705,29 +716,29 @@ public class AdikStyleActivity extends AppCompatActivity {
                         //lp.setMargins(50,50,50,50);
 
                         outerLL.setLayoutParams(lp);
-                        addElementsToLL(innerLL,element.elements);
-                        outerLL.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy, null));
+                        addElementsToLL(innerLL, element.elements);
+                        outerLL.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.boxy, null));
                         Button expandingButton = new Button(this);
 
                         expandingButton.setText(element.description);
-                        expandingButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button, null));
+                        expandingButton.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.boxy_button, null));
                         //expandingButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_more_black_24dp, null),null,null,null);
                         expandingButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Button thisButton = (Button)v;
+                                Button thisButton = (Button) v;
                                 if (innerLL.getVisibility() == View.GONE) {
                                     innerLL.setVisibility(View.VISIBLE);
-                                    thisButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_less_black_24dp, null),null,null,null);
+                                    thisButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_less_black_24dp, null), null, null, null);
                                     thisButton.setText(element.description);
                                     thisButton.requestFocus();
                                     progressBar.setVisibility(View.GONE);
                                 } else {
                                     innerLL.setVisibility(View.GONE);
-                                    thisButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_more_black_24dp, null),null,null,null);
+                                    thisButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_more_black_24dp, null), null, null, null);
                                     thisButton.setText(element.description + "\n" + element.collectData(new ArrayList<String>()));
                                     progressBar.setVisibility(View.VISIBLE);
-                                    progressBar.setProgress((int)((float)element.filled() / element.outOf() * 100));
+                                    progressBar.setProgress((int) ((float) element.filled() / element.outOf() * 100));
                                 }
                             }
                         });
@@ -737,17 +748,18 @@ public class AdikStyleActivity extends AppCompatActivity {
                             innerLL.setVisibility(View.GONE);
                         firstGroup = false;
                         if (innerLL.getVisibility() == View.VISIBLE) {
-                            expandingButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_less_black_24dp, null),null,null,null);
+                            expandingButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_less_black_24dp, null), null, null, null);
                             expandingButton.setText(element.description);
                             expandingButton.requestFocus();
                             progressBar.setVisibility(View.GONE);
                         } else {
-                            expandingButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_more_black_24dp, null),null,null,null);
+                            expandingButton.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_expand_more_black_24dp, null), null, null, null);
                             expandingButton.setText(element.description + "\n" + element.collectData(new ArrayList<String>()));
                             progressBar.setVisibility(View.VISIBLE);
-                            progressBar.setProgress((int)((float)element.filled() / element.outOf() * 100));
-                        };
-                        progressBar.setProgress((int)((float)element.filled() / element.outOf() * 100));
+                            progressBar.setProgress((int) ((float) element.filled() / element.outOf() * 100));
+                        }
+                        ;
+                        progressBar.setProgress((int) ((float) element.filled() / element.outOf() * 100));
                         outerLL.addView(expandingButton);
                         outerLL.addView(progressBar);
                         outerLL.addView(innerLL);
@@ -757,7 +769,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                     case eDate:
                         LinearLayout horizontalLLdp1 = new LinearLayout(thisActivity);
                         horizontalLLdp1.setOrientation(LinearLayout.VERTICAL);
-                        horizontalLLdp1.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
+                        horizontalLLdp1.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT, 1));
                         TextView captionTVdp1 = new TextView(thisActivity);
                         captionTVdp1.setText(element.description);
                         captionTVdp1.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -767,8 +779,8 @@ public class AdikStyleActivity extends AppCompatActivity {
                         final Element dpElement = element;
                         element.container = datePicker[datePickerIndex];
                         datePicker[datePickerIndex].setText(dateOnlyText(element.vDate));
-                        datePicker[datePickerIndex].setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button_spinner, null));
-                        datePicker[datePickerIndex].setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_expand_more_black_24dp,0);
+                        datePicker[datePickerIndex].setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.boxy_button_spinner, null));
+                        datePicker[datePickerIndex].setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_more_black_24dp, 0);
 
                         datePicker[datePickerIndex].setInputType(InputType.TYPE_NULL);
                         datePicker[datePickerIndex].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
@@ -812,7 +824,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                     case eDateTime:
                         LinearLayout horizontalLLdp = new LinearLayout(thisActivity);
                         horizontalLLdp.setOrientation(LinearLayout.VERTICAL);
-                        horizontalLLdp.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
+                        horizontalLLdp.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT, 1));
                         TextView captionTVdp = new TextView(thisActivity);
                         captionTVdp.setText(element.description);
                         captionTVdp.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -822,8 +834,8 @@ public class AdikStyleActivity extends AppCompatActivity {
                         final Element dpElement1 = element;
                         element.container = datePicker[datePickerIndex];
                         datePicker[datePickerIndex].setText(dateTimeText(element.vDate));
-                        datePicker[datePickerIndex].setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button_spinner, null));
-                        datePicker[datePickerIndex].setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_expand_more_black_24dp,0);
+                        datePicker[datePickerIndex].setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.boxy_button_spinner, null));
+                        datePicker[datePickerIndex].setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_more_black_24dp, 0);
 
                         datePicker[datePickerIndex].setInputType(InputType.TYPE_NULL);
                         datePicker[datePickerIndex].setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
@@ -873,10 +885,12 @@ public class AdikStyleActivity extends AppCompatActivity {
                         //change the element, but do not save:
                         editText.addTextChangedListener(new TextWatcher() {
                             @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            }
 
                             @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            }
 
                             @Override
                             public void afterTextChanged(Editable s) {
@@ -887,14 +901,14 @@ public class AdikStyleActivity extends AppCompatActivity {
                             @Override
                             public void onFocusChange(View v, boolean hasFocus) {
                                 if (!hasFocus) {
-                                    element.vText = ((EditText)v).getText().toString();
+                                    element.vText = ((EditText) v).getText().toString();
                                     //saveToCloud();
                                 }
                             }
                         });
                         LinearLayout horizontalLL = new LinearLayout(thisActivity);
                         horizontalLL.setOrientation(LinearLayout.HORIZONTAL);
-                        horizontalLL.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
+                        horizontalLL.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT, 1));
 
                         //ADIK: 06 August 2016:
                         TextInputLayout fieldHint = new TextInputLayout(thisActivity);
@@ -937,10 +951,12 @@ public class AdikStyleActivity extends AppCompatActivity {
                         //change the element, but do not save:
                         editTextNum.addTextChangedListener(new TextWatcher() {
                             @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            }
 
                             @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            }
 
                             @Override
                             public void afterTextChanged(Editable s) {
@@ -951,14 +967,14 @@ public class AdikStyleActivity extends AppCompatActivity {
                             @Override
                             public void onFocusChange(View v, boolean hasFocus) {
                                 if (!hasFocus) {
-                                    element.vText = ((EditText)v).getText().toString();
+                                    element.vText = ((EditText) v).getText().toString();
                                     //saveToCloud();
                                 }
                             }
                         });
                         LinearLayout horizontalLLNum = new LinearLayout(thisActivity);
                         horizontalLLNum.setOrientation(LinearLayout.HORIZONTAL);
-                        horizontalLLNum.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
+                        horizontalLLNum.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT, 1));
 
                         //ADIK: 06 August 2016:
                         TextInputLayout fieldHintNum = new TextInputLayout(thisActivity);
@@ -991,8 +1007,8 @@ public class AdikStyleActivity extends AppCompatActivity {
                         final Button planButton = new Button(this);
                         element.container = planButton;
                         planButton.setText(element.vPlan.damageDescription);
-                        planButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button_spinner, null));
-                        planButton.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_expand_more_black_24dp,0);
+                        planButton.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.boxy_button_spinner, null));
+                        planButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_more_black_24dp, 0);
 
                         planButton.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -1020,8 +1036,8 @@ public class AdikStyleActivity extends AppCompatActivity {
                                 count++;
                         }
                         photoButton.setText(count + " фото");
-                        photoButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button_spinner, null));
-                        photoButton.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_expand_more_black_24dp,0);
+                        photoButton.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.boxy_button_spinner, null));
+                        photoButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_more_black_24dp, 0);
 
                         photoButton.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -1029,7 +1045,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                                 InsReport.currentElement = element;
                                 InsReport.currentForm = currentForm;
                                 Intent intentPhoto = new Intent(thisActivity, PhotosActivity.class);
-                                startActivityForResult(intentPhoto,REQUEST_ELEMENT_PHOTO);
+                                startActivityForResult(intentPhoto, REQUEST_ELEMENT_PHOTO);
                             }
                         });
                         TextView photoTV = new TextView(this);
@@ -1040,8 +1056,8 @@ public class AdikStyleActivity extends AppCompatActivity {
                     case eDraw:
                         final Button drawButton = new Button(this);
                         element.container = drawButton;
-                        drawButton.setText(span2Strings(element.description,element.toString()), Button.BufferType.SPANNABLE);
-                        drawButton.setCompoundDrawablesWithIntrinsicBounds(element.getBitmapDrawable(this),null,null,null);
+                        drawButton.setText(span2Strings(element.description, element.toString()), Button.BufferType.SPANNABLE);
+                        drawButton.setCompoundDrawablesWithIntrinsicBounds(element.getBitmapDrawable(this), null, null, null);
                         drawButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -1065,11 +1081,11 @@ public class AdikStyleActivity extends AppCompatActivity {
                         linearLayoutPhoto1.setOrientation(LinearLayout.HORIZONTAL);
                         //here request the pictures from the cloud into linearLayoutPhoto:
                         for (String photoID : element.vPhotos)
-                            cameraAndPictures.getPicFromFirebase(photoID,linearLayoutPhoto1);
+                            cameraAndPictures.getPicFromFirebase(photoID, linearLayoutPhoto1);
 
                         final Button animaButton = new Button(this);
                         //element.container = animaButton;
-                        animaButton.setText(span2Strings(element.description,element.toString()), Button.BufferType.SPANNABLE);
+                        animaButton.setText(span2Strings(element.description, element.toString()), Button.BufferType.SPANNABLE);
                         animaButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
                         animaButton.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -1089,8 +1105,8 @@ public class AdikStyleActivity extends AppCompatActivity {
                     case eSignature:
                         final Button drawButton1 = new Button(this);
                         element.container = drawButton1;
-                        drawButton1.setText(span2Strings(element.description,element.toString()), Button.BufferType.SPANNABLE);
-                        drawButton1.setCompoundDrawablesWithIntrinsicBounds(element.getBitmapDrawable(this),null,null,null);
+                        drawButton1.setText(span2Strings(element.description, element.toString()), Button.BufferType.SPANNABLE);
+                        drawButton1.setCompoundDrawablesWithIntrinsicBounds(element.getBitmapDrawable(this), null, null, null);
                         drawButton1.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -1107,7 +1123,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                     case eCombo:
                         LinearLayout horizontalLLCombo = new LinearLayout(thisActivity);
                         horizontalLLCombo.setOrientation(LinearLayout.VERTICAL);
-                        horizontalLLCombo.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
+                        horizontalLLCombo.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT, 1));
 
                         TextView captionTVCombo = new TextView(this);
                         captionTVCombo.setText(element.description);
@@ -1126,8 +1142,8 @@ public class AdikStyleActivity extends AppCompatActivity {
                                     comboButton.setText(directoryItem.name);
                             }
                         }
-                        comboButton.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button_spinner, null));
-                        comboButton.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_expand_more_black_24dp,0);
+                        comboButton.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.boxy_button_spinner, null));
+                        comboButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_more_black_24dp, 0);
                         if (!element.directory.equals("") &&
                                 InsReport.directories.map.get(element.directory) != null) {
                             final ArrayList<DirectoryItem> directoryItems = InsReport.directories.map.get(element.directory).items;
@@ -1170,8 +1186,8 @@ public class AdikStyleActivity extends AppCompatActivity {
                             }
                             comboButtonMulti.setText(compoundText);
                         }
-                        comboButtonMulti.setBackground(ResourcesCompat.getDrawable(getResources(),R.drawable.boxy_button_spinner, null));
-                        comboButtonMulti.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_expand_more_black_24dp,0);
+                        comboButtonMulti.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.boxy_button_spinner, null));
+                        comboButtonMulti.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_more_black_24dp, 0);
                         if (!element.directory.equals("") &&
                                 InsReport.directories.map.get(element.directory) != null) {
                             final ArrayList<DirectoryItem> directoryItems = InsReport.directories.map.get(element.directory).items;
@@ -1190,7 +1206,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                     case eRadio:
                         LinearLayout horizontalLLRadio = new LinearLayout(thisActivity);
                         horizontalLLRadio.setOrientation(LinearLayout.HORIZONTAL);
-                        horizontalLLRadio.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT,1));
+                        horizontalLLRadio.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT, 1));
                         TextView captionTVRadio = new TextView(this);
                         captionTVRadio.setText(element.description + ":");
 
@@ -1270,10 +1286,12 @@ public class AdikStyleActivity extends AppCompatActivity {
                         };*/
                         lookupEditText.addTextChangedListener(new TextWatcher() {
                             @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            }
 
                             @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            }
 
                             @Override
                             public void afterTextChanged(Editable s) {
@@ -1284,7 +1302,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                             @Override
                             public void onFocusChange(View v, boolean hasFocus) {
                                 if (!hasFocus) {
-                                    element.vText = ((EditText)v).getText().toString();
+                                    element.vText = ((EditText) v).getText().toString();
                                     //saveToCloud();
                                 }
                             }
@@ -1324,9 +1342,9 @@ public class AdikStyleActivity extends AppCompatActivity {
         lookUpDialog.setContentView(getLayoutInflater().inflate(R.layout.lookup
                 , null));
 
-        ListView listView = (ListView)lookUpDialog.findViewById(R.id.ListView007);
-        EditText filterEditText = (EditText)lookUpDialog.findViewById(R.id.filterEditText);
-        final KolesaAdapter kolesaAdapter = new KolesaAdapter(this,directoryItems,filterEditText);
+        ListView listView = (ListView) lookUpDialog.findViewById(R.id.ListView007);
+        EditText filterEditText = (EditText) lookUpDialog.findViewById(R.id.filterEditText);
+        final KolesaAdapter kolesaAdapter = new KolesaAdapter(this, directoryItems, filterEditText);
         listView.setAdapter(kolesaAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -1348,9 +1366,9 @@ public class AdikStyleActivity extends AppCompatActivity {
         lookUpDialogMulti.setContentView(getLayoutInflater().inflate(R.layout.lookup_multi
                 , null));
 
-        ListView listView = (ListView)lookUpDialogMulti.findViewById(R.id.ListView007);
-        EditText filterEditText = (EditText)lookUpDialogMulti.findViewById(R.id.filterEditText);
-        final KolesaAdapterMulti kolesaAdapterMulti = new KolesaAdapterMulti(this,directoryItems,filterEditText,element.vText);
+        ListView listView = (ListView) lookUpDialogMulti.findViewById(R.id.ListView007);
+        EditText filterEditText = (EditText) lookUpDialogMulti.findViewById(R.id.filterEditText);
+        final KolesaAdapterMulti kolesaAdapterMulti = new KolesaAdapterMulti(this, directoryItems, filterEditText, element.vText);
         listView.setAdapter(kolesaAdapterMulti);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -1359,7 +1377,7 @@ public class AdikStyleActivity extends AppCompatActivity {
             }
         });
 
-        ((Button)lookUpDialogMulti.findViewById(R.id.buttonOKMulti)).setOnClickListener(new View.OnClickListener() {
+        ((Button) lookUpDialogMulti.findViewById(R.id.buttonOKMulti)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String selectedString = "";
@@ -1385,23 +1403,19 @@ public class AdikStyleActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (requestCode == SPEACH_INTENT && resultCode == RESULT_OK)
-        {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SPEACH_INTENT && resultCode == RESULT_OK) {
             ArrayList<String> matches = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS);
             if (matches.size() > 0)
                 currentEditText.setText(matches.get(0));
         }
-        if (requestCode == DAMAGE_PLAN_INTENT)
-        {
+        if (requestCode == DAMAGE_PLAN_INTENT) {
             //TODO: Warning: if you start the plan, rotate device and exit activity, currentButton does not exist any more, so, the app crashes!
             if (currentButton != null)
                 currentButton.setText(currentElement.vPlan.damageDescription);
         }
-        if (requestCode == FREE_DRAW_INTENT)
-        {
+        if (requestCode == FREE_DRAW_INTENT) {
             //currentElement.freeDrawBitmap = null;
             //TODO: get the current element from the currentElement.container!
 
@@ -1416,11 +1430,11 @@ public class AdikStyleActivity extends AppCompatActivity {
                 if (!element.deleted)
                     count++;
             }
-            ((Button)InsReport.currentElement.container).setText(count + " фото");
+            ((Button) InsReport.currentElement.container).setText(count + " фото");
         }
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            final String id = CameraAndPictures.savePictureToFirebase(Environment.getExternalStorageDirectory()+ File.separator + "image.jpg");
+            final String id = CameraAndPictures.savePictureToFirebase(Environment.getExternalStorageDirectory() + File.separator + "image.jpg");
             if (CameraAndPictures.bitmap != null) {
                 InsReport.bitmapsNeedToBeRecycled.add(CameraAndPictures.bitmap);
                 ImageView newImage = new ImageView(this);
@@ -1442,7 +1456,7 @@ public class AdikStyleActivity extends AppCompatActivity {
         if (requestCode == ANIMA_INTENT) {
             for (final Bitmap bitmap : currentElement.bitmapsToBeAddedOnResult) {
                 final ImageView theImageView = new ImageView(InsReport.currentElement.container.getContext());
-                final LinearLayout linearLayout = (LinearLayout)InsReport.currentElement.container;
+                final LinearLayout linearLayout = (LinearLayout) InsReport.currentElement.container;
                 theImageView.setImageBitmap(bitmap);
                 theImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1471,7 +1485,7 @@ public class AdikStyleActivity extends AppCompatActivity {
         CameraAndPictures.bitmap = null;
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File file = new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg");
+            File file = new File(Environment.getExternalStorageDirectory() + File.separator + "image.jpg");
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
@@ -1480,12 +1494,12 @@ public class AdikStyleActivity extends AppCompatActivity {
     public SpannableStringBuilder span2Strings(String string1, String string2) {
         SpannableStringBuilder spanSin = new SpannableStringBuilder();
         SpannableString itemasin = new SpannableString(string1 + "\n");
-        itemasin.setSpan(new AbsoluteSizeSpan(9, true), 0,itemasin.length(),0);
+        itemasin.setSpan(new AbsoluteSizeSpan(9, true), 0, itemasin.length(), 0);
         itemasin.setSpan(new ForegroundColorSpan(Color.parseColor("#EA7C07")), 0, itemasin.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         spanSin.append(itemasin);
 
         SpannableString itemsin = new SpannableString(string2);
-        itemsin.setSpan(new AbsoluteSizeSpan(12, true), 0,itemsin.length(),0);
+        itemsin.setSpan(new AbsoluteSizeSpan(12, true), 0, itemsin.length(), 0);
         spanSin.append(itemsin);
         return spanSin;
     }
