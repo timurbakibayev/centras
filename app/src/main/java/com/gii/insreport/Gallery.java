@@ -20,8 +20,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 public class Gallery extends AppCompatActivity {
     private int count;
     private Bitmap[] thumbnails;
@@ -29,25 +27,25 @@ public class Gallery extends AppCompatActivity {
     private String[] arrPath;
     private ImageAdapter imageAdapter;
 
-    /** Called when the activity is first created. */
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
-        InsReport.multipleImages = new ArrayList<>();
+        InsReport.multipleImages.clear();
 
         final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
-        final String orderBy = MediaStore.Images.Media._ID;
-        Cursor imagecursor = managedQuery(
+        final String orderBy = MediaStore.Images.Media.DATE_TAKEN + " DESC";
+        Cursor imagecursor = getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
                 null, orderBy);
         int image_column_index = imagecursor.getColumnIndex(MediaStore.Images.Media._ID);
-        this.count = imagecursor.getCount();
+        this.count = Math.min(imagecursor.getCount(),30); //to make it faster, we allow only last n photos
         this.thumbnails = new Bitmap[this.count];
         this.arrPath = new String[this.count];
         this.thumbnailsselection = new boolean[this.count];
-        InsReport.multipleImages.clear();
+        //InsReport.multipleImages.clear();
         for (int i = 0; i < this.count; i++) {
             imagecursor.moveToPosition(i);
             int id = imagecursor.getInt(image_column_index);
@@ -56,7 +54,7 @@ public class Gallery extends AppCompatActivity {
                     getApplicationContext().getContentResolver(), id,
                     MediaStore.Images.Thumbnails.MICRO_KIND, null);
             arrPath[i]= imagecursor.getString(dataColumnIndex);
-            InsReport.multipleImages.add(arrPath[i]);
+            //InsReport.multipleImages.add(arrPath[i]);
         }
         GridView imagegrid = (GridView) findViewById(R.id.PhoneImageGrid);
         imageAdapter = new ImageAdapter();
@@ -88,7 +86,8 @@ public class Gallery extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),
                             "You've selected Total " + cnt + " image(s).",
                             Toast.LENGTH_LONG).show();
-                    Log.d("SelectedImages", selectImages);
+                    finish();
+                    Log.e("SelectedImages", selectImages);
                 }
             }
         });
@@ -121,7 +120,6 @@ public class Gallery extends AppCompatActivity {
                         R.layout.galleryitem, null);
                 holder.imageview = (ImageView) convertView.findViewById(R.id.thumbImage);
                 holder.checkbox = (CheckBox) convertView.findViewById(R.id.itemCheckBox);
-
                 convertView.setTag(holder);
             }
             else {

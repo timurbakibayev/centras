@@ -160,7 +160,28 @@ public class PhotosActivity extends AppCompatActivity {
         }
 
         if (requestCode == REQUEST_MULTIPLE_GALLERY) {
-
+            for (String nextImage : InsReport.multipleImages) {
+                final String id = CameraAndPictures.savePictureToFirebase(nextImage);
+                if (CameraAndPictures.bitmap != null) {
+                    InsReport.bitmapsNeedToBeRecycled.add(CameraAndPictures.bitmap);
+                    ImageView newImage = new ImageView(this);
+                    newImage.setImageBitmap(CameraAndPictures.bitmap);
+                    newImage.setAdjustViewBounds(true);
+                    newImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            cameraAndPictures.showZoomed(picturesLL, CameraAndPictures.bitmap);
+                        }
+                    });
+                    picturesLL.addView(newImage);
+                    final Element newPhotoElement = new Element();
+                    newPhotoElement.vText = id;
+                    newPhotoElement.vDate = new Date();
+                    element.elements.add(newPhotoElement);
+                    final PhotosActivity thisActivity = this;
+                    picturesLL.addView(cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity));
+                }
+            }
         }
 
         currentForm.saveToCloud();
