@@ -44,6 +44,8 @@ public class InsReport extends Application {
     public static FirebaseAuth mAuth;
     public static Directories directories;
     public static ArrayList<FirebaseUserEmail> firebaseUserEmails = new ArrayList<>();
+
+    public static ArrayList<String> multipleImages = new ArrayList<>();
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     public static String userID = "";

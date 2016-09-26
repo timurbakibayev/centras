@@ -20,6 +20,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class Gallery extends AppCompatActivity {
     private int count;
     private Bitmap[] thumbnails;
@@ -33,6 +35,8 @@ public class Gallery extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
+        InsReport.multipleImages = new ArrayList<>();
+
         final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
         final String orderBy = MediaStore.Images.Media._ID;
         Cursor imagecursor = managedQuery(
@@ -43,6 +47,7 @@ public class Gallery extends AppCompatActivity {
         this.thumbnails = new Bitmap[this.count];
         this.arrPath = new String[this.count];
         this.thumbnailsselection = new boolean[this.count];
+        InsReport.multipleImages.clear();
         for (int i = 0; i < this.count; i++) {
             imagecursor.moveToPosition(i);
             int id = imagecursor.getInt(image_column_index);
@@ -51,6 +56,7 @@ public class Gallery extends AppCompatActivity {
                     getApplicationContext().getContentResolver(), id,
                     MediaStore.Images.Thumbnails.MICRO_KIND, null);
             arrPath[i]= imagecursor.getString(dataColumnIndex);
+            InsReport.multipleImages.add(arrPath[i]);
         }
         GridView imagegrid = (GridView) findViewById(R.id.PhoneImageGrid);
         imageAdapter = new ImageAdapter();
@@ -65,11 +71,13 @@ public class Gallery extends AppCompatActivity {
                 final int len = thumbnailsselection.length;
                 int cnt = 0;
                 String selectImages = "";
+                InsReport.multipleImages.clear();
                 for (int i =0; i<len; i++)
                 {
                     if (thumbnailsselection[i]){
                         cnt++;
                         selectImages = selectImages + arrPath[i] + "|";
+                        InsReport.multipleImages.add(arrPath[i]);
                     }
                 }
                 if (cnt == 0){

@@ -21,6 +21,7 @@ public class PhotosActivity extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 17;
     private static final int REQUEST_IMAGE_GALLERY = 34;
+    private static final int REQUEST_MULTIPLE_GALLERY = 39;
 
     Element element = InsReport.currentElement;
     Form currentForm = InsReport.currentForm;
@@ -65,12 +66,16 @@ public class PhotosActivity extends AppCompatActivity {
 
 
     private void takeFromGallery() {
+        /*
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent,
                 "Select Picture"), REQUEST_IMAGE_GALLERY);
+                */
+        Intent intent = new Intent(this, Gallery.class);
+        startActivityForResult(intent, REQUEST_MULTIPLE_GALLERY);
     }
 
     private void takeAPicture() {
@@ -152,6 +157,10 @@ public class PhotosActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Cancelled",
                         Toast.LENGTH_SHORT).show();
             }
+        }
+
+        if (requestCode == REQUEST_MULTIPLE_GALLERY) {
+
         }
 
         currentForm.saveToCloud();
