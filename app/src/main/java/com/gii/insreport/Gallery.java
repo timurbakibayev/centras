@@ -37,11 +37,38 @@ public class Gallery extends AppCompatActivity {
 
         final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
         final String orderBy = MediaStore.Images.Media.DATE_TAKEN + " DESC";
+
+        String selection = MediaStore.Images.Media.BUCKET_DISPLAY_NAME + " = ?";
+        String[] selectionArgs = new String[] {
+                "Camera"
+        };
+
         Cursor imagecursor = getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null,
-                null, orderBy);
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, selection,
+                selectionArgs, orderBy);
         int image_column_index = imagecursor.getColumnIndex(MediaStore.Images.Media._ID);
-        this.count = Math.min(imagecursor.getCount(),30); //to make it faster, we allow only last n photos
+
+        this.count = Math.min(imagecursor.getCount(),100); //to make it faster, we allow only last n photos
+        int lastDate = -2;
+        int days = 0;
+        /*
+        for (int i = 0; i < this.count; i++ ) {
+            imagecursor.moveToPosition(i);
+            int id = imagecursor.getInt(image_column_index);
+            Log.e("Gallery", "onCreate: " + id);
+            int theDate = imagecursor.getInt(imagecursor.getColumnIndex(
+                    MediaStore.Images.Media.DATE_TAKEN));
+            if (theDate != lastDate) {
+                lastDate = theDate;
+                days++;
+            }
+            if (days == 3) {
+                this.count = i; //and we still limit it to two days (today and yesterday)
+                break;
+            }
+        }
+
+*/
         this.thumbnails = new Bitmap[this.count];
         this.arrPath = new String[this.count];
         this.thumbnailsselection = new boolean[this.count];
@@ -49,13 +76,15 @@ public class Gallery extends AppCompatActivity {
         for (int i = 0; i < this.count; i++) {
             imagecursor.moveToPosition(i);
             int id = imagecursor.getInt(image_column_index);
-            int dataColumnIndex = imagecursor.getColumnIndex(MediaStore.Images.Media.DATA);
-            thumbnails[i] = MediaStore.Images.Thumbnails.getThumbnail(
-                    getApplicationContext().getContentResolver(), id,
-                    MediaStore.Images.Thumbnails.MICRO_KIND, null);
-            arrPath[i]= imagecursor.getString(dataColumnIndex);
-            //InsReport.multipleImages.add(arrPath[i]);
-        }
+
+                int dataColumnIndex = imagecursor.getColumnIndex(MediaStore.Images.Media.DATA);
+                thumbnails[i] = MediaStore.Images.Thumbnails.getThumbnail(
+                        getApplicationContext().getContentResolver(), id,
+                        MediaStore.Images.Thumbnails.MICRO_KIND, null);
+                arrPath[i] = imagecursor.getString(dataColumnIndex);
+                //InsReport.multipleImages.add(arrPath[i]);
+            }
+
         GridView imagegrid = (GridView) findViewById(R.id.PhoneImageGrid);
         imageAdapter = new ImageAdapter();
         imagegrid.setAdapter(imageAdapter);

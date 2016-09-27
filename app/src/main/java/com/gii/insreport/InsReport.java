@@ -46,6 +46,10 @@ public class InsReport extends Application {
     public static ArrayList<FirebaseUserEmail> firebaseUserEmails = new ArrayList<>();
 
     public static ArrayList<String> multipleImages = new ArrayList<>();
+
+    //TODO: EDIT THIS PHONE FOR EACH COMPANY!
+    public static String defaultCallCenter = "87771111111";
+
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     public static String userID = "";
@@ -87,7 +91,6 @@ public class InsReport extends Application {
         ref = new Firebase("https://insreport-f39a3.firebaseio.com/");
 
         mAuth = FirebaseAuth.getInstance();
-
 
         initForms();
 

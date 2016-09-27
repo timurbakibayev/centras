@@ -60,7 +60,7 @@ public class VehicleDamageActivity extends AppCompatActivity {
         final EditText newDescription = new EditText(this);
 
         //newDescription.setHint("");
-        newDescription.setSingleLine(true);
+        //newDescription.setSingleLine(true);
         String offerTheTextFromDamages = "";
 
         int i  = 0;
@@ -70,9 +70,16 @@ public class VehicleDamageActivity extends AppCompatActivity {
                 textToAdd = textToAdd.substring(0,1).toUpperCase() + textToAdd.substring(1).toLowerCase();
             else
                 textToAdd = textToAdd.toLowerCase();
+            switch (damageMark.neededAction) {
+                case 1: textToAdd += " (покраска)";
+                    break;
+                case 2: textToAdd += " (ремонт)";
+                    break;
+                case 3: textToAdd += " (замена)";
+            }
             offerTheTextFromDamages += textToAdd;
             if (i != InsReport.damagePlanData.damageMarks.size() - 1)
-                offerTheTextFromDamages += ", ";
+                offerTheTextFromDamages += ",\n";
             i++;
         }
 

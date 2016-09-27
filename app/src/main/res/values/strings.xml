@@ -45,14 +45,13 @@
     <string name="photos_and_documents">Фотографии (документы) по делу</string>
     <string name="signature">Подпись</string>
 
-
-
     <string-array name="cars_array">
         <item>Машина</item>
         <item>Грузовик</item>
         <item>Автобус</item>
         <item>Мотоцикл</item>
     </string-array>
+
     <string name="title_activity_gallery">Gallery</string>
 
 </resources>

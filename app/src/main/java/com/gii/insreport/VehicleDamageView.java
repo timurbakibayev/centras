@@ -17,10 +17,11 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -372,9 +373,9 @@ public class VehicleDamageView extends View {
                                 InsReport.damagePlanData.damageMarks.get(finalDamageNo).description = toShowArray[which];
                                 dialog.dismiss();
                                 //mSelectedIndex = which;
-                                if (which == toShowArray.length - 1) {
+                                //if (which == toShowArray.length - 1) {
                                     askForDescription(finalDamageNo);
-                                }
+                                //}
                                 break;
                         }
                     }
@@ -393,46 +394,58 @@ public class VehicleDamageView extends View {
     }
 
     private void askForDescription(final int finalDamageNo) {
-        final EditText newDescription = new EditText(vehicleDamageActivity);
+
+        final Dialog newDamageMarkDialog = new Dialog(vehicleDamageActivity);
+        newDamageMarkDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        newDamageMarkDialog.setContentView(vehicleDamageActivity.getLayoutInflater().inflate(R.layout.dialog_damage
+                , null));
+
+        final EditText newDescription = (EditText)newDamageMarkDialog.findViewById(R.id.damage_description_et);
+        final RadioButton rbPaint = (RadioButton)newDamageMarkDialog.findViewById(R.id.radio_paint);
+        final RadioButton rbFix = (RadioButton)newDamageMarkDialog.findViewById(R.id.radio_fix);
+        final RadioButton rbReplace = (RadioButton)newDamageMarkDialog.findViewById(R.id.radio_replace);
+
+        int currentNeededAction = InsReport.damagePlanData.damageMarks.get(finalDamageNo).neededAction;
+        if (currentNeededAction == 1)
+            rbPaint.setChecked(true);
+        if (currentNeededAction == 2)
+            rbFix.setChecked(true);
+        if (currentNeededAction == 3)
+            rbReplace.setChecked(true);
+
 
         newDescription.setHint("Какая часть повреждена?");
         newDescription.setSingleLine(true);
         if (!InsReport.damagePlanData.damageMarks.get(finalDamageNo).description.equals("Другое"))
             newDescription.setText(InsReport.damagePlanData.damageMarks.get(finalDamageNo).description);
 
-        final LinearLayout layout = new LinearLayout(vehicleDamageActivity);
-        layout.setOrientation(LinearLayout.VERTICAL);
-
-        layout.addView(newDescription);
-
-        new android.app.AlertDialog.Builder(vehicleDamageActivity)
-                //.setTitle("Сохранить как...")
-                //.setMessage("Введите имя файла для сохранения")
-                .setView(layout)
-                .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        String url = newDescription.getText().toString();
-                        if (!url.equals("")) {
-                            InsReport.damagePlanData.damageMarks.get(finalDamageNo).description = url;
-                            boolean exists = false;
-                            for (DamageMark damageMark : commonDamageMarks)
-                                if (damageMark.description.equals(url))
-                                    exists = true;
-                            //ref.child("youfix/anima/" + prefs.getString("AndroidID", "") + "/" + url).
-                            if (!exists)
-                                ref.child("youfix/commonDamages_" + InsReport.damagePlanData.vehicleNo + "/" + InsReport.damagePlanData.damageMarks.get(finalDamageNo).id).
-                                        setValue(InsReport.damagePlanData.damageMarks.get(finalDamageNo));
-                        }
-                    }
-                }).setNegativeButton("Удалить", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                InsReport.damagePlanData.damageMarks.remove(finalDamageNo);
-                postInvalidate();
+        newDamageMarkDialog.findViewById(R.id.damage_ok_button).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = newDescription.getText().toString();
+                if (!url.equals("")) {
+                    InsReport.damagePlanData.damageMarks.get(finalDamageNo).description = url;
+                    boolean exists = false;
+                    for (DamageMark damageMark : commonDamageMarks)
+                        if (damageMark.description.equals(url))
+                            exists = true;
+                    //ref.child("youfix/anima/" + prefs.getString("AndroidID", "") + "/" + url).
+                    if (!exists)
+                        ref.child("youfix/commonDamages_" + InsReport.damagePlanData.vehicleNo + "/" + InsReport.damagePlanData.damageMarks.get(finalDamageNo).id).
+                                setValue(InsReport.damagePlanData.damageMarks.get(finalDamageNo));
+                }
+                if (rbPaint.isChecked())
+                    InsReport.damagePlanData.damageMarks.get(finalDamageNo).neededAction = 1;
+                if (rbFix.isChecked())
+                    InsReport.damagePlanData.damageMarks.get(finalDamageNo).neededAction = 2;
+                if (rbReplace.isChecked())
+                    InsReport.damagePlanData.damageMarks.get(finalDamageNo).neededAction = 3;
+                newDamageMarkDialog.dismiss();
             }
-        }).show();
+        });
+
+        newDamageMarkDialog.show();
 
     }
-
-    //TODO: bad view in landscape orientation :(
 
 }

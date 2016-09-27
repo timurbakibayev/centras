@@ -70,14 +70,6 @@ public class PhotosActivity extends AppCompatActivity {
 
 
     private void takeFromGallery() {
-        /*
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent,
-                "Select Picture"), REQUEST_IMAGE_GALLERY);
-                */
         Intent intent = new Intent(this, Gallery.class);
         startActivityForResult(intent, REQUEST_MULTIPLE_GALLERY);
     }
