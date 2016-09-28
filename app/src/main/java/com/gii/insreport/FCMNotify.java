@@ -97,7 +97,7 @@ public class FCMNotify {
 
         s = "curl -X PUT -d '{\"description\" : \"fromServer\", \"id\" : \"" + formId + "\"," +
                 "\"dateCreated\": {\".sv\" : \"timestamp\"}, \"input\" : "  + s;
-        s = s + "}' " + "\"" + "https://insreport-f39a3.firebaseio.com/forms/incident/"+userID+"/"+formId + "/.json\"";
+        s = s + "}' " + "\"" + "https://" + InsReport.fireBaseGeneralDirectory + ".firebaseio.com/forms/incident/"+userID+"/"+formId + "/.json\"";
         return s;
     }
 

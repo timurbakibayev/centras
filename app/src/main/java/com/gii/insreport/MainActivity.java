@@ -258,12 +258,21 @@ public class MainActivity extends AppCompatActivity {
             login();
         }
 
+        if (id == R.id.action_settings) {
+            settings();
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
     public void login() {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivityForResult(intent, 1);
+    }
+
+    public void settings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivityForResult(intent,17);
     }
 
     @Override
@@ -408,7 +417,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //if this is first time, save the time of accept/reject
                 if (form.status.equals(""))
-                    InsReport.ref.child("forms/" + form.fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + form.id + "/dateAccepted").
+                    InsReport.ref.child("forms/" + form.fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + form.id + "/dateAccepted").
                             setValue(ServerValue.TIMESTAMP);
                 form.status = "accept";
                 if (form.elements.size() == 0) {
@@ -428,7 +437,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //if this is first time, save the time of accept/reject
                 if (form.status.equals(""))
-                    InsReport.ref.child("forms/" + form.fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + form.id + "/dateAccepted").
+                    InsReport.ref.child("forms/" + form.fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + form.id + "/dateAccepted").
                             setValue(ServerValue.TIMESTAMP);
                 form.status = "reject";
                 InsReport.logFirebase("Rejected " + form.fireBaseCatalog + " form no. " + form.id);
@@ -496,9 +505,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        if (requestCode == 17) {
+            for (FormsCollection mainMenuForm : InsReport.mainMenuForms) {
+                mainMenuForm.forms.clear();
+                mainMenuForm.addDataChangeListener();
+            }
+        }
         refreshUser();
-
     }
 
     public void refreshUser() {

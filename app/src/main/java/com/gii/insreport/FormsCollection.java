@@ -10,6 +10,9 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -40,7 +43,12 @@ public class FormsCollection {
 
     public void addDataChangeListener() {
         InsReport.logFirebase("Retrieving data from: " + "forms/" + fireBaseCatalog + "/" + InsReport.user.getUid());
-        Query queryRef = InsReport.ref.child("forms/" + fireBaseCatalog + "/" + InsReport.user.getUid()).orderByChild("dateCreated").limitToLast(10); //how many forms do we see
+        Log.e(TAG, "addDataChangeListener: Retrieving data from: " + "forms/" + fireBaseCatalog + "/" + InsReport.user.getUid());
+        int numOfForms = Integer.parseInt(InsReport.sharedPref.getString("number_of_forms_to_load","10"));
+        Query queryRef = InsReport.ref.child("forms/" + fireBaseCatalog + "/" + InsReport.forceUserID()).orderByChild("dateCreated").limitToLast(
+                numOfForms
+        ); //how many forms do we see
+
         queryRef.
                 addValueEventListener(new ValueEventListener() {
                     @Override
@@ -77,12 +85,27 @@ public class FormsCollection {
                                             InsReport.formToBeAccepted.id.equals(forms.get(i).id))
                                         InsReport.formToBeAccepted = newForm;
                                 }
-                                if (!exists)
+                                if (!exists) {
                                     forms.add(newForm);
+                                    Log.e(TAG, "onDataChange: added new form " + postSnapshot.getKey());
+                                } else
+                                    Log.e(TAG, "onDataChange: form exists " + postSnapshot.getKey());
                             } catch (Exception e) {
                                 Log.e(TAG, "onDataChange: PROBLEMS CASTING FROM DB!!! : " + postSnapshot.getKey() + ", " + e.getMessage());
+                                e.printStackTrace();
                                 InsReport.logFirebase("ERROR FORM: " + "forms/" + fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + postSnapshot.getKey());
-
+                                Writer writer = new StringWriter();
+                                PrintWriter printWriter = new PrintWriter(writer);
+                                e.printStackTrace(printWriter);
+                                String s = writer.toString();
+                                String s1 = "";
+                                if (s.indexOf("InvalidFormatException") > 0) {
+                                    int a = s.indexOf("InvalidFormatException");
+                                    s = s.substring(a,a+500);
+                                    if (s.indexOf("chain:") > 0)
+                                        s1 = s.substring(s.indexOf("chain:"),s.indexOf("chain:") + 100);
+                                    InsReport.logErrorFirebase("FORM NO." + postSnapshot.getKey(), s, s1);
+                                }
                             }
                         }
 

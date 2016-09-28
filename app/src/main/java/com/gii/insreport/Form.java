@@ -122,12 +122,12 @@ public class Form {
     public void saveToCloud() {
         updateDescription();
         if (!fireBaseCatalog.equals("")) {
-            ref.child("forms/" + fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + id).
+            ref.child("forms/" + fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + id).
                     setValue(this);
             //TODO: ONLY IF IT REALLY WAS MODIFIED!
-            ref.child("forms/" + fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + id + "/dateModified").
+            ref.child("forms/" + fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + id + "/dateModified").
                     setValue(ServerValue.TIMESTAMP);
-            Log.e(TAG, "saveToCloud: " + "forms/" + fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + id);
+            Log.e(TAG, "saveToCloud: " + "forms/" + fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + id);
         } else
             Log.e(TAG, "NOT saveToCloud: " + id);
         //now save raw data (ungroup and save):

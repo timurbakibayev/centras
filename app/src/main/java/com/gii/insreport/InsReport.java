@@ -3,6 +3,7 @@ package com.gii.insreport;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.ListView;
@@ -34,9 +35,12 @@ public class InsReport extends Application {
 
     private final static String TAG = "InsReport (Application)";
 
+    public final static String fireBaseGeneralDirectory = "insreport-f39a3";
     public final static String EXTRA_FIREBASE_CATALOG = "Firebase.Catalog";
     public final static String EXTRA_ID_NO = "Firebase.Form.No";
     public final static String INCIDENT_TYPE = "Incident.Type";
+
+    //public final static String forceUserID = "5K0dJbLCxzPrz9ijuXuJPqiu18u1";
 
     public static Firebase ref;
     public static FirebaseStorage storage;
@@ -53,6 +57,16 @@ public class InsReport extends Application {
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     public static String userID = "";
+
+    public static String forceUserID() {
+        if (sharedPref.getString("force_user_id","").equals("")) {
+            if (user != null)
+                return user.getUid();
+            return "error_user_id";
+        }
+        return sharedPref.getString("force_user_id","").trim();
+    }
+
     public static SharedPreferences sharedPref;
 
     public static MainActivity mainActivity;
@@ -75,7 +89,7 @@ public class InsReport extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        sharedPref = this.getSharedPreferences("default",0);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         Firebase.setAndroidContext(this);
         Firebase.getDefaultConfig().setPersistenceEnabled(true);
 
@@ -88,7 +102,7 @@ public class InsReport extends Application {
         //TODO: REMOVE THIS WHEN RELEASED!!!!!
         userID = "testUserID";
 
-        ref = new Firebase("https://insreport-f39a3.firebaseio.com/");
+        ref = new Firebase("https://" + fireBaseGeneralDirectory + ".firebaseio.com/");
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -248,6 +262,23 @@ public class InsReport extends Application {
             log.put("Device ID",FirebaseInstanceId.getInstance().getToken());
 
             ref.child("log/"+FillFormActivity.dateToYYMMDD(d) + "/" + user.getEmail().toString().replaceAll("[^A-Za-z]+", "")).
+                    push().setValue(log);
+        }
+    }
+
+    public static void logErrorFirebase(String logText, String logText2, String logText3) {
+        Map<String,Object> log = new HashMap<>();
+        if (user != null) {
+            log.put("User",user.getEmail().toString());
+            log.put("ServerTime",ServerValue.TIMESTAMP);
+            Date d = new Date();
+            log.put("TextTime",FillFormActivity.dateOnlyTextStrict(d));
+            log.put("Text",logText);
+            log.put("Text2",logText2);
+            log.put("Text3",logText3);
+            log.put("Device ID",FirebaseInstanceId.getInstance().getToken());
+
+            ref.child("error/"+FillFormActivity.dateToYYMMDD(d) + "/" + user.getEmail().toString().replaceAll("[^A-Za-z]+", "")).
                     push().setValue(log);
         }
     }
