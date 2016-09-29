@@ -13,10 +13,10 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.v7.app.ActionBar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
@@ -181,14 +181,29 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
+            if (InsReport.firebaseUserEmails.size() == 0 || InsReport.user == null) {
+                getActivity().finish();
+                return;
+            }
+
+            for (FirebaseUserEmail firebaseUserEmail : InsReport.firebaseUserEmails) {
+                if (firebaseUserEmail.id.equals(InsReport.user.getUid()))
+                    InsReport.savePref("username",firebaseUserEmail.name);
+            }
+
             addPreferencesFromResource(R.xml.pref_general);
             setHasOptionsMenu(true);
+
+
+
 
             // Bind the summaries of EditText/List/Dialog/Ringtone preferences
             // to their values. When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("force_user_id"));
+            bindPreferenceSummaryToValue(findPreference("username"));
             //bindPreferenceSummaryToValue(findPreference("example_list"));
         }
 

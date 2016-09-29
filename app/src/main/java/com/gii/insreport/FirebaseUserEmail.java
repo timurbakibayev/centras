@@ -9,6 +9,7 @@ import java.util.Map;
  */
 public class FirebaseUserEmail {
     public String email = "";
+    public String name = "";
     public String id = "";
     public Date lastLogin = new Date();
     public String lastLoginAndroid = "";

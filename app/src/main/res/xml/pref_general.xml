@@ -21,6 +21,16 @@
 
     <EditTextPreference
         android:capitalize="words"
+        android:defaultValue=""
+        android:inputType="textCapWords"
+        android:key="username"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Имя пользователя" />
+
+    <EditTextPreference
+        android:capitalize="words"
         android:defaultValue="10"
         android:inputType="number"
         android:key="number_of_forms_to_load"

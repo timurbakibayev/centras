@@ -169,7 +169,7 @@ public class InsReport extends Application {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     FirebaseUserEmail newUser = snapshot.getValue(FirebaseUserEmail.class);
                     firebaseUserEmails.add(newUser);
-                    Log.e(TAG, "onDataChange: found user " + newUser.email);
+                    //Log.e(TAG, "onDataChange: found user " + newUser.email);
                 }
             }
 

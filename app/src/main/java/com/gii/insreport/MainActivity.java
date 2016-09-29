@@ -595,6 +595,9 @@ public class MainActivity extends AppCompatActivity {
             for (FormsCollection mainMenuForm : InsReport.mainMenuForms) {
                 mainMenuForm.forms.clear();
                 mainMenuForm.addDataChangeListener();
+                InsReport.ref.child("users/"+InsReport.user.getUid()+"/name").setValue(
+                        InsReport.sharedPref.getString("username","")
+                );
             }
         }
         refreshUser();

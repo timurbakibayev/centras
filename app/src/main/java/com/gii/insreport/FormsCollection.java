@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
@@ -49,81 +50,111 @@ public class FormsCollection {
                 numOfForms
         ); //how many forms do we see
 
+        queryRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot postSnapshot, String s7) {
+                try {
+                    Form newForm = postSnapshot.getValue(Form.class);
+                    newForm.id = postSnapshot.getKey();
+                    Log.e(TAG, "onChildAdded: processing another item..." + s7);
+                    //newForm.validate();
+                    if (newForm.elements.size() == 0) {
+                        InsReport.formToBeAccepted = newForm;
+                        newForm.fireBaseCatalog = fireBaseCatalog;
+                    }
+                    forms.add(newForm);
+                    Log.e(TAG, "onDataChange: Sorting...");
+                    Collections.sort(forms, new Comparator<Form>() {
+                        @Override
+                        public int compare(Form lhs, Form rhs) {
+                            return (!lhs.dateCreated.after(rhs.dateCreated)?1:-1);
+                        }
+                    });
+                    if (InsReport.currentListView != null &&
+                            InsReport.currentListView.getAdapter() != null)
+                        ((FormsListAdapter)(InsReport.currentListView.getAdapter())).notifyDataSetChanged();
+                } catch (Exception e) {
+                    Log.e(TAG, "onDataChange: PROBLEMS CASTING FROM DB!!! : " + postSnapshot.getKey() + ", " + e.getMessage());
+                    e.printStackTrace();
+                    InsReport.logFirebase("ERROR FORM: " + "forms/" + fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + postSnapshot.getKey());
+                    Writer writer = new StringWriter();
+                    PrintWriter printWriter = new PrintWriter(writer);
+                    e.printStackTrace(printWriter);
+                    String s = writer.toString();
+                    String s1 = "";
+                    if (s.indexOf("InvalidFormatException") > 0) {
+                        int a = s.indexOf("InvalidFormatException");
+                        s = s.substring(a,a+500);
+                        if (s.indexOf("chain:") > 0)
+                            s1 = s.substring(s.indexOf("chain:"),s.indexOf("chain:") + 100);
+                        InsReport.logErrorFirebase("FORM NO." + postSnapshot.getKey(), s, s1);
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot postSnapshot, String s7) {
+                try {
+                    Form newForm = postSnapshot.getValue(Form.class);
+                    newForm.id = postSnapshot.getKey();
+                    Log.e(TAG, "onChildChanged: processing another item..." + s7);
+                    //newForm.validate();
+                    if (newForm.elements.size() == 0) {
+                        InsReport.formToBeAccepted = newForm;
+                        newForm.fireBaseCatalog = fireBaseCatalog;
+                    }
+                    boolean exists = false;
+                    for (int i = 0; i < forms.size(); i++) {
+                        if (forms.get(i).id.equals(newForm.id)) {
+                            forms.set(i,newForm);
+                            exists = true;
+                        }
+                        if (InsReport.formToBeAccepted != null &&
+                                InsReport.formToBeAccepted.id.equals(forms.get(i).id))
+                            InsReport.formToBeAccepted = newForm;
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "onDataChange: PROBLEMS CASTING FROM DB!!! : " + postSnapshot.getKey() + ", " + e.getMessage());
+                    e.printStackTrace();
+                    InsReport.logFirebase("ERROR FORM: " + "forms/" + fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + postSnapshot.getKey());
+                    Writer writer = new StringWriter();
+                    PrintWriter printWriter = new PrintWriter(writer);
+                    e.printStackTrace(printWriter);
+                    String s = writer.toString();
+                    String s1 = "";
+                    if (s.indexOf("InvalidFormatException") > 0) {
+                        int a = s.indexOf("InvalidFormatException");
+                        s = s.substring(a,a+500);
+                        if (s.indexOf("chain:") > 0)
+                            s1 = s.substring(s.indexOf("chain:"),s.indexOf("chain:") + 100);
+                        InsReport.logErrorFirebase("FORM NO." + postSnapshot.getKey(), s, s1);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
         queryRef.
                 addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
-                        Log.e(TAG, "onDataChange: got new data, processing...");
-                        //forms.clear();
-                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                            try {
-                                Form newForm = postSnapshot.getValue(Form.class);
-                                newForm.id = postSnapshot.getKey();
-                                Log.e(TAG, "onDataChange: processing another item..." + newForm.id);
-                                //newForm.validate();
-                                if (newForm.elements.size() == 0) {
-                                    /*
-                                    Log.e(TAG, "onDataChange: applying template for " + newForm.id);
-                                    FormTemplates.applyTemplate(newForm, fireBaseCatalog);
-                                    Log.e(TAG, "onDataChange: done applying. updating description...");
-                                    newForm.updateDescription();
-                                    Log.e(TAG, "onDataChange: done with description, validating...");
-                                    newForm.validate();
-                                    Log.e(TAG, "onDataChange: saving to cloud");
-                                    newForm.saveToCloud();
-                                    */
-                                    InsReport.formToBeAccepted = newForm;
-                                    newForm.fireBaseCatalog = fireBaseCatalog;
-                                }
-                                boolean exists = false;
-                                for (int i = 0; i < forms.size(); i++) {
-                                    if (forms.get(i).id.equals(newForm.id)) {
-                                        forms.set(i,newForm);
-                                        exists = true;
-                                    }
-                                    if (InsReport.formToBeAccepted != null &&
-                                            InsReport.formToBeAccepted.id.equals(forms.get(i).id))
-                                        InsReport.formToBeAccepted = newForm;
-                                }
-                                if (!exists) {
-                                    forms.add(newForm);
-                                    Log.e(TAG, "onDataChange: added new form " + postSnapshot.getKey());
-                                } else
-                                    Log.e(TAG, "onDataChange: form exists " + postSnapshot.getKey());
-                            } catch (Exception e) {
-                                Log.e(TAG, "onDataChange: PROBLEMS CASTING FROM DB!!! : " + postSnapshot.getKey() + ", " + e.getMessage());
-                                e.printStackTrace();
-                                InsReport.logFirebase("ERROR FORM: " + "forms/" + fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + postSnapshot.getKey());
-                                Writer writer = new StringWriter();
-                                PrintWriter printWriter = new PrintWriter(writer);
-                                e.printStackTrace(printWriter);
-                                String s = writer.toString();
-                                String s1 = "";
-                                if (s.indexOf("InvalidFormatException") > 0) {
-                                    int a = s.indexOf("InvalidFormatException");
-                                    s = s.substring(a,a+500);
-                                    if (s.indexOf("chain:") > 0)
-                                        s1 = s.substring(s.indexOf("chain:"),s.indexOf("chain:") + 100);
-                                    InsReport.logErrorFirebase("FORM NO." + postSnapshot.getKey(), s, s1);
-                                }
-                            }
-                        }
-
-                        Log.e(TAG, "onDataChange: Sorting...");
-                        Collections.sort(forms, new Comparator<Form>() {
-                            @Override
-                            public int compare(Form lhs, Form rhs) {
-                                return (!lhs.dateCreated.after(rhs.dateCreated)?1:-1);
-                            }
-                        });
-
-                        Log.e(TAG, "onDataChange: Successful! Updating list view if needed...");
-                        if (InsReport.currentListView != null &&
-                                InsReport.currentListView.getAdapter() != null)
-                            ((FormsListAdapter)(InsReport.currentListView.getAdapter())).notifyDataSetChanged();
-
+                        Log.e(TAG, "onDataChange: got new form data");
                         loadComplete = true;
-
                     }
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {

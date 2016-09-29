@@ -69,8 +69,11 @@ public class CameraAndPictures {
                                 }
                             });
                             theImageView.setAdjustViewBounds(true);
+                            TextView descriptionTV = descriptionTextView(element,form,theImageView,linearLayout.getContext());
+                            linearLayout.addView(deleteTextView(element,form,theImageView,linearLayout.getContext(),descriptionTV));
                             linearLayout.addView(theImageView);
-                            linearLayout.addView(descriptionTextView(element,form,theImageView,linearLayout.getContext()));
+                            linearLayout.addView(descriptionTV);
+
                         }
                     }
                     @Override
@@ -137,6 +140,26 @@ public class CameraAndPictures {
         });
         return descriptionAndDate;
     }
+
+    public TextView deleteTextView(final Element element, final Form form, final ImageView imageView, final Context context, final TextView descriptionAndDate) {
+        final TextView deleteTV = new TextView(context);
+        deleteTV.setTextColor(Color.RED);
+        deleteTV.setText("Удалить");
+        deleteTV.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+        deleteTV.setVisibility(element.deleted?View.GONE:View.VISIBLE);
+        deleteTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                element.deleted = true;
+                descriptionAndDate.setText("Удалено. Нажмите для воостановления. \n" + element.description + "\n" + FillFormActivity.dateTimeText(element.vDate) + "\n\n");
+                descriptionAndDate.setTextColor(Color.RED);
+                imageView.setVisibility(View.GONE);
+                form.saveToCloud();
+            }
+        });
+        return deleteTV;
+    }
+
 
     public void getPicFromFirebase(String photoID, final LinearLayout linearLayout) {
 
