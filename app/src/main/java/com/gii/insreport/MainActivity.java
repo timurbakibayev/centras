@@ -495,21 +495,40 @@ public class MainActivity extends AppCompatActivity {
                 //здесь переменная address уже содержит адрес
 
                 Intent intent = new Intent(Intent.ACTION_VIEW);
+                String regex = "((-|\\+)?[0-9]+(\\.[0-9]+)?)+";
+                String[] location = address.split(" ");
+                boolean coordinates = false;
 
-                String locationStr = address.replaceAll(" ", "+");
+                for (int i = 0; i < location.length; i++) {
+                    if (location[i].matches(regex)) {
+                        coordinates = true;
+                    }
+                }
+                String locationStr;
 
-                Uri locationUri = Uri.parse("geo:0,0?").buildUpon()
-                        .appendQueryParameter("q", locationStr)
-                        .build();
-                intent.setData(locationUri);
+                if (coordinates) {
+                    locationStr = location[0]+","+location[1];
+                    Uri locationUri = Uri.parse("geo:0,0?").buildUpon()
+                            .appendQueryParameter("q", locationStr)
+                            .build();
+                    intent.setData(locationUri);
+                } else {
+                    locationStr = address.replaceAll(" ", "+");
+
+                    Uri locationUri = Uri.parse("geo:0,0?").buildUpon()
+                            .appendQueryParameter("q", locationStr)
+                            .build();
+                    intent.setData(locationUri);
+                }
+
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     InsReport.logFirebase("Open a map from app: " + form.fireBaseCatalog + " form no. " + form.id + ", Location: " + locationStr);
                     startActivity(intent);
-                    Toast.makeText(MainActivity.this, locationStr, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(MainActivity.this,
                             "Нет карты", Toast.LENGTH_SHORT).show();
                 }
+
                 acceptOrRejectDialog.dismiss();
 
             }
