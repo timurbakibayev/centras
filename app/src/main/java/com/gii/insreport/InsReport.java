@@ -3,6 +3,9 @@ package com.gii.insreport;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -90,6 +93,8 @@ public class InsReport extends Application {
     public void onCreate() {
         super.onCreate();
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        prepareBeep();
+
         Firebase.setAndroidContext(this);
         Firebase.getDefaultConfig().setPersistenceEnabled(true);
 
@@ -301,4 +306,23 @@ public class InsReport extends Application {
             }
         });
     }
+
+    static Ringtone r;
+    public void prepareBeep() {
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            String soundUri = sharedPref.getString("notifications_new_message_ringtone",RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString());
+            r = RingtoneManager.getRingtone(getApplicationContext(), Uri.parse(soundUri));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static void beep() {
+        try {
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

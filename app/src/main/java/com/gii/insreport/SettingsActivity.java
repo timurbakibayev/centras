@@ -132,7 +132,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    
+
     /**
      * Set up the {@link android.app.ActionBar}, if the API is available.
      */

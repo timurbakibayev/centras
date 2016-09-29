@@ -33,6 +33,7 @@ public class Form {
     public boolean formReady = false;
 
     public String status = "";
+    public String statusNote = "";
 
     public String phoneNo = "";
 
@@ -255,5 +256,9 @@ public class Form {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getStatusNote() {
+        return statusNote;
     }
 }

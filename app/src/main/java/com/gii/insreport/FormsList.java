@@ -20,6 +20,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -118,6 +119,7 @@ public class FormsList extends AppCompatActivity {
 
 
     final FormsList thisActivity = this;
+    LinearLayout underCover;
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
 
         float mDownX;
@@ -135,6 +137,8 @@ public class FormsList extends AppCompatActivity {
                     }
                     mItemPressed = true;
                     mDownX = event.getX();
+                    //underCover = (LinearLayout)view;
+                    //underCover.setBackgroundColor(Color.GREEN);
                     break;
                 case MotionEvent.ACTION_CANCEL:
                     setSwipePosition(view, 0);

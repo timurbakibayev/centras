@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +38,8 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     private static String TAG = "MainActivity.java";
+
+    boolean triggerLastForm = false;
 
     Timer timer = new Timer();
 
@@ -123,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                             for (Button formButton : formButtons) {
                                 formButton.setEnabled(true);
                             }
-                            checkNewForms(thisActivity);
+                            checkNewForms(thisActivity, true);
                             checkIfNeededToFindByPhone();
                         }
                     });
@@ -131,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }, 1000, 1000);
-
+        if (InsReport.sharedPref.getBoolean("open_last_doc",false))
+            triggerLastForm = true;
     }
 
     static boolean dontCheckTwice = false;
@@ -282,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "onResume: YES");
 
         if (InsReport.directories.loaded) {
-            checkNewForms(this);
+            checkNewForms(this,false);
             checkIfNeededToFindByPhone();
         }
     }
@@ -364,17 +368,29 @@ public class MainActivity extends AppCompatActivity {
         mainMenuLL.addView(newMenuButton);
     }
 
-    public void checkNewForms(Activity context) {
+    public void checkNewForms(Activity context, boolean formsAreJustLoaded) {
         if (InsReport.formToBeAccepted != null &&
                 InsReport.formToBeAccepted.status.equals("")) {
             acceptOrRejectDialogShow(InsReport.formToBeAccepted, context);
+            return;
+        }
+        if (formsAreJustLoaded && triggerLastForm) {
+            String lastFormId = InsReport.sharedPref.getString("lastFormId", "");
+            String fireBaseCatalog = InsReport.sharedPref.getString("lastFormCatalog","");
+            if (!lastFormId.equals("")) {
+                openTheForm(lastFormId, fireBaseCatalog, thisActivity);
+            }
         }
     }
 
     public void openTheForm(Form form, Activity context) {
+        openTheForm(form.id,form.fireBaseCatalog,context);
+    }
+
+    public void openTheForm(String id, String fireBaseCatalog, Activity context) {
         Intent intent = new Intent(thisActivity, AdikStyleActivity.class);
-        intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, form.fireBaseCatalog);
-        intent.putExtra(InsReport.EXTRA_ID_NO, form.id);
+        intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, fireBaseCatalog);
+        intent.putExtra(InsReport.EXTRA_ID_NO, id);
         startActivity(intent);
     }
 
@@ -443,6 +459,7 @@ public class MainActivity extends AppCompatActivity {
                 InsReport.logFirebase("Rejected " + form.fireBaseCatalog + " form no. " + form.id);
                 form.saveToCloud();
                 acceptOrRejectDialog.dismiss();
+                askWhyRejected(form, context);
             }
         });
 
@@ -500,6 +517,75 @@ public class MainActivity extends AppCompatActivity {
 
 
         acceptOrRejectDialog.show();
+    }
+
+    private void askWhyRejected(final Form form, Context context) {
+        final Dialog askWhyRejectedDialog = new Dialog(context);
+        final EditText reasonET = new EditText(context);
+        //reasonET.setText(InsReport.sharedPref.getString("reasonToReject", ""));
+        TextView captionTV = new TextView(context);
+        captionTV.setText("Введите причину отклонения заявки");
+        Button positiveButton = new Button(context);
+        positiveButton.setText("OK");
+
+        Button consultationsButton = new Button(context);
+        consultationsButton.setText("Консультация");
+        consultationsButton.setBackgroundColor(Color.TRANSPARENT);
+        Button clientCancelledButton = new Button(context);
+        clientCancelledButton.setText("Отмена клиентом");
+        clientCancelledButton.setBackgroundColor(Color.TRANSPARENT);
+        Button noTimeButton = new Button(context);
+        noTimeButton.setText("Нехватка времени");
+        noTimeButton.setBackgroundColor(Color.TRANSPARENT);
+        consultationsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reasonET.setText("Консультация");
+            }
+        });
+        noTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reasonET.setText("Нехватка времени");
+            }
+        });
+        clientCancelledButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reasonET.setText("Отмена клиентом");
+            }
+        });
+
+        LinearLayout resonToRejectLL = new LinearLayout(context);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(50, 50, 50, 50);
+        resonToRejectLL.setLayoutParams(lp);
+        resonToRejectLL.setOrientation(LinearLayout.VERTICAL);
+        resonToRejectLL.addView(captionTV);
+        resonToRejectLL.addView(reasonET);
+        resonToRejectLL.addView(consultationsButton);
+        resonToRejectLL.addView(clientCancelledButton);
+        resonToRejectLL.addView(noTimeButton);
+        resonToRejectLL.addView(positiveButton);
+        //deviceNameDialog.setTitle("Введите название устройства, например 'Телефон Samsung' или 'Планшет Армана'");
+        askWhyRejectedDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        askWhyRejectedDialog.setContentView(resonToRejectLL);
+        askWhyRejectedDialog.show();
+        positiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String newReason = reasonET.getText().toString();
+                if (!newReason.equals("")) {
+                    InsReport.savePref("reasonToReject", newReason);
+                    form.statusNote = newReason;
+                    form.saveToCloud();
+                    askWhyRejectedDialog.dismiss();
+                    InsReport.logFirebase("Reason to reject the form " + form.id + ": " + newReason);
+                }
+            }
+        });
+
     }
 
 

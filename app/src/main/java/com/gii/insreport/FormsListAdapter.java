@@ -155,7 +155,7 @@ public int getItemViewType(int position) {
         if (p.status.equals("reject")) {
 //            color = Color.RED;
             color = ctx.getResources().getColor(R.color.colorPrimaryDark);
-            (view.findViewById(R.id.openAcceptOrReject)).setAnimation(animation);
+            //(view.findViewById(R.id.openAcceptOrReject)).setAnimation(animation);
             ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.rgb(70, 70, 70));
             ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.rgb(70, 70, 70));
         } else {

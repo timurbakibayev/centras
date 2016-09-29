@@ -95,19 +95,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
+        String soundUri = InsReport.sharedPref.getString("notifications_new_message_ringtone",RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString());
+        Uri defaultSoundUri = Uri.parse(soundUri);
+
+        long[] vibra = new long[0];
+        if (InsReport.sharedPref.getBoolean("notifications_new_message_vibrate", false)) {
+            vibra = new long[] {0,100,100,100,100,400,1000,100,100,100,100,400};
+        }
+
+
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.centraslogo)
                 .setContentTitle("Новый страховой случай")
                 .setContentText(messageBody)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
+                .setVibrate(vibra)
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        if (InsReport.sharedPref.getBoolean("notifications_new_message",true))
+            notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
         Log.e(TAG, "sendNotification: hm...");
     }
 }

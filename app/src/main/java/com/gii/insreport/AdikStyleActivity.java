@@ -214,6 +214,8 @@ public class AdikStyleActivity extends AppCompatActivity {
                 for (Form form : formsCollection.forms) {
                     if (form.id.equals(id_no)) {
                         currentForm = form;
+                        InsReport.savePref("lastFormId",id_no);
+                        InsReport.savePref("lastFormCatalog",fireBaseCatalog);
                     }
                 }
             }
