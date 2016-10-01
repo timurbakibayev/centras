@@ -100,18 +100,6 @@ public class Form {
         return n;
     }
 
-    public int filledPercent() {
-        int n = 0;
-        int outOf = 0;
-        for (Element element : elements) {
-            n += element.filled();
-            outOf += element.outOf();
-        }
-        //Log.e(TAG, "filledPercent: " + n + "/" + outOf );
-        //Log.e(TAG, "filledPercent result: " + (int)((float)n/outOf*100) );
-        return (int)((float)n/outOf*100);
-    }
-
     public boolean signed() {
         for (Element element : elements)
             if (!element.signed())
@@ -272,7 +260,7 @@ public class Form {
             if (formReady)
                 InsReport.mainActivity.askReadyResult(this,context, closeActivity, activity);
             else {
-                statusNote = "";
+                statusNote = "В работе";
                 saveToCloud();
             }
             InsReport.notifyFormsList();

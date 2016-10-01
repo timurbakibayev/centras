@@ -407,6 +407,7 @@ public class MainActivity extends AppCompatActivity {
                     InsReport.ref.child("forms/" + form.fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + form.id + "/dateAccepted").
                             setValue(ServerValue.TIMESTAMP);
                 form.status = "accept";
+                form.statusNote = "В работе";
                 form.formReady = false;
                 if (form.elements.size() == 0) {
                     FormTemplates.applyTemplate(form, form.fireBaseCatalog);
@@ -417,6 +418,7 @@ public class MainActivity extends AppCompatActivity {
                     nMgr.cancelAll();
                 }
                 form.saveToCloud();
+                InsReport.notifyFormsList();
                 InsReport.logFirebase("Accepted " + form.fireBaseCatalog + " form no. " + form.id);
                 acceptOrRejectDialog.dismiss();
                 openTheForm(form, context);
@@ -619,6 +621,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!newResult.equals("")) {
                     form.statusNote = newResult;
                     form.saveToCloud();
+                    InsReport.notifyFormsList();
                     askForResult.dismiss();
                     if (closeActivity)
                         activity.finish();

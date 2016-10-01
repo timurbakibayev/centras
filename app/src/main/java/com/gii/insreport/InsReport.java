@@ -182,8 +182,11 @@ public class InsReport extends Application {
 
     public static void notifyFormsList() {
         if (currentListView != null &&
-                currentListView.getAdapter() != null)
-            ((FormsListAdapter)(currentListView.getAdapter())).notifyDataSetChanged();
+                currentListView.getAdapter() != null) {
+            ((FormsListAdapter) (currentListView.getAdapter())).notifyDataSetChanged();
+            currentListView.invalidateViews();
+            Log.e(TAG, "notifyFormsList: Done");
+        }
     }
 
     public static String generateNewId() {

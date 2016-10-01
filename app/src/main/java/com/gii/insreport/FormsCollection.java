@@ -56,7 +56,7 @@ public class FormsCollection {
                 try {
                     Form newForm = postSnapshot.getValue(Form.class);
                     newForm.id = postSnapshot.getKey();
-                    Log.e(TAG, "onChildAdded: processing another item..." + s7);
+                    Log.e(TAG, "onChildAdded: processing new item..." + s7);
                     //newForm.validate();
                     if (newForm.elements.size() == 0) {
                         InsReport.formToBeAccepted = newForm;
@@ -95,21 +95,17 @@ public class FormsCollection {
                 try {
                     Form newForm = postSnapshot.getValue(Form.class);
                     newForm.id = postSnapshot.getKey();
-                    Log.e(TAG, "onChildChanged: processing another item..." + s7);
+                    Log.e(TAG, "onChildChanged: processing existing item..." + s7);
                     //newForm.validate();
                     if (newForm.elements.size() == 0) {
                         InsReport.formToBeAccepted = newForm;
                         newForm.fireBaseCatalog = fireBaseCatalog;
                     }
-                    boolean exists = false;
                     for (int i = 0; i < forms.size(); i++) {
                         if (forms.get(i).id.equals(newForm.id)) {
                             forms.set(i,newForm);
-                            exists = true;
                         }
-                        if (InsReport.formToBeAccepted != null &&
-                                InsReport.formToBeAccepted.id.equals(forms.get(i).id))
-                            InsReport.formToBeAccepted = newForm;
+                        InsReport.notifyFormsList();
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "onDataChange: PROBLEMS CASTING FROM DB!!! : " + postSnapshot.getKey() + ", " + e.getMessage());

@@ -68,6 +68,7 @@
                     android:textColor="#000"
                     android:textSize="14sp" />
 
+
                 <TextView
                     android:id="@+id/textViewID"
                     android:layout_width="0dp"
@@ -80,10 +81,22 @@
                     android:textColor="#000"
                     android:textSize="14sp"
                     android:visibility="gone" />
+
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/statusNoteTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:padding="5dp"
+                android:text="Результат работы или отказа"
+                android:textColor="#000"
+                android:textSize="14sp"  />
 
         </LinearLayout>
+
 
         <ImageView
             android:id="@+id/openAcceptOrReject"
@@ -92,55 +105,13 @@
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_menu_black_24dp" />
 
-
     </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="50dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-
-        <View
-            android:layout_width="48dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-
-        <ImageView
-            android:id="@+id/imageInListView"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:focusable="false"
-            android:src="@drawable/signature" />
-
-        <View
-            android:layout_width="48dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-
-        <View
-            android:layout_width="48dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-    </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:progress="26"
-        android:visibility="gone" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#FFBABABA" />
+
 </LinearLayout>
 
 

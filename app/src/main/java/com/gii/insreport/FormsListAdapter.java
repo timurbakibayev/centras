@@ -16,7 +16,6 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -107,6 +106,7 @@ public int getItemViewType(int position) {
             }
         }
 
+        ((TextView) view.findViewById(R.id.statusNoteTV)).setText(p.statusNote);
         ((TextView) view.findViewById(R.id.textView1)).setText(p.description);
         ((TextView) view.findViewById(R.id.textViewID)).setText(p.id);
         (view.findViewById(R.id.checkReady)).setVisibility(p.formReady?View.VISIBLE:View.INVISIBLE);
@@ -116,16 +116,6 @@ public int getItemViewType(int position) {
             photoInfo = "\n" + photoCount + " фото";
 
         ((TextView) view.findViewById(R.id.textView2)).setText(p.toString() + photoInfo);
-
-        ((ProgressBar) view.findViewById(R.id.progressBar)).setProgress(p.filledPercent());
-
-        if (!p.signed())
-            (view.findViewById(R.id.imageInListView)).setVisibility(View.GONE);
-        else
-            (view.findViewById(R.id.imageInListView)).setVisibility(View.VISIBLE);
-
-        int color = Color.BLACK;
-
 
         switch (p.status.toLowerCase()) {
             case "accept":
