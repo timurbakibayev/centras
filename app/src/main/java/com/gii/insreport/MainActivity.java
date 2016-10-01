@@ -3,6 +3,7 @@ package com.gii.insreport;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -440,6 +441,9 @@ public class MainActivity extends AppCompatActivity {
                     FormTemplates.applyTemplate(form, form.fireBaseCatalog);
                     form.updateDescription();
                     form.validate();
+                    // Clear all notification
+                    NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    nMgr.cancelAll();
                 }
                 form.saveToCloud();
                 InsReport.logFirebase("Accepted " + form.fireBaseCatalog + " form no. " + form.id);
@@ -458,6 +462,9 @@ public class MainActivity extends AppCompatActivity {
                 form.status = "reject";
                 InsReport.logFirebase("Rejected " + form.fireBaseCatalog + " form no. " + form.id);
                 form.saveToCloud();
+                // Clear all notification
+                NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                nMgr.cancelAll();
                 acceptOrRejectDialog.dismiss();
                 askWhyRejected(form, context);
             }
