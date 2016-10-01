@@ -39,6 +39,17 @@
         android:singleLine="true"
         android:title="Кол-во загружаемых форм" />
 
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="50"
+        android:inputType="number"
+        android:key="number_of_photos_to_load"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="Максимальное кол-во фотографий в галерее. Сильно влияет на скорость выбора."
+        android:title="Кол-во фотографий" />
+
     <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
          dismiss it. -->
     <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->

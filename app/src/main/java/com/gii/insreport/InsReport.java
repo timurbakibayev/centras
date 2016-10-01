@@ -53,6 +53,7 @@ public class InsReport extends Application {
     public static ArrayList<FirebaseUserEmail> firebaseUserEmails = new ArrayList<>();
 
     public static ArrayList<String> multipleImages = new ArrayList<>();
+    public static ArrayList<Long> multipleImagesDate = new ArrayList<>();
 
     //TODO: EDIT THIS PHONE FOR EACH COMPANY!
     public static String defaultCallCenter = "87771111111";

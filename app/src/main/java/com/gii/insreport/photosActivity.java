@@ -160,7 +160,9 @@ public class PhotosActivity extends AppCompatActivity {
         }
 
         if (requestCode == REQUEST_MULTIPLE_GALLERY) {
-            for (String nextImage : InsReport.multipleImages) {
+            for (int i = 0; i < InsReport.multipleImages.size(); i++) {
+                String nextImage = InsReport.multipleImages.get(i);
+                Long nextDate = InsReport.multipleImagesDate.get(i);
                 final String id = CameraAndPictures.savePictureToFirebase(nextImage);
                 if (CameraAndPictures.bitmap != null) {
                     InsReport.bitmapsNeedToBeRecycled.add(CameraAndPictures.bitmap);
@@ -175,7 +177,7 @@ public class PhotosActivity extends AppCompatActivity {
                     });
                     final Element newPhotoElement = new Element();
                     newPhotoElement.vText = id;
-                    newPhotoElement.vDate = new Date();
+                    newPhotoElement.vDate = new Date(nextDate);
                     final PhotosActivity thisActivity = this;
                     element.elements.add(newPhotoElement);
                     TextView descriptionTV = cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity);

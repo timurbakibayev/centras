@@ -1,10 +1,8 @@
 package com.gii.insreport;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +23,7 @@ public class Gallery extends AppCompatActivity {
     private Bitmap[] thumbnails;
     private boolean[] thumbnailsselection;
     private String[] arrPath;
+    private long[] arrDate;
     private ImageAdapter imageAdapter;
 
 
@@ -35,7 +34,7 @@ public class Gallery extends AppCompatActivity {
 
         InsReport.multipleImages.clear();
 
-        final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
+        final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID, MediaStore.Images.Media.DATE_TAKEN };
         final String orderBy = MediaStore.Images.Media.DATE_TAKEN + " DESC";
 
         String selection = MediaStore.Images.Media.BUCKET_DISPLAY_NAME + " = ?";
@@ -48,7 +47,8 @@ public class Gallery extends AppCompatActivity {
                 selectionArgs, orderBy);
         int image_column_index = imagecursor.getColumnIndex(MediaStore.Images.Media._ID);
 
-        this.count = Math.min(imagecursor.getCount(),100); //to make it faster, we allow only last n photos
+        int numOfForms = Integer.parseInt(InsReport.sharedPref.getString("number_of_photos_to_load","50"));
+        this.count = Math.min(imagecursor.getCount(),numOfForms); //to make it faster, we allow only last n photos
         int lastDate = -2;
         int days = 0;
         /*
@@ -71,17 +71,19 @@ public class Gallery extends AppCompatActivity {
 */
         this.thumbnails = new Bitmap[this.count];
         this.arrPath = new String[this.count];
+        this.arrDate = new long[this.count];
         this.thumbnailsselection = new boolean[this.count];
         //InsReport.multipleImages.clear();
         for (int i = 0; i < this.count; i++) {
             imagecursor.moveToPosition(i);
             int id = imagecursor.getInt(image_column_index);
-
                 int dataColumnIndex = imagecursor.getColumnIndex(MediaStore.Images.Media.DATA);
+                int dateColumnIndex = imagecursor.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN);
                 thumbnails[i] = MediaStore.Images.Thumbnails.getThumbnail(
                         getApplicationContext().getContentResolver(), id,
-                        MediaStore.Images.Thumbnails.MICRO_KIND, null);
+                        MediaStore.Images.Thumbnails.MINI_KIND, null);
                 arrPath[i] = imagecursor.getString(dataColumnIndex);
+                arrDate[i] = imagecursor.getLong(dateColumnIndex);
                 //InsReport.multipleImages.add(arrPath[i]);
             }
 
@@ -99,22 +101,21 @@ public class Gallery extends AppCompatActivity {
                 int cnt = 0;
                 String selectImages = "";
                 InsReport.multipleImages.clear();
+                InsReport.multipleImagesDate.clear();
                 for (int i =0; i<len; i++)
                 {
                     if (thumbnailsselection[i]){
                         cnt++;
                         selectImages = selectImages + arrPath[i] + "|";
                         InsReport.multipleImages.add(arrPath[i]);
+                        InsReport.multipleImagesDate.add(arrDate[i]);
                     }
                 }
                 if (cnt == 0){
                     Toast.makeText(getApplicationContext(),
-                            "Please select at least one image",
+                            "Пожалуйста, выберите хотя бы одну фотографию",
                             Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(getApplicationContext(),
-                            "You've selected Total " + cnt + " image(s).",
-                            Toast.LENGTH_LONG).show();
                     finish();
                     Log.e("SelectedImages", selectImages);
                 }
@@ -142,7 +143,7 @@ public class Gallery extends AppCompatActivity {
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
+            final ViewHolder holder;
             if (convertView == null) {
                 holder = new ViewHolder();
                 convertView = mInflater.inflate(
@@ -176,10 +177,14 @@ public class Gallery extends AppCompatActivity {
                 public void onClick(View v) {
                     // TODO Auto-generated method stub
                     int id = v.getId();
+                    /*
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_VIEW);
                     intent.setDataAndType(Uri.parse("file://" + arrPath[id]), "image/*");
                     startActivity(intent);
+                    */
+                    thumbnailsselection[id] = !thumbnailsselection[id];
+                    holder.checkbox.setChecked(thumbnailsselection[id]);
                 }
             });
             holder.imageview.setImageBitmap(thumbnails[position]);
