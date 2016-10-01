@@ -403,9 +403,8 @@ public class AdikStyleActivity extends AppCompatActivity {
                         .setPositiveButton("Да", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                currentForm.formReady = true;
-                                currentForm.saveToCloud();
-                                finish();
+                                currentForm.switchDone(thisActivity, true, thisActivity);
+                                //finish();
                             }
                         }).
                         setNeutralButton("Нет", new DialogInterface.OnClickListener() {

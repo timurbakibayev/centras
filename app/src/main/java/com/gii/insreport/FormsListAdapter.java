@@ -93,30 +93,11 @@ public int getItemViewType(int position) {
             view = lInflater.inflate(R.layout.listitem2, parent, false);
         }
 
-        if(view != convertView){
-            view.setOnTouchListener(mTouchLsitener);
-        }
-
         final Form p = getProduct(position);
 
-        //p.updateDescription();
-
-//        ((Switch) view.findViewById(R.id.complete_form)).setChecked(p.formReady);
-//
-//        ((Switch) view.findViewById(R.id.complete_form)).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (((Switch) view).isChecked()) {
-//                    p.formReady = true;
-//                    p.saveToCloud();
-//                    Toast.makeText(view.getContext(), "Форма готова к отправке", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    p.formReady = false;
-//                    p.saveToCloud();
-//                    Toast.makeText(view.getContext(), "Отмена готовности", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
+        if (view != convertView){
+            view.setOnTouchListener(mTouchLsitener);
+        }
 
         if (p.description.equals("")) {
             if (p.input.get("CLIENT_NAME") != null)
@@ -170,7 +151,7 @@ public int getItemViewType(int position) {
         view.findViewById(R.id.openAcceptOrReject).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!p.formReady)
+                if (!p.formReady || p.status.equals("reject"))
                     InsReport.mainActivity.acceptOrRejectDialogShow(p,FormsList.formList);
             }
         });

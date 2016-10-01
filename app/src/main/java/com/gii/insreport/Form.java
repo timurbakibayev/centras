@@ -1,5 +1,7 @@
 package com.gii.insreport;
 
+import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -260,5 +262,20 @@ public class Form {
 
     public String getStatusNote() {
         return statusNote;
+    }
+
+    public void switchDone(Context context, boolean closeActivity, Activity activity) {
+        InsReport.savePref("lastFormId","");
+        if (status.equals("accept")) {
+            formReady = !formReady;
+            saveToCloud();
+            if (formReady)
+                InsReport.mainActivity.askReadyResult(this,context, closeActivity, activity);
+            else {
+                statusNote = "";
+                saveToCloud();
+            }
+            InsReport.notifyFormsList();
+        }
     }
 }

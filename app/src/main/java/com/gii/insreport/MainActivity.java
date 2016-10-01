@@ -358,6 +358,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openTheForm(String id, String fireBaseCatalog, Activity context) {
+        //TODO: Find the form, if the form is ready, don't open it!
         Intent intent = new Intent(thisActivity, AdikStyleActivity.class);
         intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, fireBaseCatalog);
         intent.putExtra(InsReport.EXTRA_ID_NO, id);
@@ -406,6 +407,7 @@ public class MainActivity extends AppCompatActivity {
                     InsReport.ref.child("forms/" + form.fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + form.id + "/dateAccepted").
                             setValue(ServerValue.TIMESTAMP);
                 form.status = "accept";
+                form.formReady = false;
                 if (form.elements.size() == 0) {
                     FormTemplates.applyTemplate(form, form.fireBaseCatalog);
                     form.updateDescription();
@@ -429,6 +431,7 @@ public class MainActivity extends AppCompatActivity {
                     InsReport.ref.child("forms/" + form.fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + form.id + "/dateAccepted").
                             setValue(ServerValue.TIMESTAMP);
                 form.status = "reject";
+                form.formReady = true;
                 InsReport.logFirebase("Rejected " + form.fireBaseCatalog + " form no. " + form.id);
                 form.saveToCloud();
                 InsReport.notifyFormsList();
@@ -515,58 +518,43 @@ public class MainActivity extends AppCompatActivity {
         acceptOrRejectDialog.show();
     }
 
-    private void askWhyRejected(final Form form, Context context) {
+    public void askWhyRejected(final Form form, Context context) {
         final Dialog askWhyRejectedDialog = new Dialog(context);
         final EditText reasonET = new EditText(context);
         //reasonET.setText(InsReport.sharedPref.getString("reasonToReject", ""));
+        askWhyRejectedDialog.setCancelable(false);
         TextView captionTV = new TextView(context);
         captionTV.setText("Введите причину отклонения заявки");
         Button positiveButton = new Button(context);
         positiveButton.setText("OK");
-
-        Button consultationsButton = new Button(context);
-        consultationsButton.setText("Консультация");
-        consultationsButton.setBackgroundColor(Color.TRANSPARENT);
-        Button clientCancelledButton = new Button(context);
-        clientCancelledButton.setText("Отмена клиентом");
-        clientCancelledButton.setBackgroundColor(Color.TRANSPARENT);
-        Button noTimeButton = new Button(context);
-        noTimeButton.setText("Нехватка времени");
-        noTimeButton.setBackgroundColor(Color.TRANSPARENT);
-        consultationsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reasonET.setText("Консультация");
-            }
-        });
-        noTimeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reasonET.setText("Нехватка времени");
-            }
-        });
-        clientCancelledButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                reasonET.setText("Отмена клиентом");
-            }
-        });
-
-        LinearLayout resonToRejectLL = new LinearLayout(context);
+        LinearLayout reasonToRejectLL = new LinearLayout(context);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(50, 50, 50, 50);
-        resonToRejectLL.setLayoutParams(lp);
-        resonToRejectLL.setOrientation(LinearLayout.VERTICAL);
-        resonToRejectLL.addView(captionTV);
-        resonToRejectLL.addView(reasonET);
-        resonToRejectLL.addView(consultationsButton);
-        resonToRejectLL.addView(clientCancelledButton);
-        resonToRejectLL.addView(noTimeButton);
-        resonToRejectLL.addView(positiveButton);
-        //deviceNameDialog.setTitle("Введите название устройства, например 'Телефон Samsung' или 'Планшет Армана'");
+        reasonToRejectLL.setLayoutParams(lp);
+        reasonToRejectLL.setOrientation(LinearLayout.VERTICAL);
+        reasonToRejectLL.addView(captionTV);
+
+        String reasons[] = new String[]{"Консультация","Отмена клиентом","Нехватка времени"};
+
+        reasonToRejectLL.addView(reasonET);
+
+        for (final String reason : reasons) {
+            Button anotherReasonButton = new Button(context);
+            anotherReasonButton.setText(reason);
+            anotherReasonButton.setBackgroundColor(Color.TRANSPARENT);
+            anotherReasonButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    reasonET.setText(reason);
+                }
+            });
+            reasonToRejectLL.addView(anotherReasonButton);
+        }
+
+        reasonToRejectLL.addView(positiveButton);
         askWhyRejectedDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        askWhyRejectedDialog.setContentView(resonToRejectLL);
+        askWhyRejectedDialog.setContentView(reasonToRejectLL);
         askWhyRejectedDialog.show();
         positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -578,6 +566,63 @@ public class MainActivity extends AppCompatActivity {
                     form.saveToCloud();
                     askWhyRejectedDialog.dismiss();
                     InsReport.logFirebase("Reason to reject the form " + form.id + ": " + newReason);
+                    InsReport.notifyFormsList();
+                }
+            }
+        });
+
+    }
+
+
+    public void askReadyResult(final Form form, Context context, final boolean closeActivity, final Activity activity) {
+        final Dialog askForResult = new Dialog(context);
+        final EditText reasonET = new EditText(context);
+        //reasonET.setText(InsReport.sharedPref.getString("reasonToReject", ""));
+        askForResult.setCancelable(false);
+        TextView captionTV = new TextView(context);
+        captionTV.setText("Введите результат завершения работы");
+        Button positiveButton = new Button(context);
+        positiveButton.setText("OK");
+        LinearLayout formResultLL = new LinearLayout(context);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.setMargins(50, 50, 50, 50);
+        formResultLL.setLayoutParams(lp);
+        formResultLL.setOrientation(LinearLayout.VERTICAL);
+        formResultLL.addView(captionTV);
+
+        String reasons[] = new String[]{"Оформлен ДТП","Урегулирован на месте","Направлен страховщику виновной стороны"};
+
+        formResultLL.addView(reasonET);
+
+        for (final String reason : reasons) {
+            Button anotherReasonButton = new Button(context);
+            anotherReasonButton.setText(reason);
+            anotherReasonButton.setBackgroundColor(Color.TRANSPARENT);
+            anotherReasonButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    reasonET.setText(reason);
+                }
+            });
+            formResultLL.addView(anotherReasonButton);
+        }
+
+        formResultLL.addView(positiveButton);
+        askForResult.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        askForResult.setContentView(formResultLL);
+        askForResult.show();
+        positiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String newResult = reasonET.getText().toString();
+                if (!newResult.equals("")) {
+                    form.statusNote = newResult;
+                    form.saveToCloud();
+                    askForResult.dismiss();
+                    if (closeActivity)
+                        activity.finish();
+                    InsReport.logFirebase("Done with result " + form.id + ": " + newResult);
                 }
             }
         });
