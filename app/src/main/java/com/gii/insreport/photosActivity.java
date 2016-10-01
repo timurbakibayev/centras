@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -101,14 +102,15 @@ public class PhotosActivity extends AppCompatActivity {
                         cameraAndPictures.showZoomed(picturesLL, CameraAndPictures.bitmap);
                     }
                 });
-                picturesLL.addView(newImage);
                 final Element newPhotoElement = new Element();
                 newPhotoElement.vText = id;
                 newPhotoElement.vDate = new Date();
-                element.elements.add(newPhotoElement);
                 final PhotosActivity thisActivity = this;
-                picturesLL.addView(cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity));
-
+                TextView descriptionTV = cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity);
+                element.elements.add(newPhotoElement);
+                picturesLL.addView(cameraAndPictures.deleteTextView(newPhotoElement,currentForm,newImage,thisActivity,descriptionTV));
+                picturesLL.addView(newImage);
+                picturesLL.addView(descriptionTV);
             }
         }
 
@@ -140,13 +142,15 @@ public class PhotosActivity extends AppCompatActivity {
                                 cameraAndPictures.showZoomed(picturesLL, CameraAndPictures.bitmap);
                             }
                         });
-                        picturesLL.addView(newImage);
                         final Element newPhotoElement = new Element();
                         newPhotoElement.vText = id;
                         newPhotoElement.vDate = new Date();
-                        element.elements.add(newPhotoElement);
                         final PhotosActivity thisActivity = this;
-                        picturesLL.addView(cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity));
+                        TextView descriptionTV = cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity);
+                        element.elements.add(newPhotoElement);
+                        picturesLL.addView(cameraAndPictures.deleteTextView(newPhotoElement,currentForm,newImage,thisActivity,descriptionTV));
+                        picturesLL.addView(newImage);
+                        picturesLL.addView(descriptionTV);
                     }
                 }
             } else {
@@ -169,13 +173,15 @@ public class PhotosActivity extends AppCompatActivity {
                             cameraAndPictures.showZoomed(picturesLL, CameraAndPictures.bitmap);
                         }
                     });
-                    picturesLL.addView(newImage);
                     final Element newPhotoElement = new Element();
                     newPhotoElement.vText = id;
                     newPhotoElement.vDate = new Date();
-                    element.elements.add(newPhotoElement);
                     final PhotosActivity thisActivity = this;
-                    picturesLL.addView(cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity));
+                    element.elements.add(newPhotoElement);
+                    TextView descriptionTV = cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity);
+                    picturesLL.addView(cameraAndPictures.deleteTextView(newPhotoElement,currentForm,newImage,thisActivity,descriptionTV));
+                    picturesLL.addView(newImage);
+                    picturesLL.addView(descriptionTV);
                 }
             }
         }
