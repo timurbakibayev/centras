@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -44,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
     Timer timer = new Timer();
 
-    int imgMainClicked = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,19 +53,7 @@ public class MainActivity extends AppCompatActivity {
         InsReport.storage = FirebaseStorage.getInstance();
         //InsReport.storageRef = InsReport.storage.getReferenceFromUrl("gs://insreport-f39a3.appspot.com");
 
-        ImageView imgMain = (ImageView) findViewById(R.id.main_img);
-        /*
-        imgMain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                imgMainClicked++;
-                if (imgMainClicked >= 3 && InsReport.mAuth.getCurrentUser() != null) {
-                    Intent serverIntent = new Intent(thisActivity, ServerEmuActivity.class);
-                    startActivity(serverIntent);
-                }
-            }
-        });
-        */
+
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -197,16 +182,10 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23) {
             if (this.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
-                //Log.v(TAG,"Permission is granted");
-                return;
             } else {
                 //Log.v(TAG,"Permission is revoked");
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                return;
             }
-        } else { //permission is automatically granted on sdk<23 upon installation
-            //Log.v(TAG,"Permission is granted");
-            return;
         }
     }
 
@@ -214,16 +193,11 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23) {
             if (this.checkSelfPermission(Manifest.permission.CAMERA)
                     == PackageManager.PERMISSION_GRANTED) {
-                //Log.v(TAG,"Permission is granted");
-                return;
             } else {
                 //Log.v(TAG,"Permission is revoked");
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, 1);
-                return;
+
             }
-        } else { //permission is automatically granted on sdk<23 upon installation
-            //Log.v(TAG,"Permission is granted");
-            return;
         }
     }
 
@@ -231,16 +205,11 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23) {
             if (this.checkSelfPermission(Manifest.permission.CALL_PHONE)
                     == PackageManager.PERMISSION_GRANTED) {
-                //Log.v(TAG,"Permission is granted");
-                return;
             } else {
                 //Log.v(TAG,"Permission is revoked");
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CALL_PHONE}, 1);
-                return;
+
             }
-        } else { //permission is automatically granted on sdk<23 upon installation
-            //Log.v(TAG,"Permission is granted");
-            return;
         }
     }
 
@@ -392,7 +361,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(thisActivity, AdikStyleActivity.class);
         intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, fireBaseCatalog);
         intent.putExtra(InsReport.EXTRA_ID_NO, id);
-        startActivity(intent);
+        context.startActivity(intent);
     }
 
     public void acceptOrRejectDialogShow(final Form form, final Activity context) {
@@ -429,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
 
         ((TextView) acceptOrRejectDialog.findViewById(R.id.textHeader)).setText(headerText);
 
-        ((Button) acceptOrRejectDialog.findViewById(R.id.buttonAccept)).setOnClickListener(new View.OnClickListener() {
+        ( acceptOrRejectDialog.findViewById(R.id.buttonAccept)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //if this is first time, save the time of accept/reject
@@ -452,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ((Button) acceptOrRejectDialog.findViewById(R.id.buttonReject)).setOnClickListener(new View.OnClickListener() {
+        ( acceptOrRejectDialog.findViewById(R.id.buttonReject)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //if this is first time, save the time of accept/reject
@@ -462,6 +431,7 @@ public class MainActivity extends AppCompatActivity {
                 form.status = "reject";
                 InsReport.logFirebase("Rejected " + form.fireBaseCatalog + " form no. " + form.id);
                 form.saveToCloud();
+                InsReport.notifyFormsList();
                 // Clear all notification
                 NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 nMgr.cancelAll();
@@ -470,7 +440,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ((Button) acceptOrRejectDialog.findViewById(R.id.buttonCall)).setOnClickListener(new View.OnClickListener() {
+        ( acceptOrRejectDialog.findViewById(R.id.buttonCall)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO: make a call to phoneNo
@@ -495,7 +465,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ((Button) acceptOrRejectDialog.findViewById(R.id.buttonMap)).setOnClickListener(new View.OnClickListener() {
+        ( acceptOrRejectDialog.findViewById(R.id.buttonMap)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO: open map intent to address

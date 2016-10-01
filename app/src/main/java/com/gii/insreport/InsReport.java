@@ -180,6 +180,12 @@ public class InsReport extends Application {
         });
     }
 
+    public static void notifyFormsList() {
+        if (currentListView != null &&
+                currentListView.getAdapter() != null)
+            ((FormsListAdapter)(currentListView.getAdapter())).notifyDataSetChanged();
+    }
+
     public static String generateNewId() {
         SecureRandom random = new SecureRandom();
         return(new BigInteger(64, random).toString(32));

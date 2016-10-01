@@ -144,27 +144,30 @@ public int getItemViewType(int position) {
             (view.findViewById(R.id.imageInListView)).setVisibility(View.VISIBLE);
 
         int color = Color.BLACK;
-        ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.BLACK);
-        ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.BLACK);
 
-        if (p.status.equals("accept")) {
-            color = Color.GREEN;
-            //color = ctx.getResources().getColor(R.color.colorGreen);
-//            color = ctx.getColor(R.color.colorGreen);
+
+        switch (p.status.toLowerCase()) {
+            case "accept":
+                ((ImageView)view.findViewById(R.id.openAcceptOrReject)).setColorFilter(Color.GREEN);
+                (view.findViewById(R.id.openAcceptOrReject)).setAnimation(null);
+                ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.BLACK);
+                ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.BLACK);
+                break;
+            case "reject":
+                ((ImageView)view.findViewById(R.id.openAcceptOrReject)).setColorFilter(Color.RED);
+                (view.findViewById(R.id.openAcceptOrReject)).setAnimation(null);
+                ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.rgb(70, 70, 70));
+                ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.rgb(70, 70, 70));
+                break;
+            default:
+                ((ImageView)view.findViewById(R.id.openAcceptOrReject)).setColorFilter(Color.BLACK);
+                (view.findViewById(R.id.openAcceptOrReject)).setAnimation(animation);
+                ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.BLACK);
+                ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.BLACK);
+                break;
         }
-        if (p.status.equals("reject")) {
-//            color = Color.RED;
-            color = ctx.getResources().getColor(R.color.colorPrimaryDark);
-            //(view.findViewById(R.id.openAcceptOrReject)).setAnimation(animation);
-            ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.rgb(70, 70, 70));
-            ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.rgb(70, 70, 70));
-        } else {
-            (view.findViewById(R.id.openAcceptOrReject)).setAnimation(null);
-        }
 
-        ((ImageView)view.findViewById(R.id.openAcceptOrReject)).setColorFilter(color);
-
-        ((ImageView)view.findViewById(R.id.openAcceptOrReject)).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.openAcceptOrReject).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!p.formReady)

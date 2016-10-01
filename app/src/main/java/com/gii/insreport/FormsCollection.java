@@ -70,9 +70,7 @@ public class FormsCollection {
                             return (!lhs.dateCreated.after(rhs.dateCreated)?1:-1);
                         }
                     });
-                    if (InsReport.currentListView != null &&
-                            InsReport.currentListView.getAdapter() != null)
-                        ((FormsListAdapter)(InsReport.currentListView.getAdapter())).notifyDataSetChanged();
+                    InsReport.notifyFormsList();
                 } catch (Exception e) {
                     Log.e(TAG, "onDataChange: PROBLEMS CASTING FROM DB!!! : " + postSnapshot.getKey() + ", " + e.getMessage());
                     e.printStackTrace();
