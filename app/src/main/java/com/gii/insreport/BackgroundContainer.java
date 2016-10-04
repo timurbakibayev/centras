@@ -2,6 +2,7 @@ package com.gii.insreport;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
@@ -33,7 +34,8 @@ public class BackgroundContainer extends FrameLayout {
     }
 
     private void init() {
-        mShadowedBackground = getContext().getResources().getDrawable(R.drawable.shadowed_background);
+//        mShadowedBackground = getContext().getResources().getDrawable(R.drawable.shadowed_background);
+        mShadowedBackground = new ColorDrawable(getContext().getResources().getColor(R.color.color_green));
     }
 
     public void showBackground(int top, int bottom) {
@@ -45,7 +47,7 @@ public class BackgroundContainer extends FrameLayout {
     }
 
     public void hideBackground() {
-        setWillNotDraw(false);
+        setWillNotDraw(true);
         mShowing = false;
     }
 

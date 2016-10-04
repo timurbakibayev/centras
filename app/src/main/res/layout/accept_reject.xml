@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/activity_vertical_margin">
@@ -14,20 +14,18 @@
         android:gravity="center_horizontal" />
 
     <LinearLayout
-
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/buttonCall"
+            android:id="@+id/buttonAccept"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:drawableLeft="@drawable/ic_call_black_24dp"
-            android:text="@string/call" />
-
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_done_black_24dp"
+            android:text="@string/accept" />
         <View
             android:layout_marginBottom="6dp"
             android:layout_width="1dp"
@@ -35,13 +33,13 @@
             android:background="#FFBABABA" />
 
         <Button
-            android:id="@+id/buttonMap"
+            android:id="@+id/buttonDelay"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_pin_drop_black_24dp"
-            android:text="@string/on_map" />
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_access_alarms_black_24dp"
+            android:text="@string/delay" />
 
     </LinearLayout>
 
@@ -51,7 +49,7 @@
         android:background="#FFBABABA" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
@@ -70,15 +68,15 @@
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="#FFBABABA" />
-
         <Button
-            android:id="@+id/buttonAccept"
+            android:id="@+id/buttonCall"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:drawableLeft="@drawable/ic_done_black_24dp"
-            android:text="@string/accept" />
+            android:layout_weight="2"
+            android:drawableLeft="@drawable/ic_call_black_24dp"
+            android:text="@string/call" />
+
     </LinearLayout>
     <View
         android:layout_marginTop="6dp"
@@ -86,13 +84,11 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
     <Button
-        android:id="@+id/send_sms"
-        android:drawableRight="@drawable/ic_chat_black_24dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:drawablePadding="6dp"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/send_sms"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:id="@+id/buttonMap"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_pin_drop_black_24dp"
+        android:text="@string/on_map" />
 
 </LinearLayout>

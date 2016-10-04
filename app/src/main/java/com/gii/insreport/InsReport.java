@@ -56,7 +56,7 @@ public class InsReport extends Application {
     public static ArrayList<Long> multipleImagesDate = new ArrayList<>();
 
     //TODO: EDIT THIS PHONE FOR EACH COMPANY!
-    public static String defaultCallCenter = "87771111111";
+    public static String defaultCallCenter = "+77272597755";
 
     private FirebaseAuth.AuthStateListener mAuthListener;
 

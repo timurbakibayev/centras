@@ -159,7 +159,7 @@ public class FormsList extends AppCompatActivity {
                         if (deltaXAbs > mSwipeSlop) {
                             mSwiping = true;
                             InsReport.currentListView.requestDisallowInterceptTouchEvent(true);
-                            //mBackgroundContainer.showBackground(view.getTop(), view.getHeight());
+                            mBackgroundContainer.showBackground(view.getTop(), view.getHeight());
 
                         }
                     }

@@ -429,7 +429,8 @@ public class MainActivity extends AppCompatActivity {
                 form.status = "accept";
                 form.statusNote = "В работе";
                 //TODO: change the phone no.
-                Log.e(TAG, "Sending SMS: " + SMS.send("0507663904","Test")); //phoneNo
+                Log.e(TAG, "Sending SMS: " + SMS.send(phoneNo,
+                        getString(R.string.accept_sms, "Нурбек"))); //phoneNo
                 form.formReady = false;
                 if (form.elements.size() == 0) {
                     FormTemplates.applyTemplate(form, form.fireBaseCatalog);
@@ -489,12 +490,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Add sms not sure how to connect to firebase
-        (acceptOrRejectDialog.findViewById(R.id.send_sms)).setOnClickListener(new View.OnClickListener() {
+        (acceptOrRejectDialog.findViewById(R.id.buttonDelay)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                acceptOrRejectDialog.dismiss();
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms",
-                        phoneNo.trim(), null)));
+                SMS.send(phoneNo,
+                        getString(R.string.delay_sms, "Нурбек", 30));
             }
         });
 
