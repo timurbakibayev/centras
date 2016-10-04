@@ -64,9 +64,11 @@ public class PhotosActivity extends AppCompatActivity {
 
         picturesLL = (LinearLayout)findViewById(R.id.photoLLNew);
 
+        //TODO: for some reason element.elements was null once :(
         for (Element el : element.elements)
             if (!el.deleted)
                 cameraAndPictures.getPicFromFirebase(el,currentForm,picturesLL);
+
     }
 
 

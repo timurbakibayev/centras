@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.TextInputLayout;
 import android.util.Base64;
 import android.util.Log;
@@ -35,7 +36,7 @@ public class CameraAndPictures {
     public static String savePictureToFirebase(String filename) {
         File file = new File(filename);
         //Uri fileUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg"));
-        bitmap = decodeSampledBitmapFromFile(file.getAbsolutePath(), 700, 700); //i guess, 640x480 would be enough
+        bitmap = decodeSampledBitmapFromFile(file.getAbsolutePath(), 3000, 3000); //i guess, 640x480 would be enough 700 700
         String id = generateNewId();
         //uncomment this to upload the file to the firebase storage as well.
         //does not work offline :(
@@ -88,7 +89,11 @@ public class CameraAndPictures {
         descriptionAndDate.setTextColor(Color.BLACK);
         if (element.description.equals(""))
             element.description = "Без описания";
-        descriptionAndDate.setText(element.description + "\n" + FillFormActivity.dateTimeText(element.vDate) + "\n\n");
+        Drawable d = imageView.getDrawable();
+        int origW = d.getIntrinsicWidth();
+        int origH = d.getIntrinsicHeight();
+        String size = "Размер: " + origW + " x " + origH;
+        descriptionAndDate.setText(element.description + "\n" + FillFormActivity.dateTimeText(element.vDate) + "\n" + size + "\n\n");
         descriptionAndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
