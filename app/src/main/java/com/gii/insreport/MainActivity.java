@@ -113,8 +113,8 @@ public class MainActivity extends AppCompatActivity {
                             for (Button formButton : formButtons) {
                                 formButton.setEnabled(true);
                             }
-                            checkNewForms(thisActivity, true);
                             checkIfNeededToFindByPhone();
+                            checkNewForms(thisActivity, true);
                         }
                     });
                     Log.e(TAG, "run: ALL LOADED");
@@ -267,8 +267,8 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "onResume: YES");
 
         if (InsReport.directories.loaded) {
-            checkNewForms(this,false);
             checkIfNeededToFindByPhone();
+            checkNewForms(this,false);
         }
     }
 
@@ -283,6 +283,7 @@ public class MainActivity extends AppCompatActivity {
                                     form.input.get("CLAIMANT_PHONE_NO").equals(phoneNo))
                             ) {
                         //here open the form
+                        InsReport.savePref("lastFormId","");
                         openTheForm(form, this);
                         getIntent().removeExtra("findByPhone");
                         break;
@@ -352,6 +353,7 @@ public class MainActivity extends AppCompatActivity {
     public void checkNewForms(Activity context, boolean formsAreJustLoaded) {
         if (InsReport.formToBeAccepted != null &&
                 InsReport.formToBeAccepted.status.equals("")) {
+            Log.e(TAG, "checkNewForms: acceptOrReject");
             acceptOrRejectDialogShow(InsReport.formToBeAccepted, context);
             return;
         }
@@ -365,7 +367,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openTheForm(Form form, Activity context) {
-        openTheForm(form.id,form.fireBaseCatalog,context);
+        if (form.status.equals("accept"))
+            openTheForm(form.id,form.fireBaseCatalog,context);
+        if (form.status.equals("")) {
+            Log.e(TAG, "openTheForm: acceptOrRejectDialogShow");
+            acceptOrRejectDialogShow(form, context);
+        }
     }
 
     public void openTheForm(String id, String fireBaseCatalog, Activity context) {
@@ -377,6 +384,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void acceptOrRejectDialogShow(final Form form, final Activity context) {
+        Log.e(TAG, "acceptOrRejectDialogShow");
         InsReport.formToBeAccepted = null; //we don't have to accept or reject it second time. And it is now outdated anyways.
         final Dialog acceptOrRejectDialog = new Dialog(context);
         acceptOrRejectDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -429,7 +437,13 @@ public class MainActivity extends AppCompatActivity {
                     form.validate();
                     // Clear all notification
                     NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    nMgr.cancelAll();
+                    int idk = 0;
+                    for (int i = 0; i < phoneNo.length(); i++) {
+                        int k = phoneNo.charAt(i);
+                        k = k * i;
+                        idk += k;
+                    }
+                    nMgr.cancel(idk);
                 }
                 form.saveToCloud();
                 InsReport.notifyFormsList();

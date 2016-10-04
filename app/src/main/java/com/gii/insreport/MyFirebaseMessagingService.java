@@ -21,6 +21,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
 
+    private String personPhone = "";
+    private String address = "";
+    private String personName = "";
+
     /**
      * Called when message is received.
      *
@@ -74,6 +78,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intent.setAction("Updated from notification!");
         sendBroadcast(intent);
 
+        personPhone = remoteMessage.getData().get("phone");
+        address = remoteMessage.getData().get("address");
+        personName = remoteMessage.getData().get("name");
+
+
         String t = "";
         if (remoteMessage.getData().get("name") != null)
             t = remoteMessage.getData().get("name");
@@ -90,11 +99,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param messageBody FCM message body received.
      */
     private void sendNotification(String messageBody) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+        //Intent intent = new Intent(this, MainActivity.class);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        //intent.setAction("foo");
+        //PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+         //       PendingIntent.FLAG_UPDATE_CURRENT);
 
+
+        int id = 0;
+        for (int i = 0; i < personPhone.length(); i++) {
+            int k = personPhone.charAt(i);
+            k = k * i;
+            id += k;
+        }
 
         String soundUri = InsReport.sharedPref.getString("notifications_new_message_ringtone",RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString());
         Uri defaultSoundUri = Uri.parse(soundUri);
@@ -104,21 +121,77 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             vibra = new long[] {0,100,100,100,100,400,1000,100,100,100,100,400};
         }
 
+        Intent intentMA = new Intent(this, MainActivity.class);
+        intentMA.setAction("foo");
+        intentMA.putExtra("findByPhone", personPhone);
+        intentMA.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent openAppPendingIntent = PendingIntent.getActivity(this, id, intentMA, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.centraslogo)
-                .setContentTitle("Новый страховой случай")
-                .setContentText(messageBody)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setVibrate(vibra)
-                .setContentIntent(pendingIntent);
+
+        Intent intentCall = new Intent(Intent.ACTION_CALL);
+        intentCall.setData(Uri.parse("tel:" + personPhone.trim()));
+        PendingIntent callPendingIntent = PendingIntent.getActivity(this, id, intentCall, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        String regex = "((-|\\+)?[0-9]+(\\.[0-9]+)?)+";
+        String[] location = address.split(" ");
+        boolean coordinates = false;
+
+        for (int i = 0; i < location.length; i++) {
+            if (location[i].matches(regex)) {
+                coordinates = true;
+            }
+        }
+        String locationStr;
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW);
+
+        if (coordinates) {
+            if (location.length > 1)
+                locationStr = location[0]+","+location[1];
+            else
+                locationStr = location[0];
+            Uri locationUri1 = Uri.parse("geo:0,0?").buildUpon()
+                    .appendQueryParameter("q", locationStr)
+                    .build();
+            mapIntent.setData(locationUri1);
+        } else {
+            locationStr = address.replaceAll(" ", "+");
+            Uri locationUri2 = Uri.parse("geo:0,0?").buildUpon()
+                    .appendQueryParameter("q", locationStr)
+                    .build();
+            mapIntent.setData(locationUri2);
+        }
+        PendingIntent mapPendingIntent = PendingIntent.getActivity(this, id, mapIntent, 0);
+        NotificationCompat.Builder notificationBuilder;
+
+        if (personPhone.equals("") || address.equals("")) {
+            notificationBuilder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.centraslogo)
+                    .setContentTitle("Новый страховой случай")
+                    .setContentText(messageBody)
+                    .setAutoCancel(true)
+                    .setSound(defaultSoundUri)
+                    .setVibrate(vibra)
+                    .setContentIntent(openAppPendingIntent);
+        } else {
+            notificationBuilder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.centraslogo)
+                    .setContentTitle(personName)
+                    .setTicker(personName)
+                    .setContentText(address + "\n" + personPhone)
+                    .setSound(defaultSoundUri)
+                    .setVibrate(vibra)
+                    .addAction(R.drawable.ic_call_black_24dp,"Позвонить",callPendingIntent)
+                    .addAction(R.drawable.ic_pin_drop_black_24dp,"Карта",mapPendingIntent)
+                    .setOngoing(true)
+                    .setContentIntent(openAppPendingIntent);
+        }
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+
         if (InsReport.sharedPref.getBoolean("notifications_new_message",true))
-            notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+            notificationManager.notify(id /* ID of notification */, notificationBuilder.build());
         Log.e(TAG, "sendNotification: hm...");
     }
 }

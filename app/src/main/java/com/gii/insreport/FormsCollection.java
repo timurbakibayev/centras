@@ -56,7 +56,8 @@ public class FormsCollection {
                 try {
                     Form newForm = postSnapshot.getValue(Form.class);
                     newForm.id = postSnapshot.getKey();
-                    Log.e(TAG, "onChildAdded: processing new item..." + s7);
+                    newForm.fireBaseCatalog = fireBaseCatalog;
+                    Log.e(TAG, "onChildAdded: processing new item..." + newForm.id);
                     //newForm.validate();
                     if (newForm.elements.size() == 0) {
                         InsReport.formToBeAccepted = newForm;
@@ -95,15 +96,18 @@ public class FormsCollection {
                 try {
                     Form newForm = postSnapshot.getValue(Form.class);
                     newForm.id = postSnapshot.getKey();
-                    Log.e(TAG, "onChildChanged: processing existing item..." + s7);
+                    newForm.fireBaseCatalog = fireBaseCatalog;
+                    Log.e(TAG, "onChildChanged: processing existing item..." + newForm.id + ", status " + newForm.status);
                     //newForm.validate();
+                    /*
                     if (newForm.elements.size() == 0) {
                         InsReport.formToBeAccepted = newForm;
                         newForm.fireBaseCatalog = fireBaseCatalog;
-                    }
+                    }*/
                     for (int i = 0; i < forms.size(); i++) {
                         if (forms.get(i).id.equals(newForm.id)) {
                             forms.set(i,newForm);
+                            Log.e(TAG, "onChildChanged: found the corresponding form id");
                         }
                         InsReport.notifyFormsList();
                     }

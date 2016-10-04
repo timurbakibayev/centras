@@ -324,6 +324,10 @@ public class AdikStyleActivity extends AppCompatActivity {
 
         }
 
+        if (findViewById(R.id.call_adik) == null) {
+            finish();
+            return;
+        }
 
         ((ImageButton) findViewById(R.id.call_adik)).setOnClickListener(new View.OnClickListener() {
             @Override
