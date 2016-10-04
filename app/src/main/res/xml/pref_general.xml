@@ -7,6 +7,14 @@
         android:title="Открывать последнюю форму при запуске"
         android:visibility="gone"/>
 
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="sms"
+        android:summary="Отправлять автоматические sms сообщения при принятии новой заявки и других случаях."
+        android:title="Отправлять SMS"
+        android:visibility="gone"/>
+
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
     <EditTextPreference

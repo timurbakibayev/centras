@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         grantStoragePermission();
         grantCameraPermission();
         grantCallPermission();
+        grantSMSPermission();
 
         refreshUser();
         InsReport.mainActivity = this;
@@ -206,8 +207,18 @@ public class MainActivity extends AppCompatActivity {
             if (this.checkSelfPermission(Manifest.permission.CALL_PHONE)
                     == PackageManager.PERMISSION_GRANTED) {
             } else {
-                //Log.v(TAG,"Permission is revoked");
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CALL_PHONE}, 1);
+
+            }
+        }
+    }
+
+    public void grantSMSPermission() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (this.checkSelfPermission(Manifest.permission.SEND_SMS)
+                    == PackageManager.PERMISSION_GRANTED) {
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
 
             }
         }
@@ -366,6 +377,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void acceptOrRejectDialogShow(final Form form, final Activity context) {
+        InsReport.formToBeAccepted = null; //we don't have to accept or reject it second time. And it is now outdated anyways.
         final Dialog acceptOrRejectDialog = new Dialog(context);
         acceptOrRejectDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         acceptOrRejectDialog.setContentView(context.getLayoutInflater().inflate(R.layout.accept_reject
@@ -408,6 +420,8 @@ public class MainActivity extends AppCompatActivity {
                             setValue(ServerValue.TIMESTAMP);
                 form.status = "accept";
                 form.statusNote = "В работе";
+                //TODO: change the phone no.
+                Log.e(TAG, "Sending SMS: " + SMS.send("0507663904","Test")); //phoneNo
                 form.formReady = false;
                 if (form.elements.size() == 0) {
                     FormTemplates.applyTemplate(form, form.fireBaseCatalog);
