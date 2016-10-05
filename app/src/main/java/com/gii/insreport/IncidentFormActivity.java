@@ -60,7 +60,7 @@ import java.util.Map;
 
 public class IncidentFormActivity extends AppCompatActivity {
 
-    private static final String TAG = "IncidentFormActivity.java";
+    private static final String TAG = "IncidentFormActivity";
 
     private static final int SPEACH_INTENT = 12;
     private static final int DAMAGE_PLAN_INTENT = 15;
@@ -253,8 +253,10 @@ public class IncidentFormActivity extends AppCompatActivity {
             buildTheForm(currentForm);
         }
 
+
         if (fireBaseCatalog.equalsIgnoreCase("incident")) {
 
+            ((Button) findViewById(R.id.AButtonGeneral)).setText("Общие данные\n");
             ((Button) findViewById(R.id.AButtonGeneral)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -391,13 +393,21 @@ public class IncidentFormActivity extends AppCompatActivity {
 
 
         final String address;
+        String headerText = "";
 
         if (currentForm != null) {
+            if (currentForm.input.get("CLIENT_NAME") != null)
+                headerText = currentForm.input.get("CLIENT_NAME");
             if (currentForm.input.get("EVENT_PLACE") != null) {
                 address = currentForm.input.get("EVENT_PLACE");
             } else
                 address = "";
-        } else address = "";
+        } else
+            address = "";
+
+
+        if (findViewById(R.id.textHeader) != null)
+            ((TextView)findViewById(R.id.textHeader)).setText(headerText);
 
         ((ImageButton) findViewById(R.id.map_adik)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -720,8 +730,10 @@ public class IncidentFormActivity extends AppCompatActivity {
             if (element.serverStatic) {
                 LinearLayout horizontalLLStatic = new LinearLayout(this);
                 horizontalLLStatic.setOrientation(LinearLayout.HORIZONTAL);
-                horizontalLLStatic.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT));
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(0,0,0,20);
+                horizontalLLStatic.setLayoutParams(lp);
                 TextView fieldName = new TextView(this);
                 fieldName.setMaxLines(5);
                 fieldName.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,

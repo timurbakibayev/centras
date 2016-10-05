@@ -106,12 +106,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
          //       PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        int id = 0;
-        for (int i = 0; i < personPhone.length(); i++) {
-            int k = personPhone.charAt(i);
-            k = k * i;
-            id += k;
-        }
+        int id = Form.hash(personPhone);
+
+        Log.e(TAG, "sendNotification: id " + id);
 
         String soundUri = InsReport.sharedPref.getString("notifications_new_message_ringtone",RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString());
         Uri defaultSoundUri = Uri.parse(soundUri);
@@ -126,7 +123,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         intentMA.putExtra("findByPhone", personPhone);
         intentMA.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent openAppPendingIntent = PendingIntent.getActivity(this, id, intentMA, PendingIntent.FLAG_CANCEL_CURRENT);
-
 
         Intent intentCall = new Intent(Intent.ACTION_CALL);
         intentCall.setData(Uri.parse("tel:" + personPhone.trim()));

@@ -1,6 +1,7 @@
 package com.gii.insreport;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.util.Log;
 
@@ -257,13 +258,34 @@ public class Form {
         if (status.equals("accept")) {
             formReady = !formReady;
             saveToCloud();
-            if (formReady)
-                InsReport.mainActivity.askReadyResult(this,context, closeActivity, activity);
+            if (formReady) {
+                InsReport.mainActivity.askReadyResult(this, context, closeActivity, activity);
+                NotificationManager nMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                nMgr.cancel(calculateId());
+                Log.e(TAG, "switchDone: " + calculateId());
+            }
             else {
                 statusNote = "В работе";
                 saveToCloud();
             }
             InsReport.notifyFormsList();
         }
+    }
+
+    public int calculateId() {
+        if (input.get("CLAIMANT_PHONE_NO") != null)
+            phoneNo = input.get("CLAIMANT_PHONE_NO");
+        return hash(phoneNo);
+
+    }
+
+    public static int hash (String phoneNo) {
+        int idk = 0;
+        for (int i = 0; i < phoneNo.length(); i++) {
+            int k = phoneNo.charAt(i);
+            k = k * (i *100);
+            idk += k;
+        }
+        return idk;
     }
 }

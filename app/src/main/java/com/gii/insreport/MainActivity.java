@@ -436,15 +436,6 @@ public class MainActivity extends AppCompatActivity {
                     FormTemplates.applyTemplate(form, form.fireBaseCatalog);
                     form.updateDescription();
                     form.validate();
-                    // Clear all notification
-                    NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    int idk = 0;
-                    for (int i = 0; i < phoneNo.length(); i++) {
-                        int k = phoneNo.charAt(i);
-                        k = k * i;
-                        idk += k;
-                    }
-                    nMgr.cancel(idk);
                 }
                 form.saveToCloud();
                 InsReport.notifyFormsList();

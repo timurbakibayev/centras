@@ -25,10 +25,11 @@
                 android:id="@+id/call_center_adik"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_business_black_24dp"
+                android:src="@drawable/call_center_worker"
                 android:tint="@android:color/white"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layoutDirection="rtl"/>
+                android:layoutDirection="rtl"
+                />
 
             <ImageButton
                 android:id="@+id/call_adik"
@@ -58,6 +59,12 @@
                 android:layoutDirection="rtl"/>
 
         </android.support.v7.widget.Toolbar>
+        <TextView
+            android:id="@+id/textHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text=""/>
 
     </android.support.design.widget.AppBarLayout>
 
