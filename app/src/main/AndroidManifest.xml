@@ -65,10 +65,6 @@
             android:label="@string/title_activity_forms_list"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".FillFormActivity"
-            android:label="Анкета"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
             android:name=".FreeDrawActivity"
             android:label="@string/title_activity_free_draw"
             android:theme="@style/AppTheme.NoActionBar" />

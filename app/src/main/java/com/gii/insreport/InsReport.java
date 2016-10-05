@@ -137,7 +137,7 @@ public class InsReport extends Application {
                     ref.child("users/"+user.getUid()+"/id").setValue(user.getUid());
                     ref.child("users/"+user.getUid()+"/lastLogin").setValue(ServerValue.TIMESTAMP);
                     Date d = new Date();
-                    ref.child("users/"+user.getUid()+"/lastLoginAndroid").setValue(FillFormActivity.dateOnlyTextStrict(d));
+                    ref.child("users/"+user.getUid()+"/lastLoginAndroid").setValue(AdikStyleActivity.dateOnlyTextStrict(d));
                     ref.child("users/"+user.getUid()+"/devices/" + FirebaseInstanceId.getInstance().getToken().replaceAll("[^0-9]+", "")).setValue(
                             sharedPref.getString("devicename","Неизвестное устройство"));
                     MainActivity.checkDeviceName(mainActivity);
@@ -272,11 +272,11 @@ public class InsReport extends Application {
             log.put("User",user.getEmail().toString());
             log.put("ServerTime",ServerValue.TIMESTAMP);
             Date d = new Date();
-            log.put("TextTime",FillFormActivity.dateOnlyTextStrict(d));
+            log.put("TextTime",AdikStyleActivity.dateOnlyTextStrict(d));
             log.put("Text",logText);
             log.put("Device ID",FirebaseInstanceId.getInstance().getToken());
 
-            ref.child("log/"+FillFormActivity.dateToYYMMDD(d) + "/" + user.getEmail().toString().replaceAll("[^A-Za-z]+", "")).
+            ref.child("log/"+AdikStyleActivity.dateToYYMMDD(d) + "/" + user.getEmail().toString().replaceAll("[^A-Za-z]+", "")).
                     push().setValue(log);
         }
     }
@@ -287,13 +287,13 @@ public class InsReport extends Application {
             log.put("User",user.getEmail().toString());
             log.put("ServerTime",ServerValue.TIMESTAMP);
             Date d = new Date();
-            log.put("TextTime",FillFormActivity.dateOnlyTextStrict(d));
+            log.put("TextTime",AdikStyleActivity.dateOnlyTextStrict(d));
             log.put("Text",logText);
             log.put("Text2",logText2);
             log.put("Text3",logText3);
             log.put("Device ID",FirebaseInstanceId.getInstance().getToken());
 
-            ref.child("error/"+FillFormActivity.dateToYYMMDD(d) + "/" + user.getEmail().toString().replaceAll("[^A-Za-z]+", "")).
+            ref.child("error/"+AdikStyleActivity.dateToYYMMDD(d) + "/" + user.getEmail().toString().replaceAll("[^A-Za-z]+", "")).
                     push().setValue(log);
         }
     }

@@ -93,14 +93,14 @@ public class CameraAndPictures {
         int origW = d.getIntrinsicWidth();
         int origH = d.getIntrinsicHeight();
         String size = "Размер: " + origW + " x " + origH;
-        descriptionAndDate.setText(element.description + "\n" + FillFormActivity.dateTimeText(element.vDate) + "\n" + size + "\n\n");
+        descriptionAndDate.setText(element.description + "\n" + AdikStyleActivity.dateTimeText(element.vDate) + "\n" + size + "\n\n");
         descriptionAndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (element.deleted) {
                     imageView.setVisibility(View.VISIBLE);
                     descriptionAndDate.setTextColor(Color.BLACK);
-                    descriptionAndDate.setText(element.description + "\n" + FillFormActivity.dateTimeText(element.vDate) + "\n\n");
+                    descriptionAndDate.setText(element.description + "\n" + AdikStyleActivity.dateTimeText(element.vDate) + "\n\n");
                     element.deleted = false;
                     form.saveToCloud();
                     return;
@@ -127,13 +127,13 @@ public class CameraAndPictures {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 element.description = editText.getText().toString();
                                 form.saveToCloud();
-                                descriptionAndDate.setText(element.description + "\n" + FillFormActivity.dateTimeText(element.vDate) + "\n\n");
+                                descriptionAndDate.setText(element.description + "\n" + AdikStyleActivity.dateTimeText(element.vDate) + "\n\n");
                             }
                         }).setNegativeButton("Удалить", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                             element.deleted = true;
-                            descriptionAndDate.setText("Удалено. Нажмите для воостановления. \n" + element.description + "\n" + FillFormActivity.dateTimeText(element.vDate) + "\n\n");
+                            descriptionAndDate.setText("Удалено. Нажмите для воостановления. \n" + element.description + "\n" + AdikStyleActivity.dateTimeText(element.vDate) + "\n\n");
                             descriptionAndDate.setTextColor(Color.RED);
                             imageView.setVisibility(View.GONE);
                             form.saveToCloud();
@@ -156,7 +156,7 @@ public class CameraAndPictures {
             @Override
             public void onClick(View view) {
                 element.deleted = true;
-                descriptionAndDate.setText("Удалено. Нажмите для воостановления. \n" + element.description + "\n" + FillFormActivity.dateTimeText(element.vDate) + "\n\n");
+                descriptionAndDate.setText("Удалено. Нажмите для воостановления. \n" + element.description + "\n" + AdikStyleActivity.dateTimeText(element.vDate) + "\n\n");
                 descriptionAndDate.setTextColor(Color.RED);
                 imageView.setVisibility(View.GONE);
                 form.saveToCloud();

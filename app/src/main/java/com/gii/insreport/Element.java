@@ -125,9 +125,9 @@ public class Element {
             case eText:
                 return vText;
             case eDate:
-                return (FillFormActivity.dateOnlyText(vDate));
+                return (AdikStyleActivity.dateOnlyText(vDate));
             case eDateTime:
-                return (FillFormActivity.dateTimeText(vDate));
+                return (AdikStyleActivity.dateTimeText(vDate));
             case eInteger:
                 return ("" + vInteger);
             case ePlan:
@@ -160,9 +160,9 @@ public class Element {
             case eText:
                 return vText;
             case eDate:
-                return (FillFormActivity.dateJson(vDate));
+                return (AdikStyleActivity.dateJson(vDate));
             case eDateTime:
-                return (FillFormActivity.dateTimeJson(vDate));
+                return (AdikStyleActivity.dateTimeJson(vDate));
             case eInteger:
                 return ("" + vInteger);
             case ePlan:
