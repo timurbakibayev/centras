@@ -473,7 +473,7 @@ public class FormsList extends AppCompatActivity {
             }
             if (currentForm.status.equals("accept") &&
                     !currentForm.formReady) {
-                Intent intent = new Intent(thisActivity, AdikStyleActivity.class);
+                Intent intent = new Intent(thisActivity, IncidentFormActivity.class);
                 intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, fireBaseCatalog);
                 intent.putExtra(InsReport.EXTRA_ID_NO, id);
                 InsReport.logFirebase("Open " + fireBaseCatalog + " form no. " + id);

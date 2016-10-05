@@ -76,7 +76,7 @@
             android:label="@string/title_activity_anima"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AdikStyleActivity"
+            android:name=".IncidentFormActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PhotosActivity"

@@ -58,9 +58,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AdikStyleActivity extends AppCompatActivity {
+public class IncidentFormActivity extends AppCompatActivity {
 
-    private static final String TAG = "AdikStyleActivity.java";
+    private static final String TAG = "IncidentFormActivity.java";
 
     private static final int SPEACH_INTENT = 12;
     private static final int DAMAGE_PLAN_INTENT = 15;
@@ -228,7 +228,7 @@ public class AdikStyleActivity extends AppCompatActivity {
         fireBaseCatalog = getIntent().getStringExtra(InsReport.EXTRA_FIREBASE_CATALOG);
 
         if (fireBaseCatalog.equalsIgnoreCase("incident"))
-            setContentView(R.layout.activity_adik_style);
+            setContentView(R.layout.activity_incident_form);
         if (fireBaseCatalog.equalsIgnoreCase("preinsurance"))
             setContentView(R.layout.activity_pre_insurance);
 
@@ -470,7 +470,7 @@ public class AdikStyleActivity extends AppCompatActivity {
             }
             photos[i] = element.description + " (" + k + " фото)";
         }
-        final AdikStyleActivity adikStyleActivity = this;
+        final IncidentFormActivity incidentFormActivity = this;
         new android.app.AlertDialog.Builder(this)
                 .setTitle("Выберите тип фото")
                 .setSingleChoiceItems(photos, 0, new DialogInterface.OnClickListener() {
@@ -515,7 +515,7 @@ public class AdikStyleActivity extends AppCompatActivity {
             Element element = signatureElements.get(i);
             signatures[i] = element.description + "  " + element.toString();
         }
-        final AdikStyleActivity adikStyleActivity = this;
+        final IncidentFormActivity incidentFormActivity = this;
         new android.app.AlertDialog.Builder(this)
                 .setTitle("Выберите подпись")
                 .setSingleChoiceItems(signatures, 0, new DialogInterface.OnClickListener() {
@@ -556,7 +556,7 @@ public class AdikStyleActivity extends AppCompatActivity {
             participants[i] = element.description;
         }
         participants[participants.length - 1] = "Добавить +";
-        final AdikStyleActivity adikStyleActivity = this;
+        final IncidentFormActivity incidentFormActivity = this;
         new android.app.AlertDialog.Builder(this)
                 .setTitle("Выберите участника")
                 .setSingleChoiceItems(participants, 0, new DialogInterface.OnClickListener() {
@@ -580,7 +580,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                                     currentForm.participants.elements.add(newParticipant);
                                 }
                                 InsReport.currentElement = currentForm.participants.elements.get(which);
-                                LinearLayout newLL = new LinearLayout(adikStyleActivity);
+                                LinearLayout newLL = new LinearLayout(incidentFormActivity);
                                 newLL.setOrientation(LinearLayout.VERTICAL);
                                 addElementsToLL(newLL, InsReport.currentElement.elements);
                                 linearLayoutForFragment.put("specific", newLL);
@@ -606,7 +606,7 @@ public class AdikStyleActivity extends AppCompatActivity {
             objects[i] = element.description;
         }
         objects[objects.length - 1] = "Добавить +";
-        final AdikStyleActivity adikStyleActivity = this;
+        final IncidentFormActivity incidentFormActivity = this;
         new android.app.AlertDialog.Builder(this)
                 .setTitle("Выберите объект")
                 .setSingleChoiceItems(objects, 0, new DialogInterface.OnClickListener() {
@@ -630,7 +630,7 @@ public class AdikStyleActivity extends AppCompatActivity {
                                     currentForm.objects.elements.add(newObject);
                                 }
                                 InsReport.currentElement = currentForm.objects.elements.get(which);
-                                LinearLayout newLL = new LinearLayout(adikStyleActivity);
+                                LinearLayout newLL = new LinearLayout(incidentFormActivity);
                                 newLL.setOrientation(LinearLayout.VERTICAL);
                                 addElementsToLL(newLL, InsReport.currentElement.elements);
                                 linearLayoutForFragment.put("specific", newLL);
@@ -708,7 +708,7 @@ public class AdikStyleActivity extends AppCompatActivity {
         }
     }
 
-    final AdikStyleActivity thisActivity = this;
+    final IncidentFormActivity thisActivity = this;
     int datePickerIndex = -1;
     Element currentDateElement = null;
 

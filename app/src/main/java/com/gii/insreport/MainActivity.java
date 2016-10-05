@@ -377,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void openTheForm(String id, String fireBaseCatalog, Activity context) {
         //TODO: Find the form, if the form is ready, don't open it!
-        Intent intent = new Intent(thisActivity, AdikStyleActivity.class);
+        Intent intent = new Intent(thisActivity, IncidentFormActivity.class);
         intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, fireBaseCatalog);
         intent.putExtra(InsReport.EXTRA_ID_NO, id);
         context.startActivity(intent);
