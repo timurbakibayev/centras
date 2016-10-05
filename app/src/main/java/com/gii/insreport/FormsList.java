@@ -236,7 +236,7 @@ public class FormsList extends AppCompatActivity {
             AlphaAnimation alphaAnim = new AlphaAnimation(mCurrentAlpha, remove ? 0 : 1);
             AnimationSet set = new AnimationSet(true);
             set.addAnimation(swipeAnim);
-            set.addAnimation(alphaAnim);
+            //set.addAnimation(alphaAnim);
             set.setDuration(duration);
             view.startAnimation(set);
             setAnimationEndAction(set, new Runnable() {
@@ -260,7 +260,8 @@ public class FormsList extends AppCompatActivity {
         float fraction = Math.abs(deltaX) / view.getWidth();
         if (isRuntimePostGingerbread()) {
             view.setTranslationX(deltaX);
-            view.setAlpha(1 - fraction);
+            //view.setAlpha(1 - fraction);
+            //mBackgroundContainer.setAlpha(fraction);
         } else {
             // Hello, Gingerbread!
             TranslateAnimation swipeAnim = new TranslateAnimation(deltaX, deltaX, 0, 0);
@@ -269,7 +270,7 @@ public class FormsList extends AppCompatActivity {
             AlphaAnimation alphaAnim = new AlphaAnimation(mCurrentAlpha, mCurrentAlpha);
             AnimationSet set = new AnimationSet(true);
             set.addAnimation(swipeAnim);
-            set.addAnimation(alphaAnim);
+            //set.addAnimation(alphaAnim);
             set.setFillAfter(true);
             set.setFillEnabled(true);
             view.startAnimation(set);
