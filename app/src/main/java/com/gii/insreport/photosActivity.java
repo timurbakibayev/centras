@@ -86,6 +86,10 @@ public class PhotosActivity extends AppCompatActivity {
                 }
             }
         }, 1000,1000);
+
+        if (findViewById(R.id.titleTV) != null)
+            ((TextView)findViewById(R.id.titleTV)).setText(element.description);
+
     }
 
     void refreshRequirements() {
@@ -107,9 +111,6 @@ public class PhotosActivity extends AppCompatActivity {
             }
         }
         ((TextView)findViewById(R.id.requirementsTV)).setText(requirements);
-        if (findViewById(R.id.titleTV) == null)
-            return;
-        ((TextView)findViewById(R.id.titleTV)).setText(element.description);
     }
 
 

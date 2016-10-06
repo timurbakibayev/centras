@@ -32,7 +32,7 @@
             android:id="@+id/requirementsTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Необходимо добавить: \n Место ДТП \n Ещё фотография \n Ещё фотография..."/>
+            android:text="Обновляется список требований..."/>
 
     </android.support.design.widget.AppBarLayout>
 

@@ -241,6 +241,22 @@ public class Element {
         return (n);
     }
 
+    public boolean allPhotosTaken() {
+        for (String comboItem : comboItems) {
+            if (!comboItem.equals("")) {
+                boolean exitsts = false;
+                for (Element element1 : elements) {
+                    if (element1.description.equals(comboItem) && !element1.deleted)
+                        exitsts = true;
+                }
+                if (!exitsts) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public enum ElementType {
         eInteger, eBoolean, ePhoto, eText, eCombo, eRadio, eDate, eDateTime, eGroup, eDraw, ePlan, eSignature, eAnima, eLookUp, eParticipant, eTextNum, eComboMulti;
     }

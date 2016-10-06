@@ -73,15 +73,15 @@ public class FormsCollection {
                             newForm.fireBaseCatalog = fireBaseCatalog;
                         }
                         forms.add(newForm);
-                        Log.e(TAG, "onDataChange: Sorting...");
-                        Collections.sort(forms, new Comparator<Form>() {
-                            @Override
-                            public int compare(Form lhs, Form rhs) {
-                                return (!lhs.dateCreated.after(rhs.dateCreated) ? 1 : -1);
-                            }
-                        });
-                        InsReport.notifyFormsList();
                     }
+                    Log.e(TAG, "onDataChange: Sorting...");
+                    Collections.sort(forms, new Comparator<Form>() {
+                        @Override
+                        public int compare(Form lhs, Form rhs) {
+                            return (!lhs.dateCreated.after(rhs.dateCreated) ? 1 : -1);
+                        }
+                    });
+                    InsReport.notifyFormsList();
                 } catch (Exception e) {
                     Log.e(TAG, "onDataChange: PROBLEMS CASTING FROM DB!!! : " + postSnapshot.getKey() + ", " + e.getMessage());
                     e.printStackTrace();

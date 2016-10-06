@@ -466,21 +466,66 @@ public class IncidentFormActivity extends AppCompatActivity {
 
     private void showManyPhotos() {
         final ArrayList<Element> photoElements = new ArrayList<>();
+        final ArrayList<String> photoDescription = new ArrayList<>();
+        Log.w(TAG, "showManyPhotos: step1");
         for (Element element : currentForm.elements) {
-            if (element.category.equals("photo"))
+            if (element.category.equals("photo")) {
                 photoElements.add(element);
-        }
-        final String[] photos = new String[photoElements.size()];
-        for (int i = 0; i < photoElements.size(); i++) {
-            Element element = photoElements.get(i);
-            int k = 0;
-            for (Element element1 : element.elements) {
-                if (!element1.deleted)
-                    k++;
+                int k = 0;
+                for (Element element1 : element.elements) {
+                    if (!element1.deleted)
+                        k++;
+                }
+                photoDescription.add(element.description + " (" + k + " фото)");
             }
-            photos[i] = element.description + " (" + k + " фото)";
         }
-        final IncidentFormActivity incidentFormActivity = this;
+        Log.w(TAG, "showManyPhotos: step2");
+
+        //final String[] objects = new String[currentForm.objects.elements.size()];
+        for (int i = 0; i < currentForm.objects.elements.size(); i++) {
+            Element element = currentForm.objects.elements.get(i);
+            for (Element element1 : element.elements) {
+                if (element1.category.equals("photo")) {
+                    photoElements.add(element1);
+                    int k = 0;
+                    for (Element element2 : element1.elements) {
+                        if (!element2.deleted)
+                            k++;
+                    }
+                    photoDescription.add(element.description + " (" + k + " фото)" + (element1.allPhotosTaken()?" ✔":""));
+                }
+            }
+        }
+
+        if (currentForm.objects.elements.size() == 0) {
+            //Необходимо добавить как минимум клиента. Дальше объекты будут создаваться вручную.
+            Element newObject = new Element("object", Element.ElementType.eParticipant,
+                    "client", "Клиент");
+            FormTemplates.applyTemplateForObjects(newObject);
+            for (Element element1 : newObject.elements) {
+                if (element1.category.equals("photo")) {
+                    Log.w(TAG, "adding a client");
+                    photoElements.add(element1);
+                    photoDescription.add(newObject.description);
+                }
+            }
+            currentForm.objects.elements.add(newObject);
+            currentForm.saveToCloud();
+        }
+
+        Log.w(TAG, "showManyPhotos: step3");
+
+        final String[] photos = new String[photoElements.size() + 1];
+        for (int i = 0; i < photoElements.size(); i++) {
+            photos[i] = photoDescription.get(i);
+        }
+
+        Log.w(TAG, "showManyPhotos: step4");
+
+        photos[photos.length - 1] = "Добавить участника +";
+
+        Log.w(TAG, "showManyPhotos: step5, now going to show the dialog. photos: " + photos.length);
+        //final IncidentFormActivity incidentFormActivity = this;
         new android.app.AlertDialog.Builder(this)
                 .setTitle("Выберите тип фото")
                 .setSingleChoiceItems(photos, 0, new DialogInterface.OnClickListener() {
@@ -497,10 +542,85 @@ public class IncidentFormActivity extends AppCompatActivity {
 
                             default:
                                 dialog.dismiss();
+                                if (which == photos.length - 1) {
+                                    int objectNumber = currentForm.numberOfObjects();
+                                    Element newObject = new Element("object", Element.ElementType.eParticipant,
+                                            "object" + (objectNumber), "Участник №" + (objectNumber));
+                                    FormTemplates.applyTemplateForObjects(newObject);
+                                    for (Element element1 : newObject.elements) {
+                                        if (element1.category.equals("photo")) {
+                                            Log.w(TAG, "showManyPhotos: added a new element of type 'photo'");
+                                            photoElements.add(element1);
+                                            photoDescription.add(newObject.description);
+                                        }
+                                    }
+                                    currentForm.objects.elements.add(newObject);
+                                    currentForm.saveToCloud();
+                                }
+
                                 InsReport.currentElement = photoElements.get(which);
                                 InsReport.currentForm = currentForm;
                                 Intent intent = new Intent(thisActivity, PhotosActivity.class);
                                 startActivity(intent);
+                                break;
+                        }
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        //return;
+                    }
+                }).
+                show();
+    }
+
+    private void showManyObjects() {
+
+        if (currentForm.objects.elements.size() == 0) {
+            //Необходимо добавить как минимум клиента. Дальше объекты будут создаваться вручную.
+            Element newObject = new Element("object", Element.ElementType.eParticipant,
+                    "client", "Клиент");
+            FormTemplates.applyTemplateForObjects(newObject);
+            currentForm.objects.elements.add(newObject);
+            currentForm.saveToCloud();
+        }
+
+        final String[] objects = new String[currentForm.objects.elements.size() + 1];
+        for (int i = 0; i < currentForm.objects.elements.size(); i++) {
+            Element element = currentForm.objects.elements.get(i);
+            objects[i] = element.description;
+        }
+        objects[objects.length - 1] = "Добавить +";
+        final IncidentFormActivity incidentFormActivity = this;
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Выберите участника")
+                .setSingleChoiceItems(objects, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case Dialog.BUTTON_NEGATIVE: // Cancel button selected, do nothing
+                                dialog.cancel();
+                                break;
+
+                            case Dialog.BUTTON_POSITIVE: // OK button selected, send the data back
+                                dialog.dismiss();
+                                break;
+
+                            default:
+                                dialog.dismiss();
+                                if (which == objects.length - 1) {
+                                    Element newObject = new Element("object", Element.ElementType.eParticipant,
+                                            "object" + (which + 1), "Участник №" + (which + 1));
+                                    FormTemplates.applyTemplateForObjects(newObject);
+                                    currentForm.objects.elements.add(newObject);
+                                }
+                                InsReport.currentElement = currentForm.objects.elements.get(which);
+                                LinearLayout newLL = new LinearLayout(incidentFormActivity);
+                                newLL.setOrientation(LinearLayout.VERTICAL);
+                                addElementsToLL(newLL, InsReport.currentElement.elements);
+                                linearLayoutForFragment.put("specific", newLL);
+                                showTheFragment("specific", InsReport.currentElement.description);
                                 break;
                         }
                     }
@@ -590,56 +710,6 @@ public class IncidentFormActivity extends AppCompatActivity {
                                     currentForm.participants.elements.add(newParticipant);
                                 }
                                 InsReport.currentElement = currentForm.participants.elements.get(which);
-                                LinearLayout newLL = new LinearLayout(incidentFormActivity);
-                                newLL.setOrientation(LinearLayout.VERTICAL);
-                                addElementsToLL(newLL, InsReport.currentElement.elements);
-                                linearLayoutForFragment.put("specific", newLL);
-                                showTheFragment("specific", InsReport.currentElement.description);
-                                break;
-                        }
-                    }
-                })
-                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        //return;
-                    }
-                }).
-                show();
-    }
-
-
-    private void showManyObjects() {
-        final String[] objects = new String[currentForm.objects.elements.size() + 1];
-        for (int i = 0; i < currentForm.objects.elements.size(); i++) {
-            Element element = currentForm.objects.elements.get(i);
-            objects[i] = element.description;
-        }
-        objects[objects.length - 1] = "Добавить +";
-        final IncidentFormActivity incidentFormActivity = this;
-        new android.app.AlertDialog.Builder(this)
-                .setTitle("Выберите объект")
-                .setSingleChoiceItems(objects, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case Dialog.BUTTON_NEGATIVE: // Cancel button selected, do nothing
-                                dialog.cancel();
-                                break;
-
-                            case Dialog.BUTTON_POSITIVE: // OK button selected, send the data back
-                                dialog.dismiss();
-                                break;
-
-                            default:
-                                dialog.dismiss();
-                                if (which == objects.length - 1) {
-                                    Element newObject = new Element("object", Element.ElementType.eParticipant,
-                                            "object" + (which + 1), "Объект " + (which + 1));
-                                    FormTemplates.applyTemplateForObjects(newObject);
-                                    currentForm.objects.elements.add(newObject);
-                                }
-                                InsReport.currentElement = currentForm.objects.elements.get(which);
                                 LinearLayout newLL = new LinearLayout(incidentFormActivity);
                                 newLL.setOrientation(LinearLayout.VERTICAL);
                                 addElementsToLL(newLL, InsReport.currentElement.elements);

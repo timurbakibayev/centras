@@ -31,43 +31,53 @@ public class FormTemplates {
                 "страховая компания", "DCT_THIRD_PART_INSURER"));
     }
 
-    public static void applyTemplateForObjects(Element form) {
+    public static void applyTemplateForObjects(Element element) {
 
-        form.elements.add(new Element("object", Element.ElementType.ePlan, "DAMAGE_PLAN", "Повреждения"));
+        element.elements.add(new Element("photo", Element.ElementType.ePhoto, "PHOTO", "Фото " + element.description, new String[] {
+                "Передняя часть ТС",
+                "Задняя часть ТС",
+                "Левая передняя сторона 45 град",
+                "Правая передняя сторона 45 град",
+                "Левая задняя сторона 45 град",
+                "Правая задняя сторона 45 град",
+                "VIN номер кузова ТС",
+                "Гос. номер"
+        }));
 
+        element.elements.add(new Element("object", Element.ElementType.ePlan, "DAMAGE_PLAN", "Повреждения"));
 
-        form.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_TYPE",
+        element.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_TYPE",
                 "тип объекта",
                 "DCT_OBJECT_TYPE"));
 
-        form.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_SUB_TYPE",
+        element.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_SUB_TYPE",
                 "подтип объекта",
                 "DCT_OBJECT_SUB_TYPE"));
 
-        form.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_PRODUCTION",
+        element.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_PRODUCTION",
                 "марка",
                 "DCT_OBJECT_PRODUCTION"));
 
-        form.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_MODEL",
+        element.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_MODEL",
                 "модель",
                 "DCT_OBJECT_MODEL"));
 
-        form.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_CHASSIS_NO_VIN",
+        element.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_CHASSIS_NO_VIN",
                 "№ кузова, № шасси"));
 
-        form.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_REGISRATION_NUMBER",
+        element.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_REGISRATION_NUMBER",
                 "Регистрационный номер объекта"));
 
-        form.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_ENGINE_NO",
+        element.elements.add(new Element("object", Element.ElementType.eText, "OBJECT_ENGINE_NO",
                 "Номер двигателя"));
 
-        form.elements.add(new Element("object", Element.ElementType.eTextNum, "PRODUCTION_YEAR",
+        element.elements.add(new Element("object", Element.ElementType.eTextNum, "PRODUCTION_YEAR",
                 "Год производства"));
 
-        form.elements.add(new Element("object", Element.ElementType.eTextNum, "PRODUCTION_MONTH",
+        element.elements.add(new Element("object", Element.ElementType.eTextNum, "PRODUCTION_MONTH",
                 "Месяц производства"));
 
-        form.elements.add(new Element("object", Element.ElementType.eText, "CAR_COLOUR",
+        element.elements.add(new Element("object", Element.ElementType.eText, "CAR_COLOUR",
                 "Цвет объекта"));
     }
 
