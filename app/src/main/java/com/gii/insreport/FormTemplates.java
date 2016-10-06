@@ -35,8 +35,6 @@ public class FormTemplates {
 
         form.elements.add(new Element("object", Element.ElementType.ePlan, "DAMAGE_PLAN", "Повреждения"));
 
-        form.elements.add(new Element("object", Element.ElementType.ePhoto, "photoDocuments", "Фото документов"));
-        form.elements.add(new Element("object", Element.ElementType.ePhoto, "photoDamages", "Фото повреждения"));
 
         form.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_TYPE",
                 "тип объекта",
@@ -539,9 +537,21 @@ public class FormTemplates {
                             "Подпись Комисcара"));
                     form.elements.add(new Element("signature", Element.ElementType.eSignature, "CLIENT_SIGN",
                             "Подпись Клиента"));
-                    form.elements.add(new Element("photo", Element.ElementType.ePhoto, "photoDocuments", "Документы"));
-                    form.elements.add(new Element("photo", Element.ElementType.ePhoto, "photoDamages", "Повреждения"));
-                    form.elements.add(new Element("photo", Element.ElementType.ePhoto, "photoOther", "Другое"));
+
+                    form.elements.add(new Element("photo", Element.ElementType.ePhoto, "photoDocuments", "Фото документов",
+                            new String[] {"Уд.личности сторона 1",
+                                    "Уд. личности сторона 2",
+                                    "Тех.паспорт сторона 1",
+                                    "Тех.паспорт сторона 2",
+                                    "Страховой полис",
+                                    "Акт осмотра"
+                            }));
+                    form.elements.add(new Element("photo", Element.ElementType.ePhoto, "photoPlace", "Фото места ДТП",
+                            new String[] {
+                                    "Общий вид ДТП",
+                                    "Общий вид ДТП слева 45 град",
+                                    "Общий вид ДТП справа 45 град"
+                            }));
 
 
                     //form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "DOCUMENT_ID",

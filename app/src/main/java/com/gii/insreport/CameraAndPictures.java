@@ -11,6 +11,7 @@ import android.support.design.widget.TextInputLayout;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,6 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 
 public class CameraAndPictures {
     public static Bitmap bitmap;
@@ -36,7 +38,7 @@ public class CameraAndPictures {
     public static String savePictureToFirebase(String filename) {
         File file = new File(filename);
         //Uri fileUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory()+File.separator + "image.jpg"));
-        bitmap = decodeSampledBitmapFromFile(file.getAbsolutePath(), 3000, 3000); //i guess, 640x480 would be enough 700 700
+        bitmap = decodeSampledBitmapFromFile(file.getAbsolutePath(), 700, 700); //i guess, 640x480 would be enough 700 700
         String id = generateNewId();
         //uncomment this to upload the file to the firebase storage as well.
         //does not work offline :(
@@ -46,7 +48,8 @@ public class CameraAndPictures {
         return id;
     }
 
-    public void getPicFromFirebase(final Element element, final Form form, final LinearLayout linearLayout) {
+    public void getPicFromFirebase(final Element element, final Form form, final LinearLayout linearLayout,
+                                   final ArrayList<String> comboItems) {
 
         InsReport.ref.child("images/" + element.vText).
                 addValueEventListener(new ValueEventListener() {
@@ -70,7 +73,7 @@ public class CameraAndPictures {
                                 }
                             });
                             theImageView.setAdjustViewBounds(true);
-                            TextView descriptionTV = descriptionTextView(element,form,theImageView,linearLayout.getContext());
+                            TextView descriptionTV = descriptionTextView(element,form,theImageView,linearLayout.getContext(),comboItems);
                             linearLayout.addView(deleteTextView(element,form,theImageView,linearLayout.getContext(),descriptionTV));
                             linearLayout.addView(theImageView);
                             linearLayout.addView(descriptionTV);
@@ -84,7 +87,8 @@ public class CameraAndPictures {
                 });
     }
 
-    public TextView descriptionTextView(final Element element, final Form form, final ImageView imageView, final Context context) {
+    public TextView descriptionTextView(final Element element, final Form form, final ImageView imageView, final Context context,
+                                        final ArrayList<String> comboItems) {
         final TextView descriptionAndDate = new TextView(context);
         descriptionAndDate.setTextColor(Color.BLACK);
         if (element.description.equals(""))
@@ -121,8 +125,25 @@ public class CameraAndPictures {
                 lp.setMargins(100,30,100,30);
                 photoDescriptionScrollView.setLayoutParams(lp);
                 photoDescriptionScrollView.addView(fieldHint);
+                LinearLayout linearLayout = new LinearLayout(context);
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+                linearLayout.addView(photoDescriptionScrollView);
+                for (final String comboItem : comboItems) {
+                    if (!comboItem.equals("")) {
+                        Button comboButton = new Button(context);
+                        comboButton.setText(comboItem);
+                        comboButton.setBackgroundColor(Color.TRANSPARENT);
+                        comboButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                editText.setText(comboItem);
+                            }
+                        });
+                        linearLayout.addView(comboButton);
+                    }
+                }
                 builder
-                        .setView(photoDescriptionScrollView)
+                        .setView(linearLayout)
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 element.description = editText.getText().toString();
@@ -139,7 +160,6 @@ public class CameraAndPictures {
                             form.saveToCloud();
                     }
                 })
-
                         .show();
             }
         });

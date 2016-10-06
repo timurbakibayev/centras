@@ -8,7 +8,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,6 +16,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by Acer on 9/27/2016.
@@ -32,13 +33,14 @@ public class PhotosActivity extends AppCompatActivity {
     Form currentForm = InsReport.currentForm;
     CameraAndPictures cameraAndPictures = new CameraAndPictures();
     LinearLayout picturesLL;
+    Timer timer = new Timer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photos);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
         //toolbar.setTitle(InsReport.currentElement.description);
         //getWindow().setTitle(InsReport.currentElement.description);
@@ -67,8 +69,47 @@ public class PhotosActivity extends AppCompatActivity {
         //TODO: for some reason element.elements was null once :(
         for (Element el : element.elements)
             if (!el.deleted)
-                cameraAndPictures.getPicFromFirebase(el,currentForm,picturesLL);
+                cameraAndPictures.getPicFromFirebase(el,currentForm,picturesLL, element.comboItems);
 
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                TextView tv = (TextView)findViewById(R.id.requirementsTV);
+                if (tv != null &&
+                        tv.getHandler() != null) {
+                    tv.getHandler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            refreshRequirements();
+                        }
+                    });
+                }
+            }
+        }, 1000,1000);
+    }
+
+    void refreshRequirements() {
+        if (findViewById(R.id.requirementsTV) == null)
+            return;
+        String requirements = "";
+        for (String comboItem : element.comboItems) {
+            if (!comboItem.equals("")) {
+                boolean exitsts = false;
+                for (Element element1 : element.elements) {
+                    if (element1.description.equals(comboItem) && !element1.deleted)
+                        exitsts = true;
+                }
+                if (!exitsts) {
+                    if (requirements.equals(""))
+                        requirements = "Требуется:";
+                    requirements += "\n" + comboItem;
+                }
+            }
+        }
+        ((TextView)findViewById(R.id.requirementsTV)).setText(requirements);
+        if (findViewById(R.id.titleTV) == null)
+            return;
+        ((TextView)findViewById(R.id.titleTV)).setText(element.description);
     }
 
 
@@ -108,7 +149,7 @@ public class PhotosActivity extends AppCompatActivity {
                 newPhotoElement.vText = id;
                 newPhotoElement.vDate = new Date();
                 final PhotosActivity thisActivity = this;
-                TextView descriptionTV = cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity);
+                TextView descriptionTV = cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity,element.comboItems);
                 element.elements.add(newPhotoElement);
                 picturesLL.addView(cameraAndPictures.deleteTextView(newPhotoElement,currentForm,newImage,thisActivity,descriptionTV));
                 picturesLL.addView(newImage);
@@ -148,7 +189,7 @@ public class PhotosActivity extends AppCompatActivity {
                         newPhotoElement.vText = id;
                         newPhotoElement.vDate = new Date();
                         final PhotosActivity thisActivity = this;
-                        TextView descriptionTV = cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity);
+                        TextView descriptionTV = cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity,element.comboItems);
                         element.elements.add(newPhotoElement);
                         picturesLL.addView(cameraAndPictures.deleteTextView(newPhotoElement,currentForm,newImage,thisActivity,descriptionTV));
                         picturesLL.addView(newImage);
@@ -182,7 +223,7 @@ public class PhotosActivity extends AppCompatActivity {
                     newPhotoElement.vDate = new Date(nextDate);
                     final PhotosActivity thisActivity = this;
                     element.elements.add(newPhotoElement);
-                    TextView descriptionTV = cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity);
+                    TextView descriptionTV = cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity,element.comboItems);
                     picturesLL.addView(cameraAndPictures.deleteTextView(newPhotoElement,currentForm,newImage,thisActivity,descriptionTV));
                     picturesLL.addView(newImage);
                     picturesLL.addView(descriptionTV);

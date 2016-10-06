@@ -59,19 +59,29 @@ public class FormsCollection {
                     newForm.fireBaseCatalog = fireBaseCatalog;
                     Log.e(TAG, "onChildAdded: processing new item..." + newForm.id);
                     //newForm.validate();
-                    if (newForm.elements.size() == 0) {
-                        InsReport.formToBeAccepted = newForm;
-                        newForm.fireBaseCatalog = fireBaseCatalog;
-                    }
-                    forms.add(newForm);
-                    Log.e(TAG, "onDataChange: Sorting...");
-                    Collections.sort(forms, new Comparator<Form>() {
-                        @Override
-                        public int compare(Form lhs, Form rhs) {
-                            return (!lhs.dateCreated.after(rhs.dateCreated)?1:-1);
+                    boolean exists = false;
+                    for (int i = 0; i < forms.size(); i++) {
+                        if (forms.get(i).id.equals(newForm.id)) {
+                            exists = true;
+                            Log.e(TAG, "onChildAdded: found the corresponding form id");
                         }
-                    });
-                    InsReport.notifyFormsList();
+                    }
+
+                    if (!exists) {
+                        if (newForm.elements.size() == 0) {
+                            InsReport.formToBeAccepted = newForm;
+                            newForm.fireBaseCatalog = fireBaseCatalog;
+                        }
+                        forms.add(newForm);
+                        Log.e(TAG, "onDataChange: Sorting...");
+                        Collections.sort(forms, new Comparator<Form>() {
+                            @Override
+                            public int compare(Form lhs, Form rhs) {
+                                return (!lhs.dateCreated.after(rhs.dateCreated) ? 1 : -1);
+                            }
+                        });
+                        InsReport.notifyFormsList();
+                    }
                 } catch (Exception e) {
                     Log.e(TAG, "onDataChange: PROBLEMS CASTING FROM DB!!! : " + postSnapshot.getKey() + ", " + e.getMessage());
                     e.printStackTrace();

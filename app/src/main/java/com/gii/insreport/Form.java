@@ -27,6 +27,7 @@ public class Form {
 
     public String fireBaseCatalog = "";
     public Date dateCreated = new Date();
+    public long dateCreatedNeg = 000000000000;
     public Date dateModified = new Date();
     public Date dateAccepted = null;
 
@@ -251,6 +252,10 @@ public class Form {
 
     public String getStatusNote() {
         return statusNote;
+    }
+
+    public long getDateCreatedNeg() {
+        return dateCreatedNeg;
     }
 
     public void switchDone(Context context, boolean closeActivity, Activity activity) {
