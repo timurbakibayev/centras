@@ -331,7 +331,9 @@ public class MainActivity extends AppCompatActivity {
                         InsReport.savePref("lastFormId","");
                         openTheForm(form, this);
                         getIntent().removeExtra("findByPhone");
-                        return true;
+                        if (form.status.equals("accept"))
+                            return true;
+                        return false;
                     }
                 }
             }
@@ -425,7 +427,7 @@ public class MainActivity extends AppCompatActivity {
                 InsReport.formToBeAccepted.status.equals("")) {
             Log.e(TAG, "checkNewForms: acceptOrReject");
             acceptOrRejectDialogShow(InsReport.formToBeAccepted, context);
-            return true;
+            return false;
         }
         if (formsAreJustLoaded && triggerLastForm) {
             String lastFormId = InsReport.sharedPref.getString("lastFormId", "");
@@ -572,6 +574,7 @@ public class MainActivity extends AppCompatActivity {
                 Date postponingDate = new Date((new Date()).getTime() + postponeMinutes * 60000);
                 form.status = "postpone";
                 form.statusNote = "Форма отложена до " + IncidentFormActivity.timeText(postponingDate);
+                form.saveToCloud();
                 form.saveToCloud();
                 InsReport.notifyFormsList();
                 acceptOrRejectDialog.dismiss();
