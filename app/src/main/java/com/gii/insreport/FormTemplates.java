@@ -10,13 +10,13 @@ public class FormTemplates {
 
     public static void applyTemplateForParticipants(Element element) {
         element.elements.add(new Element("participant", Element.ElementType.eText, "PERSON_NAME",
-                "ФИО персоны"));
+                "ФИО участника"));
 
         element.elements.add(new Element("participant", Element.ElementType.eComboMulti, "PERSON_TYPE",
-                "Тип персоны", "DCT_PERSON_TYPE"));
+                "Тип участника", "DCT_PERSON_TYPE"));
 
         element.elements.add(new Element("participant", Element.ElementType.eTextNum, "PERSON_IIN",
-                "Иин персоны"));
+                "Иин участника"));
 
         element.elements.add(new Element("participant", Element.ElementType.eTextNum, "GUILT_PERCENTAGE",
                 "% виновности"));

@@ -2,8 +2,10 @@ package com.gii.insreport;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,6 +13,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -33,12 +36,14 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     private static String TAG = "MainActivity.java";
 
+    boolean nowReleaseButtons = false;
     boolean triggerLastForm = false;
 
     Timer timer = new Timer();
@@ -79,10 +84,13 @@ public class MainActivity extends AppCompatActivity {
 */
         addForms();
 
+        /*
         grantStoragePermission();
         grantCameraPermission();
         grantCallPermission();
         grantSMSPermission();
+        */
+        grantAllPermissions();
 
         refreshUser();
         InsReport.mainActivity = this;
@@ -109,12 +117,15 @@ public class MainActivity extends AppCompatActivity {
                     pb.getHandler().post(new Runnable() {
                         @Override
                         public void run() {
-                            pb.setVisibility(View.GONE);
-                            for (Button formButton : formButtons) {
-                                formButton.setEnabled(true);
+                            boolean a1 = checkIfNeededToFindByPhone();
+                            boolean a2 = checkNewForms(thisActivity, true);
+                            if (!(a1 || a2)) {
+                                pb.setVisibility(View.GONE);
+                                for (Button formButton : formButtons) {
+                                    formButton.setEnabled(true);
+                                }
                             }
-                            checkIfNeededToFindByPhone();
-                            checkNewForms(thisActivity, true);
+                            nowReleaseButtons = true;
                         }
                     });
                     Log.e(TAG, "run: ALL LOADED");
@@ -178,6 +189,27 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void grantAllPermissions() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (this.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                    this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    this.checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED ||
+                    this.checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED ||
+                    this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                    this.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                //Log.v(TAG,"Permission is revoked");
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA,
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        android.Manifest.permission.CALL_PHONE,
+                        Manifest.permission.SEND_SMS,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                }, 1);
+
+            }
+        }
+    }
 
     public void grantStoragePermission() {
         if (Build.VERSION.SDK_INT >= 23) {
@@ -267,12 +299,25 @@ public class MainActivity extends AppCompatActivity {
         Log.e(TAG, "onResume: YES");
 
         if (InsReport.directories.loaded) {
+            checkIfNeededToArrivedByPhone();
             checkIfNeededToFindByPhone();
             checkNewForms(this,false);
+            final ProgressBar pb = (ProgressBar) findViewById(R.id.roundProgressbar);
+            if (pb != null && pb.getHandler() != null) {
+                pb.getHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        pb.setVisibility(View.GONE);
+                        for (Button formButton : formButtons) {
+                            formButton.setEnabled(true);
+                        }
+                    }
+                });
+            };
         }
     }
 
-    private void checkIfNeededToFindByPhone() {
+    private boolean checkIfNeededToFindByPhone() {
         if (getIntent().hasExtra("findByPhone")) {
             String phoneNo = getIntent().getExtras().getString("findByPhone");
             if (phoneNo != null && !phoneNo.equals("")) {
@@ -286,11 +331,36 @@ public class MainActivity extends AppCompatActivity {
                         InsReport.savePref("lastFormId","");
                         openTheForm(form, this);
                         getIntent().removeExtra("findByPhone");
-                        break;
+                        return true;
                     }
                 }
             }
         }
+        return false;
+    }
+
+    private boolean checkIfNeededToArrivedByPhone() {
+        if (getIntent().hasExtra("arrivedByPhone")) {
+            String phoneNo = getIntent().getExtras().getString("arrivedByPhone");
+            if (phoneNo != null && !phoneNo.equals("")) {
+                for (Form form : InsReport.incidentFormsCollection.forms) {
+                    if (form.status.equals("accept") &&
+                            form.phoneNo.equals(phoneNo) ||
+                            (form.input.get("CLAIMANT_PHONE_NO") != null &&
+                                    form.input.get("CLAIMANT_PHONE_NO").equals(phoneNo))
+                            ) {
+                        //set successfully arrived
+                        InsReport.savePref("lastFormId","");
+                        InsReport.ref.child("arrivals/"+form.fireBaseCatalog + "/" + form.id + "/created").setValue(form.dateCreated);
+                        InsReport.ref.child("arrivals/"+form.fireBaseCatalog + "/" + form.id + "/arrived").setValue(ServerValue.TIMESTAMP);
+                        openTheForm(form, this);
+                        getIntent().removeExtra("arrivedByPhone");
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 
@@ -350,20 +420,22 @@ public class MainActivity extends AppCompatActivity {
         mainMenuLL.addView(newMenuButton);
     }
 
-    public void checkNewForms(Activity context, boolean formsAreJustLoaded) {
+    public boolean checkNewForms(Activity context, boolean formsAreJustLoaded) {
         if (InsReport.formToBeAccepted != null &&
                 InsReport.formToBeAccepted.status.equals("")) {
             Log.e(TAG, "checkNewForms: acceptOrReject");
             acceptOrRejectDialogShow(InsReport.formToBeAccepted, context);
-            return;
+            return true;
         }
         if (formsAreJustLoaded && triggerLastForm) {
             String lastFormId = InsReport.sharedPref.getString("lastFormId", "");
             String fireBaseCatalog = InsReport.sharedPref.getString("lastFormCatalog","");
             if (!lastFormId.equals("")) {
                 openTheForm(lastFormId, fireBaseCatalog, thisActivity);
+                return true;
             }
         }
+        return false;
     }
 
     public void openTheForm(Form form, Activity context) {
@@ -394,6 +466,8 @@ public class MainActivity extends AppCompatActivity {
         String headerText = "";
         final String phoneNo;
         final String address;
+        final String personName;
+
 
         //TODO: scan the elements
         //Внимание! Если создать форму с нуля, а не с сервера, то данные не подтягиваются!
@@ -404,8 +478,12 @@ public class MainActivity extends AppCompatActivity {
         //        form.input.put("dddd",element.toString());
         //}
 
-        if (form.input.get("CLIENT_NAME") != null)
+        if (form.input.get("CLIENT_NAME") != null) {
             headerText += form.input.get("CLIENT_NAME") + "\n";
+            personName = form.input.get("CLIENT_NAME");
+        } else
+            personName = "";
+
         if (form.input.get("CLAIMANT_PHONE_NO") != null) {
             headerText += "Телефон: " + form.input.get("CLAIMANT_PHONE_NO") + "\n";
             phoneNo = form.input.get("CLAIMANT_PHONE_NO");
@@ -428,6 +506,7 @@ public class MainActivity extends AppCompatActivity {
                             setValue(ServerValue.TIMESTAMP);
                 form.status = "accept";
                 form.statusNote = "В работе";
+                scheduleNotification(personName,phoneNo,address,0);
                 //TODO: change the phone no.
                 Log.e(TAG, "Sending SMS: " + SMS.send(phoneNo,
                         getString(R.string.accept_sms, "Нурбек"))); //phoneNo
@@ -459,7 +538,7 @@ public class MainActivity extends AppCompatActivity {
                 InsReport.notifyFormsList();
                 // Clear all notification
                 NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                nMgr.cancelAll();
+                nMgr.cancel(form.calculateId());
                 acceptOrRejectDialog.dismiss();
                 askWhyRejected(form, context);
             }
@@ -486,6 +565,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 SMS.send(phoneNo,
                         getString(R.string.delay_sms, "Нурбек", 30));
+                NotificationManager nMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                nMgr.cancel(form.calculateId());
+                int postponeMinutes = 30;
+                scheduleNotification(personName,phoneNo,address,postponeMinutes);
+                Date postponingDate = new Date((new Date()).getTime() + postponeMinutes * 60000);
+                form.status = "postpone";
+                form.statusNote = "Форма отложена до " + IncidentFormActivity.timeText(postponingDate);
+                form.saveToCloud();
+                InsReport.notifyFormsList();
+                acceptOrRejectDialog.dismiss();
             }
         });
 
@@ -537,6 +626,18 @@ public class MainActivity extends AppCompatActivity {
 
 
         acceptOrRejectDialog.show();
+    }
+
+    private void scheduleNotification(String name, String phone, String address, int delay) {
+        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+        notificationIntent.putExtra("name", name);
+        notificationIntent.putExtra("phone", phone);
+        notificationIntent.putExtra("address", address);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        long futureInMillis = SystemClock.elapsedRealtime() + delay * 60000;
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
     public void askWhyRejected(final Form form, Context context) {

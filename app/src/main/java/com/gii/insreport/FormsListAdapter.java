@@ -141,7 +141,7 @@ public int getItemViewType(int position) {
         view.findViewById(R.id.openAcceptOrReject).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!p.formReady || p.status.equals("reject"))
+                if (!p.formReady || !p.status.equals("accept"))
                     InsReport.mainActivity.acceptOrRejectDialogShow(p,FormsList.formList);
             }
         });

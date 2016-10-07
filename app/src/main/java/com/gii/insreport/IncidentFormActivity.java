@@ -223,6 +223,10 @@ public class IncidentFormActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        if (InsReport.incidentFormActivity != null)
+            InsReport.incidentFormActivity.finish();
+        InsReport.incidentFormActivity = this;
+
         for (int i = 0; i < datePicker.length; i++)
             datePicker[i] = new Button(this);
         fireBaseCatalog = getIntent().getStringExtra(InsReport.EXTRA_FIREBASE_CATALOG);

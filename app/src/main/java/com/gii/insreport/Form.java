@@ -27,6 +27,7 @@ public class Form {
 
     public String fireBaseCatalog = "";
     public Date dateCreated = new Date();
+    public Date dateArrived = new Date();
     public long dateCreatedNeg = 000000000000;
     public Date dateModified = new Date();
     public Date dateAccepted = null;
@@ -258,6 +259,10 @@ public class Form {
         return dateCreatedNeg;
     }
 
+    public Date getDateArrived() {
+        return dateArrived;
+    }
+
     public void switchDone(Context context, boolean closeActivity, Activity activity) {
         InsReport.savePref("lastFormId","");
         if (status.equals("accept")) {
@@ -271,6 +276,25 @@ public class Form {
             }
             else {
                 statusNote = "В работе";
+                final String phoneNo;
+                final String address;
+                final String personName;
+
+                if (input.get("CLIENT_NAME") != null)
+                    personName = input.get("CLIENT_NAME");
+                else
+                    personName = "";
+
+                if (input.get("CLAIMANT_PHONE_NO") != null)
+                    phoneNo = input.get("CLAIMANT_PHONE_NO");
+                else
+                    phoneNo = "";
+                if (input.get("EVENT_PLACE") != null)
+                    address = input.get("EVENT_PLACE");
+                else
+                    address = "";
+
+                MyFirebaseMessagingService.sendNotification(personName,personName,phoneNo,address,context);
                 saveToCloud();
             }
             InsReport.notifyFormsList();

@@ -79,6 +79,7 @@ public class InsReport extends Application {
     public static ArrayList<FormsCollection> mainMenuForms = new ArrayList<>();
     public static FormsCollection preInsuranceFormsCollection = new FormsCollection();
     public static FormsCollection incidentFormsCollection = new FormsCollection();
+    public static IncidentFormActivity incidentFormActivity;
     public static Form formToBeAccepted = null;
 
     public static Element currentElement = null;
