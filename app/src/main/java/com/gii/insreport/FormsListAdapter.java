@@ -106,6 +106,10 @@ public int getItemViewType(int position) {
             }
         }
 
+
+        (view.findViewById(R.id.openAcceptOrReject)).setVisibility(p.status.equals("postpone")?View.GONE:View.VISIBLE);
+        (view.findViewById(R.id.postponedForm)).setVisibility(p.status.equals("postpone")?View.VISIBLE:View.GONE);
+
         ((TextView) view.findViewById(R.id.statusNoteTV)).setText(p.statusNote);
         ((TextView) view.findViewById(R.id.textView1)).setText(p.description);
         ((TextView) view.findViewById(R.id.textViewID)).setText(p.id);
@@ -130,6 +134,12 @@ public int getItemViewType(int position) {
                 ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.rgb(70, 70, 70));
                 ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.rgb(70, 70, 70));
                 break;
+            case "postpone":
+                ((ImageView)view.findViewById(R.id.openAcceptOrReject)).setColorFilter(Color.RED);
+                (view.findViewById(R.id.openAcceptOrReject)).setAnimation(null);
+                ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.rgb(170, 170, 170));
+                ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.rgb(170, 170, 170));
+                break;
             default:
                 ((ImageView)view.findViewById(R.id.openAcceptOrReject)).setColorFilter(Color.BLACK);
                 (view.findViewById(R.id.openAcceptOrReject)).setAnimation(animation);
@@ -143,6 +153,16 @@ public int getItemViewType(int position) {
             public void onClick(View view) {
                 if (!p.formReady || !p.status.equals("accept"))
                     InsReport.mainActivity.acceptOrRejectDialogShow(p,FormsList.formList);
+                Log.w(TAG, "onClick: openAcceptOrReject");
+            }
+        });
+
+        view.findViewById(R.id.postponedForm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!p.formReady || !p.status.equals("accept"))
+                    InsReport.mainActivity.acceptOrRejectDialogShow(p,FormsList.formList);
+                Log.w(TAG, "onClick: postponedForm");
             }
         });
 

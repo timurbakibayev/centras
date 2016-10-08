@@ -148,12 +148,12 @@
 
             <Button
                 android:textSize="10sp"
-                android:id="@+id/menuSignature"
+                android:id="@+id/menuDescription"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/ic_border_color_black_24dp"
-                android:text="@string/signature" />
+                android:drawableTop="@drawable/ic_map_black_72dp"
+                android:text="@string/event_description" />
         </LinearLayout>
 
     </LinearLayout>

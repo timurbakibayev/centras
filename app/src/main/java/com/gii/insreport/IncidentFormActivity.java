@@ -294,10 +294,10 @@ public class IncidentFormActivity extends AppCompatActivity {
                 }
             });
 
-            ((Button) findViewById(R.id.menuSignature)).setOnClickListener(new View.OnClickListener() {
+            ((Button) findViewById(R.id.menuDescription)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showManySignatures();
+                    showTheFragment("description", "Описание событий");
                 }
             });
         }
@@ -330,14 +330,6 @@ public class IncidentFormActivity extends AppCompatActivity {
 //                    showManyObjects();
                 }
             });
-            /*
-            ((Button) findViewById(R.id.menuParticipants)).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    showManyParticipants();
-                }
-            });
-            */
 
             ((Button) findViewById(R.id.BButtonPhoto)).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -736,12 +728,14 @@ public class IncidentFormActivity extends AppCompatActivity {
     Map<String, LinearLayout> linearLayoutForFragment = new HashMap<>();
 
     private void showTheFragment(String menuName, String title) {
-        if (linearLayoutForFragment.get(menuName) == null) {
-            FormTemplates.applyTemplate(currentForm, currentForm.fireBaseCatalog);
-            buildTheForm(currentForm);
-        }
-        if (linearLayoutForFragment.get(menuName) == null) //if template did not help, exit
+        //if (linearLayoutForFragment.get(menuName) == null) {
+        //    FormTemplates.applyTemplate(currentForm, currentForm.fireBaseCatalog);
+        //    buildTheForm(currentForm);
+        //}
+        if (linearLayoutForFragment.get(menuName) == null) { //if template did not help, exit
+            Toast.makeText(this, "Неподходящая форма", Toast.LENGTH_LONG);
             return;
+        }
         ViewGroup parent = (ViewGroup) linearLayoutForFragment.get(menuName).getParent();
 
         if (parent != null)

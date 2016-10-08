@@ -96,13 +96,22 @@
 
         </LinearLayout>
 
-
-        <ImageView
-            android:id="@+id/openAcceptOrReject"
+        <RelativeLayout
             android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_menu_black_24dp" />
+            android:layout_height="24dp">
+            <ImageView
+                android:id="@+id/postponedForm"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_forward_30_black_24dp" />
+            <ImageView
+                android:id="@+id/openAcceptOrReject"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_menu_black_24dp" />
+        </RelativeLayout>
 
     </LinearLayout>
 
