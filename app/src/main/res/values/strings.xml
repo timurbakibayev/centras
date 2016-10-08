@@ -119,6 +119,7 @@
     <!--SMS templates-->
     <string name="accept_sms">Аварком %1$s выехал на место ДТП</string>
     <string name="delay_sms">Аварком %1$s выедет через %2$d минут</string>
+    <string name="title_activity_maps">Map</string>
 
 
 </resources>

@@ -1,6 +1,7 @@
 package com.gii.insreport;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.Ringtone;
@@ -8,6 +9,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -88,6 +90,7 @@ public class InsReport extends Application {
     public static FirebaseUser user;
 
     public static ListView currentListView = null;
+    public static Bitmap tempBitmap;
 
     public static ArrayList<Bitmap> bitmapsNeedToBeRecycled = new ArrayList<>();
 
@@ -334,6 +337,12 @@ public class InsReport extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
 }

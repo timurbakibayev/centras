@@ -1,9 +1,13 @@
 package com.gii.insreport;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,13 +15,16 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class AnimaActivity extends AppCompatActivity {
+    private static final String TAG = "AnimaActivity";
     public AnimaView animaView;
 
+    public Bitmap backgroundbitmap;
     public IconsWindow iconsWindow;
 
     public ArrayList<Frame> frames = new ArrayList<>();
@@ -61,8 +68,7 @@ public class AnimaActivity extends AppCompatActivity {
                 if (InsReport.currentElement.vBoolean) {
                     fab.setImageResource(R.drawable.ic_lock_outline_black_24dp);
                     Toast.makeText(thisActivity, "Дороги зафиксированы", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     fab.setImageResource(R.drawable.ic_lock_open_black_24dp);
                     Toast.makeText(thisActivity, "Дороги разблокированы", Toast.LENGTH_SHORT).show();
                 }
@@ -94,8 +100,6 @@ public class AnimaActivity extends AppCompatActivity {
             }
         });
 
-
-
         final FloatingActionButton undoFab = (FloatingActionButton) findViewById(R.id.undoFab);
         undoFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +119,16 @@ public class AnimaActivity extends AppCompatActivity {
             }
         });
 
+        final FloatingActionButton gmapsFab = (FloatingActionButton) findViewById(R.id.googleMaps);
+        gmapsFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gmaps = new Intent(thisActivity, MapsActivity.class);
+                //gmaps.putExtra()
+                thisActivity.startActivityForResult(gmaps, 1);
+            }
+        });
+
         if (animaView == null) {
             animaView = new AnimaView(this);
 
@@ -128,11 +142,11 @@ public class AnimaActivity extends AppCompatActivity {
         animaView.frames = frames;
         if (animaView.currentFrame == null)
             animaView.currentFrame = frames.get(0);
-        ViewGroup parent = (ViewGroup)animaView.getParent();
+        ViewGroup parent = (ViewGroup) animaView.getParent();
         if (parent != null) {
             parent.removeAllViews();
         }
-        ((RelativeLayout)findViewById(R.id.canvas)).addView(animaView);
+        ((RelativeLayout) findViewById(R.id.canvas)).addView(animaView);
 
         tim.schedule(new TimerTask() {
             @Override
@@ -141,13 +155,12 @@ public class AnimaActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (play) {
-                            if (frameNo < frames.size()-1) {
+                            if (frameNo < frames.size() - 1) {
                                 //frameNo++;
                                 animaView.playTo(frameNo + 1);
                                 animaView.currentFrame = frames.get(frameNo);
                                 animaView.postInvalidate();
-                            }
-                            else
+                            } else
                                 play = false;
                         }
                     }
@@ -169,6 +182,7 @@ public class AnimaActivity extends AppCompatActivity {
     }
 
     MenuItem frameNoMenu;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -210,7 +224,7 @@ public class AnimaActivity extends AppCompatActivity {
                 frameNo++;
             } else {
                 frames.add(new Frame(animaView.currentFrame));
-                frameNo = frames.size()-1;
+                frameNo = frames.size() - 1;
             }
             animaView.currentFrame = frames.get(frameNo);
             animaView.appState = AnimaView.AppState.idle;
@@ -219,7 +233,7 @@ public class AnimaActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_frameClick) {
-            if (frameNo == frames.size()-1) {
+            if (frameNo == frames.size() - 1) {
                 frameNo = 0;
                 animaView.currentFrame = frames.get(frameNo);
                 animaView.appState = AnimaView.AppState.idle;
@@ -265,4 +279,16 @@ public class AnimaActivity extends AppCompatActivity {
         animaView.currentFrame = frames.get(frameNo);
         animaView.postInvalidate();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Log.w(TAG, "onActivityResult: returned from google maps");
+            backgroundbitmap = CameraAndPictures.decodeSampledBitmapFromFile(Environment.getExternalStorageDirectory() + File.separator + "image.jpg",
+                    1000, 1000);
+            Log.w(TAG, "onActivityResult: maps dimensions: " + backgroundbitmap.getWidth() + "," + backgroundbitmap.getHeight());
+            animaView.postInvalidate();
+        }
+    }
+
 }

@@ -116,7 +116,14 @@ public class AnimaView extends View {
         canvasHeight = canvas.getHeight();
 
 
-        canvas.drawRect(0,0,canvasWidth,canvasHeight,backgroundPaint);
+
+
+        if (animaActivity.backgroundbitmap != null) {
+            canvas.drawBitmap(animaActivity.backgroundbitmap,new Rect(0,0,
+                            animaActivity.backgroundbitmap.getWidth(), animaActivity.backgroundbitmap.getHeight()),
+                    new Rect(0,0,canvasWidth,canvasHeight),null);
+        } else
+            canvas.drawRect(0,0,canvasWidth,canvasHeight,backgroundPaint);
         //canvas.drawLine(40,40,200,200,road);
         //canvas.drawLine(40,40,200,200,roadMark);
 

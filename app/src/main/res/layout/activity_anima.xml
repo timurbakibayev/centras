@@ -25,12 +25,32 @@
         android:id="@+id/canvas"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/lock_roads"
+        android:id="@+id/googleMaps"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_lock_outline_black_24dp" />
+        android:src="@drawable/ic_map_black_24dp"
+        android:tint="@android:color/white"
+         />
+
+    <View
+        android:id="@+id/dummy4"
+        android:layout_width="1dp"
+        android:layout_height="16dp"
+        app:layout_anchor="@id/googleMaps"
+        app:layout_anchorGravity="top|right|end" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/lock_roads"
+        app:layout_anchor="@id/dummy4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_lock_outline_black_24dp"
+        android:tint="@android:color/white"
+        app:layout_anchorGravity="top|right|end"/>
 
     <View
         android:id="@+id/dummy"
@@ -45,7 +65,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|top"
         android:layout_margin="16dp"
-        android:src="@android:drawable/ic_menu_camera"
+        android:src="@drawable/ic_camera_alt_black_24dp"
+        android:tint="@android:color/white"
         app:layout_anchor="@id/dummy"
         app:layout_anchorGravity="top|right|end" />
 
@@ -66,7 +87,6 @@
         android:src="@drawable/ic_photo_black_24dp"
         app:layout_anchor="@id/dummy3"
         app:layout_anchorGravity="top|right|end" />
-
 
     <View
         android:id="@+id/dummy2"

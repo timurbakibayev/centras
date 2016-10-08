@@ -1220,6 +1220,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 InsReport.currentElement = element;
+                                InsReport.currentForm = currentForm;
                                 currentElement = element;
                                 currentButton = animaButton;
                                 Intent intent = new Intent(thisActivity, AnimaActivity.class);
