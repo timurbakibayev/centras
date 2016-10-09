@@ -569,12 +569,12 @@ public class MainActivity extends AppCompatActivity {
                         getString(R.string.delay_sms, "Нурбек", 30));
                 NotificationManager nMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 nMgr.cancel(form.calculateId());
-                int postponeMinutes = 30;
+                //TODO: change this to 30!
+                int postponeMinutes = 1;
                 scheduleNotification(personName,phoneNo,address,postponeMinutes);
                 Date postponingDate = new Date((new Date()).getTime() + postponeMinutes * 60000);
                 form.status = "postpone";
                 form.statusNote = "Форма отложена до " + IncidentFormActivity.timeText(postponingDate);
-                form.saveToCloud();
                 form.saveToCloud();
                 InsReport.notifyFormsList();
                 acceptOrRejectDialog.dismiss();

@@ -162,7 +162,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
                 if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     locationManager.addProximityAlert(lat, lon, 200, -1, arrivePendingIntent);
                     InsReport.logErrorFirebase("PROXIMITY ALERT SET for " + personName,"Lat:"+lat,"Lon:"+lon);
                     return;
