@@ -6,8 +6,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,7 +26,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by Acer on 9/27/2016.
+ * Created by Acer on 10/10/2016.
  */
 
 public class PhotosActivity extends AppCompatActivity {
@@ -28,6 +34,7 @@ public class PhotosActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 17;
     private static final int REQUEST_IMAGE_GALLERY = 34;
     private static final int REQUEST_MULTIPLE_GALLERY = 39;
+    BottomSheetBehavior behavior;
 
     Element element = InsReport.currentElement;
     Form currentForm = InsReport.currentForm;
@@ -39,11 +46,45 @@ public class PhotosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photos);
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
 
-        //toolbar.setTitle(InsReport.currentElement.description);
-        //getWindow().setTitle(InsReport.currentElement.description);
+        //bottomsheets
+        View bottomSheet = findViewById(R.id.design_bottom_sheet);
+        behavior = BottomSheetBehavior.from(bottomSheet);
+        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        Log.i("BottomSheetCallback", "BottomSheetBehavior.STATE_DRAGGING");
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        Log.i("BottomSheetCallback", "BottomSheetBehavior.STATE_SETTLING");
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        Log.i("BottomSheetCallback", "BottomSheetBehavior.STATE_EXPANDED");
+                        break;
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        Log.i("BottomSheetCallback", "BottomSheetBehavior.STATE_COLLAPSED");
+                        break;
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        Log.i("BottomSheetCallback", "BottomSheetBehavior.STATE_HIDDEN");
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                Log.i("BottomSheetCallback", "slideOffset: " + slideOffset);
+            }
+        });
+        //end of bottomsheets
+
+
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
 
         //TODO: fails sometimes :(
         //Caused by: java.lang.NullPointerException: Attempt to read from field 'java.lang.String com.gii.insreport.Element.description' on a null object reference
@@ -89,6 +130,8 @@ public class PhotosActivity extends AppCompatActivity {
 
         if (findViewById(R.id.titleTV) != null)
             ((TextView)findViewById(R.id.titleTV)).setText(element.description);
+
+        setTitle(element.description);
 
     }
 
@@ -236,5 +279,38 @@ public class PhotosActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_photo, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_info) {
+            showHint();           
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showHint() {
+        if (behavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        } else {
+            behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
+    }
+
 }
+
 

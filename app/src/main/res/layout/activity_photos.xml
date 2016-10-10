@@ -13,13 +13,14 @@
         android:id="@+id/appBarLayout"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <!--
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" /> -->
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+        <!--
         <TextView
             android:id="@+id/titleTV"
             android:textAlignment="center"
@@ -32,7 +33,7 @@
             android:id="@+id/requirementsTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Обновляется список требований..."/>
+            android:text="Обновляется список требований..."/>-->
 
     </android.support.design.widget.AppBarLayout>
 
@@ -64,6 +65,37 @@
         app:layout_anchor="@id/dummy"
         android:tint="#ffffff"
         app:layout_anchorGravity="top|right|end" />
+    <LinearLayout
+        android:id="@+id/design_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp"
+        app:elevation="4dp"
+        android:orientation="vertical"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+        <TextView
+            android:id="@+id/requirementsTV"
+
+            android:textColor="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Обновляется список требований..."/>
+        <TextView
+            android:id="@+id/titleTV"
+            android:visibility="gone"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="24dp"
+            android:textColor="@android:color/white"
+            android:text="Фотографии"/>
+        </LinearLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

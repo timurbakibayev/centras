@@ -1,4 +1,5 @@
 <resources>
+    <!--Activities-->
     <string name="app_name">Страховые осмотры</string>
     <string name="action_login">Login</string>
     <string name="action_settings">Настройки</string>
@@ -120,6 +121,8 @@
     <string name="accept_sms">Аварком %1$s выехал на место ДТП</string>
     <string name="delay_sms">Аварком %1$s выедет через %2$d минут</string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="title_info">информация</string>
 
 
 </resources>
