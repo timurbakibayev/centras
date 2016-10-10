@@ -151,21 +151,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .build();
             mapIntent.setData(locationUri1);
             try {
-                long lat = Long.parseLong(location[0]);
-                long lon = Long.parseLong(location[1]);
+                double lat = Double.parseDouble(location[0]);
+                double lon = Double.parseDouble(location[1]);
 
-                Intent arriveIntent = new Intent(context, MainActivity.class);
-                arriveIntent.setAction("foo");
-                arriveIntent.putExtra("arrivedByPhone", personPhone);
-                arriveIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                PendingIntent arrivePendingIntent = PendingIntent.getActivity(context, id, arriveIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                if (lat > lon ) { //for Kazakhstan, lat is always less than lon! so, swap
+                    double tmp = lat;
+                    lat = lon;
+                    lon = tmp;
+                }
+
+
+                Intent arriveIntent = new Intent(context, ProximityIntentReceiver.class);
+                arriveIntent.putExtra("phoneNo", personPhone);
+                arriveIntent.putExtra("personName", personName);
+                //arriveIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                PendingIntent arrivePendingIntent = PendingIntent.getBroadcast(context, id, arriveIntent, 0);
 
                 LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
                 if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     locationManager.addProximityAlert(lat, lon, 200, -1, arrivePendingIntent);
                     InsReport.logErrorFirebase("PROXIMITY ALERT SET for " + personName,"Lat:"+lat,"Lon:"+lon);
-                    return;
                 }
             } catch (Exception e) {
 
@@ -208,7 +214,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
 
         if (InsReport.sharedPref.getBoolean("notifications_new_message",true))
             notificationManager.notify(id /* ID of notification */, notificationBuilder.build());
