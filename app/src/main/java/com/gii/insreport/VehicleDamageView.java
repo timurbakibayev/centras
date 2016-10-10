@@ -91,6 +91,8 @@ public class VehicleDamageView extends View {
         canvasHeight = canvas.getHeight();
         int step = canvas.getWidth() / 30;
 
+        canvas.drawRect(0,0,canvasWidth,canvasHeight,white);
+
         if (vehicleImageDestRect[InsReport.damagePlanData.vehicleNo].width() != canvas.getWidth()) {
             vehicleImageDestRect[InsReport.damagePlanData.vehicleNo].set(0, 0, canvas.getWidth(),
                     (int) ((float) canvas.getWidth() / vehicleImage[InsReport.damagePlanData.vehicleNo].getWidth() * vehicleImage[InsReport.damagePlanData.vehicleNo].getHeight()));
