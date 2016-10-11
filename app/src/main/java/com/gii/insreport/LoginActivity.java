@@ -178,7 +178,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             "User TOKEN ID: " + FirebaseInstanceId.getInstance().getToken() + "\n\n" +
                             "User ID: " + user.getUid() + "\n\n" +
                             "");
-                    //TODO: add information with sample curl queries
                     thisActivity.startActivity(Intent.createChooser(intentShareFile, "Отправить данные"));
                 }
             });

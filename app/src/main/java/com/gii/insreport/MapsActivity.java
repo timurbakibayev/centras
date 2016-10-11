@@ -8,12 +8,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.File;
@@ -35,6 +37,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         findViewById(R.id.capture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((Button)view).setText("Зарузка карты...");
                 if (mMap != null) {
                     captureAndFinish();
                 }
@@ -42,8 +45,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
+    Marker place;
     private void captureAndFinish() {
         mMap.moveCamera(CameraUpdateFactory.zoomTo(19));
+        if (place != null)
+            place.remove();
         mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             public void onMapLoaded() {
                 mMap.snapshot(new GoogleMap.SnapshotReadyCallback() {
@@ -91,19 +97,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         LatLng almaty = new LatLng(43.236, 76.913);
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(almaty,13));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(almaty,13));
 
+        place = null;
         if (InsReport.currentForm != null &&
                 InsReport.currentForm.input.get("LAT") != null &&
                 InsReport.currentForm.input.get("LON") != null) {
             try {
                 double lat = Double.parseDouble(InsReport.currentForm.input.get("LAT"));
                 double lon = Double.parseDouble(InsReport.currentForm.input.get("LON"));
-                mMap.addMarker(new MarkerOptions().position(new LatLng(lat,lon)).title("Место аварии"));
+                place = mMap.addMarker(new MarkerOptions().position(new LatLng(lat,lon)).title("Место аварии"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat,lon),19));
                 Log.w(TAG, "onMapReady: going to " + lat + "," + lon);
             } catch (Exception e) {
 
+            }
+        }
+
+        String address = "";
+        if (place == null) {
+            if (InsReport.currentForm.input.get("EVENT_PLACE") != null) {
+                address = InsReport.currentForm.input.get("EVENT_PLACE");
+            }
+            String regex = "((-|\\+)?[0-9]+(\\.[0-9]+)?)+";
+            String[] location = address.split(" ");
+            boolean coordinates = false;
+
+            for (int i = 0; i < location.length; i++) {
+                if (location[i].matches(regex)) {
+                    coordinates = true;
+                }
+            }
+
+            if (coordinates && location.length > 1) {
+                try {
+                    double lat = Double.parseDouble(location[0]);
+                    double lon = Double.parseDouble(location[1]);
+                    place = mMap.addMarker(new MarkerOptions().position(new LatLng(lat,lon)).title("Место аварии"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat,lon),19));
+                    Log.w(TAG, "onMapReady: going to " + lat + "," + lon);
+                } catch (Exception e) {
+
+                }
             }
         }
 

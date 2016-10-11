@@ -119,9 +119,17 @@ public class AnimaView extends View {
 
 
         if (animaActivity.backgroundbitmap != null) {
-            canvas.drawBitmap(animaActivity.backgroundbitmap,new Rect(0,0,
-                            animaActivity.backgroundbitmap.getWidth(), animaActivity.backgroundbitmap.getHeight()),
-                    new Rect(0,0,canvasWidth,canvasHeight),null);
+            int bW = animaActivity.backgroundbitmap.getWidth();
+            int bH = animaActivity.backgroundbitmap.getHeight();
+            //RectF backRect =
+            drawRect.set(
+                    (int)((currentFrame.backgroundCenter.x  - bW/6 * currentFrame.scale)),
+                    (int)((currentFrame.backgroundCenter.y - bH/6 * currentFrame.scale)),
+                    (int)( (currentFrame.backgroundCenter.x  + bW/6 * currentFrame.scale)),
+                    (int)((currentFrame.backgroundCenter.y + bH/6 * currentFrame.scale)));
+            //position(backRect,drawRect,currentFrame);
+            canvas.drawBitmap(animaActivity.backgroundbitmap,null,
+                    drawRect,null);
         } else
             canvas.drawRect(0,0,canvasWidth,canvasHeight,backgroundPaint);
         //canvas.drawLine(40,40,200,200,road);
@@ -140,14 +148,36 @@ public class AnimaView extends View {
                     }
                 }
             }
+
+
+            intermediateFrameProperties.scale = currentFrame.scale;
+            intermediateFrameProperties.backgroundCenter.set(currentFrame.backgroundCenter.x,
+                    currentFrame.backgroundCenter.y);
+
+            if (animaActivity.play) {
+                intermediateFrameProperties.scale = currentFrame.scale + (animaActivity.frames.get(playToFrame).scale - currentFrame.scale) / intermediateFrames * playToPercent;
+                intermediateFrameProperties.backgroundCenter.x = currentFrame.backgroundCenter.x + (animaActivity.frames.get(playToFrame).backgroundCenter.x - currentFrame.backgroundCenter.x) / intermediateFrames * playToPercent;
+                intermediateFrameProperties.backgroundCenter.y = currentFrame.backgroundCenter.y + (animaActivity.frames.get(playToFrame).backgroundCenter.y - currentFrame.backgroundCenter.y) / intermediateFrames * playToPercent;
+            }
+
+            if (animaActivity.backgroundbitmap != null) {
+                int bW = animaActivity.backgroundbitmap.getWidth();
+                int bH = animaActivity.backgroundbitmap.getHeight();
+                drawRect.set(
+                        (int) ((intermediateFrameProperties.backgroundCenter.x - bW / 6 * intermediateFrameProperties.scale)),
+                        (int) ((intermediateFrameProperties.backgroundCenter.y - bH / 6 * intermediateFrameProperties.scale)),
+                        (int) ((intermediateFrameProperties.backgroundCenter.x + bW / 6 * intermediateFrameProperties.scale)),
+                        (int) ((intermediateFrameProperties.backgroundCenter.y + bH / 6 * intermediateFrameProperties.scale)));
+                canvas.drawBitmap(animaActivity.backgroundbitmap, null,
+                        drawRect, null);
+            }
+
+
             if (currentFrame.icons.size() > 0) {
+
                 for (int layer = 0; layer <= 10; layer ++)
                     for (Icon icon : currentFrame.icons) {
                         if (iconLayer[icon.picId] == layer){
-                            intermediateFrameProperties.scale = currentFrame.scale;
-                            intermediateFrameProperties.backgroundCenter.set(currentFrame.backgroundCenter.x,
-                                    currentFrame.backgroundCenter.y);
-
                             int rotation = icon.rotation;
                             //center.set(icon.center.x,icon.center.y);
                             drawRectF.set(icon.left, icon.top, icon.right, icon.bottom);
@@ -167,9 +197,6 @@ public class AnimaView extends View {
                                     }
                                 }
 
-                                intermediateFrameProperties.scale = currentFrame.scale + (animaActivity.frames.get(playToFrame).scale - currentFrame.scale) / intermediateFrames * playToPercent;
-                                intermediateFrameProperties.backgroundCenter.x = currentFrame.backgroundCenter.x + (animaActivity.frames.get(playToFrame).backgroundCenter.x - currentFrame.backgroundCenter.x) / intermediateFrames * playToPercent;
-                                intermediateFrameProperties.backgroundCenter.y = currentFrame.backgroundCenter.y + (animaActivity.frames.get(playToFrame).backgroundCenter.y - currentFrame.backgroundCenter.y) / intermediateFrames * playToPercent;
                             }
 
                             position(drawRectF, drawRect, intermediateFrameProperties);
@@ -353,7 +380,7 @@ public class AnimaView extends View {
             return onTouchEventPositionIcon(event);
 
         if (appState == AppState.chooseIcon) {
-            return animaActivity.iconsWindow.onTouchEvent(event);
+            return animaActivity.iconsWindow.onTouchEvent(event,currentFrame);
         }
 
         return false;
@@ -413,6 +440,38 @@ public class AnimaView extends View {
                             i++;
                         }
                     }
+                    if (appState == AppState.idle)
+                        for (int layer = 10; layer >= minLayer; layer--) {
+                            i = 0;
+                            float minDistanceSqr = 10000; //the minimal distance to move the object: sqrt(1600)=40
+                            for (Icon icon : currentFrame.icons) {
+                                if (iconLayer[icon.picId] == layer) {
+                                    drawRectF.set(icon.left, icon.top, icon.right, icon.bottom);
+                                    position(drawRectF, drawRect, currentFrame);
+                                    if (true) {
+                                        float newDistanceSqr = (drawRect.centerX() - event.getX()) * (drawRect.centerX() - event.getX()) +
+                                                (drawRect.centerY() - event.getY()) * (drawRect.centerY() - event.getY());
+                                        if (newDistanceSqr < minDistanceSqr) {
+                                            minDistanceSqr = newDistanceSqr;
+                                            movingIcon = icon;
+                                            movingIconId = i;
+                                            relativePoint.set((int) event.getX() - drawRect.centerX(),
+                                                    (int) event.getY() - drawRect.centerY());
+                                            appState = AppState.moveIcon;
+                                            Operation moveOperation;
+                                            moveOperation = new Operation();
+                                            moveOperation.operationType = "move";
+                                            moveOperation.newIdInArray = movingIconId;
+                                            moveOperation.oldIcon = new Icon(icon);
+                                            currentFrame.operations.add(moveOperation);
+                                            Log.e(TAG, "onTouchEventIdle: adding a new 'MOVE' operation!");
+                                            layer = -1; //exiting the loop
+                                        }
+                                    }
+                                }
+                                i++;
+                            }
+                        }
                 }
                 if (appState == AppState.idle) {
                     relativePoint.set((int) event.getX(),

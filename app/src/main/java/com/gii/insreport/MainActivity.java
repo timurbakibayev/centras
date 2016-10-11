@@ -471,14 +471,6 @@ public class MainActivity extends AppCompatActivity {
         final String personName;
 
 
-        //TODO: scan the elements
-        //Внимание! Если создать форму с нуля, а не с сервера, то данные не подтягиваются!
-        //Надо: просканировать elements формы, найти эти данные и записать их в input!
-        //Примерно так:
-        //for (Element element : form.elements) {
-        //    if (element.fireBaseFieldName.equals("dddd"))
-        //        form.input.put("dddd",element.toString());
-        //}
 
         if (form.input.get("CLIENT_NAME") != null) {
             headerText += form.input.get("CLIENT_NAME") + "\n";
@@ -509,7 +501,7 @@ public class MainActivity extends AppCompatActivity {
                 form.status = "accept";
                 form.statusNote = "В работе";
                 scheduleNotification(personName,phoneNo,address,0);
-                //TODO: change the phone no.
+
                 Log.e(TAG, "Sending SMS: " + SMS.send(phoneNo,
                         getString(R.string.accept_sms, "Нурбек"))); //phoneNo
                 form.formReady = false;
@@ -549,8 +541,6 @@ public class MainActivity extends AppCompatActivity {
         ( acceptOrRejectDialog.findViewById(R.id.buttonCall)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: make a call to phoneNo
-                //здесь переменная phoneNo уже содержит телефон
                 Intent intent = new Intent(Intent.ACTION_CALL);
                 intent.setData(Uri.parse("tel:" + phoneNo.trim()));
                 if (intent.resolveActivity(getPackageManager()) != null) {
@@ -584,8 +574,6 @@ public class MainActivity extends AppCompatActivity {
         ( acceptOrRejectDialog.findViewById(R.id.buttonMap)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: open map intent to address
-                //здесь переменная address уже содержит адрес
 
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 String regex = "((-|\\+)?[0-9]+(\\.[0-9]+)?)+";
@@ -788,7 +776,6 @@ public class MainActivity extends AppCompatActivity {
             }
             loginButton.setVisibility(View.VISIBLE);
         }
-        //TODO: Consider adding '".indexOn": "dateCreated"' at /forms/incident/5ARsewRkMeTL9kRLHVIkwnKbq812 to your security and Firebase rules for better performance
 
     }
 }

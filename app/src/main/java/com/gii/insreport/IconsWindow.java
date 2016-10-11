@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -86,7 +85,7 @@ public class IconsWindow {
         }
     }
 
-    public boolean onTouchEvent(@NonNull MotionEvent event) {
+    public boolean onTouchEvent(@NonNull MotionEvent event, Frame currentFrame) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 pressedHere = true;
@@ -118,7 +117,7 @@ public class IconsWindow {
                 break;
             case MotionEvent.ACTION_UP:
                 if (pressedHere && !moving) {
-                    click(event.getX(), event.getY());
+                    click(event.getX(), event.getY(), currentFrame);
                 }
                 if (pressedHere && moving) {
                     dy = (lastY1-lastY0) / (lastY1Time.getTimeInMillis() - lastY0Time.getTimeInMillis()) * 100;
@@ -151,7 +150,7 @@ public class IconsWindow {
             backgroundPosition.y = 0;
     }
 
-    private void click(float x, float y) {
+    private void click(float x, float y, Frame currentFrame) {
         for (int i = 0; i < rectsNumber; i++) {
             if (drawRects[i].contains((int) x, (int) y)) {
                 pictureNo = i;
@@ -162,19 +161,19 @@ public class IconsWindow {
                 Icon newIcon = new Icon();
                 newIcon.picId = i;
                 //newIcon.drawRect = new Rect(30,30,70,70);
-                newIcon.center = new PointF(0,0);
-                newIcon.left = - AnimaView.drawableSize[i].x / 2;
-                newIcon.top = - AnimaView.drawableSize[i].y / 2;
-                newIcon.right = + AnimaView.drawableSize[i].x / 2;
-                newIcon.bottom = + AnimaView.drawableSize[i].y / 2;
-                animaView.currentFrame.icons.add(newIcon);
-                if (animaView.iconLayer[i] > 2)
-                    InsReport.currentElement.vBoolean = true;
-                ((FloatingActionButton) animaView.animaActivity.findViewById(R.id.lock_roads)).setImageResource(R.drawable.ic_lock_outline_black_24dp);
+                newIcon.center = new PointF(- currentFrame.backgroundCenter.x / currentFrame.scale
+                        + animaView.canvasWidth / 2 / currentFrame.scale,
+                        - currentFrame.backgroundCenter.y / currentFrame.scale
+                        + animaView.canvasHeight / 2 / currentFrame.scale);
+                newIcon.left = newIcon.center.x - AnimaView.drawableSize[i].x / 2;
+                newIcon.top = newIcon.center.y - AnimaView.drawableSize[i].y / 2;
+                newIcon.right = newIcon.center.x + AnimaView.drawableSize[i].x / 2;
+                newIcon.bottom = newIcon.center.y + AnimaView.drawableSize[i].y / 2;
+                currentFrame.icons.add(newIcon);
 
                 Operation newOperation = new Operation();
                 newOperation.operationType = "new icon";
-                animaView.currentFrame.operations.add(newOperation);
+                currentFrame.operations.add(newOperation);
                 Log.e(TAG, "onClick: adding a new 'NEW ICON' operation!" );
                 animaView.appState = AnimaView.AppState.idle;
                 animaView.postInvalidate();
@@ -243,4 +242,5 @@ public class IconsWindow {
 
     public Choosing choosing = Choosing.icon;
 
+    //TODO: remember the bitmap inside the element, save it to firebase
 }

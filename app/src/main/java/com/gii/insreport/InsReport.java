@@ -128,7 +128,6 @@ public class InsReport extends Application {
                 if (user != null) {
                     // User is signed in
                     Log.e(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    //TODO: somehow handle the notification inside the app, currently it is beeping
                     FirebaseMessaging.getInstance().subscribeToTopic(user.getUid());
                     Log.e(TAG, "onAuthStateChanged: Instance_Id_Scope:" + FirebaseInstanceId.getInstance().getToken());
                     Log.e(TAG, "onAuthStateChanged: subscribed to " + user.getUid());
@@ -162,8 +161,6 @@ public class InsReport extends Application {
 
         loadUserBase();
 
-        //TODO: REMOVE THIS WHEN RELEASED!!!!!
-        //addDummyForms();
     }
 
     private void loadUserBase() {

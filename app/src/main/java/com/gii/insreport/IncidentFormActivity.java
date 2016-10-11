@@ -732,8 +732,10 @@ public class IncidentFormActivity extends AppCompatActivity {
         //    FormTemplates.applyTemplate(currentForm, currentForm.fireBaseCatalog);
         //    buildTheForm(currentForm);
         //}
+        Log.e(TAG, "showTheFragment: " + menuName);
         if (linearLayoutForFragment.get(menuName) == null) { //if template did not help, exit
             Toast.makeText(this, "Неподходящая форма", Toast.LENGTH_LONG);
+            Log.e(TAG, "showTheFragment: " + menuName + " is null :( Form is not ready? Quitting");
             return;
         }
         ViewGroup parent = (ViewGroup) linearLayoutForFragment.get(menuName).getParent();
@@ -746,6 +748,8 @@ public class IncidentFormActivity extends AppCompatActivity {
         scrollView.setPadding(padding, 0, padding, 0);
         scrollView.addView(linearLayoutForFragment.get(menuName));
 
+        Log.e(TAG, "showTheFragment: about to show the form...");
+
         new AlertDialog.Builder(this).setTitle(title).setView(scrollView)
                 .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
                     @Override
@@ -755,7 +759,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                 }).setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                currentForm.saveToCloud();
+                    currentForm.saveToCloud();
             }
         }).
                 show();
@@ -1479,10 +1483,8 @@ public class IncidentFormActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //TODO: .code
                 String selectedString = kolesaAdapter.filteredObjects.get(i).name;
                 lookupEditText.setText(selectedString);
-                //TODO: .name
                 element.vText = kolesaAdapter.filteredObjects.get(i).id;
                 lookUpDialog.dismiss();
             }

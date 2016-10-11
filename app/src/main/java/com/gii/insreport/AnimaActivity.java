@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -57,46 +56,13 @@ public class AnimaActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.lock_roads);
-        defFab = (FloatingActionButton) findViewById(R.id.lock_roads);
         final AnimaActivity thisActivity = this;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //fab.setBackgroundDrawable();
-                InsReport.currentElement.vBoolean = !InsReport.currentElement.vBoolean;
-                if (InsReport.currentElement.vBoolean) {
-                    fab.setImageResource(R.drawable.ic_lock_outline_black_24dp);
-                    Toast.makeText(thisActivity, "Дороги зафиксированы", Toast.LENGTH_SHORT).show();
-                } else {
-                    fab.setImageResource(R.drawable.ic_lock_open_black_24dp);
-                    Toast.makeText(thisActivity, "Дороги разблокированы", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-
-
-        /*
-        final FloatingActionButton deleteAllFab = (FloatingActionButton) findViewById(R.id.deleteFab);
-        deleteAllFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                animaView.currentFrame.strokes.clear();
-                animaView.currentFrame.icons.clear();
-                animaView.postInvalidate();
-            }
-        });
-        */
 
         final FloatingActionButton photoFab = (FloatingActionButton) findViewById(R.id.photoFab);
         photoFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 animaView.takeSnapshot();
-                //animaView.currentFrame.strokes.clear();
-                //animaView.currentFrame.icons.clear();
-                //animaView.postInvalidate();
             }
         });
 
@@ -124,7 +90,6 @@ public class AnimaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent gmaps = new Intent(thisActivity, MapsActivity.class);
-                //gmaps.putExtra()
                 thisActivity.startActivityForResult(gmaps, 1);
             }
         });
@@ -170,10 +135,6 @@ public class AnimaActivity extends AppCompatActivity {
 
         iconsWindow.init(animaView);
 
-        if (InsReport.currentElement.vBoolean)
-            fab.setImageResource(R.drawable.ic_lock_outline_black_24dp);
-        else
-            fab.setImageResource(R.drawable.ic_lock_open_black_24dp);
     }
 
 
