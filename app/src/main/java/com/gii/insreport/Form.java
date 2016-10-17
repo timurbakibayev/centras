@@ -294,7 +294,7 @@ public class Form {
                 else
                     address = "";
 
-                MyFirebaseMessagingService.sendNotification(personName,personName,phoneNo,address,context);
+                MyFirebaseMessagingService.sendNotification(personName,personName,phoneNo,address,context, false, false);
                 saveToCloud();
             }
             InsReport.notifyFormsList();

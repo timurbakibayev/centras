@@ -92,7 +92,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().get("name") != null)
             t = remoteMessage.getData().get("name");
 
-        sendNotification(t,personName, personPhone, address, this);
+        sendNotification(t,personName, personPhone, address, this, true, true);
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
@@ -103,7 +103,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      *
      * @param messageBody FCM message body received.
      */
-    public static void sendNotification(String messageBody, String personName, String personPhone, String address, Context context) {
+    public static void sendNotification(String messageBody, String personName, String personPhone, String address, Context context, boolean beep, boolean setProximity) {
         //Intent intent = new Intent(this, MainActivity.class);
         //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         //intent.setAction("foo");
@@ -116,6 +116,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         String soundUri = InsReport.sharedPref.getString("notifications_new_message_ringtone", RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString());
         Uri defaultSoundUri = Uri.parse(soundUri);
+        if (!beep)
+            defaultSoundUri = null;
 
         long[] vibra = new long[0];
         if (InsReport.sharedPref.getBoolean("notifications_new_message_vibrate", false)) {
@@ -144,7 +146,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String locationStr;
         Intent mapIntent = new Intent(Intent.ACTION_VIEW);
 
-        if (coordinates && location.length > 1) {
+        if (coordinates && location.length > 1
+                && setProximity) {
             locationStr = location[0] + "," + location[1];
             Uri locationUri1 = Uri.parse("geo:0,0?").buildUpon()
                     .appendQueryParameter("q", locationStr)
@@ -171,7 +174,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     locationManager.addProximityAlert(lat, lon, 200, -1, arrivePendingIntent);
-                    InsReport.logErrorFirebase("PROXIMITY ALERT SET for " + personName,"Lat:"+lat,"Lon:"+lon);
+                    InsReport.logGPSFirebase(personPhone,"PROXIMITY SET", "Lat:"+lat + ", Lon:"+lon);
                 }
             } catch (Exception e) {
 
@@ -195,7 +198,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .setSound(defaultSoundUri)
                     .setVibrate(vibra)
                     .setContentIntent(openAppPendingIntent);
-        } else {
+        } else if (defaultSoundUri != null) {
             long when = (new Date()).getTime();
             notificationBuilder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.centraslogo)
@@ -210,13 +213,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .addAction(R.drawable.ic_pin_drop_black_24dp,"Карта",mapPendingIntent)
                     .setOngoing(true)
                     .setContentIntent(openAppPendingIntent);
+        } else {
+            long when = (new Date()).getTime();
+            notificationBuilder = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.centraslogo)
+                    .setContentTitle(personName)
+                    .setTicker(personName)
+                    .setContentText(address + "\n" + personPhone)
+                    .setVibrate(vibra)
+                    .setShowWhen(true)
+                    .setWhen(when)
+                    .addAction(R.drawable.ic_call_black_24dp,"Позвонить",callPendingIntent)
+                    .addAction(R.drawable.ic_pin_drop_black_24dp,"Карта",mapPendingIntent)
+                    .setOngoing(true)
+                    .setContentIntent(openAppPendingIntent);
         }
 
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (InsReport.sharedPref.getBoolean("notifications_new_message",true))
-            notificationManager.notify(id /* ID of notification */, notificationBuilder.build());
-        Log.e(TAG, "sendNotification: hm...");
+            notificationManager.notify(id, notificationBuilder.build());
+        Log.e(TAG, "sendNotification: hm... done.");
     }
 }

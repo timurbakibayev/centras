@@ -34,8 +34,7 @@ public class ProximityIntentReceiver extends BroadcastReceiver {
             Toast.makeText(context, "Вы прибыли на место аварии", Toast.LENGTH_LONG).show();
             String personName = intent.getExtras().getString("personName");
             String phoneNo = intent.getExtras().getString("phoneNo");
-            InsReport.logErrorFirebase("ARRIVED!", "Phone: " + phoneNo,
-                    "Name: " + personName);
+            InsReport.logGPSFirebase(phoneNo, "ARRIVED", personName);
 
             LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 

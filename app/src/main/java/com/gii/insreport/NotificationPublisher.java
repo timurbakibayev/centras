@@ -9,6 +9,6 @@ public class NotificationPublisher extends BroadcastReceiver {
         String name = intent.getStringExtra("name");
         String phone = intent.getStringExtra("phone");
         String address = intent.getStringExtra("address");
-        MyFirebaseMessagingService.sendNotification(name,name,phone,address,context);
+        MyFirebaseMessagingService.sendNotification(name,name,phone,address,context, true, false);
     }
 }

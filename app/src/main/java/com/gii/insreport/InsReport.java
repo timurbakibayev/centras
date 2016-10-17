@@ -299,6 +299,23 @@ public class InsReport extends Application {
         }
     }
 
+    public static void logGPSFirebase(String phoneNo, String logText2, String logText3) {
+        Map<String,Object> log = new HashMap<>();
+        if (user != null) {
+            log.put("User",user.getEmail().toString());
+            log.put("ServerTime",ServerValue.TIMESTAMP);
+            Date d = new Date();
+            log.put("TextTime", IncidentFormActivity.dateOnlyTextStrict(d));
+            log.put("Phone",phoneNo);
+            log.put("Text2",logText2);
+            log.put("Text3",logText3);
+            log.put("Device ID",FirebaseInstanceId.getInstance().getToken());
+
+            ref.child("gps/"+ IncidentFormActivity.dateToYYMMDD(d) + "/" + user.getEmail().toString().replaceAll("[^A-Za-z]+", "")).
+                    push().setValue(log);
+        }
+    }
+
     public void checkBlock(String token) {
         ref.child("block/"+token).addValueEventListener(new ValueEventListener() {
             @Override
