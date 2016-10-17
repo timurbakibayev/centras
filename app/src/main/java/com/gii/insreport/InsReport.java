@@ -48,9 +48,9 @@ public class InsReport extends Application {
     //public final static String forceUserID = "5K0dJbLCxzPrz9ijuXuJPqiu18u1";
 
     public static Firebase ref;
+    public static FirebaseAuth mAuth;
     public static FirebaseStorage storage;
     public static StorageReference storageRef;
-    public static FirebaseAuth mAuth;
     public static Directories directories;
     public static ArrayList<FirebaseUserEmail> firebaseUserEmails = new ArrayList<>();
 

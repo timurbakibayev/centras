@@ -1,12 +1,15 @@
 package com.gii.insreport;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,7 +19,7 @@ import java.util.Date;
 /**
  * Created by Timur_hnimdvi on 10-Oct-16.
  */
-public class ProximityIntentReceiver extends BroadcastReceiver{
+public class ProximityIntentReceiver extends BroadcastReceiver {
     private static final String TAG = "ProximityIntentReceiver";
 
     @Override
@@ -25,13 +28,31 @@ public class ProximityIntentReceiver extends BroadcastReceiver{
         String k = LocationManager.KEY_PROXIMITY_ENTERING;
 
         boolean state = intent.getBooleanExtra(k, false);
-        if(state){
+        if (state) {
+
             Log.e(TAG, "onReceive: ENTERING region set by MyFirebaseMessagingService");
             Toast.makeText(context, "Вы прибыли на место аварии", Toast.LENGTH_LONG).show();
             String personName = intent.getExtras().getString("personName");
             String phoneNo = intent.getExtras().getString("phoneNo");
-            InsReport.logErrorFirebase("ARRIVED!","Phone: " + phoneNo,
+            InsReport.logErrorFirebase("ARRIVED!", "Phone: " + phoneNo,
                     "Name: " + personName);
+
+            LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+
+            int id = Form.hash(phoneNo);
+
+            PendingIntent proximityIntent = PendingIntent
+                    .getBroadcast(
+                            context,
+                            id,
+                            intent,
+                            0);
+
+
+            if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                locationManager.removeProximityAlert(proximityIntent);
+            }
 
             String soundUri = InsReport.sharedPref.getString("notifications_new_message_ringtone", RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString());
             Uri defaultSoundUri = Uri.parse(soundUri);
