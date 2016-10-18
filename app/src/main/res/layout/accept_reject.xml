@@ -58,7 +58,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:drawableLeft="@drawable/ic_clear_black_24dp1"
             android:text="@string/decline" />
 
@@ -73,7 +73,7 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:drawableLeft="@drawable/ic_call_black_24dp"
             android:text="@string/call" />
 
@@ -83,12 +83,18 @@
         android:background="@color/colorDivider"
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
-    <Button
-        android:id="@+id/buttonMap"
-        style="@style/Widget.AppCompat.Button.Borderless"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_pin_drop_black_24dp"
-        android:text="@string/on_map" />
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/buttonMap"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_pin_drop_black_24dp"
+            android:text="@string/on_map" />
+    </LinearLayout>
 
 </LinearLayout>

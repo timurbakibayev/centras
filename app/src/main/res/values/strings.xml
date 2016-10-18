@@ -32,7 +32,7 @@
     <string name="insured">Застрахованные</string>
 
     <!--AcceptReject-->
-    <string name="call"> Позвонить</string>
+    <string name="call"> Звонок</string>
     <string name="on_map"> На Карте</string>
     <string name="decline"> Отклонить</string>
     <string name="accept"> Принять</string>
