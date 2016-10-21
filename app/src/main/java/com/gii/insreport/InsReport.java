@@ -43,6 +43,7 @@ public class InsReport extends Application {
     public final static String fireBaseGeneralDirectory = "insreport-f39a3";
     public final static String EXTRA_FIREBASE_CATALOG = "Firebase.Catalog";
     public final static String EXTRA_ID_NO = "Firebase.Form.No";
+    public final static String EXTRA_FORM_READY = "Firebase.Form.formReady";
     public final static String INCIDENT_TYPE = "Incident.Type";
 
     //public final static String forceUserID = "5K0dJbLCxzPrz9ijuXuJPqiu18u1";

@@ -82,6 +82,8 @@ public class IncidentFormActivity extends AppCompatActivity {
     public Element currentElement = null;
     public LinearLayout currentLinearLayout = null;
 
+    public boolean readOnly = false;
+
     //LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
 
@@ -96,7 +98,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                     datePicker[currentDatePicker].setText(dateTimeText(calendar.getTime()));
                     currentDateElement.vDate.setTime(calendar.getTime().getTime());
-                    new TimePickerDialog(thisActivity, timeTo, calendar
+                    new TimePickerDialog(thisActivity, android.R.style.Theme_Holo_Light_Dialog,                            timeTo, calendar
                             .get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
                 }
 
@@ -237,7 +239,11 @@ public class IncidentFormActivity extends AppCompatActivity {
             setContentView(R.layout.activity_pre_insurance);
 
         id_no = getIntent().getStringExtra(InsReport.EXTRA_ID_NO);
+
+        readOnly = getIntent().getBooleanExtra(InsReport.EXTRA_FORM_READY, false);
+
         currentForm = null;
+
         for (FormsCollection formsCollection : InsReport.mainMenuForms) {
             if (formsCollection.fireBaseCatalog.equals(fireBaseCatalog)) {
                 for (Form form : formsCollection.forms) {
@@ -429,11 +435,10 @@ public class IncidentFormActivity extends AppCompatActivity {
             }
         });
 
-
+        findViewById(R.id.ready_adik).setVisibility(readOnly?View.GONE:View.VISIBLE);
         ((ImageButton) findViewById(R.id.ready_adik)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 new AlertDialog.Builder(thisActivity).setTitle("Форма полностью готова?")
                         .setPositiveButton("Да", new DialogInterface.OnClickListener() {
                             @Override
@@ -493,7 +498,7 @@ public class IncidentFormActivity extends AppCompatActivity {
             }
         }
 
-        if (currentForm.objects.elements.size() == 0) {
+        if (currentForm.objects.elements.size() == 0 && !readOnly) {
             //Необходимо добавить как минимум клиента. Дальше объекты будут создаваться вручную.
             Element newObject = new Element("object", Element.ElementType.eParticipant,
                     "client", "Клиент");
@@ -539,19 +544,23 @@ public class IncidentFormActivity extends AppCompatActivity {
                             default:
                                 dialog.dismiss();
                                 if (which == photos.length - 1) {
-                                    int objectNumber = currentForm.numberOfObjects();
-                                    Element newObject = new Element("object", Element.ElementType.eParticipant,
-                                            "object" + (objectNumber), "Участник №" + (objectNumber));
-                                    FormTemplates.applyTemplateForObjects(newObject);
-                                    for (Element element1 : newObject.elements) {
-                                        if (element1.category.equals("photo")) {
-                                            Log.w(TAG, "showManyPhotos: added a new element of type 'photo'");
-                                            photoElements.add(element1);
-                                            photoDescription.add(newObject.description);
+                                    if (readOnly)
+                                        return;
+                                    else {
+                                        int objectNumber = currentForm.numberOfObjects();
+                                        Element newObject = new Element("object", Element.ElementType.eParticipant,
+                                                "object" + (objectNumber), "Участник №" + (objectNumber));
+                                        FormTemplates.applyTemplateForObjects(newObject);
+                                        for (Element element1 : newObject.elements) {
+                                            if (element1.category.equals("photo")) {
+                                                Log.w(TAG, "showManyPhotos: added a new element of type 'photo'");
+                                                photoElements.add(element1);
+                                                photoDescription.add(newObject.description);
+                                            }
                                         }
+                                        currentForm.objects.elements.add(newObject);
+                                        currentForm.saveToCloud();
                                     }
-                                    currentForm.objects.elements.add(newObject);
-                                    currentForm.saveToCloud();
                                 }
 
                                 InsReport.currentElement = photoElements.get(which);
@@ -573,7 +582,7 @@ public class IncidentFormActivity extends AppCompatActivity {
 
     private void showManyObjects() {
 
-        if (currentForm.objects.elements.size() == 0) {
+        if (currentForm.objects.elements.size() == 0 && !readOnly) {
             //Необходимо добавить как минимум клиента. Дальше объекты будут создаваться вручную.
             Element newObject = new Element("object", Element.ElementType.eParticipant,
                     "client", "Клиент");
@@ -606,6 +615,8 @@ public class IncidentFormActivity extends AppCompatActivity {
                             default:
                                 dialog.dismiss();
                                 if (which == objects.length - 1) {
+                                    if (readOnly)
+                                        return;
                                     Element newObject = new Element("object", Element.ElementType.eParticipant,
                                             "object" + (which + 1), "Участник №" + (which + 1));
                                     FormTemplates.applyTemplateForObjects(newObject);
@@ -700,6 +711,8 @@ public class IncidentFormActivity extends AppCompatActivity {
                             default:
                                 dialog.dismiss();
                                 if (which == participants.length - 1) {
+                                    if (readOnly)
+                                        return;
                                     Element newParticipant = new Element("participant", Element.ElementType.eParticipant,
                                             "participant" + (which + 1), "Участник " + (which + 1));
                                     FormTemplates.applyTemplateForParticipants(newParticipant);
@@ -750,6 +763,7 @@ public class IncidentFormActivity extends AppCompatActivity {
 
         Log.e(TAG, "showTheFragment: about to show the form...");
 
+        if (!readOnly)
         new AlertDialog.Builder(this).setTitle(title).setView(scrollView)
                 .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
                     @Override
@@ -760,8 +774,17 @@ public class IncidentFormActivity extends AppCompatActivity {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                     currentForm.saveToCloud();
-            }
+                    }
         }).
+                show();
+        if (readOnly)
+        new AlertDialog.Builder(this).setTitle(title).setView(scrollView)
+                .setPositiveButton("Выйти", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }).
                 show();
     }
 
@@ -799,7 +822,17 @@ public class IncidentFormActivity extends AppCompatActivity {
     public void addElementsToLL(LinearLayout LL, ArrayList<Element> elements) {
         boolean firstGroup = true;
         for (final Element element : elements) {
-            if (element.serverStatic) {
+            if (element.serverStatic || (readOnly && (
+                    element.type == Element.ElementType.eBoolean ||
+                    element.type == Element.ElementType.eCombo||
+                    element.type == Element.ElementType.eComboMulti ||
+                    element.type == Element.ElementType.eInteger ||
+                    element.type == Element.ElementType.eLookUp ||
+                    element.type == Element.ElementType.eRadio ||
+                    element.type == Element.ElementType.eText ||
+                    element.type == Element.ElementType.eTextNum
+            )
+            )) {
                 LinearLayout horizontalLLStatic = new LinearLayout(this);
                 horizontalLLStatic.setOrientation(LinearLayout.HORIZONTAL);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -824,7 +857,17 @@ public class IncidentFormActivity extends AppCompatActivity {
         }
 
         for (final Element element : elements) {
-            if (!element.serverStatic)
+            if (!element.serverStatic && !(readOnly && (
+                    element.type == Element.ElementType.eBoolean ||
+                            element.type == Element.ElementType.eCombo||
+                            element.type == Element.ElementType.eComboMulti ||
+                            element.type == Element.ElementType.eInteger ||
+                            element.type == Element.ElementType.eLookUp ||
+                            element.type == Element.ElementType.eRadio ||
+                            element.type == Element.ElementType.eText ||
+                            element.type == Element.ElementType.eTextNum
+            )
+            ))
                 switch (element.type) {
                     case eGroup:
                         LinearLayout outerLL = new LinearLayout(this);
@@ -926,6 +969,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                                     calendar.setTime(element.vDate);
                                     currentDatePicker = dpI;
                                     currentDateElement = dpElement;
+                                    if (!readOnly)
                                     new DatePickerDialog(thisActivity, dateOnly, calendar
                                             .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                                             calendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -940,6 +984,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                                 calendar.setTime(element.vDate);
                                 currentDatePicker = dpI;
                                 currentDateElement = dpElement;
+                                if (!readOnly)
                                 new DatePickerDialog(thisActivity, dateOnly, calendar
                                         .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                                         calendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -981,6 +1026,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                                     calendar.setTime(element.vDate);
                                     currentDatePicker = dpI1;
                                     currentDateElement = dpElement1;
+                                    if (!readOnly)
                                     new DatePickerDialog(thisActivity, dateThenTime, calendar
                                             .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                                             calendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -995,6 +1041,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                                 calendar.setTime(element.vDate);
                                 currentDatePicker = dpI1;
                                 currentDateElement = dpElement1;
+                                if (!readOnly)
                                 new DatePickerDialog(thisActivity, dateThenTime, calendar
                                         .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                                         calendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -1142,7 +1189,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                         planButton.setText(element.vPlan.damageDescription);
                         planButton.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.boxy_button_spinner, null));
                         planButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_more_black_24dp, 0);
-
+                        if (!readOnly)
                         planButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -1191,6 +1238,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                         element.container = drawButton;
                         drawButton.setText(span2Strings(element.description, element.toString()), Button.BufferType.SPANNABLE);
                         drawButton.setCompoundDrawablesWithIntrinsicBounds(element.getBitmapDrawable(this), null, null, null);
+                        if (!readOnly)
                         drawButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -1220,6 +1268,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                         //element.container = animaButton;
                         animaButton.setText(span2Strings(element.description, element.toString()), Button.BufferType.SPANNABLE);
                         animaButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                        if (!readOnly)
                         animaButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -1241,6 +1290,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                         element.container = drawButton1;
                         drawButton1.setText(span2Strings(element.description, element.toString()), Button.BufferType.SPANNABLE);
                         drawButton1.setCompoundDrawablesWithIntrinsicBounds(element.getBitmapDrawable(this), null, null, null);
+                        if (!readOnly)
                         drawButton1.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -1601,7 +1651,8 @@ public class IncidentFormActivity extends AppCompatActivity {
             }
         }
 
-        saveToCloud();
+        if (!readOnly)
+            saveToCloud();
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -1619,7 +1670,8 @@ public class IncidentFormActivity extends AppCompatActivity {
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             File file = new File(Environment.getExternalStorageDirectory() + File.separator + "image.jpg");
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            if (!readOnly)
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
@@ -1638,14 +1690,15 @@ public class IncidentFormActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        saveToCloud();
+        if (!readOnly)
+            saveToCloud();
         finish();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (currentForm != null) {
+        if (currentForm != null && !readOnly) {
             currentForm.validate();
             currentForm.saveToCloud();
         }

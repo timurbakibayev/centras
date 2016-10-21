@@ -472,17 +472,14 @@ public class FormsList extends AppCompatActivity {
                 if (!currentForm.formReady)
                     InsReport.mainActivity.acceptOrRejectDialogShow(currentForm,this);
             }
-            if (currentForm.status.equals("accept") &&
-                    !currentForm.formReady) {
+            if (currentForm.status.equals("accept")) {
                 Intent intent = new Intent(thisActivity, IncidentFormActivity.class);
                 intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, fireBaseCatalog);
                 intent.putExtra(InsReport.EXTRA_ID_NO, id);
+                intent.putExtra(InsReport.EXTRA_FORM_READY, currentForm.formReady);
                 InsReport.logFirebase("Open " + fireBaseCatalog + " form no. " + id);
                 startActivity(intent);
-            }
-            if (currentForm.formReady) {
-                snackBar("Форма уже отправлена на сервер!");
-            } else if (!currentForm.status.equals("accept")) {
+            } else {
                 snackBar("Форма не была принята!");
             }
         }

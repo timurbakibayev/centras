@@ -74,7 +74,8 @@ public class CameraAndPictures {
                             });
                             theImageView.setAdjustViewBounds(true);
                             TextView descriptionTV = descriptionTextView(element,form,theImageView,linearLayout.getContext(),comboItems);
-                            linearLayout.addView(deleteTextView(element,form,theImageView,linearLayout.getContext(),descriptionTV));
+                            if (!form.formReady)
+                                linearLayout.addView(deleteTextView(element,form,theImageView,linearLayout.getContext(),descriptionTV));
                             linearLayout.addView(theImageView);
                             linearLayout.addView(descriptionTV);
 
@@ -98,7 +99,8 @@ public class CameraAndPictures {
         int origH = d.getIntrinsicHeight();
         String size = "Размер: " + origW + " x " + origH;
         descriptionAndDate.setText(element.description + "\n" + IncidentFormActivity.dateTimeText(element.vDate) + "\n" + size + "\n\n");
-        descriptionAndDate.setOnClickListener(new View.OnClickListener() {
+        if (!form.formReady)
+            descriptionAndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (element.deleted) {

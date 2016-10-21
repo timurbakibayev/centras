@@ -91,19 +91,21 @@ public class PhotosActivity extends AppCompatActivity {
         //setTitle(InsReport.currentElement.description);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabPhoto);
-        fab.setOnClickListener(new View.OnClickListener() {
+        if (!InsReport.currentForm.formReady)
+            fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 takeAPicture();
             }
         });
 
-        ((FloatingActionButton) findViewById(R.id.galleryFab)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                takeFromGallery();
-            }
-        });
+        if (!InsReport.currentForm.formReady)
+            ((FloatingActionButton) findViewById(R.id.galleryFab)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    takeFromGallery();
+                }
+            });
 
         picturesLL = (LinearLayout)findViewById(R.id.photoLLNew);
 
@@ -195,7 +197,8 @@ public class PhotosActivity extends AppCompatActivity {
                 final PhotosActivity thisActivity = this;
                 TextView descriptionTV = cameraAndPictures.descriptionTextView(newPhotoElement,currentForm,newImage,thisActivity,element.comboItems);
                 element.elements.add(newPhotoElement);
-                picturesLL.addView(cameraAndPictures.deleteTextView(newPhotoElement,currentForm,newImage,thisActivity,descriptionTV));
+                if (!InsReport.currentForm.formReady)
+                    picturesLL.addView(cameraAndPictures.deleteTextView(newPhotoElement,currentForm,newImage,thisActivity,descriptionTV));
                 picturesLL.addView(newImage);
                 picturesLL.addView(descriptionTV);
             }

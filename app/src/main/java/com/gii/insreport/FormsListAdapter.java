@@ -107,8 +107,10 @@ public int getItemViewType(int position) {
         }
 
 
-        (view.findViewById(R.id.openAcceptOrReject)).setVisibility(p.status.equals("postpone")?View.GONE:View.VISIBLE);
+        (view.findViewById(R.id.openAcceptOrReject)).setVisibility(p.status.equals("")?View.VISIBLE:View.GONE);
         (view.findViewById(R.id.postponedForm)).setVisibility(p.status.equals("postpone")?View.VISIBLE:View.GONE);
+        (view.findViewById(R.id.acceptedForm)).setVisibility(p.status.equals("accept")?View.VISIBLE:View.GONE);
+        (view.findViewById(R.id.rejectedForm)).setVisibility(p.status.equals("reject")?View.VISIBLE:View.GONE);
 
         ((TextView) view.findViewById(R.id.statusNoteTV)).setText(p.statusNote);
         ((TextView) view.findViewById(R.id.textView1)).setText(p.description);
@@ -151,8 +153,7 @@ public int getItemViewType(int position) {
         view.findViewById(R.id.openAcceptOrReject).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!p.formReady || !p.status.equals("accept"))
-                    InsReport.mainActivity.acceptOrRejectDialogShow(p,FormsList.formList);
+                InsReport.mainActivity.acceptOrRejectDialogShow(p,FormsList.formList);
                 Log.w(TAG, "onClick: openAcceptOrReject");
             }
         });
@@ -160,7 +161,23 @@ public int getItemViewType(int position) {
         view.findViewById(R.id.postponedForm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!p.formReady || !p.status.equals("accept"))
+                    InsReport.mainActivity.acceptOrRejectDialogShow(p,FormsList.formList);
+                Log.w(TAG, "onClick: postponedForm");
+            }
+        });
+
+        view.findViewById(R.id.acceptedForm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!p.formReady)
+                    InsReport.mainActivity.acceptOrRejectDialogShow(p,FormsList.formList);
+                Log.w(TAG, "onClick: postponedForm");
+            }
+        });
+
+        view.findViewById(R.id.rejectedForm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                     InsReport.mainActivity.acceptOrRejectDialogShow(p,FormsList.formList);
                 Log.w(TAG, "onClick: postponedForm");
             }
