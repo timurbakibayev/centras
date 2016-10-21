@@ -618,16 +618,17 @@ public class IncidentFormActivity extends AppCompatActivity {
                                     if (readOnly)
                                         return;
                                     Element newObject = new Element("object", Element.ElementType.eParticipant,
-                                            "object" + (which + 1), "Участник №" + (which + 1));
+                                            "object" + (which + 1), "Участник " + (which + 1));
                                     FormTemplates.applyTemplateForObjects(newObject);
                                     currentForm.objects.elements.add(newObject);
                                 }
                                 InsReport.currentElement = currentForm.objects.elements.get(which);
+                                currentElement = currentForm.objects.elements.get(which);
                                 LinearLayout newLL = new LinearLayout(incidentFormActivity);
                                 newLL.setOrientation(LinearLayout.VERTICAL);
                                 addElementsToLL(newLL, InsReport.currentElement.elements);
-                                linearLayoutForFragment.put("specific", newLL);
-                                showTheFragment("specific", InsReport.currentElement.description);
+                                linearLayoutForFragment.put("participant", newLL);
+                                showTheFragment("participant", InsReport.currentElement.description);
                                 break;
                         }
                     }
@@ -687,6 +688,15 @@ public class IncidentFormActivity extends AppCompatActivity {
     }
 
     private void showManyParticipants() {
+        if (currentForm.participants.elements.size() == 0 && !readOnly) {
+            //Необходимо добавить как минимум клиента. Дальше объекты будут создаваться вручную.
+            Element newObject = new Element("participant", Element.ElementType.eParticipant,
+                    "client", "Клиент");
+            FormTemplates.applyTemplateForObjects(newObject);
+            currentForm.participants.elements.add(newObject);
+            currentForm.saveToCloud();
+        }
+
         final String[] participants = new String[currentForm.participants.elements.size() + 1];
         for (int i = 0; i < currentForm.participants.elements.size(); i++) {
             Element element = currentForm.participants.elements.get(i);
@@ -784,6 +794,24 @@ public class IncidentFormActivity extends AppCompatActivity {
                 .setNegativeButton("Удалить", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        if (currentElement.fireBaseFieldName.equals("client")) {
+                            new AlertDialog.Builder(thisActivity).setTitle("Это наш клиент, его нельзя удалять!")
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            currentForm.saveToCloud();
+                                        }
+                                    })
+                                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                        @Override
+                                        public void onDismiss(DialogInterface dialogInterface) {
+                                            currentForm.saveToCloud();
+                                        }
+                                    }).
+                                    show();
+
+                            return;
+                        }
                         for (final Element element : currentForm.participants.elements) {
                             if (element.fireBaseFieldName.equals(currentElement.fireBaseFieldName)) {
                                 new AlertDialog.Builder(thisActivity).setTitle("Удалить участника?")
@@ -809,6 +837,31 @@ public class IncidentFormActivity extends AppCompatActivity {
                                         show();
                             }
                         }      
+                        for (final Element element : currentForm.objects.elements) {
+                            if (element.fireBaseFieldName.equals(currentElement.fireBaseFieldName)) {
+                                new AlertDialog.Builder(thisActivity).setTitle("Удалить участника?")
+                                        .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                currentForm.objects.elements.remove(element);
+                                                currentForm.saveToCloud();
+                                            }
+                                        }).
+                                        setNeutralButton("Нет", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                currentForm.saveToCloud();
+                                            }
+                                        })
+                                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                            @Override
+                                            public void onDismiss(DialogInterface dialogInterface) {
+                                                currentForm.saveToCloud();
+                                            }
+                                        }).
+                                        show();
+                            }
+                        }
                     }
                 })
                 .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
