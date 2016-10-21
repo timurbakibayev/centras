@@ -274,6 +274,18 @@ public class Element {
         return name + percentGuilty;
     }
 
+    @JsonIgnore
+    public String constructObjectInfo() {
+        String s = this.find("OBJECT_REGISRATION_NUMBER");
+        if (s.equals(""))
+            s = description;
+        if (!s.equals(""))
+            s += ", ";
+        if (fireBaseFieldName.equals("client"))
+            s = "Клиент: " + s;
+        return s;
+    }
+
     public String find(String fireBaseFieldName) {
         for (Element element : elements) {
             if (element.fireBaseFieldName.equals(fireBaseFieldName))

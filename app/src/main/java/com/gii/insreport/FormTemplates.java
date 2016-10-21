@@ -19,6 +19,9 @@ public class FormTemplates {
         element.elements.add(new Element("participant", Element.ElementType.eComboMulti, "PERSON_TYPE",
                 "Тип участника", "DCT_PERSON_TYPE"));
 
+        element.elements.add(new Element("participant", Element.ElementType.eTextNum, "PHONE_NO",
+                "Телефон"));
+
         element.elements.add(new Element("participant", Element.ElementType.eTextNum, "PERSON_IIN",
                 "Иин участника"));
 
@@ -32,7 +35,10 @@ public class FormTemplates {
                 "Дата договора другой страховой компании"));
 
         element.elements.add(new Element("participant", Element.ElementType.eCombo, "THIRD_PART_INSURER",
-                "страховая компания", "DCT_THIRD_PART_INSURER"));
+                "Страховая компания", "DCT_THIRD_PART_INSURER"));
+
+        element.elements.add(new Element("participant", Element.ElementType.eText, "EXTRA_INFO",
+                "Примечания"));
     }
 
     public static void applyTemplateForObjects(Element element) {
@@ -83,6 +89,9 @@ public class FormTemplates {
 
         element.elements.add(new Element("object", Element.ElementType.eText, "CAR_COLOUR",
                 "Цвет объекта"));
+
+        element.elements.add(new Element("object", Element.ElementType.eText, "EXTRA_INFO",
+                "Примечания"));
     }
 
     public static void applyTemplate(Form form, String fireBaseCatalog) {

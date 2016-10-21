@@ -594,7 +594,16 @@ public class IncidentFormActivity extends AppCompatActivity {
         final String[] objects = new String[currentForm.objects.elements.size() + 1];
         for (int i = 0; i < currentForm.objects.elements.size(); i++) {
             Element element = currentForm.objects.elements.get(i);
-            objects[i] = element.description;
+            int count = 0;
+            for (Element element1 : element.elements) {
+                if (element1.category.equals("photo")) {
+                    for (Element element2 : element1.elements) {
+                        if (!element2.deleted)
+                            count++;
+                    }
+                }
+            }
+            objects[i] = element.constructObjectInfo() + " (" + count + " фото)";
         }
         objects[objects.length - 1] = "Добавить +";
         final IncidentFormActivity incidentFormActivity = this;
@@ -1260,6 +1269,12 @@ public class IncidentFormActivity extends AppCompatActivity {
                         TextInputLayout fieldHintNum = new TextInputLayout(thisActivity);
                         fieldHintNum.setHint(element.description);
                         editTextNum.setInputType(InputType.TYPE_CLASS_NUMBER);
+                        if (element.fireBaseFieldName.contains("SUM")) {
+                            //TODO: editText.setMask
+                        }
+                        if (element.fireBaseFieldName.contains("PHONE")) {
+                            //TODO: editText.setMask
+                        }
                         fieldHintNum.setLayoutParams(new LinearLayout.LayoutParams(0,
                                 LinearLayout.LayoutParams.WRAP_CONTENT, 1));
                         fieldHintNum.addView(editTextNum);
