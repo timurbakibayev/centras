@@ -719,11 +719,12 @@ public class IncidentFormActivity extends AppCompatActivity {
                                     currentForm.participants.elements.add(newParticipant);
                                 }
                                 InsReport.currentElement = currentForm.participants.elements.get(which);
+                                currentElement = currentForm.participants.elements.get(which);
                                 LinearLayout newLL = new LinearLayout(incidentFormActivity);
                                 newLL.setOrientation(LinearLayout.VERTICAL);
                                 addElementsToLL(newLL, InsReport.currentElement.elements);
-                                linearLayoutForFragment.put("specific", newLL);
-                                showTheFragment("specific", InsReport.currentElement.description);
+                                linearLayoutForFragment.put("participant", newLL);
+                                showTheFragment("participant", InsReport.currentElement.description);
                                 break;
                         }
                     }
@@ -763,8 +764,8 @@ public class IncidentFormActivity extends AppCompatActivity {
 
         Log.e(TAG, "showTheFragment: about to show the form...");
 
-        if (!readOnly)
-        new AlertDialog.Builder(this).setTitle(title).setView(scrollView)
+        if (!readOnly && !menuName.equals("participant"))
+            new AlertDialog.Builder(this).setTitle(title).setView(scrollView)
                 .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -777,6 +778,52 @@ public class IncidentFormActivity extends AppCompatActivity {
                     }
         }).
                 show();
+
+        if (!readOnly && menuName.equals("participant"))
+            new AlertDialog.Builder(this).setTitle(title).setView(scrollView)
+                .setNegativeButton("Удалить", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        for (final Element element : currentForm.participants.elements) {
+                            if (element.fireBaseFieldName.equals(currentElement.fireBaseFieldName)) {
+                                new AlertDialog.Builder(thisActivity).setTitle("Удалить участника?")
+                                        .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                currentForm.participants.elements.remove(element);
+                                                currentForm.saveToCloud();
+                                            }
+                                        }).
+                                        setNeutralButton("Нет", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                currentForm.saveToCloud();
+                                            }
+                                        })
+                                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                            @Override
+                                            public void onDismiss(DialogInterface dialogInterface) {
+                                                currentForm.saveToCloud();
+                                            }
+                                        }).
+                                        show();
+                            }
+                        }      
+                    }
+                })
+                .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        currentForm.saveToCloud();
+                    }
+                }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                    currentForm.saveToCloud();
+                    }
+        }).
+                show();
+
         if (readOnly)
         new AlertDialog.Builder(this).setTitle(title).setView(scrollView)
                 .setPositiveButton("Выйти", new DialogInterface.OnClickListener() {
