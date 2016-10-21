@@ -257,6 +257,31 @@ public class Element {
         return true;
     }
 
+    @JsonIgnore
+    public String constructParticipantInfo() {
+        String s = this.find("PERSON_NAME");
+        String s1 = this.find("LAST_NAME") + this.find("FIRST_NAME");
+        String name = s + s1;
+        String percentGuilty = this.find("GUILT_PERCENTAGE");
+        if (!percentGuilty.equals(""))
+            percentGuilty += "%";
+        if ((name + percentGuilty).equals(""))
+            return description;
+        if (!(name.equals("") || percentGuilty.equals("")))
+            name += ", ";
+        if (fireBaseFieldName.equals("client"))
+            name = "Клиент: " + name;
+        return name + percentGuilty;
+    }
+
+    public String find(String fireBaseFieldName) {
+        for (Element element : elements) {
+            if (element.fireBaseFieldName.equals(fireBaseFieldName))
+                return element.toString();
+        }
+        return "";
+    }
+
     public enum ElementType {
         eInteger, eBoolean, ePhoto, eText, eCombo, eRadio, eDate, eDateTime, eGroup, eDraw, ePlan, eSignature, eAnima, eLookUp, eParticipant, eTextNum, eComboMulti;
     }

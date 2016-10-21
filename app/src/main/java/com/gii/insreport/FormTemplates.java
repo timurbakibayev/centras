@@ -9,8 +9,12 @@ public class FormTemplates {
     public static String selectionTypes = "";
 
     public static void applyTemplateForParticipants(Element element) {
-        element.elements.add(new Element("participant", Element.ElementType.eText, "PERSON_NAME",
-                "ФИО участника"));
+        element.elements.add(new Element("participant", Element.ElementType.eText, "LAST_NAME",
+                "Фамилия"));
+        element.elements.add(new Element("participant", Element.ElementType.eText, "FIRST_NAME",
+                "Имя"));
+        element.elements.add(new Element("participant", Element.ElementType.eText, "MIDDLE_NAME",
+                "Отчество"));
 
         element.elements.add(new Element("participant", Element.ElementType.eComboMulti, "PERSON_TYPE",
                 "Тип участника", "DCT_PERSON_TYPE"));

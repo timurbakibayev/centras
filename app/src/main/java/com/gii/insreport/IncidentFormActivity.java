@@ -692,7 +692,7 @@ public class IncidentFormActivity extends AppCompatActivity {
             //Необходимо добавить как минимум клиента. Дальше объекты будут создаваться вручную.
             Element newObject = new Element("participant", Element.ElementType.eParticipant,
                     "client", "Клиент");
-            FormTemplates.applyTemplateForObjects(newObject);
+            FormTemplates.applyTemplateForParticipants(newObject);
             currentForm.participants.elements.add(newObject);
             currentForm.saveToCloud();
         }
@@ -700,7 +700,7 @@ public class IncidentFormActivity extends AppCompatActivity {
         final String[] participants = new String[currentForm.participants.elements.size() + 1];
         for (int i = 0; i < currentForm.participants.elements.size(); i++) {
             Element element = currentForm.participants.elements.get(i);
-            participants[i] = element.description;
+            participants[i] = element.constructParticipantInfo();
         }
         participants[participants.length - 1] = "Добавить +";
         final IncidentFormActivity incidentFormActivity = this;
