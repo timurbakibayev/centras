@@ -405,6 +405,7 @@ public class VehicleDamageView extends View {
         final EditText newDescription = (EditText)newDamageMarkDialog.findViewById(R.id.damage_description_et);
         final RadioButton rbPaint = (RadioButton)newDamageMarkDialog.findViewById(R.id.radio_paint);
         final RadioButton rbFix = (RadioButton)newDamageMarkDialog.findViewById(R.id.radio_fix);
+        final RadioButton rbFixPaint = (RadioButton)newDamageMarkDialog.findViewById(R.id.radio_fix_and_paint);
         final RadioButton rbReplace = (RadioButton)newDamageMarkDialog.findViewById(R.id.radio_replace);
 
         int currentNeededAction = InsReport.damagePlanData.damageMarks.get(finalDamageNo).neededAction;
@@ -414,6 +415,8 @@ public class VehicleDamageView extends View {
             rbFix.setChecked(true);
         if (currentNeededAction == 3)
             rbReplace.setChecked(true);
+        if (currentNeededAction == 4)
+            rbFixPaint.setChecked(true);
 
 
         newDescription.setHint("Какая часть повреждена?");
@@ -442,6 +445,8 @@ public class VehicleDamageView extends View {
                     InsReport.damagePlanData.damageMarks.get(finalDamageNo).neededAction = 2;
                 if (rbReplace.isChecked())
                     InsReport.damagePlanData.damageMarks.get(finalDamageNo).neededAction = 3;
+                if (rbFixPaint.isChecked())
+                    InsReport.damagePlanData.damageMarks.get(finalDamageNo).neededAction = 4;
                 newDamageMarkDialog.dismiss();
             }
         });

@@ -25,6 +25,11 @@
             android:layout_height="wrap_content"
             android:text="Ремонт"/>
         <RadioButton
+            android:id="@+id/radio_fix_and_paint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ремонт и покраска"/>
+        <RadioButton
             android:id="@+id/radio_replace"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
