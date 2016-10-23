@@ -91,6 +91,12 @@ public class PhotosActivity extends AppCompatActivity {
         //setTitle(InsReport.currentElement.description);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabPhoto);
+
+        if (InsReport.currentForm.formReady) {
+            fab.setVisibility(View.GONE);
+            (findViewById(R.id.galleryFab)).setVisibility(View.GONE);
+        }
+
         if (!InsReport.currentForm.formReady)
             fab.setOnClickListener(new View.OnClickListener() {
             @Override
