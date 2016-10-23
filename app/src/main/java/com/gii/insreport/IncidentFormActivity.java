@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -264,9 +265,33 @@ public class IncidentFormActivity extends AppCompatActivity {
         }
 
 
+        boolean portrait = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
         if (fireBaseCatalog.equalsIgnoreCase("incident")) {
 
-            ((Button) findViewById(R.id.AButtonGeneral)).setText("Общие данные\n");
+            ((Button) findViewById(R.id.AButtonGeneral)).
+                        setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_assignment_black_24dp,
+                                portrait?R.drawable.ic_assignment_black_24dp:0, 0, 0);
+
+            ((Button) findViewById(R.id.menuExtraInfo)).
+                        setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_add_black_24dp,
+                                portrait?R.drawable.ic_add_black_24dp:0, 0, 0);
+
+            ((Button) findViewById(R.id.menuDescription)).
+                        setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_map_black_72dp,
+                                portrait?R.drawable.ic_map_black_72dp:0, 0, 0);
+
+            ((Button) findViewById(R.id.menuParticipants)).
+                        setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_people_black_24dp,
+                                portrait?R.drawable.ic_people_black_24dp:0, 0, 0);
+
+            ((Button) findViewById(R.id.menuObjects)).
+                        setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_directions_car_black_24dp,
+                                portrait?R.drawable.ic_directions_car_black_24dp:0, 0, 0);
+
+            ((Button) findViewById(R.id.menuPhotos)).
+                        setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_perm_media_black_24dp,
+                                portrait?R.drawable.ic_perm_media_black_24dp:0, 0, 0);
+
             ((Button) findViewById(R.id.AButtonGeneral)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -309,6 +334,34 @@ public class IncidentFormActivity extends AppCompatActivity {
         }
 
         if (fireBaseCatalog.equalsIgnoreCase("preinsurance")) {
+
+
+            ((Button) findViewById(R.id.BButtonGeneral)).
+                    setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_assignment_black_24dp,
+                            portrait?R.drawable.ic_assignment_black_24dp:0, 0, 0);
+
+            ((Button) findViewById(R.id.BMenuObjects)).
+                    setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_directions_car_black_24dp,
+                            portrait?R.drawable.ic_directions_car_black_24dp:0, 0, 0);
+
+            ((Button) findViewById(R.id.BInsured)).
+                    setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_people_black_24dp,
+                            portrait?R.drawable.ic_people_black_24dp:0, 0, 0);
+
+            ((Button) findViewById(R.id.BMenuDocuments)).
+                    setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_description_black_24dp,
+                            portrait?R.drawable.ic_description_black_24dp:0, 0, 0);
+
+            ((Button) findViewById(R.id.BMenuSignature)).
+                    setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_border_color_black_24dp,
+                            portrait?R.drawable.ic_border_color_black_24dp:0, 0, 0);
+
+            ((Button) findViewById(R.id.BButtonPhoto)).
+                    setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_perm_media_black_24dp,
+                            portrait?R.drawable.ic_perm_media_black_24dp:0, 0, 0);
+
+
+
             ((Button) findViewById(R.id.BButtonGeneral)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

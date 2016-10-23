@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 if (allLoaded || InsReport.mAuth.getCurrentUser() == null) {
                     timer.cancel();
                     final ProgressBar pb = (ProgressBar) findViewById(R.id.roundProgressbar);
+                    if (pb != null && pb.getHandler() != null)
                     pb.getHandler().post(new Runnable() {
                         @Override
                         public void run() {

@@ -90,7 +90,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/ic_assignment_black_24dp"
                 android:text="@string/general_info" />
 
 
@@ -101,7 +100,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/ic_perm_media_black_24dp"
                 android:text="@string/photos_and_documents" />
 
         </LinearLayout>
@@ -119,7 +117,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/ic_directions_car_black_24dp"
                 android:text="@string/objects_info" />
 
             <Button
@@ -129,7 +126,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/ic_people_black_24dp"
                 android:text="@string/participants_info" />
 
         </LinearLayout>
@@ -145,7 +141,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/ic_map_black_72dp"
                 android:text="@string/event_description" />
 
 
@@ -156,7 +151,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:drawableTop="@drawable/ic_add_black_24dp"
                 android:text="@string/additional_info" />
         </LinearLayout>
 
