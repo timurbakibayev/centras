@@ -1370,6 +1370,8 @@ public class IncidentFormActivity extends AppCompatActivity {
                                 startActivityForResult(intent, DAMAGE_PLAN_INTENT);
                             }
                         });
+                        if (readOnly)
+                            planButton.setVisibility(View.GONE);
                         TextView damageTV = new TextView(this);
                         damageTV.setText(element.description);
                         LL.addView(damageTV);
@@ -1449,6 +1451,8 @@ public class IncidentFormActivity extends AppCompatActivity {
                                 startActivityForResult(intent, ANIMA_INTENT);
                             }
                         });
+                        if (readOnly)
+                            animaButton.setVisibility(View.GONE);
                         linearLayoutPhoto1.addView(animaButton);
                         scrollViewPhoto1.addView(linearLayoutPhoto1);
                         LL.addView(scrollViewPhoto1);

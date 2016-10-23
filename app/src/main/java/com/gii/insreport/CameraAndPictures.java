@@ -3,10 +3,13 @@ package com.gii.insreport;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.design.widget.TextInputLayout;
 import android.util.Base64;
 import android.util.Log;
@@ -24,11 +27,13 @@ import com.firebase.client.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 
 public class CameraAndPictures {
+    public static String TAG = "CameraAndPictures";
     public static Bitmap bitmap;
     public static String generateNewId() {
         SecureRandom random = new SecureRandom();
@@ -223,25 +228,27 @@ public class CameraAndPictures {
     }
 
     public void showZoomed(LinearLayout linearLayout, Bitmap thePicture) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(linearLayout.getContext());
-        final AlertDialog dialog = builder.create();
-        final ScrollView filterScrollView = new ScrollView(linearLayout.getContext());
+        String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                "/Preview";
+        File dir = new File(file_path);
+        if(!dir.exists())
+            dir.mkdirs();
+        File file = new File(dir, "preview.jpeg");
+        try {
+            FileOutputStream fOut = new FileOutputStream(file);
+            thePicture.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+            fOut.flush();
+            fOut.close();
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.parse("file://" + file.getAbsolutePath()), "image/*");
+            Log.e(TAG, "showZoomed: " + Uri.parse("file://" + file.getAbsolutePath().toString()));
+            linearLayout.getContext().
+                startActivity(intent);
+        } catch (Exception e) {
 
-        ImageView theImageViewBigger = new ImageView(linearLayout.getContext());
-        theImageViewBigger.setImageBitmap(thePicture);
-        //theImageViewBigger.setScaleType(ImageView.ScaleType.FIT_XY);
-        theImageViewBigger.setAdjustViewBounds(true);
+        }
 
-        filterScrollView.addView(theImageViewBigger);
-
-        builder
-                //.setMessage(getContext().getString(R.string.enter_amount))
-                .setView(filterScrollView)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-
-                    }
-                }).show();
     }
 
     public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight)
