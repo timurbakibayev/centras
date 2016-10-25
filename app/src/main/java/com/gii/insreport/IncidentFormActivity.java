@@ -1324,9 +1324,13 @@ public class IncidentFormActivity extends AppCompatActivity {
                         editTextNum.setInputType(InputType.TYPE_CLASS_NUMBER);
                         if (element.fireBaseFieldName.contains("SUM")) {
                             //TODO: editText.setMask
+                            editTextNum.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                            editTextNum.setRawInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                            editTextNum.addTextChangedListener(new AmountWatcher(editTextNum));
                         }
                         if (element.fireBaseFieldName.contains("PHONE")) {
                             //TODO: editText.setMask
+                            editTextNum.addTextChangedListener(new PhoneWatcher(editTextNum));
                         }
                         fieldHintNum.setLayoutParams(new LinearLayout.LayoutParams(0,
                                 LinearLayout.LayoutParams.WRAP_CONTENT, 1));
