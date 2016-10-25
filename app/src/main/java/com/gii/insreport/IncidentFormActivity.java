@@ -419,9 +419,9 @@ public class IncidentFormActivity extends AppCompatActivity {
                     currentForm.phoneNo = currentForm.input.get("CLAIMANT_PHONE_NO");
 
                 Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + currentForm.phoneNo.trim()));
+                intent.setData(Uri.parse("tel:" + SMS.call(currentForm.phoneNo)));
                 if (intent.resolveActivity(getPackageManager()) != null) {
-                    InsReport.logFirebase("Make a call from inside the form: " + currentForm.fireBaseCatalog + " form no. " + currentForm.id + ", TEL: " + currentForm.phoneNo);
+                    InsReport.logFirebase("Make a call from inside the form: " + currentForm.fireBaseCatalog + " form no. " + currentForm.id + ", TEL: " + SMS.call(currentForm.phoneNo));
                     startActivity(intent);
                 }
 
@@ -437,9 +437,9 @@ public class IncidentFormActivity extends AppCompatActivity {
                     phoneNo = currentForm.input.get("CALLCENTER");
 
                 Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + phoneNo.trim()));
+                intent.setData(Uri.parse("tel:" + SMS.call(phoneNo)));
                 if (intent.resolveActivity(getPackageManager()) != null) {
-                    InsReport.logFirebase("CALL CENTER from inside the form: " + currentForm.fireBaseCatalog + " form no. " + currentForm.id + ", TEL: " + phoneNo);
+                    InsReport.logFirebase("CALL CENTER from inside the form: " + currentForm.fireBaseCatalog + " form no. " + currentForm.id + ", TEL: " + SMS.call(phoneNo));
                     startActivity(intent);
                 }
 
