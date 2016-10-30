@@ -135,6 +135,8 @@ public class MainActivity extends AppCompatActivity {
         }, 1000, 1000);
         if (InsReport.sharedPref.getBoolean("open_last_doc",false))
             triggerLastForm = true;
+
+        SMS.wsdlQuery("+77078656018","Текст на русском. Adik.");
     }
 
     static boolean dontCheckTwice = false;
