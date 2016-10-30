@@ -99,11 +99,11 @@ public class PhotosActivity extends AppCompatActivity {
 
         if (!InsReport.currentForm.formReady)
             fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                takeAPicture();
-            }
-        });
+                @Override
+                public void onClick(View view) {
+                    takeAPicture();
+                }
+            });
 
         if (!InsReport.currentForm.formReady)
             ((FloatingActionButton) findViewById(R.id.galleryFab)).setOnClickListener(new View.OnClickListener() {
@@ -306,7 +306,7 @@ public class PhotosActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_info) {
-            showHint();           
+            showHint();
         }
 
         return super.onOptionsItemSelected(item);
@@ -321,5 +321,3 @@ public class PhotosActivity extends AppCompatActivity {
     }
 
 }
-
-

@@ -24,26 +24,25 @@ public class SMS {
     public static String NAMESPACE = "http://insisdb/SmsServ.wsdl";
     public static String URL = "http://88.204.255.194:8001/SmsAppl-sms-context-root/smsServPort?wsdl";
     public static boolean send(String phoneNumber, String message) {
-        if (!InsReport.sharedPref.getBoolean("sms",true))
+        if (!InsReport.sharedPref.getBoolean("sms", true))
             return false;
         try {
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null,message, null, null);
+            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
             return true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.e("SMS.java", "send: " + e.getMessage());
             return false;
         }
     }
+
     public static void wsdlQuery(String phoneNo, String message) {
         Log.e(TAG, "wsdlQuery: start");
         final SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER10);
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
         request.addProperty("piPhone", phoneNo);
-        request.addProperty("piTheme","theme");
-        request.addProperty("piMessage",message);
+        request.addProperty("piTheme", "theme");
+        request.addProperty("piMessage", message);
         envelope.setOutputSoapObject(request);
         final HttpTransportSE httpTransport = new HttpTransportSE(URL);
         try {
@@ -67,5 +66,14 @@ public class SMS {
             Log.e(TAG, "wsdlQuery: error: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    public static String call(String phoneNumder) {
+        phoneNumder = phoneNumder.trim();
+        if(phoneNumder.length() > 7 && phoneNumder.charAt(0) != '8'
+                && phoneNumder.charAt(0) != '+'){
+            phoneNumder = "+7" +phoneNumder;
+        }
+        return phoneNumder;
     }
 }

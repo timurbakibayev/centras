@@ -131,7 +131,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent openAppPendingIntent = PendingIntent.getActivity(context, id, intentMA, PendingIntent.FLAG_CANCEL_CURRENT);
 
         Intent intentCall = new Intent(Intent.ACTION_CALL);
-        intentCall.setData(Uri.parse("tel:" + personPhone.trim()));
+        intentCall.setData(Uri.parse("tel:" + SMS.call(personPhone)));
         PendingIntent callPendingIntent = PendingIntent.getActivity(context, id, intentCall, PendingIntent.FLAG_UPDATE_CURRENT);
 
         String regex = "((-|\\+)?[0-9]+(\\.[0-9]+)?)+";

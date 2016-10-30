@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
         //InsReport.storageRef = InsReport.storage.getReferenceFromUrl("gs://insreport-f39a3.appspot.com");
 
 
-
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,25 +114,25 @@ public class MainActivity extends AppCompatActivity {
                     timer.cancel();
                     final ProgressBar pb = (ProgressBar) findViewById(R.id.roundProgressbar);
                     if (pb != null && pb.getHandler() != null)
-                    pb.getHandler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            boolean a1 = checkIfNeededToFindByPhone();
-                            boolean a2 = checkNewForms(thisActivity, true);
-                            if (!(a1 || a2)) {
-                                pb.setVisibility(View.GONE);
-                                for (Button formButton : formButtons) {
-                                    formButton.setEnabled(true);
+                        pb.getHandler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                boolean a1 = checkIfNeededToFindByPhone();
+                                boolean a2 = checkNewForms(thisActivity, true);
+                                if (!(a1 || a2)) {
+                                    pb.setVisibility(View.GONE);
+                                    for (Button formButton : formButtons) {
+                                        formButton.setEnabled(true);
+                                    }
                                 }
+                                nowReleaseButtons = true;
                             }
-                            nowReleaseButtons = true;
-                        }
-                    });
+                        });
                     Log.e(TAG, "run: ALL LOADED");
                 }
             }
         }, 1000, 1000);
-        if (InsReport.sharedPref.getBoolean("open_last_doc",false))
+        if (InsReport.sharedPref.getBoolean("open_last_doc", false))
             triggerLastForm = true;
 
         SMS.wsdlQuery("+77078656018","Текст на русском. Adik.");
@@ -292,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void settings() {
         Intent intent = new Intent(this, SettingsActivity.class);
-        startActivityForResult(intent,17);
+        startActivityForResult(intent, 17);
     }
 
     @Override
@@ -304,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
         if (InsReport.directories.loaded) {
             checkIfNeededToArrivedByPhone();
             checkIfNeededToFindByPhone();
-            checkNewForms(this,false);
+            checkNewForms(this, false);
             final ProgressBar pb = (ProgressBar) findViewById(R.id.roundProgressbar);
             if (pb != null && pb.getHandler() != null) {
                 pb.getHandler().post(new Runnable() {
@@ -316,7 +315,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-            };
+            }
+            ;
         }
     }
 
@@ -331,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
                                     form.input.get("CLAIMANT_PHONE_NO").equals(phoneNo))
                             ) {
                         //here open the form
-                        InsReport.savePref("lastFormId","");
+                        InsReport.savePref("lastFormId", "");
                         openTheForm(form, this);
                         getIntent().removeExtra("findByPhone");
                         if (form.status.equals("accept"))
@@ -355,9 +355,9 @@ public class MainActivity extends AppCompatActivity {
                                     form.input.get("CLAIMANT_PHONE_NO").equals(phoneNo))
                             ) {
                         //set successfully arrived
-                        InsReport.savePref("lastFormId","");
-                        InsReport.ref.child("arrivals/"+form.fireBaseCatalog + "/" + form.id + "/created").setValue(form.dateCreated);
-                        InsReport.ref.child("arrivals/"+form.fireBaseCatalog + "/" + form.id + "/arrived").setValue(ServerValue.TIMESTAMP);
+                        InsReport.savePref("lastFormId", "");
+                        InsReport.ref.child("arrivals/" + form.fireBaseCatalog + "/" + form.id + "/created").setValue(form.dateCreated);
+                        InsReport.ref.child("arrivals/" + form.fireBaseCatalog + "/" + form.id + "/arrived").setValue(ServerValue.TIMESTAMP);
                         openTheForm(form, this);
                         getIntent().removeExtra("arrivedByPhone");
                         return true;
@@ -434,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (formsAreJustLoaded && triggerLastForm) {
             String lastFormId = InsReport.sharedPref.getString("lastFormId", "");
-            String fireBaseCatalog = InsReport.sharedPref.getString("lastFormCatalog","");
+            String fireBaseCatalog = InsReport.sharedPref.getString("lastFormCatalog", "");
             if (!lastFormId.equals("")) {
                 openTheForm(lastFormId, fireBaseCatalog, thisActivity);
                 return true;
@@ -445,7 +445,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void openTheForm(Form form, Activity context) {
         if (form.status.equals("accept"))
-            openTheForm(form.id,form.fireBaseCatalog,context);
+            openTheForm(form.id, form.fireBaseCatalog, context);
         if (form.status.equals("")) {
             Log.e(TAG, "openTheForm: acceptOrRejectDialogShow");
             acceptOrRejectDialogShow(form, context);
@@ -474,7 +474,6 @@ public class MainActivity extends AppCompatActivity {
         final String personName;
 
 
-
         if (form.input.get("CLIENT_NAME") != null) {
             headerText += form.input.get("CLIENT_NAME") + "\n";
             personName = form.input.get("CLIENT_NAME");
@@ -494,7 +493,7 @@ public class MainActivity extends AppCompatActivity {
 
         ((TextView) acceptOrRejectDialog.findViewById(R.id.textHeader)).setText(headerText);
 
-        ( acceptOrRejectDialog.findViewById(R.id.buttonAccept)).setOnClickListener(new View.OnClickListener() {
+        (acceptOrRejectDialog.findViewById(R.id.buttonAccept)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //if this is first time, save the time of accept/reject
@@ -503,7 +502,7 @@ public class MainActivity extends AppCompatActivity {
                             setValue(ServerValue.TIMESTAMP);
                 form.status = "accept";
                 form.statusNote = "В работе";
-                scheduleNotification(personName,phoneNo,address,0);
+                scheduleNotification(personName, phoneNo, address, 0);
 
                 Log.e(TAG, "Sending SMS: " + SMS.send(phoneNo,
                         getString(R.string.accept_sms, "Нурбек"))); //phoneNo
@@ -521,7 +520,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ( acceptOrRejectDialog.findViewById(R.id.buttonReject)).setOnClickListener(new View.OnClickListener() {
+        (acceptOrRejectDialog.findViewById(R.id.buttonReject)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //if this is first time, save the time of accept/reject
@@ -541,13 +540,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ( acceptOrRejectDialog.findViewById(R.id.buttonCall)).setOnClickListener(new View.OnClickListener() {
+        (acceptOrRejectDialog.findViewById(R.id.buttonCall)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + phoneNo.trim()));
+                intent.setData(Uri.parse("tel:" + SMS.call(phoneNo)));
                 if (intent.resolveActivity(getPackageManager()) != null) {
-                    InsReport.logFirebase("Make a call from accept-reject dialog: " + form.fireBaseCatalog + " form no. " + form.id + ", TEL: " + phoneNo);
+                    InsReport.logFirebase("Make a call from accept-reject dialog: " + form.fireBaseCatalog + " form no. " + form.id + ", TEL: " + SMS.call(phoneNo));
                     startActivity(intent);
                 }
                 acceptOrRejectDialog.dismiss();
@@ -564,7 +563,7 @@ public class MainActivity extends AppCompatActivity {
                 nMgr.cancel(form.calculateId());
                 //TODO: change this to 30!
                 int postponeMinutes = 1;
-                scheduleNotification(personName,phoneNo,address,postponeMinutes);
+                scheduleNotification(personName, phoneNo, address, postponeMinutes);
                 Date postponingDate = new Date((new Date()).getTime() + postponeMinutes * 60000);
                 form.status = "postpone";
                 form.statusNote = "Форма отложена до " + IncidentFormActivity.timeText(postponingDate);
@@ -574,7 +573,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ( acceptOrRejectDialog.findViewById(R.id.buttonMap)).setOnClickListener(new View.OnClickListener() {
+        (acceptOrRejectDialog.findViewById(R.id.buttonMap)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -591,7 +590,7 @@ public class MainActivity extends AppCompatActivity {
                 String locationStr;
 
                 if (coordinates) {
-                    locationStr = location[0]+","+location[1];
+                    locationStr = location[0] + "," + location[1];
                     Uri locationUri = Uri.parse("geo:0,0?").buildUpon()
                             .appendQueryParameter("q", locationStr)
                             .build();
@@ -630,7 +629,7 @@ public class MainActivity extends AppCompatActivity {
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         long futureInMillis = SystemClock.elapsedRealtime() + delay * 60000;
-        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
@@ -651,7 +650,7 @@ public class MainActivity extends AppCompatActivity {
         reasonToRejectLL.setOrientation(LinearLayout.VERTICAL);
         reasonToRejectLL.addView(captionTV);
 
-        String reasons[] = new String[]{"Консультация","Отмена клиентом","Нехватка времени"};
+        String reasons[] = new String[]{"Консультация", "Отмена клиентом", "Нехватка времени"};
 
         reasonToRejectLL.addView(reasonET);
 
@@ -707,7 +706,7 @@ public class MainActivity extends AppCompatActivity {
         formResultLL.setOrientation(LinearLayout.VERTICAL);
         formResultLL.addView(captionTV);
 
-        String reasons[] = new String[]{"Оформлен ДТП","Урегулирован на месте","Направлен страховщику виновной стороны"};
+        String reasons[] = new String[]{"Оформлен ДТП", "Урегулирован на месте", "Направлен страховщику виновной стороны"};
 
         formResultLL.addView(reasonET);
 
@@ -753,8 +752,8 @@ public class MainActivity extends AppCompatActivity {
             for (FormsCollection mainMenuForm : InsReport.mainMenuForms) {
                 mainMenuForm.forms.clear();
                 mainMenuForm.addDataChangeListener();
-                InsReport.ref.child("users/"+InsReport.user.getUid()+"/name").setValue(
-                        InsReport.sharedPref.getString("username","")
+                InsReport.ref.child("users/" + InsReport.user.getUid() + "/name").setValue(
+                        InsReport.sharedPref.getString("username", "")
                 );
             }
         }
