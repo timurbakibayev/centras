@@ -43,6 +43,7 @@ public class FormTemplates {
 
     public static void applyTemplateForObjects(Element element) {
 
+        element.elements.add(new Element("object", Element.ElementType.eBoolean, "IS_CLIENT", "Клиент"));
         element.elements.add(new Element("photo", Element.ElementType.ePhoto, "PHOTO", "Фото " + element.description, new String[] {
                 "Передняя часть ТС",
                 "Задняя часть ТС",
@@ -326,7 +327,8 @@ public class FormTemplates {
                     break;
             }
             //now insert values from "input" field, posted by INSIS
-            form.applyInput(form.elements);
+            form.applyInput(form.input, form.elements);
+            form.applyInputObjects();
         }
 
     }

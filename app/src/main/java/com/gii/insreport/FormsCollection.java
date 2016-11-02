@@ -116,8 +116,10 @@ public class FormsCollection {
                     }*/
                     for (int i = 0; i < forms.size(); i++) {
                         if (forms.get(i).id.equals(newForm.id)) {
-                            forms.set(i,newForm);
-                            Log.e(TAG, "onChildChanged: found the corresponding form id");
+                            if (!InsReport.currentForm.id.equals(newForm.id)) {
+                                forms.set(i, newForm);
+                            } else
+                                Log.w(TAG, "onChildChanged: ignoring form, because it's open");
                         }
                         InsReport.notifyFormsList();
                     }

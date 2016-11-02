@@ -166,6 +166,8 @@ public class Form {
 
     Map<String, String> input = new HashMap<String, String>();
 
+    public ArrayList<Map<String, String>> inputObjects = new ArrayList<>();
+
     public Map<String, String> getInput() {
         return input;
     }
@@ -189,14 +191,14 @@ public class Form {
         }
     }
 
-    public void applyInput(ArrayList<Element> elements) {
+    public void applyInput(Map<String,String> inputValues, ArrayList<Element> elements) {
         for (Element element : elements) {
             if (element.type == Element.ElementType.eGroup)
-                applyInput(element.elements);
+                applyInput(inputValues, element.elements);
             else
-                if (input.get(element.fireBaseFieldName) != null) {
+                if (inputValues.get(element.fireBaseFieldName) != null) {
                     element.serverStatic = true;
-                    String value = input.get(element.fireBaseFieldName);
+                    String value = inputValues.get(element.fireBaseFieldName);
                     element.vText = value;
                     if (element.type == Element.ElementType.eText)
                         element.vText = value;
@@ -209,13 +211,13 @@ public class Form {
 
                         }
                     }
-                    //TODO: not tested!
+
                     if (element.type == Element.ElementType.eInteger)
                         try {
                             element.vInteger = Integer.parseInt(value);
                         } catch (Exception e) {};
 
-                    //TODO: not tested!
+
                     if (element.type == Element.ElementType.eRadio || element.type == Element.ElementType.eCombo) {
                         for (int i = 0; i < element.comboItems.size(); i++) {
                             if (element.comboItems.get(i).equals(value)) {
@@ -225,6 +227,35 @@ public class Form {
                         }
                     }
                 }
+        }
+    }
+
+    public void applyInputObjects() {
+        if (inputObjects.size() == 0) {
+            Log.w(TAG, "applyInputObjects: 0 objects");
+            return;
+        }
+        int i = 0;
+        for (Map<String, String> inputObject : inputObjects) {
+            Element newObject;
+            if (i == 0) {
+                newObject = new Element("object", Element.ElementType.eParticipant,
+                        "client", "Клиент");
+            } else {
+                newObject = new Element("object", Element.ElementType.eParticipant,
+                        "object" + i, "Участник " + i);
+            }
+            FormTemplates.applyTemplateForObjects(newObject);
+            if (i == 0) {
+                for (Element element : newObject.elements) {
+                    if (element.fireBaseFieldName.equals("IS_CLIENT"))
+                        element.vBoolean = true;
+                }
+            }
+            objects.elements.add(newObject);
+            Log.w(TAG, "applyInputObjects: input #" + i + ": " + inputObject);
+            applyInput(inputObject, newObject.elements);
+            i++;
         }
     }
 
@@ -261,6 +292,10 @@ public class Form {
 
     public Date getDateArrived() {
         return dateArrived;
+    }
+
+    public ArrayList<Map<String,String>> getInputObjects() {
+        return inputObjects;
     }
 
     public void switchDone(Context context, boolean closeActivity, Activity activity) {
@@ -317,4 +352,6 @@ public class Form {
         }
         return idk;
     }
+
+
 }
