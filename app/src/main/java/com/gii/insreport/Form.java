@@ -167,6 +167,7 @@ public class Form {
     Map<String, String> input = new HashMap<String, String>();
 
     public ArrayList<Map<String, String>> inputObjects = new ArrayList<>();
+    public ArrayList<Map<String, String>> inputParticipants = new ArrayList<>();
 
     public Map<String, String> getInput() {
         return input;
@@ -255,6 +256,35 @@ public class Form {
             objects.elements.add(newObject);
             Log.w(TAG, "applyInputObjects: input #" + i + ": " + inputObject);
             applyInput(inputObject, newObject.elements);
+            i++;
+        }
+    }
+
+    public void applyInputParticipants() {
+        if (inputParticipants.size() == 0) {
+            Log.w(TAG, "applyInputParticipants: 0 participants");
+            return;
+        }
+        int i = 0;
+        for (Map<String, String> inputParticipant : inputParticipants) {
+            Element newParticipant;
+            if (i == 0) {
+                newParticipant = new Element("participant", Element.ElementType.eParticipant,
+                        "client", "Клиент");
+            } else {
+                newParticipant = new Element("participant", Element.ElementType.eParticipant,
+                        "participant" + i, "Участник " + i);
+            }
+            FormTemplates.applyTemplateForParticipants(newParticipant);
+            if (i == 0) {
+                for (Element element : newParticipant.elements) {
+                    if (element.fireBaseFieldName.equals("IS_CLIENT"))
+                        element.vBoolean = true;
+                }
+            }
+            participants.elements.add(newParticipant);
+            Log.w(TAG, "applyInputParticipants: input #" + i + ": " + inputParticipant);
+            applyInput(inputParticipant, newParticipant.elements);
             i++;
         }
     }

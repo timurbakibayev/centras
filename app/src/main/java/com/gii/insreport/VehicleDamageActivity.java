@@ -76,6 +76,9 @@ public class VehicleDamageActivity extends AppCompatActivity {
                 case 2: textToAdd += " (ремонт)";
                     break;
                 case 3: textToAdd += " (замена)";
+                    break;
+                case 4: textToAdd += " (ремонт и покраска)";
+                    break;
             }
             offerTheTextFromDamages += textToAdd;
             if (i != InsReport.damagePlanData.damageMarks.size() - 1)

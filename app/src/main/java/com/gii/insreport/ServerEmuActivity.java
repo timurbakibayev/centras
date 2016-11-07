@@ -116,9 +116,17 @@ public class ServerEmuActivity extends AppCompatActivity  {
                 Map<String,String> input = new HashMap<>();
                 Map<String,String> inputObjClient = new HashMap<>();
                 Map<String,String> inputObj1 = new HashMap<>();
+                Map<String,String> inputPartClient = new HashMap<>();
+                Map<String,String> inputPart1 = new HashMap<>();
                 inputObjClient.put("OBJECT_REGISRATION_NUMBER","A2-12-85-06");
                 inputObjClient.put("PRODUCTION_YEAR","2015");
                 inputObj1.put("OBJECT_REGISRATION_NUMBER","B2-12-85-06");
+                inputPartClient.put("LAST_NAME","Клиентов");
+                inputPartClient.put("FIRST_NAME","Клиент");
+                inputPartClient.put("MIDDLE_NAME","Клиентович");
+                inputPart1.put("LAST_NAME","Участников");
+                inputPart1.put("FIRST_NAME","Участник");
+                inputPart1.put("MIDDLE_NAME","Участникович");
                 String name = "";
                 String phone = "";
                 String address = "";
@@ -134,6 +142,8 @@ public class ServerEmuActivity extends AppCompatActivity  {
                 sendTo.child("input").setValue(input);
                 sendTo.child("inputObjects/0").setValue(inputObjClient);
                 sendTo.child("inputObjects/1").setValue(inputObj1);
+                sendTo.child("inputParticipants/0").setValue(inputPartClient);
+                sendTo.child("inputParticipants/1").setValue(inputPart1);
                 sendTo.child("dateCreated").setValue(ServerValue.TIMESTAMP);
                 sendTo.child("id").setValue(formId);
                 fcmNotify.trySendNotification(firebaseUserEmail.id,name,phone,address);

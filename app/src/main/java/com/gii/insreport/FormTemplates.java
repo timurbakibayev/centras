@@ -16,6 +16,8 @@ public class FormTemplates {
         element.elements.add(new Element("participant", Element.ElementType.eText, "MIDDLE_NAME",
                 "Отчество"));
 
+        element.elements.add(new Element("object", Element.ElementType.eBoolean, "IS_CLIENT", "Клиент"));
+
         element.elements.add(new Element("participant", Element.ElementType.eComboMulti, "PERSON_TYPE",
                 "Тип участника", "DCT_PERSON_TYPE"));
 
@@ -329,6 +331,7 @@ public class FormTemplates {
             //now insert values from "input" field, posted by INSIS
             form.applyInput(form.input, form.elements);
             form.applyInputObjects();
+            form.applyInputParticipants();
         }
 
     }

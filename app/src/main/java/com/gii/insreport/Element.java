@@ -260,7 +260,7 @@ public class Element {
     @JsonIgnore
     public String constructParticipantInfo() {
         String s = this.find("PERSON_NAME");
-        String s1 = this.find("LAST_NAME") + this.find("FIRST_NAME");
+        String s1 = this.find("LAST_NAME") + " " + this.find("FIRST_NAME");
         String name = s + s1;
         String percentGuilty = this.find("GUILT_PERCENTAGE");
         if (!percentGuilty.equals(""))
