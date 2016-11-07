@@ -213,50 +213,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void grantStoragePermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (this.checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
-            } else {
-                //Log.v(TAG,"Permission is revoked");
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-            }
-        }
-    }
 
-    public void grantCameraPermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (this.checkSelfPermission(Manifest.permission.CAMERA)
-                    == PackageManager.PERMISSION_GRANTED) {
-            } else {
-                //Log.v(TAG,"Permission is revoked");
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, 1);
-
-            }
-        }
-    }
-
-    public void grantCallPermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (this.checkSelfPermission(Manifest.permission.CALL_PHONE)
-                    == PackageManager.PERMISSION_GRANTED) {
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CALL_PHONE}, 1);
-
-            }
-        }
-    }
-
-    public void grantSMSPermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (this.checkSelfPermission(Manifest.permission.SEND_SMS)
-                    == PackageManager.PERMISSION_GRANTED) {
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
-
-            }
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

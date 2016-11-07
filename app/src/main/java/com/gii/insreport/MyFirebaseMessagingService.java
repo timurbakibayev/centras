@@ -146,13 +146,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String locationStr;
         Intent mapIntent = new Intent(Intent.ACTION_VIEW);
 
-        if (coordinates && location.length > 1
-                && setProximity) {
+        if (coordinates && location.length > 1) {
             locationStr = location[0] + "," + location[1];
             Uri locationUri1 = Uri.parse("geo:0,0?").buildUpon()
                     .appendQueryParameter("q", locationStr)
                     .build();
             mapIntent.setData(locationUri1);
+            if (setProximity)
             try {
                 double lat = Double.parseDouble(location[0]);
                 double lon = Double.parseDouble(location[1]);
