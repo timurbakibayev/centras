@@ -25,6 +25,9 @@ public class Form {
 
     public String id = "";
 
+    @JsonIgnore
+    public boolean removed = false;
+
     public String fireBaseCatalog = "";
     public Date dateCreated = new Date();
     public Date dateArrived = new Date();
@@ -114,6 +117,8 @@ public class Form {
     public static Firebase ref = InsReport.ref;
 
     public void saveToCloud() {
+        if (removed)
+            return;
         updateDescription();
         if (!fireBaseCatalog.equals("")) {
             ref.child("forms/" + fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + id).
