@@ -99,7 +99,8 @@ public class IncidentFormActivity extends AppCompatActivity {
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                     datePicker[currentDatePicker].setText(dateTimeText(calendar.getTime()));
                     currentDateElement.vDate.setTime(calendar.getTime().getTime());
-                    new TimePickerDialog(thisActivity, android.R.style.Theme_Holo_Light_Dialog,                            timeTo, calendar
+                    currentDateElement.vText = String.valueOf(calendar.getTime().getTime() / 1000);
+                    new TimePickerDialog(thisActivity, android.R.style.Theme_Holo_Light_Dialog, timeTo, calendar
                             .get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
                 }
 
@@ -156,7 +157,7 @@ public class IncidentFormActivity extends AppCompatActivity {
         String year = "" + cal.get(Calendar.YEAR);
         int monthNo = cal.get(Calendar.MONTH);
         String day = "" + cal.get(Calendar.DAY_OF_MONTH);
-        return (year + "_" + monthNo +"/"+ day);
+        return (year + "_" + monthNo + "/" + day);
     }
 
 
@@ -250,8 +251,8 @@ public class IncidentFormActivity extends AppCompatActivity {
                 for (Form form : formsCollection.forms) {
                     if (form.id.equals(id_no)) {
                         currentForm = form;
-                        InsReport.savePref("lastFormId",id_no);
-                        InsReport.savePref("lastFormCatalog",fireBaseCatalog);
+                        InsReport.savePref("lastFormId", id_no);
+                        InsReport.savePref("lastFormCatalog", fireBaseCatalog);
                     }
                 }
             }
@@ -269,28 +270,28 @@ public class IncidentFormActivity extends AppCompatActivity {
         if (fireBaseCatalog.equalsIgnoreCase("incident")) {
 
             ((Button) findViewById(R.id.AButtonGeneral)).
-                        setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_assignment_black_24dp,
-                                portrait?R.drawable.ic_assignment_black_24dp:0, 0, 0);
+                    setCompoundDrawablesWithIntrinsicBounds(portrait ? 0 : R.drawable.ic_assignment_black_24dp,
+                            portrait ? R.drawable.ic_assignment_black_24dp : 0, 0, 0);
 
             ((Button) findViewById(R.id.menuExtraInfo)).
-                        setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_add_black_24dp,
-                                portrait?R.drawable.ic_add_black_24dp:0, 0, 0);
+                    setCompoundDrawablesWithIntrinsicBounds(portrait ? 0 : R.drawable.ic_add_black_24dp,
+                            portrait ? R.drawable.ic_add_black_24dp : 0, 0, 0);
 
             ((Button) findViewById(R.id.menuDescription)).
-                        setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_map_black_72dp,
-                                portrait?R.drawable.ic_map_black_72dp:0, 0, 0);
+                    setCompoundDrawablesWithIntrinsicBounds(portrait ? 0 : R.drawable.ic_map_black_72dp,
+                            portrait ? R.drawable.ic_map_black_72dp : 0, 0, 0);
 
             ((Button) findViewById(R.id.menuParticipants)).
-                        setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_people_black_24dp,
-                                portrait?R.drawable.ic_people_black_24dp:0, 0, 0);
+                    setCompoundDrawablesWithIntrinsicBounds(portrait ? 0 : R.drawable.ic_people_black_24dp,
+                            portrait ? R.drawable.ic_people_black_24dp : 0, 0, 0);
 
             ((Button) findViewById(R.id.menuObjects)).
-                        setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_directions_car_black_24dp,
-                                portrait?R.drawable.ic_directions_car_black_24dp:0, 0, 0);
+                    setCompoundDrawablesWithIntrinsicBounds(portrait ? 0 : R.drawable.ic_directions_car_black_24dp,
+                            portrait ? R.drawable.ic_directions_car_black_24dp : 0, 0, 0);
 
             ((Button) findViewById(R.id.menuPhotos)).
-                        setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_perm_media_black_24dp,
-                                portrait?R.drawable.ic_perm_media_black_24dp:0, 0, 0);
+                    setCompoundDrawablesWithIntrinsicBounds(portrait ? 0 : R.drawable.ic_perm_media_black_24dp,
+                            portrait ? R.drawable.ic_perm_media_black_24dp : 0, 0, 0);
 
             ((Button) findViewById(R.id.AButtonGeneral)).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -337,29 +338,28 @@ public class IncidentFormActivity extends AppCompatActivity {
 
 
             ((Button) findViewById(R.id.BButtonGeneral)).
-                    setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_assignment_black_24dp,
-                            portrait?R.drawable.ic_assignment_black_24dp:0, 0, 0);
+                    setCompoundDrawablesWithIntrinsicBounds(portrait ? 0 : R.drawable.ic_assignment_black_24dp,
+                            portrait ? R.drawable.ic_assignment_black_24dp : 0, 0, 0);
 
             ((Button) findViewById(R.id.BMenuObjects)).
-                    setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_directions_car_black_24dp,
-                            portrait?R.drawable.ic_directions_car_black_24dp:0, 0, 0);
+                    setCompoundDrawablesWithIntrinsicBounds(portrait ? 0 : R.drawable.ic_directions_car_black_24dp,
+                            portrait ? R.drawable.ic_directions_car_black_24dp : 0, 0, 0);
 
             ((Button) findViewById(R.id.BInsured)).
-                    setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_people_black_24dp,
-                            portrait?R.drawable.ic_people_black_24dp:0, 0, 0);
+                    setCompoundDrawablesWithIntrinsicBounds(portrait ? 0 : R.drawable.ic_people_black_24dp,
+                            portrait ? R.drawable.ic_people_black_24dp : 0, 0, 0);
 
             ((Button) findViewById(R.id.BMenuDocuments)).
-                    setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_description_black_24dp,
-                            portrait?R.drawable.ic_description_black_24dp:0, 0, 0);
+                    setCompoundDrawablesWithIntrinsicBounds(portrait ? 0 : R.drawable.ic_description_black_24dp,
+                            portrait ? R.drawable.ic_description_black_24dp : 0, 0, 0);
 
             ((Button) findViewById(R.id.BMenuSignature)).
-                    setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_border_color_black_24dp,
-                            portrait?R.drawable.ic_border_color_black_24dp:0, 0, 0);
+                    setCompoundDrawablesWithIntrinsicBounds(portrait ? 0 : R.drawable.ic_border_color_black_24dp,
+                            portrait ? R.drawable.ic_border_color_black_24dp : 0, 0, 0);
 
             ((Button) findViewById(R.id.BButtonPhoto)).
-                    setCompoundDrawablesWithIntrinsicBounds(portrait?0:R.drawable.ic_perm_media_black_24dp,
-                            portrait?R.drawable.ic_perm_media_black_24dp:0, 0, 0);
-
+                    setCompoundDrawablesWithIntrinsicBounds(portrait ? 0 : R.drawable.ic_perm_media_black_24dp,
+                            portrait ? R.drawable.ic_perm_media_black_24dp : 0, 0, 0);
 
 
             ((Button) findViewById(R.id.BButtonGeneral)).setOnClickListener(new View.OnClickListener() {
@@ -385,7 +385,7 @@ public class IncidentFormActivity extends AppCompatActivity {
             ((Button) findViewById(R.id.BInsured)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showTheFragment("insured",getString(R.string.insured));
+                    showTheFragment("insured", getString(R.string.insured));
 //                    showManyObjects();
                 }
             });
@@ -462,7 +462,7 @@ public class IncidentFormActivity extends AppCompatActivity {
 
 
         if (findViewById(R.id.textHeader) != null)
-            ((TextView)findViewById(R.id.textHeader)).setText(headerText);
+            ((TextView) findViewById(R.id.textHeader)).setText(headerText);
 
         ((ImageButton) findViewById(R.id.map_adik)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -488,7 +488,7 @@ public class IncidentFormActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.ready_adik).setVisibility(readOnly?View.GONE:View.VISIBLE);
+        findViewById(R.id.ready_adik).setVisibility(readOnly ? View.GONE : View.VISIBLE);
         ((ImageButton) findViewById(R.id.ready_adik)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -546,7 +546,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                         if (!element2.deleted)
                             k++;
                     }
-                    photoDescription.add(element.description + " (" + k + " фото)" + (element1.allPhotosTaken()?" ✔":""));
+                    photoDescription.add(element.description + " (" + k + " фото)" + (element1.allPhotosTaken() ? " ✔" : ""));
                 }
             }
         }
@@ -838,116 +838,116 @@ public class IncidentFormActivity extends AppCompatActivity {
 
         if (!readOnly && !menuName.equals("participant"))
             new AlertDialog.Builder(this).setTitle(title).setView(scrollView)
-                .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        currentForm.saveToCloud();
-                    }
-                }).setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
+                    .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            currentForm.saveToCloud();
+                        }
+                    }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
                     currentForm.saveToCloud();
-                    }
-        }).
-                show();
+                }
+            }).
+                    show();
 
         if (!readOnly && menuName.equals("participant"))
             new AlertDialog.Builder(this).setTitle(title).setView(scrollView)
-                .setNegativeButton("Удалить", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if (currentElement.fireBaseFieldName.equals("client")) {
-                            new AlertDialog.Builder(thisActivity).setTitle("Это наш клиент, его нельзя удалять!")
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            currentForm.saveToCloud();
-                                        }
-                                    })
-                                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                        @Override
-                                        public void onDismiss(DialogInterface dialogInterface) {
-                                            currentForm.saveToCloud();
-                                        }
-                                    }).
-                                    show();
+                    .setNegativeButton("Удалить", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            if (currentElement.fireBaseFieldName.equals("client")) {
+                                new AlertDialog.Builder(thisActivity).setTitle("Это наш клиент, его нельзя удалять!")
+                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                currentForm.saveToCloud();
+                                            }
+                                        })
+                                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                            @Override
+                                            public void onDismiss(DialogInterface dialogInterface) {
+                                                currentForm.saveToCloud();
+                                            }
+                                        }).
+                                        show();
 
-                            return;
-                        }
-                        for (final Element element : currentForm.participants.elements) {
-                            if (element.fireBaseFieldName.equals(currentElement.fireBaseFieldName)) {
-                                new AlertDialog.Builder(thisActivity).setTitle("Удалить участника?")
-                                        .setPositiveButton("Да", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                currentForm.participants.elements.remove(element);
-                                                currentForm.saveToCloud();
-                                            }
-                                        }).
-                                        setNeutralButton("Нет", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                currentForm.saveToCloud();
-                                            }
-                                        })
-                                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                            @Override
-                                            public void onDismiss(DialogInterface dialogInterface) {
-                                                currentForm.saveToCloud();
-                                            }
-                                        }).
-                                        show();
+                                return;
                             }
-                        }      
-                        for (final Element element : currentForm.objects.elements) {
-                            if (element.fireBaseFieldName.equals(currentElement.fireBaseFieldName)) {
-                                new AlertDialog.Builder(thisActivity).setTitle("Удалить участника?")
-                                        .setPositiveButton("Да", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                currentForm.objects.elements.remove(element);
-                                                currentForm.saveToCloud();
-                                            }
-                                        }).
-                                        setNeutralButton("Нет", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                currentForm.saveToCloud();
-                                            }
-                                        })
-                                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                            @Override
-                                            public void onDismiss(DialogInterface dialogInterface) {
-                                                currentForm.saveToCloud();
-                                            }
-                                        }).
-                                        show();
+                            for (final Element element : currentForm.participants.elements) {
+                                if (element.fireBaseFieldName.equals(currentElement.fireBaseFieldName)) {
+                                    new AlertDialog.Builder(thisActivity).setTitle("Удалить участника?")
+                                            .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    currentForm.participants.elements.remove(element);
+                                                    currentForm.saveToCloud();
+                                                }
+                                            }).
+                                            setNeutralButton("Нет", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    currentForm.saveToCloud();
+                                                }
+                                            })
+                                            .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                                @Override
+                                                public void onDismiss(DialogInterface dialogInterface) {
+                                                    currentForm.saveToCloud();
+                                                }
+                                            }).
+                                            show();
+                                }
+                            }
+                            for (final Element element : currentForm.objects.elements) {
+                                if (element.fireBaseFieldName.equals(currentElement.fireBaseFieldName)) {
+                                    new AlertDialog.Builder(thisActivity).setTitle("Удалить участника?")
+                                            .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    currentForm.objects.elements.remove(element);
+                                                    currentForm.saveToCloud();
+                                                }
+                                            }).
+                                            setNeutralButton("Нет", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    currentForm.saveToCloud();
+                                                }
+                                            })
+                                            .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                                @Override
+                                                public void onDismiss(DialogInterface dialogInterface) {
+                                                    currentForm.saveToCloud();
+                                                }
+                                            }).
+                                            show();
+                                }
                             }
                         }
-                    }
-                })
-                .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        currentForm.saveToCloud();
-                    }
-                }).setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
+                    })
+                    .setPositiveButton("Сохранить", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            currentForm.saveToCloud();
+                        }
+                    }).setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
                     currentForm.saveToCloud();
-                    }
-        }).
-                show();
+                }
+            }).
+                    show();
 
         if (readOnly)
-        new AlertDialog.Builder(this).setTitle(title).setView(scrollView)
-                .setPositiveButton("Выйти", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+            new AlertDialog.Builder(this).setTitle(title).setView(scrollView)
+                    .setPositiveButton("Выйти", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                }).
-                show();
+                        }
+                    }).
+                    show();
     }
 
 
@@ -986,20 +986,20 @@ public class IncidentFormActivity extends AppCompatActivity {
         for (final Element element : elements) {
             if (element.serverStatic || (readOnly && (
                     element.type == Element.ElementType.eBoolean ||
-                    element.type == Element.ElementType.eCombo||
-                    element.type == Element.ElementType.eComboMulti ||
-                    element.type == Element.ElementType.eInteger ||
-                    element.type == Element.ElementType.eLookUp ||
-                    element.type == Element.ElementType.eRadio ||
-                    element.type == Element.ElementType.eText ||
-                    element.type == Element.ElementType.eTextNum
+                            element.type == Element.ElementType.eCombo ||
+                            element.type == Element.ElementType.eComboMulti ||
+                            element.type == Element.ElementType.eInteger ||
+                            element.type == Element.ElementType.eLookUp ||
+                            element.type == Element.ElementType.eRadio ||
+                            element.type == Element.ElementType.eText ||
+                            element.type == Element.ElementType.eTextNum
             )
             )) {
                 LinearLayout horizontalLLStatic = new LinearLayout(this);
                 horizontalLLStatic.setOrientation(LinearLayout.HORIZONTAL);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
-                lp.setMargins(0,0,0,20);
+                lp.setMargins(0, 0, 0, 20);
                 horizontalLLStatic.setLayoutParams(lp);
                 TextView fieldName = new TextView(this);
                 fieldName.setMaxLines(5);
@@ -1021,7 +1021,7 @@ public class IncidentFormActivity extends AppCompatActivity {
         for (final Element element : elements) {
             if (!element.serverStatic && !(readOnly && (
                     element.type == Element.ElementType.eBoolean ||
-                            element.type == Element.ElementType.eCombo||
+                            element.type == Element.ElementType.eCombo ||
                             element.type == Element.ElementType.eComboMulti ||
                             element.type == Element.ElementType.eInteger ||
                             element.type == Element.ElementType.eLookUp ||
@@ -1132,9 +1132,9 @@ public class IncidentFormActivity extends AppCompatActivity {
                                     currentDatePicker = dpI;
                                     currentDateElement = dpElement;
                                     if (!readOnly)
-                                    new DatePickerDialog(thisActivity, dateOnly, calendar
-                                            .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                                            calendar.get(Calendar.DAY_OF_MONTH)).show();
+                                        new DatePickerDialog(thisActivity, dateOnly, calendar
+                                                .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                                                calendar.get(Calendar.DAY_OF_MONTH)).show();
                                 }
                             }
                         });
@@ -1147,9 +1147,9 @@ public class IncidentFormActivity extends AppCompatActivity {
                                 currentDatePicker = dpI;
                                 currentDateElement = dpElement;
                                 if (!readOnly)
-                                new DatePickerDialog(thisActivity, dateOnly, calendar
-                                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+                                    new DatePickerDialog(thisActivity, dateOnly, calendar
+                                            .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                                            calendar.get(Calendar.DAY_OF_MONTH)).show();
                             }
                         });
                         ViewGroup parent = (ViewGroup) datePicker[datePickerIndex].getParent();
@@ -1189,9 +1189,9 @@ public class IncidentFormActivity extends AppCompatActivity {
                                     currentDatePicker = dpI1;
                                     currentDateElement = dpElement1;
                                     if (!readOnly)
-                                    new DatePickerDialog(thisActivity, dateThenTime, calendar
-                                            .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                                            calendar.get(Calendar.DAY_OF_MONTH)).show();
+                                        new DatePickerDialog(thisActivity, dateThenTime, calendar
+                                                .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                                                calendar.get(Calendar.DAY_OF_MONTH)).show();
                                 }
                             }
                         });
@@ -1204,9 +1204,9 @@ public class IncidentFormActivity extends AppCompatActivity {
                                 currentDatePicker = dpI1;
                                 currentDateElement = dpElement1;
                                 if (!readOnly)
-                                new DatePickerDialog(thisActivity, dateThenTime, calendar
-                                        .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+                                    new DatePickerDialog(thisActivity, dateThenTime, calendar
+                                            .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                                            calendar.get(Calendar.DAY_OF_MONTH)).show();
                             }
                         });
                         ViewGroup parent1 = (ViewGroup) datePicker[datePickerIndex].getParent();
@@ -1362,18 +1362,18 @@ public class IncidentFormActivity extends AppCompatActivity {
                         planButton.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.boxy_button_spinner, null));
                         planButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_more_black_24dp, 0);
                         if (!readOnly)
-                        planButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                currentElement = element;
-                                currentButton = planButton;
-                                Intent intent = new Intent(thisActivity, VehicleDamageActivity.class);
-                                InsReport.damagePlanData = element.vPlan;
-                                InsReport.currentElement = element;
-                                InsReport.logFirebase("Open Damage Plan: " + currentForm.id);
-                                startActivityForResult(intent, DAMAGE_PLAN_INTENT);
-                            }
-                        });
+                            planButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    currentElement = element;
+                                    currentButton = planButton;
+                                    Intent intent = new Intent(thisActivity, VehicleDamageActivity.class);
+                                    InsReport.damagePlanData = element.vPlan;
+                                    InsReport.currentElement = element;
+                                    InsReport.logFirebase("Open Damage Plan: " + currentForm.id);
+                                    startActivityForResult(intent, DAMAGE_PLAN_INTENT);
+                                }
+                            });
                         if (readOnly)
                             planButton.setVisibility(View.GONE);
                         TextView damageTV = new TextView(this);
@@ -1413,17 +1413,17 @@ public class IncidentFormActivity extends AppCompatActivity {
                         drawButton.setText(span2Strings(element.description, element.toString()), Button.BufferType.SPANNABLE);
                         drawButton.setCompoundDrawablesWithIntrinsicBounds(element.getBitmapDrawable(this), null, null, null);
                         if (!readOnly)
-                        drawButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                InsReport.currentElement = element;
-                                currentElement = element;
-                                currentButton = drawButton;
-                                Intent intent = new Intent(thisActivity, FreeDrawActivity.class);
-                                InsReport.damagePlanData = element.vPlan;
-                                startActivityForResult(intent, FREE_DRAW_INTENT);
-                            }
-                        });
+                            drawButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    InsReport.currentElement = element;
+                                    currentElement = element;
+                                    currentButton = drawButton;
+                                    Intent intent = new Intent(thisActivity, FreeDrawActivity.class);
+                                    InsReport.damagePlanData = element.vPlan;
+                                    startActivityForResult(intent, FREE_DRAW_INTENT);
+                                }
+                            });
                         LL.addView(drawButton);
                         break;
                     case eAnima:
@@ -1443,18 +1443,18 @@ public class IncidentFormActivity extends AppCompatActivity {
                         animaButton.setText(span2Strings(element.description, element.toString()), Button.BufferType.SPANNABLE);
                         animaButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
                         if (!readOnly)
-                        animaButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                InsReport.currentElement = element;
-                                InsReport.currentForm = currentForm;
-                                currentElement = element;
-                                currentButton = animaButton;
-                                Intent intent = new Intent(thisActivity, AnimaActivity.class);
-                                //InsReport.damagePlanData = element.vPlan;
-                                startActivityForResult(intent, ANIMA_INTENT);
-                            }
-                        });
+                            animaButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    InsReport.currentElement = element;
+                                    InsReport.currentForm = currentForm;
+                                    currentElement = element;
+                                    currentButton = animaButton;
+                                    Intent intent = new Intent(thisActivity, AnimaActivity.class);
+                                    //InsReport.damagePlanData = element.vPlan;
+                                    startActivityForResult(intent, ANIMA_INTENT);
+                                }
+                            });
                         if (readOnly)
                             animaButton.setVisibility(View.GONE);
                         linearLayoutPhoto1.addView(animaButton);
@@ -1467,17 +1467,17 @@ public class IncidentFormActivity extends AppCompatActivity {
                         drawButton1.setText(span2Strings(element.description, element.toString()), Button.BufferType.SPANNABLE);
                         drawButton1.setCompoundDrawablesWithIntrinsicBounds(element.getBitmapDrawable(this), null, null, null);
                         if (!readOnly)
-                        drawButton1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                InsReport.currentElement = element;
-                                currentElement = element;
-                                currentButton = drawButton1;
-                                Intent intent = new Intent(thisActivity, FreeDrawActivity.class);
-                                InsReport.damagePlanData = element.vPlan;
-                                startActivityForResult(intent, FREE_DRAW_INTENT);
-                            }
-                        });
+                            drawButton1.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    InsReport.currentElement = element;
+                                    currentElement = element;
+                                    currentButton = drawButton1;
+                                    Intent intent = new Intent(thisActivity, FreeDrawActivity.class);
+                                    InsReport.damagePlanData = element.vPlan;
+                                    startActivityForResult(intent, FREE_DRAW_INTENT);
+                                }
+                            });
                         LL.addView(drawButton1);
                         break;
                     case eCombo:

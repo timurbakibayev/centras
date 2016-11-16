@@ -164,7 +164,7 @@ public class Form {
     }
 
     @JsonIgnore
-    Element rawData = new Element("raw",Element.ElementType.eGroup,"rawData","");
+    Element rawData = new Element("raw", Element.ElementType.eGroup, "rawData", "");
 
 
     Map<String, String> rawMap = new HashMap<String, String>();
@@ -188,51 +188,52 @@ public class Form {
         //    formReady = true;
     }
 
-    private void copyElementsRaw(Map<String,String> destinationMapping, ArrayList<Element> elements) {
+    private void copyElementsRaw(Map<String, String> destinationMapping, ArrayList<Element> elements) {
         for (Element element : elements) {
             if (element.type == Element.ElementType.eGroup)
-                copyElementsRaw(destinationMapping,element.elements);
+                copyElementsRaw(destinationMapping, element.elements);
             else
-                destinationMapping.put(element.fireBaseFieldName,element.toJson());
+                destinationMapping.put(element.fireBaseFieldName, element.toJson());
         }
     }
 
-    public void applyInput(Map<String,String> inputValues, ArrayList<Element> elements) {
+    public void applyInput(Map<String, String> inputValues, ArrayList<Element> elements) {
         for (Element element : elements) {
             if (element.type == Element.ElementType.eGroup)
                 applyInput(inputValues, element.elements);
-            else
-                if (inputValues.get(element.fireBaseFieldName) != null) {
-                    element.serverStatic = true;
-                    String value = inputValues.get(element.fireBaseFieldName);
+            else if (inputValues.get(element.fireBaseFieldName) != null) {
+                element.serverStatic = true;
+                String value = inputValues.get(element.fireBaseFieldName);
+                element.vText = value;
+                if (element.type == Element.ElementType.eText)
                     element.vText = value;
-                    if (element.type == Element.ElementType.eText)
-                        element.vText = value;
-                    if (element.type == Element.ElementType.eDate || element.type == Element.ElementType.eDateTime) {
-                        try {
-                            Long t = Long.parseLong(value);
-                            Date inputDate = new Date(t);
-                            element.vDate = inputDate;
-                        } catch (Exception e) {
+                if (element.type == Element.ElementType.eDate || element.type == Element.ElementType.eDateTime) {
+                    try {
+                        Long t = Long.parseLong(value);
+                        Date inputDate = new Date(t * 1000);
+                        element.vDate = inputDate;
+                    } catch (Exception e) {
 
-                        }
                     }
+                }
 
-                    if (element.type == Element.ElementType.eInteger)
-                        try {
-                            element.vInteger = Integer.parseInt(value);
-                        } catch (Exception e) {};
+                if (element.type == Element.ElementType.eInteger)
+                    try {
+                        element.vInteger = Integer.parseInt(value);
+                    } catch (Exception e) {
+                    }
+                ;
 
 
-                    if (element.type == Element.ElementType.eRadio || element.type == Element.ElementType.eCombo) {
-                        for (int i = 0; i < element.comboItems.size(); i++) {
-                            if (element.comboItems.get(i).equals(value)) {
-                                element.vText = value;
-                                element.vInteger = i;
-                            }
+                if (element.type == Element.ElementType.eRadio || element.type == Element.ElementType.eCombo) {
+                    for (int i = 0; i < element.comboItems.size(); i++) {
+                        if (element.comboItems.get(i).equals(value)) {
+                            element.vText = value;
+                            element.vInteger = i;
                         }
                     }
                 }
+            }
         }
     }
 
@@ -329,12 +330,12 @@ public class Form {
         return dateArrived;
     }
 
-    public ArrayList<Map<String,String>> getInputObjects() {
+    public ArrayList<Map<String, String>> getInputObjects() {
         return inputObjects;
     }
 
     public void switchDone(Context context, boolean closeActivity, Activity activity) {
-        InsReport.savePref("lastFormId","");
+        InsReport.savePref("lastFormId", "");
         if (status.equals("accept")) {
             formReady = !formReady;
             saveToCloud();
@@ -343,8 +344,7 @@ public class Form {
                 NotificationManager nMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 nMgr.cancel(calculateId());
                 Log.e(TAG, "switchDone: " + calculateId());
-            }
-            else {
+            } else {
                 statusNote = "В работе";
                 final String phoneNo;
                 final String address;
@@ -364,7 +364,7 @@ public class Form {
                 else
                     address = "";
 
-                MyFirebaseMessagingService.sendNotification(personName,personName,phoneNo,address,context, false, false);
+                MyFirebaseMessagingService.sendNotification(personName, personName, phoneNo, address, context, false, false);
                 saveToCloud();
             }
             InsReport.notifyFormsList();
@@ -378,11 +378,11 @@ public class Form {
 
     }
 
-    public static int hash (String phoneNo) {
+    public static int hash(String phoneNo) {
         int idk = 0;
         for (int i = 0; i < phoneNo.length(); i++) {
             int k = phoneNo.charAt(i);
-            k = k * (i *100);
+            k = k * (i * 100);
             idk += k;
         }
         return idk;
