@@ -1696,14 +1696,14 @@ public class IncidentFormActivity extends AppCompatActivity {
         }
     }
 
-    private void openLookUpDialog(final Button lookupEditText, ArrayList<DirectoryItem> directoryItems, final Element element) {
+    private void openLookUpDialog(final Button lookupEditText, final ArrayList<DirectoryItem> directoryItems, final Element element) {
         final Dialog lookUpDialog = new Dialog(this);
         lookUpDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         lookUpDialog.setContentView(getLayoutInflater().inflate(R.layout.lookup
                 , null));
 
         ListView listView = (ListView) lookUpDialog.findViewById(R.id.ListView007);
-        EditText filterEditText = (EditText) lookUpDialog.findViewById(R.id.filterEditText);
+        final EditText filterEditText = (EditText) lookUpDialog.findViewById(R.id.filterEditText);
         final KolesaAdapter kolesaAdapter = new KolesaAdapter(this, directoryItems, filterEditText);
         listView.setAdapter(kolesaAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -1715,7 +1715,50 @@ public class IncidentFormActivity extends AppCompatActivity {
                 lookUpDialog.dismiss();
             }
         });
+        lookUpDialog.findViewById(R.id.addToDirectory).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addNewDirectoryItem(filterEditText.getText().toString(), lookupEditText, element);
+                lookUpDialog.dismiss();
+            }
+        });
+
         lookUpDialog.show();
+    }
+
+    private void addNewDirectoryItem(String s, final Button lookupEditText, final Element element) {
+        final Dialog lookUpDialog = new Dialog(this);
+        lookUpDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        lookUpDialog.setContentView(getLayoutInflater().inflate(R.layout.add_new_directory_item
+                , null));
+        final EditText filterEditText = (EditText) lookUpDialog.findViewById(R.id.filterEditText);
+        filterEditText.setText(s);
+        final EditText codeEditText = (EditText) lookUpDialog.findViewById(R.id.directoryCode);
+        lookUpDialog.findViewById(R.id.addToDirectory).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (codeEditText.getText().toString().equals("")) {
+                    Toast.makeText(IncidentFormActivity.this, "Не введён код", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                ArrayList<DirectoryItem> directoryItems1 = InsReport.directories.map.get(element.directory).items;
+                for (DirectoryItem directoryItem : directoryItems1)
+                    if (directoryItem.id.equals(codeEditText.getText().toString())) {
+                        Toast.makeText(IncidentFormActivity.this, "Код уже существует!", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                addNewDirectoryItem(filterEditText.getText().toString(), codeEditText.getText().toString(),element.directory);
+                lookupEditText.setText(filterEditText.getText().toString());
+                element.vText = codeEditText.getText().toString();
+                lookUpDialog.dismiss();
+            }
+        });
+        lookUpDialog.show();
+    }
+
+    private void addNewDirectoryItem(String s, String code, String directory) {
+        InsReport.ref.child("dirs").child(directory).child(code).child("name").setValue(s);
+        InsReport.ref.child("dirs").child(directory).child(code).child("status").setValue("Y");
     }
 
     private void openLookUpDialogMulti(final Button lookupEditText, final ArrayList<DirectoryItem> directoryItems, final Element element) {
