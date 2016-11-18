@@ -20,7 +20,7 @@ add an item to a directory:
 curl -X PUT -d '{
 "code001":{"name":"description 001","status":"true"},
 "code002":{"name":"description 002","status":"true"}
-}' "https://insreport-f39a3.firebaseio.com/dirs/DCT_CLAIM_TYPE/.json"
+}' "https://calimregistration.firebaseio.com/dirs/DCT_CLAIM_TYPE/.json"
 
 //gulnar: B4m2mvpt8STf2pUykgSGs6eEvMV2
 

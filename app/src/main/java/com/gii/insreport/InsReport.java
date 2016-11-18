@@ -40,7 +40,7 @@ public class InsReport extends Application {
 
     private final static String TAG = "InsReport (Application)";
 
-    public final static String fireBaseGeneralDirectory = "insreport-f39a3";
+    public final static String fireBaseGeneralDirectory = "calimregistration";
     public final static String EXTRA_FIREBASE_CATALOG = "Firebase.Catalog";
     public final static String EXTRA_ID_NO = "Firebase.Form.No";
     public final static String EXTRA_FORM_READY = "Firebase.Form.formReady";
