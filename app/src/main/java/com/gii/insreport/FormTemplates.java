@@ -103,8 +103,8 @@ public class FormTemplates {
         if (form.elements.size() == 0) { //this is the first load of the form after server initiation. Or manually created form.
             switch (fireBaseCatalog) {
                 case ("preInsurance"):
-                    form.elements.add(new Element("", Element.ElementType.eTextNum, "DOC_ID",
-                            "Системный код заявления"));
+//                    form.elements.add(new Element("", Element.ElementType.eTextNum, "DOC_ID",
+//                            "Системный код заявления"));
 
                     form.elements.add(new Element("general", Element.ElementType.eText, "DOC_NO",
                             "№ заявки"));
@@ -149,28 +149,28 @@ public class FormTemplates {
                     form.elements.add(new Element("general", Element.ElementType.eText, "ADDITIONAL_CONDITIONS",
                             "Дополнительные условия по договору"));
 
-                    form.elements.add(new Element("", Element.ElementType.eText, "MANAGER_COMENTS",
-                            "Комментарии менеджера"));
+//                    form.elements.add(new Element("", Element.ElementType.eText, "MANAGER_COMENTS",
+//                            "Комментарии менеджера"));
 
-                    form.elements.add(new Element("", Element.ElementType.eDate, "CREATED_DATE",
-                            "Системная дата создания записи"));
+//                    form.elements.add(new Element("", Element.ElementType.eDate, "CREATED_DATE",
+//                            "Системная дата создания записи"));
+//
+//                    form.elements.add(new Element("", Element.ElementType.eDate, "CREATED_USER",
+//                            "Пользователь создавший запись"));
+//
+//                    form.elements.add(new Element("", Element.ElementType.eDate, "CHANGED_DATE",
+//                            "Системная дата изменени записи"));
+//
+//                    form.elements.add(new Element("", Element.ElementType.eText, "CHANGED_USER",
+//                            "Пользователь Изменивший запись"));
 
-                    form.elements.add(new Element("", Element.ElementType.eDate, "CREATED_USER",
-                            "Пользователь создавший запись"));
 
-                    form.elements.add(new Element("", Element.ElementType.eDate, "CHANGED_DATE",
-                            "Системная дата изменени записи"));
-
-                    form.elements.add(new Element("", Element.ElementType.eText, "CHANGED_USER",
-                            "Пользователь Изменивший запись"));
-
-
-                    form.elements.add(new Element("", Element.ElementType.eTextNum, "DOC_ID",
-                            "Системный код заявления"));
-                    form.elements.add(new Element("", Element.ElementType.eTextNum, "OBJECT_ID",
-                            "код объекта"));
-                    form.elements.add(new Element("", Element.ElementType.eTextNum, "DOCUMENT_ID",
-                            "код документа"));
+//                    form.elements.add(new Element("", Element.ElementType.eTextNum, "DOC_ID",
+//                            "Системный код заявления"));
+//                    form.elements.add(new Element("", Element.ElementType.eTextNum, "OBJECT_ID",
+//                            "код объекта"));
+//                    form.elements.add(new Element("", Element.ElementType.eTextNum, "DOCUMENT_ID",
+//                            "код документа"));
 
                     form.elements.add(new Element("documents", Element.ElementType.eText, "DOCUMENT_TYPE",
                             "Тип документа"));
@@ -183,6 +183,7 @@ public class FormTemplates {
                     form.elements.add(new Element("documents", Element.ElementType.ePhoto, "DOCUMENT_ATTACHMENT",
                             "прикрепление изображения"));
 
+                    /*
                     form.elements.add(new Element("", Element.ElementType.eDate, "CREATED_DATE",
                             "Системная дата создания записи"));
                     form.elements.add(new Element("", Element.ElementType.eText, "CREATED_USER",
@@ -191,6 +192,7 @@ public class FormTemplates {
                             "Системная дата изменени записи"));
                     form.elements.add(new Element("", Element.ElementType.eText, "CHANGED_USER",
                             "Пользователь Изменивший запись"));
+                            */
 
 
                     form.elements.add(new Element("photo", Element.ElementType.ePhoto, "photoDocuments", "Документы"));
@@ -211,8 +213,8 @@ public class FormTemplates {
 
                 case ("incident"):
 
-                    form.elements.add(new Element("", Element.ElementType.eText, "DOCUMENT_ID",
-                            "Системный код"));
+//                    form.elements.add(new Element("", Element.ElementType.eText, "DOCUMENT_ID",
+//                            "Системный код"));
 
                     form.elements.add(new Element("general", Element.ElementType.eCombo, "DOCUMENT_TYPE",
                             "Тип документа",
@@ -228,9 +230,9 @@ public class FormTemplates {
                     form.elements.add(new Element("general", Element.ElementType.eDateTime, "CLAIM_STARTED",
                             "Дата регистрации дела"));
 
-                    form.elements.add(new Element("", Element.ElementType.eCombo, "CAUSE_ID",
-                            "Тип урегулирования",
-                            "DCT_CAUSE_ID"));
+//                    form.elements.add(new Element("", Element.ElementType.eCombo, "CAUSE_ID",
+//                            "Тип урегулирования",
+//                            "DCT_CAUSE_ID"));
 
                     form.elements.add(new Element("general", Element.ElementType.eText, "POLICY_REG",
                             "№ Договора"));
@@ -266,23 +268,23 @@ public class FormTemplates {
                     form.elements.add(new Element("general", Element.ElementType.eTextNum, "INITIAL_SUM",
                             "Предварительная сумма (ущерба для страховых случае, стоимости авто для предварительного страхового осмотра)"));
 
-                    form.elements.add(new Element("", Element.ElementType.eText, "REGISTRATION_DATE",
-                            "Системное/Серверное время создания записи"));
-                    form.elements.add(new Element("", Element.ElementType.eText, "USERNAME",
-                            "Пользователь создавший запись (Login)"));
-                    form.elements.add(new Element("", Element.ElementType.eText, "CHANGED_BY",
-                            "Пользователь изменивший запись (Login)"));
-                    form.elements.add(new Element("", Element.ElementType.eText, "CHANGE_DATE",
-                            "Системное/Серверное время изменения записи"));
+//                    form.elements.add(new Element("", Element.ElementType.eText, "REGISTRATION_DATE",
+//                            "Системное/Серверное время создания записи"));
+//                    form.elements.add(new Element("", Element.ElementType.eText, "USERNAME",
+//                            "Пользователь создавший запись (Login)"));
+//                    form.elements.add(new Element("", Element.ElementType.eText, "CHANGED_BY",
+//                            "Пользователь изменивший запись (Login)"));
+//                    form.elements.add(new Element("", Element.ElementType.eText, "CHANGE_DATE",
+//                            "Системное/Серверное время изменения записи"));
 
                     form.elements.add(new Element("general", Element.ElementType.eText, "OPERATOR_NAME",
                             "Имя оператора кол-центра"));
-                    form.elements.add(new Element("", Element.ElementType.eTextNum, "SEND_SMS",
-                            "На какой номер АК было отправлено уведомление о страх. Случае"));
+//                    form.elements.add(new Element("", Element.ElementType.eTextNum, "SEND_SMS",
+//                            "На какой номер АК было отправлено уведомление о страх. Случае"));
                     form.elements.add(new Element("general", Element.ElementType.eTextNum, "CLAIMANT_PHONE_NO",
                             "Номер телефона застрахованного"));
-                    form.elements.add(new Element("", Element.ElementType.eText, "SMS_PROVIDER",
-                            "СМС провайдер"));
+//                    form.elements.add(new Element("", Element.ElementType.eText, "SMS_PROVIDER",
+//                            "СМС провайдер"));
                     form.elements.add(new Element("signature", Element.ElementType.eSignature, "SPECIALIST_SIGN",
                             "Подпись Комисcара"));
                     form.elements.add(new Element("signature", Element.ElementType.eSignature, "CLIENT_SIGN",
@@ -310,8 +312,8 @@ public class FormTemplates {
                             "Описание вопроса"));
 
 
-                    form.elements.add(new Element("", Element.ElementType.eText, "QUESTION_ANSWER_TYPE",
-                            "Тип ответа"));
+//                    form.elements.add(new Element("", Element.ElementType.eText, "QUESTION_ANSWER_TYPE",
+//                            "Тип ответа"));
 
                     form.elements.add(new Element("additionalInfo", Element.ElementType.eCombo, "QUESTION_ANSWER",
                             "Ответ на вопрос", "DCT_QUESTION_ANSWER"));

@@ -294,6 +294,61 @@ public class Element {
         return "";
     }
 
+    public String describe() {
+        String s = "Поле: " + fireBaseFieldName + " | Тип: ";
+        switch (type) {
+            case eText:
+                s += "Текст";
+                break;
+            case eTextNum:
+                s += "Текст-Число";
+                break;
+            case eDate:
+                s += "Дата";
+                break;
+            case eDateTime:
+                s += "Дата-Время";
+                break;
+            case eInteger:
+                s += "Целое";
+                break;
+            case ePlan:
+                s += "Повреждения";
+                break;
+            case eDraw:
+                s += "Рисунок";
+                break;
+            case eSignature:
+                s += "Подпись";
+                break;
+            case eBoolean:
+                s += "Boolean";
+                break;
+            case ePhoto:
+                s += "Фото";
+                break;
+            case eRadio:
+                s += "Выбор";
+                break;
+            case eCombo:
+                s += "Список";
+                break;
+            case eAnima:
+                s += "План ДТП";
+                break;
+        }
+        s += " | ";
+        if (!directory.equals(""))
+            s += " Справочник: " + directory;
+        if (comboItems.size() > 0) {
+            s += " Выбор: ";
+            for (String comboItem : comboItems) {
+                s += comboItem + "/";
+            }
+        }
+        return s;
+    }
+
     public enum ElementType {
         eInteger, eBoolean, ePhoto, eText, eCombo, eRadio, eDate, eDateTime, eGroup, eDraw, ePlan, eSignature, eAnima, eLookUp, eParticipant, eTextNum, eComboMulti;
     }

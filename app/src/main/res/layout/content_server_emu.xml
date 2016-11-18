@@ -54,6 +54,13 @@
                 android:layout_height="wrap_content"
                 android:text="Добавить поле"/>
 
+            <Button
+                android:id="@+id/serverButtonAllFields"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Справочник полей"/>
+
+
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.gii.insreport;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -81,6 +83,12 @@ public class ServerEmuActivity extends AppCompatActivity  {
                 addNewField();
             }
         });
+        ((Button)findViewById(R.id.serverButtonAllFields)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                copyAllFields();
+            }
+        });
         InsReport.ref.child("youfix/restTemplate").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -101,6 +109,68 @@ public class ServerEmuActivity extends AppCompatActivity  {
 
             }
         });
+    }
+
+    private void copyAllFields() {
+        String s = "";
+        s += "Страховые случаи\n\n";
+        {
+            Form someForm = new Form();
+            FormTemplates.applyTemplate(someForm, "incident");
+            s += fieldsDescription(someForm.elements) + "\n\n\n";
+        }
+        {
+            s += "Объекты (передаются в inputObjects)\n\n";
+            Element someObject = new Element();
+            FormTemplates.applyTemplateForObjects(someObject);
+            s += fieldsDescription(someObject.elements) + "\n\n\n";
+        }
+        {
+            s += "Участники (передаются в inputParticipants)\n\n";
+            Element someParticipant = new Element();
+            FormTemplates.applyTemplateForParticipants(someParticipant);
+            s += fieldsDescription(someParticipant.elements) + "\n\n\n";
+        }
+        {
+            s += "Предстраховые осмотры\n\n";
+            Form someForm1 = new Form();
+            FormTemplates.applyTemplate(someForm1, "preInsurance");
+            s += fieldsDescription(someForm1.elements) + "\n\n\n";
+        }
+        showStringInDialog(this,s);
+    }
+
+    private String fieldsDescription(ArrayList<Element> elements) {
+        String s = "";
+        for (Element element : elements) {
+            if (element.type == Element.ElementType.eGroup)
+                s += fieldsDescription(element.elements);
+            else
+                s += element.describe();
+            s += "\n\n";
+        }
+        return s;
+    }
+
+    public static void showStringInDialog(final Context context, final String s) {
+        ScrollView scrollView = new ScrollView(context);
+        LinearLayout linearLayout = new LinearLayout(context);
+        scrollView.addView(linearLayout);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        final TextView tvNotify = new TextView(context);
+        tvNotify.setText(s);
+        linearLayout.addView(tvNotify);
+
+        new AlertDialog.Builder(context).setTitle("Справочник").setView(scrollView).
+                setPositiveButton("Копировать в Буфер", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("Text Label", s);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                }).
+                show();
     }
 
     FCMNotify fcmNotify = new FCMNotify();
