@@ -23,9 +23,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,11 +42,14 @@ import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.gii.insreport.InsReport.user;
+
 public class MainActivity extends AppCompatActivity {
-    private static String TAG = MainActivity.class.getSimpleName();
+    private static String TAG = "MainActivity.java";
 
     boolean nowReleaseButtons = false;
     boolean triggerLastForm = false;
+    TextView text_header, text_header2;
 
     Timer timer = new Timer();
 
@@ -52,6 +57,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        text_header = (TextView) findViewById(R.id.text_header);
+        text_header2 = (TextView) findViewById(R.id.text_header2);
+
+        //
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        //
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -135,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
         if (InsReport.sharedPref.getBoolean("open_last_doc", false))
             triggerLastForm = true;
 
-        SMS.wsdlQuery("+77078656018","Текст на русском. Adik.");
+//        SMS.wsdlQuery("+77078656018","Текст на русском. Adik.");
     }
 
     static boolean dontCheckTwice = false;
@@ -151,14 +168,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void showDeviceNameDialog(Context context) {
-        if (InsReport.user == null)
+        if (user == null)
             return;
         dontCheckTwice = true;
         final Dialog deviceNameDialog = new Dialog(context);
         final EditText deviceNameET = new EditText(context);
         deviceNameET.setText(InsReport.sharedPref.getString("devicename", ""));
         TextView captionTV = new TextView(context);
-        captionTV.setText(context.getString(R.string.device_alert));
+        captionTV.setText("Введите название устройства, например 'Samsung s5' или 'Планшет Арман'. " +
+                "Это необходимо для возможности " +
+                "блокировки устройства при потере.");
         Button positiveButton = new Button(context);
         positiveButton.setText("OK");
         LinearLayout deviceNameLL = new LinearLayout(context);
@@ -180,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 String newName = deviceNameET.getText().toString();
                 if (!newName.equals("")) {
                     InsReport.savePref("devicename", newName);
-                    InsReport.ref.child("users/" + InsReport.user.getUid() + "/devices/" + FirebaseInstanceId.getInstance().getToken().replaceAll("[^0-9]+", "")).setValue(
+                    InsReport.ref.child("users/" + user.getUid() + "/devices/" + FirebaseInstanceId.getInstance().getToken().replaceAll("[^0-9]+", "")).setValue(
                             InsReport.sharedPref.getString("devicename", "Неизвестное устройство"));
                     deviceNameDialog.dismiss();
                     InsReport.logFirebase("Device renamed to: " + newName);
@@ -210,7 +229,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 
 
     @Override
@@ -325,59 +343,121 @@ public class MainActivity extends AppCompatActivity {
 
 
     ArrayList<Button> formButtons = new ArrayList<>();
-    Button loginButton = null;
+    //    Button loginButton = null;
     MainActivity thisActivity = this;
 
     private void addForms() {
-        final float scale = getResources().getDisplayMetrics().density;
-        LinearLayout mainMenuLL = (LinearLayout) findViewById(R.id.mainMenuLL);
-        mainMenuLL.removeAllViews();
-        for (final FormsCollection formsCollection : InsReport.mainMenuForms) {
-            Button newMenuButton = new Button(this);
-            formButtons.add(newMenuButton);
-            newMenuButton.setText(formsCollection.description);
-            newMenuButton.setHeight((int) (96 * scale + 0.5f));
-            newMenuButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(thisActivity, FormsList.class);
-                    String message = formsCollection.fireBaseCatalog;
-                    intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, message);
-                    InsReport.logFirebase("Opening " + formsCollection.fireBaseCatalog);
-                    startActivity(intent);
-                }
-            });
-            newMenuButton.setEnabled(false);
-            mainMenuLL.addView(newMenuButton);
+        ArrayList<String> items = new ArrayList<String>();
+        ArrayList<Integer> images = new ArrayList<>();
+        for(FormsCollection formsCollection : InsReport.mainMenuForms){
+            items.add(formsCollection.description);
         }
-        Button serverButton = new Button(this);
-        serverButton.setText("Эмулятор сервера");
-        serverButton.setHeight((int) (96 * scale + 0.5f));
-        serverButton.setOnClickListener(new View.OnClickListener() {
+        items.add("Имущество");
+        items.add("Недвижимость");
+        items.add("Грузы");
+        items.add("Эмулятор сервера");
+        images.add(R.drawable.ic_assignment_black_24dp);
+        images.add(R.drawable.ic_traffic_black_24dp);
+        images.add(R.drawable.ic_location_city_black_24dp);
+        images.add(R.drawable.ic_account_balance_black_24dp);
+        images.add(R.drawable.ic_local_shipping_black_24dp);
+        images.add(R.drawable.ic_add_black_24dp);
+
+
+//        items.add(getString(R.string.general_info));
+//        items.add(getString(R.string.photos_and_documents));
+//        items.add(getString(R.string.objects_info));
+//        items.add(getString(R.string.participants_info));
+//        items.add(getString(R.string.event_description));
+//        items.add(getString(R.string.additional_info));
+//        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.card_recycler_view);
+//        recyclerView.setHasFixedSize(true);
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//        recyclerView.setLayoutManager(layoutManager);
+        ReportType adapter = new ReportType(getApplicationContext(), items, images);
+        ListView list = (ListView) findViewById(R.id.reports);
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent serverIntent = new Intent(thisActivity, ServerEmuActivity.class);
-                startActivity(serverIntent);
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(thisActivity, FormsList.class);
+                String message = "";
+                switch (i) {
+                    case 0:
+                        message = InsReport.mainMenuForms.get(0).fireBaseCatalog;
+                        intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, message);
+                        InsReport.logFirebase("Opening " + InsReport.mainMenuForms.get(0).fireBaseCatalog);
+                        startActivity(intent);
+                        break;
+                    case 1:
+                        message = InsReport.mainMenuForms.get(1).fireBaseCatalog;
+                        intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, message);
+                        InsReport.logFirebase("Opening " + InsReport.mainMenuForms.get(1).fireBaseCatalog);
+                        startActivity(intent);
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        Intent serverIntent = new Intent(thisActivity, ServerEmuActivity.class);
+                        startActivity(serverIntent);
+                        break;
+                }
+//                Toast.makeText(getApplicationContext(), "Position " + i, Toast.LENGTH_SHORT).show();
             }
         });
-        formButtons.add(serverButton);
-        serverButton.setEnabled(false);
-        mainMenuLL.addView(serverButton);
-
-        Button newMenuButton = new Button(this);
-        formButtons.add(newMenuButton);
-        newMenuButton.setText("АВТОРИЗАЦИЯ");
-        newMenuButton.setHeight((int) (96 * scale + 0.5f));
-        newMenuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(thisActivity, LoginActivity.class);
-                startActivityForResult(intent, 1);
-            }
-        });
-
-        loginButton = newMenuButton;
-        mainMenuLL.addView(newMenuButton);
+//        final float scale = getResources().getDisplayMetrics().density;
+//        LinearLayout mainMenuLL = (LinearLayout) findViewById(R.id.mainMenuLL);
+//        mainMenuLL.removeAllViews();
+//        for (final FormsCollection formsCollection : InsReport.mainMenuForms) {
+//            Button newMenuButton = new Button(this);
+//            formButtons.add(newMenuButton);
+//            newMenuButton.setText(formsCollection.description);
+//            newMenuButton.setHeight((int) (96 * scale + 0.5f));
+//            newMenuButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(thisActivity, FormsList.class);
+//                    String message = formsCollection.fireBaseCatalog;
+//                    intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, message);
+//                    InsReport.logFirebase("Opening " + formsCollection.fireBaseCatalog);
+//                    startActivity(intent);
+//                }
+//            });
+//            newMenuButton.setEnabled(false);
+//            mainMenuLL.addView(newMenuButton);
+//        }
+//        Button serverButton = new Button(this);
+//        serverButton.setText("Эмулятор сервера");
+//        serverButton.setHeight((int) (96 * scale + 0.5f));
+//        serverButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent serverIntent = new Intent(thisActivity, ServerEmuActivity.class);
+//                startActivity(serverIntent);
+//            }
+//        });
+//        formButtons.add(serverButton);
+//        serverButton.setEnabled(false);
+//        mainMenuLL.addView(serverButton);
+//
+//        Button newMenuButton = new Button(this);
+//        formButtons.add(newMenuButton);
+//        newMenuButton.setText("АВТОРИЗАЦИЯ");
+//        newMenuButton.setHeight((int) (96 * scale + 0.5f));
+//        newMenuButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(thisActivity, LoginActivity.class);
+//                startActivityForResult(intent, 1);
+//            }
+//        });
+//
+//        loginButton = newMenuButton;
+//        mainMenuLL.addView(newMenuButton);
     }
 
     public boolean checkNewForms(Activity context, boolean formsAreJustLoaded) {
@@ -461,8 +541,8 @@ public class MainActivity extends AppCompatActivity {
 
 //                Log.e(TAG, "Sending SMS: " + SMS.send(phoneNo,
 //                        getString(R.string.accept_sms, "Нурбек"))); //phoneNo
-                SMS.wsdlQuery(phoneNo,
-                        getString(R.string.accept_sms, "Нурбек"));
+//                SMS.wsdlQuery(phoneNo,
+//                        getString(R.string.accept_sms, "Нурбек"));
                 form.formReady = false;
                 if (form.elements.size() == 0) {
                     FormTemplates.applyTemplate(form, form.fireBaseCatalog);
@@ -514,8 +594,8 @@ public class MainActivity extends AppCompatActivity {
         (acceptOrRejectDialog.findViewById(R.id.buttonDelay)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SMS.wsdlQuery(phoneNo,
-                        getString(R.string.delay_sms, "Нурбек", 30));
+//                SMS.wsdlQuery(phoneNo,
+//                        getString(R.string.delay_sms, "Нурбек", 30));
                 NotificationManager nMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 nMgr.cancel(form.calculateId());
                 //TODO: change this to 30!
@@ -553,7 +633,7 @@ public class MainActivity extends AppCompatActivity {
                             .build();
                     intent.setData(locationUri);
                 } else {
-                    locationStr = address.replaceAll(" ", "+");
+                    locationStr = address;
 
                     Uri locationUri = Uri.parse("geo:0,0?").buildUpon()
                             .appendQueryParameter("q", locationStr)
@@ -709,7 +789,7 @@ public class MainActivity extends AppCompatActivity {
             for (FormsCollection mainMenuForm : InsReport.mainMenuForms) {
                 mainMenuForm.forms.clear();
                 mainMenuForm.addDataChangeListener();
-                InsReport.ref.child("users/" + InsReport.user.getUid() + "/name").setValue(
+                InsReport.ref.child("users/" + user.getUid() + "/name").setValue(
                         InsReport.sharedPref.getString("username", "")
                 );
             }
@@ -721,20 +801,25 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         FirebaseUser user = InsReport.mAuth.getCurrentUser();
         if (user != null) {
-            toolbar.setSubtitle("Online: " + user.getEmail());
+//            text_header.setText("Виды отчетов");
+            text_header2.setText("Online: " + user.getEmail()
+                    + "\nВиды отчетов");
+//            toolbar.setSubtitle("Online: " + user.getEmail());
+//            /toolbar.setSubtitle("Виды отчетов");
+            toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             InsReport.userID = user.getEmail();
             for (Button formButton : formButtons) {
                 formButton.setVisibility(View.VISIBLE);
             }
-            loginButton.setVisibility(View.GONE);
+//            loginButton.setVisibility(View.GONE);
         } else {
             toolbar.setSubtitle("Offline");
             InsReport.userID = "Incognito";
             for (Button formButton : formButtons) {
                 formButton.setVisibility(View.GONE);
             }
-            loginButton.setVisibility(View.VISIBLE);
             startActivity(new Intent(this, LoginActivity.class));
+//            loginButton.setVisibility(View.VISIBLE);
         }
 
     }
