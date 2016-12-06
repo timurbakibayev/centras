@@ -240,6 +240,115 @@ public class IncidentFormActivity extends AppCompatActivity {
         if (fireBaseCatalog.equalsIgnoreCase("preinsurance"))
             setContentView(R.layout.activity_pre_insurance);
 
+        //
+//
+        ArrayList<Integer> images = new ArrayList<>();
+
+
+        ArrayList<String> items = new ArrayList<String>();
+
+//        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.card_recycler_view);
+//        recyclerView.setHasFixedSize(true);
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//        recyclerView.setLayoutManager(layoutManager);
+
+        if (fireBaseCatalog.equalsIgnoreCase("incident")) {
+            images.add(R.drawable.ic_assignment_black_24dp);
+            images.add(R.drawable.ic_perm_media_black_24dp);
+            images.add(R.drawable.ic_directions_car_black_24dp);
+            images.add(R.drawable.ic_people_black_24dp);
+            images.add(R.drawable.ic_map_black_72dp);
+            images.add(R.drawable.ic_add_black_24dp);
+            items.add(getString(R.string.general_info));
+            items.add(getString(R.string.photos_and_documents));
+            items.add(getString(R.string.objects_info));
+            items.add(getString(R.string.participants_info));
+            items.add(getString(R.string.event_description));
+            items.add(getString(R.string.additional_info));
+            ReportType adapter = new ReportType(getApplicationContext(), items, images);
+            ListView list = (ListView) findViewById(R.id.reports);
+            list.setAdapter(adapter);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    switch (i) {
+                        case 0:
+                            showTheFragment("general", "Общие сведения");
+                            break;
+                        case 1:
+                            showManyPhotos();
+                            break;
+                        case 2:
+                            showManyObjects();
+                            break;
+                        case 3:
+                            showManyParticipants();
+                            break;
+                        case 4:
+                            showTheFragment("description", "Описание событий");
+                            break;
+                        case 5:
+                            showTheFragment("additionalInfo", "Дополнительная информация");
+                            break;
+                    }
+//                Toast.makeText(getApplicationContext(), "Position " + i, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+        if (fireBaseCatalog.equalsIgnoreCase("preinsurance")) {
+            images.add(R.drawable.ic_assignment_black_24dp);
+            images.add(R.drawable.ic_perm_media_black_24dp);
+            images.add(R.drawable.ic_directions_car_black_24dp);
+            images.add(R.drawable.ic_people_black_24dp);
+            images.add(R.drawable.ic_map_black_72dp);
+            images.add(R.drawable.ic_add_black_24dp);
+
+            items.add(getString(R.string.general_info));
+            items.add(getString(R.string.photos_and_documents));
+            items.add(getString(R.string.objects_info));
+            items.add(getString(R.string.participants_info));
+            items.add(getString(R.string.event_description));
+            items.add(getString(R.string.additional_info));
+
+            ReportType adapter = new ReportType(getApplicationContext(), items, images);
+            ListView list = (ListView) findViewById(R.id.reports);
+            list.setAdapter(adapter);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    switch (i) {
+                        case 0:
+                            showTheFragment("general", "Заявление");
+                            break;
+                        case 1:
+                            showManyDocuments();
+                            break;
+                        case 2:
+                            showManyObjects();
+                            break;
+                        case 3:
+                            showManyInsured();
+                            break;
+                        case 4:
+                            showManyPhotos();
+                            break;
+                        case 5:
+                            showManySignatures();
+                            break;
+                    }
+//                Toast.makeText(getApplicationContext(), "Position " + i, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
+//        recyclerView.setAdapter(adapter);
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
+//                items);
+//        ListView reportTypes = (ListView) findViewById(R.id.report_type);
+//        reportTypes.setAdapter(adapter);
+        //
+        //
+
         id_no = getIntent().getStringExtra(InsReport.EXTRA_ID_NO);
 
         readOnly = getIntent().getBooleanExtra(InsReport.EXTRA_FORM_READY, false);
@@ -516,6 +625,146 @@ public class IncidentFormActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void showManyInsured() {
+        if (currentForm.objects.elements.size() == 0 && !readOnly) {
+            //Необходимо добавить как минимум клиента. Дальше объекты будут создаваться вручную.
+            Element newObject = new Element("object", Element.ElementType.eInsured,
+                    "insureds", "Застрахованные");
+            FormTemplates.applyTemplateForInsureds(newObject);
+            currentForm.objects.elements.add(newObject);
+            currentForm.saveToCloud();
+        }
+
+        final String[] objects = new String[currentForm.objects.elements.size() + 1];
+        for (int i = 0; i < currentForm.objects.elements.size(); i++) {
+            Element element = currentForm.objects.elements.get(i);
+            int count = 0;
+            for (Element element1 : element.elements) {
+                if (element1.category.equals("insureds")) {
+                    for (Element element2 : element1.elements) {
+                        if (!element2.deleted)
+                            count++;
+                    }
+                }
+            }
+            objects[i] = element.constructObjectInfo() + " (" + count + " застрахованные)";
+        }
+        objects[objects.length - 1] = "Добавить +";
+        final IncidentFormActivity incidentFormActivity = this;
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Выберите застрахованного")
+                .setSingleChoiceItems(objects, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case Dialog.BUTTON_NEGATIVE: // Cancel button selected, do nothing
+                                dialog.cancel();
+                                break;
+
+                            case Dialog.BUTTON_POSITIVE: // OK button selected, send the data back
+                                dialog.dismiss();
+                                break;
+
+                            default:
+                                dialog.dismiss();
+                                if (which == objects.length - 1) {
+                                    if (readOnly)
+                                        return;
+                                    Element newObject = new Element("object", Element.ElementType.eInsured,
+                                            "object" + (which + 1), "Застрахованные " + (which + 1));
+                                    FormTemplates.applyTemplateForDocuments(newObject);
+                                    currentForm.objects.elements.add(newObject);
+                                }
+                                InsReport.currentElement = currentForm.objects.elements.get(which);
+                                currentElement = currentForm.objects.elements.get(which);
+                                LinearLayout newLL = new LinearLayout(incidentFormActivity);
+                                newLL.setOrientation(LinearLayout.VERTICAL);
+                                addElementsToLL(newLL, InsReport.currentElement.elements);
+                                linearLayoutForFragment.put("insureds", newLL);
+                                showTheFragment("insureds", InsReport.currentElement.description);
+                                break;
+                        }
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        //return;
+                    }
+                }).
+                show();
+    }
+
+    private void showManyDocuments() {
+        if (currentForm.objects.elements.size() == 0 && !readOnly) {
+            //Необходимо добавить как минимум клиента. Дальше объекты будут создаваться вручную.
+            Element newObject = new Element("object", Element.ElementType.eDocuments,
+                    "documents", "Документы");
+            FormTemplates.applyTemplateForDocuments(newObject);
+            currentForm.objects.elements.add(newObject);
+            currentForm.saveToCloud();
+        }
+
+        final String[] objects = new String[currentForm.objects.elements.size() + 1];
+        for (int i = 0; i < currentForm.objects.elements.size(); i++) {
+            Element element = currentForm.objects.elements.get(i);
+            int count = 0;
+            for (Element element1 : element.elements) {
+                if (element1.category.equals("documents")) {
+                    for (Element element2 : element1.elements) {
+                        if (!element2.deleted)
+                            count++;
+                    }
+                }
+            }
+            objects[i] = element.constructObjectInfo() + " (" + count + " документы)";
+        }
+        objects[objects.length - 1] = "Добавить +";
+        final IncidentFormActivity incidentFormActivity = this;
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Выберите документ")
+                .setSingleChoiceItems(objects, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case Dialog.BUTTON_NEGATIVE: // Cancel button selected, do nothing
+                                dialog.cancel();
+                                break;
+
+                            case Dialog.BUTTON_POSITIVE: // OK button selected, send the data back
+                                dialog.dismiss();
+                                break;
+
+                            default:
+                                dialog.dismiss();
+                                if (which == objects.length - 1) {
+                                    if (readOnly)
+                                        return;
+                                    Element newObject = new Element("object", Element.ElementType.eDocuments,
+                                            "object" + (which + 1), "Документы " + (which + 1));
+                                    FormTemplates.applyTemplateForDocuments(newObject);
+                                    currentForm.objects.elements.add(newObject);
+                                }
+                                InsReport.currentElement = currentForm.objects.elements.get(which);
+                                currentElement = currentForm.objects.elements.get(which);
+                                LinearLayout newLL = new LinearLayout(incidentFormActivity);
+                                newLL.setOrientation(LinearLayout.VERTICAL);
+                                addElementsToLL(newLL, InsReport.currentElement.elements);
+                                linearLayoutForFragment.put("documents", newLL);
+                                showTheFragment("documents", InsReport.currentElement.description);
+                                break;
+                        }
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        //return;
+                    }
+                }).
+                show();
     }
 
     private void showManyPhotos() {

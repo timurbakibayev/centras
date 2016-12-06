@@ -127,8 +127,8 @@ public int getItemViewType(int position) {
             case "accept":
                 ((ImageView)view.findViewById(R.id.openAcceptOrReject)).setColorFilter(Color.GREEN);
                 (view.findViewById(R.id.openAcceptOrReject)).setAnimation(null);
-                ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.BLACK);
-                ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.BLACK);
+                ((TextView) view.findViewById(R.id.textView2)).setTextColor(ctx.getResources().getColor(R.color.colorSecondaryText));
+                ((TextView) view.findViewById(R.id.textView1)).setTextColor(ctx.getResources().getColor(R.color.colorSecondaryText));
                 break;
             case "reject":
                 ((ImageView)view.findViewById(R.id.openAcceptOrReject)).setColorFilter(Color.RED);
@@ -145,8 +145,8 @@ public int getItemViewType(int position) {
             default:
                 ((ImageView)view.findViewById(R.id.openAcceptOrReject)).setColorFilter(Color.BLACK);
                 (view.findViewById(R.id.openAcceptOrReject)).setAnimation(animation);
-                ((TextView) view.findViewById(R.id.textView2)).setTextColor(Color.BLACK);
-                ((TextView) view.findViewById(R.id.textView1)).setTextColor(Color.BLACK);
+                ((TextView) view.findViewById(R.id.textView2)).setTextColor(ctx.getResources().getColor(R.color.colorSecondaryText));
+                ((TextView) view.findViewById(R.id.textView1)).setTextColor(ctx.getResources().getColor(R.color.colorSecondaryText));
                 break;
         }
 

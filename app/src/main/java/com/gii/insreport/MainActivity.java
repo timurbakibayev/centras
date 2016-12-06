@@ -41,7 +41,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-    private static String TAG = "MainActivity.java";
+    private static String TAG = MainActivity.class.getSimpleName();
 
     boolean nowReleaseButtons = false;
     boolean triggerLastForm = false;
@@ -158,9 +158,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText deviceNameET = new EditText(context);
         deviceNameET.setText(InsReport.sharedPref.getString("devicename", ""));
         TextView captionTV = new TextView(context);
-        captionTV.setText("Введите название устройства, например 'Samsung s5' или 'Планшет Арман'. " +
-                "Это необходимо для возможности " +
-                "блокировки устройства при потере.");
+        captionTV.setText(context.getString(R.string.device_alert));
         Button positiveButton = new Button(context);
         positiveButton.setText("OK");
         LinearLayout deviceNameLL = new LinearLayout(context);
@@ -736,6 +734,7 @@ public class MainActivity extends AppCompatActivity {
                 formButton.setVisibility(View.GONE);
             }
             loginButton.setVisibility(View.VISIBLE);
+            startActivity(new Intent(this, LoginActivity.class));
         }
 
     }

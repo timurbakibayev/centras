@@ -131,9 +131,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
 
+        final LinearLayout loginControl = (LinearLayout) findViewById(R.id.login_control);
 
         final Button signOutButton = (Button) findViewById(R.id.sign_out_button);
         if (user != null) {
+            loginControl.setVisibility(View.VISIBLE);
             mEmailView.setVisibility(View.GONE);
             mPasswordView.setVisibility(View.GONE);
             findViewById(R.id.passwordTextInputLayour).setVisibility(View.GONE);
@@ -149,6 +151,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             signOutButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    loginControl.setVisibility(View.GONE);
                     FirebaseMessaging.getInstance().unsubscribeFromTopic(uId);
                     InsReport.mAuth.signOut();
                     mEmailView.setVisibility(View.VISIBLE);

@@ -22,6 +22,10 @@
     <string name="title_activity_anima">Анимация</string>
     <string name="title_activity_photos">Фотографии</string>
     <string name="title_activity_server_emu">Server Emulator</string>
+    <string name="no_account">Нет аккаунта?</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="sign_in">Войти</string>
+
 
 
     <!--PreInsurance-->
@@ -123,6 +127,9 @@
     <string name="title_activity_maps">Map</string>
 
     <string name="title_info">информация</string>
+
+    <string name="device_alert">Введите название устройства, например \'Samsung s5\' или \'Планшет Арман\'.
+        Это необходимо для возможности блокировки устройства при потере.</string>
 
 
 </resources>

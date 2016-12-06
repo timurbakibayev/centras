@@ -35,7 +35,7 @@ public class BackgroundContainer extends FrameLayout {
 
     private void init() {
 //        mShadowedBackground = getContext().getResources().getDrawable(R.drawable.shadowed_background);
-        mShadowedBackground = new ColorDrawable(getContext().getResources().getColor(R.color.color_green));
+        mShadowedBackground = new ColorDrawable(getContext().getResources().getColor(R.color.color_list_background));
     }
 
     public void showBackground(int top, int bottom) {

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "587300471768",
+    "firebase_url": "https://calimregistration.firebaseio.com",
+    "project_id": "calimregistration",
+    "storage_bucket": "calimregistration.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587300471768:android:b3dbf35fad0468a0",
+        "android_client_info": {
+          "package_name": "com.gii.insreport"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "587300471768-6393nk8477tp1cumeiv17h1o25l8pe58.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAg6hevFIJ9VQYNUONpARXeYxbCAiDN5cw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

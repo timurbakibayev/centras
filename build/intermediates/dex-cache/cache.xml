@@ -1,0 +1,797 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/Users/adik/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.2.2/3c8f6018eaa72d43b261181e801e6f8676c16ef6/jackson-databind-2.2.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="3c8f6018eaa72d43b261181e801e6f8676c16ef6">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/jackson-databind-2.2.2_647e5b2bf43fb0495ddccf4cd84206bf394e4fc2/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="d8bd2268fdcbfd52c76ade65d9900cd8def93a44">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-24.2.0_3c3c25b60c07a32c248ada839c3718b0fe1b4227/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="e454c414a069241ee08444d187f2dd3a702596b5">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-maps-9.4.0_78a8ba8319883ca4fe53433371b013a9ee47108e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth-common/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="34762013d39dbe6c656050589c44e8b61b9a2c5d">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-common-9.4.0_2d8af235fd440fbf0f97e3c899b860adf5fda89f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.firebaseui/firebase-ui/0.3.1/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="5f34a8aeb0eaaa2d69752d56102a8c808117058e">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.firebaseui-firebase-ui-0.3.1_6246bb1cd6c0592fd33b5c8a2fe4a65723588bec/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.2.2/285cb9c666f0f0f3dd8a1be04e1f457eb7b15113/jackson-annotations-2.2.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="285cb9c666f0f0f3dd8a1be04e1f457eb7b15113">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/jackson-annotations-2.2.2_b936a3139507cb7423ed184e7acd7a56fb26960f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.0/jars/libs/internal_impl-24.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="60d7b23621d31e6f42f4f76f16af467e57a20cda">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.0_e7d5c6679c37b01d6b52931cf2bee6e68145c258/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="16fdc334458a386410f53e7118cb6eea2704da30">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_36af6ea5062c2f4b50423b8e4879f64a801defba/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-messaging/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="4b6d9b70f93bbeb872d0948bc064ae3f3f2bcbac">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-messaging-9.4.0_240bcc4612beb06eb398e950244d08afc4003e16/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="ece40b09e9d4d488bc270cf6af5a9af73bc1cfa3">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-gcm-9.4.0_515c4baec06909fbde76747d6f1fdee614c90fc8/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-tasks/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="8a36d229011e75f0caef408e1adf0d3fd4d94e02">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-tasks-9.4.0_904db0af3b0bcec96edcd3f37a5927beb70a2658/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.0/jars/libs/internal_impl-24.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="6e02e34594ebe9c0501ffda8dd48497f81b82977">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.0_c736fb996959d96858f2a873251da2f6ff849f4a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth-module/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="6bc41d9d6fd12d2ef23c785a259011001f4a1a5b">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-module-9.4.0_a97a929fc2ea105bd37de79f9241d36f2c429c8f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="6eb9107eb34d2fe2b020662b7fbbec991dcba846">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-24.2.0_f20fbb1d2e724dc1a33f737f6abbc7620132d019/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-tasks/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="8a36d229011e75f0caef408e1adf0d3fd4d94e02">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-tasks-9.4.0_904db0af3b0bcec96edcd3f37a5927beb70a2658/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/design/24.2.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="23eb0d2998a782213b56168cbf23a0688b9111d9">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-24.2.0_526d86bcea1310a4ed614e6809aedaeb18be93bc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-messaging/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="4b6d9b70f93bbeb872d0948bc064ae3f3f2bcbac">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-messaging-9.4.0_240bcc4612beb06eb398e950244d08afc4003e16/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.0/jars/libs/internal_impl-24.2.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="60d7b23621d31e6f42f4f76f16af467e57a20cda">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.0_e7d5c6679c37b01d6b52931cf2bee6e68145c258/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="0b060160e7daee343f5315b3da91b0ff2d7eed89">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-location-9.4.0_75dd876598db0000c7773fc92aaa990c49509f1e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="8394e4a338d600d72dcbb8cac6beb9a1dfe24a8f">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_0e7d1428496b8896146c05d6343b7cbbf16d66c3/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="c84e216d9bf618464d6b9564d71d9a656433e7c4">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-24.2.0_3b9105f43def9168e8550b9194d0d0834a787f45/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="88848548ab56d4fbf3d2d1b0c85bf1ff9b4c1f4b">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-9.4.0_2f041f4fd586009f67fe7ec3878c8174898d6b2b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="e454c414a069241ee08444d187f2dd3a702596b5">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-maps-9.4.0_78a8ba8319883ca4fe53433371b013a9ee47108e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="3dee4ce5844d39d843d503fb8fe04e51e5bfffac">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-base-9.4.0_5037956346082bf9c9bb1fcde0082e53b287d729/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/24.2.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="c755536e5a100d9c76c8ea0b72f76c018f7a9de2">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-24.2.0_8d76951feacf628ab53e75c9c79919bdf331e716/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.0/jars/libs/internal_impl-24.2.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="771b3cc0e597b54da25f8086ba73180c59c6bc71">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.0_b98680061ebbd702363b07486906ee489ac399e8/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="d8bd2268fdcbfd52c76ade65d9900cd8def93a44">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-24.2.0_3c3c25b60c07a32c248ada839c3718b0fe1b4227/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.0/jars/libs/internal_impl-24.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="045be695d968dd707691cc55d23746dbf8cf569a">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.0_4676675d79f3d22c20c6b733a29c4445adeddad4/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.2.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="beac40bcc8a320a896dd15f5109cfcaea5e1e0e3">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-24.2.0_fed60942dccd4df2abffaa190a275929f7bd9c18/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="fcc945a86ebcbf527429acb8216ec7dae2c06417">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-24.2.0_adec0a32015c1ea42f8e040e96d0bdb7c512a966/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.2.2/3c8f6018eaa72d43b261181e801e6f8676c16ef6/jackson-databind-2.2.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="3c8f6018eaa72d43b261181e801e6f8676c16ef6">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/jackson-databind-2.2.2_647e5b2bf43fb0495ddccf4cd84206bf394e4fc2/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/.gradle/caches/modules-2/files-2.1/com.firebase/firebase-client-android/2.5.2/f19f10d6276aa0b380e2d05d2ab3272d693a5433/firebase-client-android-2.5.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="f19f10d6276aa0b380e2d05d2ab3272d693a5433">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/firebase-client-android-2.5.2_52f83141aedc2f06dde3d9af6b41dbbd16e4ec68/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="f3ee23ef25c9a8fe3d40246d0b7097267963a612">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-24.2.0_63c358c776351af5b54e35b600482514bc49b6ca/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.0/jars/libs/internal_impl-24.2.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="6e02e34594ebe9c0501ffda8dd48497f81b82977">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.0_c736fb996959d96858f2a873251da2f6ff849f4a/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="6eb9107eb34d2fe2b020662b7fbbec991dcba846">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-24.2.0_f20fbb1d2e724dc1a33f737f6abbc7620132d019/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/.gradle/caches/modules-2/files-2.1/com.firebase/tubesock/0.0.12/6ec0bbd3e161a73ed672284b587fd32309a86d7a/tubesock-0.0.12.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="6ec0bbd3e161a73ed672284b587fd32309a86d7a">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/tubesock-0.0.12_59aa2ef8bf1bcf45647fa080417ec6e82f2d4a60/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics-impl/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="a440fb3fec30ff925e9f601cc458fb6671834cb2">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-impl-9.4.0_ed7a43fdc9ae5d60045ff7aa98b208c70349010d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth-module/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="6bc41d9d6fd12d2ef23c785a259011001f4a1a5b">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-module-9.4.0_a97a929fc2ea105bd37de79f9241d36f2c429c8f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics-impl/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="a440fb3fec30ff925e9f601cc458fb6671834cb2">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-impl-9.4.0_ed7a43fdc9ae5d60045ff7aa98b208c70349010d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/multidex/1.0.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="6666dd525c3da197e7d07f4f23ef5fc7881a697b">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-multidex-1.0.0_7772c2468b3a6eb5679d0799a29618ad7ab3d038/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="ece40b09e9d4d488bc270cf6af5a9af73bc1cfa3">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-gcm-9.4.0_515c4baec06909fbde76747d6f1fdee614c90fc8/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.2.2/d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b/jackson-core-2.2.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/jackson-core-2.2.2_7b9b79accb712beb8b694e54c19e59d87682be7f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/.gradle/caches/modules-2/files-2.1/com.firebase/tubesock/0.0.12/6ec0bbd3e161a73ed672284b587fd32309a86d7a/tubesock-0.0.12.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="6ec0bbd3e161a73ed672284b587fd32309a86d7a">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/tubesock-0.0.12_59aa2ef8bf1bcf45647fa080417ec6e82f2d4a60/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-iid/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="59a16a4a42d25b2c243dd1e8aea87d06895b4a06">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-iid-9.4.0_56447b274397df0a60bbfbcc539da1684815ecc6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-analytics/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="88848548ab56d4fbf3d2d1b0c85bf1ff9b4c1f4b">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-analytics-9.4.0_2f041f4fd586009f67fe7ec3878c8174898d6b2b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.2.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="45f5eda279825ff470e3f51019d374d1ef61e000">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-24.2.0_b107e5e8993b81e98c8e402164c3f58e117669bf/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/src/main/java/ksoap2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="b457441023b25f0b6bae28c76be982a4e49a8666">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/2/ksoap2_97581e21cd0f243587164878cdfc52e5fc66d275/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-iid/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="3b7173b3df4c7029699919414400041f64519e34">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-iid-9.4.0_263e7b857ce8f8d253f2f0b5f67cbdced91847bc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.2.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="c3c638be6e650b165ab9ae144857b64e82787fad">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-24.2.0_278269e022761fd294a4c7d7893caa712597fe0f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/24.2.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="c755536e5a100d9c76c8ea0b72f76c018f7a9de2">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-recyclerview-v7-24.2.0_8d76951feacf628ab53e75c9c79919bdf331e716/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.0/support-annotations-24.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="6be858a75633b1f0a2d24cad740db57775cb6871">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-24.2.0_36fcfa15f62f6176039b0263adec394f5bd874a2/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="fcc945a86ebcbf527429acb8216ec7dae2c06417">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-24.2.0_adec0a32015c1ea42f8e040e96d0bdb7c512a966/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/.gradle/caches/modules-2/files-2.1/com.firebase/firebase-client-jvm/2.5.2/91731b8f5868a3e8a8a773f29b8d06b5c358f5bb/firebase-client-jvm-2.5.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="91731b8f5868a3e8a8a773f29b8d06b5c358f5bb">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/firebase-client-jvm-2.5.2_05b4781539bc22bfef10aa39b8df121c6654e079/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.2.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="c3c638be6e650b165ab9ae144857b64e82787fad">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-24.2.0_278269e022761fd294a4c7d7893caa712597fe0f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="618485fef3ebe12127f7622abbc9b5b39057b5c2">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-basement-9.4.0_4e094759cfe53c15a3c7cc377913d9cf006e8990/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-storage/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="98e97da89d4df8e2f6eba63498d3d46a587372f2">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-storage-9.4.0_a9405ea92692cd7b905b000c5d7268f327f0926d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.0/jars/libs/internal_impl-24.2.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="045be695d968dd707691cc55d23746dbf8cf569a">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.0_4676675d79f3d22c20c6b733a29c4445adeddad4/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="f9b41622897665678d31d78e57a361cb0cebcb0d">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-24.2.0_3862cd4dde00dd81d3e605972e9d5d6a3f287e24/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.2.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="beac40bcc8a320a896dd15f5109cfcaea5e1e0e3">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-24.2.0_fed60942dccd4df2abffaa190a275929f7bd9c18/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-common/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="18b5697c65c4fe5b7381613b8b8ae9ac52e26fa7">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-common-9.4.0_6b34955f783af9b65dd5099a6603cbb940a81eac/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-storage-common/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="c8f5d56f8f8a287c95e02c542baade138a378048">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-storage-common-9.4.0_fdd6f40b72e80dfc74fef7c22b7a9a79051545ae/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="4b630471536351be7c3c3100735c75b7ad2cbd84">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-9.4.0_9a55af6965c03e59209c3f1ba4ce9b5acb4eed3c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="f3ee23ef25c9a8fe3d40246d0b7097267963a612">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-24.2.0_63c358c776351af5b54e35b600482514bc49b6ca/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/multidex/1.0.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="6666dd525c3da197e7d07f4f23ef5fc7881a697b">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-multidex-1.0.0_7772c2468b3a6eb5679d0799a29618ad7ab3d038/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.0/jars/libs/internal_impl-24.2.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="032a4b53def5e2ceedfc2e793b126c0163cfa1dd">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.0_4820151bb9c8821916e141b5e36bf6344d85fe88/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-storage/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="98e97da89d4df8e2f6eba63498d3d46a587372f2">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-storage-9.4.0_a9405ea92692cd7b905b000c5d7268f327f0926d/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="618485fef3ebe12127f7622abbc9b5b39057b5c2">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-basement-9.4.0_4e094759cfe53c15a3c7cc377913d9cf006e8990/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-iid/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="59a16a4a42d25b2c243dd1e8aea87d06895b4a06">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-iid-9.4.0_56447b274397df0a60bbfbcc539da1684815ecc6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/src/main/java/ksoap2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="b457441023b25f0b6bae28c76be982a4e49a8666">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/2/ksoap2_97581e21cd0f243587164878cdfc52e5fc66d275/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-iid/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="3b7173b3df4c7029699919414400041f64519e34">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-iid-9.4.0_263e7b857ce8f8d253f2f0b5f67cbdced91847bc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="3dee4ce5844d39d843d503fb8fe04e51e5bfffac">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-base-9.4.0_5037956346082bf9c9bb1fcde0082e53b287d729/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.2.2/285cb9c666f0f0f3dd8a1be04e1f457eb7b15113/jackson-annotations-2.2.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="285cb9c666f0f0f3dd8a1be04e1f457eb7b15113">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/jackson-annotations-2.2.2_b936a3139507cb7423ed184e7acd7a56fb26960f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="f9b41622897665678d31d78e57a361cb0cebcb0d">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-24.2.0_3862cd4dde00dd81d3e605972e9d5d6a3f287e24/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.2.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="45f5eda279825ff470e3f51019d374d1ef61e000">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-24.2.0_b107e5e8993b81e98c8e402164c3f58e117669bf/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.firebaseui/firebase-ui/0.3.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="5f34a8aeb0eaaa2d69752d56102a8c808117058e">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.firebaseui-firebase-ui-0.3.1_6246bb1cd6c0592fd33b5c8a2fe4a65723588bec/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="4b630471536351be7c3c3100735c75b7ad2cbd84">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-9.4.0_9a55af6965c03e59209c3f1ba4ce9b5acb4eed3c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.2.2/d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b/jackson-core-2.2.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/jackson-core-2.2.2_7b9b79accb712beb8b694e54c19e59d87682be7f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/.gradle/caches/modules-2/files-2.1/com.firebase/firebase-client-jvm/2.5.2/91731b8f5868a3e8a8a773f29b8d06b5c358f5bb/firebase-client-jvm-2.5.2.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="91731b8f5868a3e8a8a773f29b8d06b5c358f5bb">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/firebase-client-jvm-2.5.2_05b4781539bc22bfef10aa39b8df121c6654e079/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-common/9.4.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="18b5697c65c4fe5b7381613b8b8ae9ac52e26fa7">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-common-9.4.0_6b34955f783af9b65dd5099a6603cbb940a81eac/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="0b060160e7daee343f5315b3da91b0ff2d7eed89">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.android.gms-play-services-location-9.4.0_75dd876598db0000c7773fc92aaa990c49509f1e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/design/24.2.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="23eb0d2998a782213b56168cbf23a0688b9111d9">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-design-24.2.0_526d86bcea1310a4ed614e6809aedaeb18be93bc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.0/jars/libs/internal_impl-24.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="032a4b53def5e2ceedfc2e793b126c0163cfa1dd">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.0_4820151bb9c8821916e141b5e36bf6344d85fe88/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-storage-common/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="c8f5d56f8f8a287c95e02c542baade138a378048">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-storage-common-9.4.0_fdd6f40b72e80dfc74fef7c22b7a9a79051545ae/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="c84e216d9bf618464d6b9564d71d9a656433e7c4">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-24.2.0_3b9105f43def9168e8550b9194d0d0834a787f45/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/.gradle/caches/modules-2/files-2.1/com.firebase/firebase-client-android/2.5.2/f19f10d6276aa0b380e2d05d2ab3272d693a5433/firebase-client-android-2.5.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="f19f10d6276aa0b380e2d05d2ab3272d693a5433">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/firebase-client-android-2.5.2_52f83141aedc2f06dde3d9af6b41dbbd16e4ec68/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.google.firebase/firebase-auth-common/9.4.0/jars/classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="34762013d39dbe6c656050589c44e8b61b9a2c5d">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.google.firebase-firebase-auth-common-9.4.0_2d8af235fd440fbf0f97e3c899b860adf5fda89f/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.0/support-annotations-24.2.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.3"
+        sha1="6be858a75633b1f0a2d24cad740db57775cb6871">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-24.2.0_36fcfa15f62f6176039b0263adec394f5bd874a2/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.0/jars/libs/internal_impl-24.2.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="23.0.3"
+        sha1="771b3cc0e597b54da25f8086ba73180c59c6bc71">
+        <dex dex="/Users/adik/AndroidStudioProjects/centras/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.0_b98680061ebbd702363b07486906ee489ac399e8/classes.dex" />
+    </item>
+
+</items>

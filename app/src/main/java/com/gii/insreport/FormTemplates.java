@@ -43,10 +43,32 @@ public class FormTemplates {
                 "Примечания"));
     }
 
+    public static void applyTemplateForDocuments(Element element) {
+        element.elements.add(new Element("documents", Element.ElementType.eText, "DOCUMENT_TYPE",
+                "Тип документа"));
+        element.elements.add(new Element("documents", Element.ElementType.eText, "DOCUMENT_NO",
+                "№ документа"));
+
+        element.elements.add(new Element("documents", Element.ElementType.eDate, "DOCUMENT_DATE",
+                "дата выдачи документа"));
+
+        element.elements.add(new Element("documents", Element.ElementType.ePhoto, "DOCUMENT_ATTACHMENT",
+                "прикрепление изображения"));
+
+    }
+
+    public static void applyTemplateForInsureds(Element element) {
+        element.elements.add(new Element("insured", Element.ElementType.eTextNum, "IIN",
+                "ИИН"));
+        element.elements.add(new Element("insured", Element.ElementType.eText, "FULLNAME",
+                "ФИО"));
+
+    }
+
     public static void applyTemplateForObjects(Element element) {
 
         element.elements.add(new Element("object", Element.ElementType.eBoolean, "IS_CLIENT", "Клиент"));
-        element.elements.add(new Element("photo", Element.ElementType.ePhoto, "PHOTO", "Фото " + element.description, new String[] {
+        element.elements.add(new Element("photo", Element.ElementType.ePhoto, "PHOTO", "Фото " + element.description, new String[]{
                 "Передняя часть ТС",
                 "Задняя часть ТС",
                 "Левая передняя сторона 45 град",
@@ -291,7 +313,7 @@ public class FormTemplates {
                             "Подпись Клиента"));
 
                     form.elements.add(new Element("photo", Element.ElementType.ePhoto, "photoDocuments", "Фото документов",
-                            new String[] {"Уд.личности сторона 1",
+                            new String[]{"Уд.личности сторона 1",
                                     "Уд. личности сторона 2",
                                     "Тех.паспорт сторона 1",
                                     "Тех.паспорт сторона 2",
@@ -299,7 +321,7 @@ public class FormTemplates {
                                     "Акт осмотра"
                             }));
                     form.elements.add(new Element("photo", Element.ElementType.ePhoto, "photoPlace", "Фото места ДТП",
-                            new String[] {
+                            new String[]{
                                     "Общий вид ДТП",
                                     "Общий вид ДТП слева 45 град",
                                     "Общий вид ДТП справа 45 град"
@@ -318,8 +340,8 @@ public class FormTemplates {
                     form.elements.add(new Element("additionalInfo", Element.ElementType.eCombo, "QUESTION_ANSWER",
                             "Ответ на вопрос", "DCT_QUESTION_ANSWER"));
 
-                    form.elements.add(new Element("description", Element.ElementType.eAnima, "PLAN","План ДТП"));
-                    form.elements.add(new Element("description", Element.ElementType.eText, "DESCRIPTION","Описание событий"));
+                    form.elements.add(new Element("description", Element.ElementType.eAnima, "PLAN", "План ДТП"));
+                    form.elements.add(new Element("description", Element.ElementType.eText, "DESCRIPTION", "Описание событий"));
 
                     form.elements.add(new Element("attachments", Element.ElementType.eCombo, "ATTACHMENT_TYPE",
                             "Тип документа", "DCT_ATTACHMENT_TYPE"));
