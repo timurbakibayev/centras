@@ -183,6 +183,7 @@ public class ServerEmuActivity extends AppCompatActivity  {
                 Snackbar.make(view, "Sending " + formId + " to " + whois + "...", Snackbar.LENGTH_LONG)
                         .setAction("Show command", null).show();
                 Firebase sendTo = InsReport.ref.child("forms/incident/"+firebaseUserEmail.id+"/"+formId);
+                Log.e("SERVER REQUEST", sendTo.toString());
                 Map<String,String> input = new HashMap<>();
                 Map<String,String> inputObjClient = new HashMap<>();
                 Map<String,String> inputObj1 = new HashMap<>();

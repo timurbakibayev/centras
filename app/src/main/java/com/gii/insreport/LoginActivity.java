@@ -133,9 +133,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         final LinearLayout loginControl = (LinearLayout) findViewById(R.id.login_control);
 
+        final LinearLayout signInForm =  (LinearLayout) findViewById(R.id.sign_in_form);
+        final LinearLayout suggestion =  (LinearLayout) findViewById(R.id.suggestion);
+
         final Button signOutButton = (Button) findViewById(R.id.sign_out_button);
         if (user != null) {
             loginControl.setVisibility(View.VISIBLE);
+            signInForm.setVisibility(View.GONE);
+            suggestion.setVisibility(View.GONE);
             mEmailView.setVisibility(View.GONE);
             mPasswordView.setVisibility(View.GONE);
             findViewById(R.id.passwordTextInputLayour).setVisibility(View.GONE);
@@ -152,6 +157,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 @Override
                 public void onClick(View view) {
                     loginControl.setVisibility(View.GONE);
+                    signInForm.setVisibility(View.VISIBLE);
+                    suggestion.setVisibility(View.VISIBLE);
                     FirebaseMessaging.getInstance().unsubscribeFromTopic(uId);
                     InsReport.mAuth.signOut();
                     mEmailView.setVisibility(View.VISIBLE);
@@ -661,6 +668,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     savePassword(email, password);
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
                 } else {
                     Log.e(TAG, "onComplete: " + task.getException().getMessage());
