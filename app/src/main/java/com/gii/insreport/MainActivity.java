@@ -37,11 +37,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.gii.insreport.InsReport.INCIDENT_TYPE;
 import static com.gii.insreport.InsReport.user;
 
 public class MainActivity extends AppCompatActivity {
@@ -525,6 +527,7 @@ public class MainActivity extends AppCompatActivity {
             address = form.input.get("EVENT_PLACE");
         } else
             address = "";
+        headerText += "Дата: " + IncidentFormActivity.dateTimeText(new Date()) + "\n";
 
         ((TextView) acceptOrRejectDialog.findViewById(R.id.textHeader)).setText(headerText);
 
