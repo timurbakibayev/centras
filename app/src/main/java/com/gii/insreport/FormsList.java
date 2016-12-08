@@ -77,7 +77,7 @@ public class FormsList extends AppCompatActivity {
             if (formsCollection1.fireBaseCatalog.equals(fireBaseCatalog))
                 formsCollection = formsCollection1;
 
-        setTitle(formsCollection.description);
+        ((TextView)findViewById(R.id.text_header)).setText(formsCollection.description);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +111,8 @@ public class FormsList extends AppCompatActivity {
                 openTheForm(currentFormsCollection.forms.get(position).id);
             }
         });
+
+
     }
 
     private boolean isRuntimePostGingerbread() {
