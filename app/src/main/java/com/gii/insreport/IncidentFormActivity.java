@@ -246,6 +246,7 @@ public class IncidentFormActivity extends AppCompatActivity {
 
 
         ArrayList<String> items = new ArrayList<String>();
+        ArrayList<Boolean> availability = new ArrayList<>();
 
 //        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.card_recycler_view);
 //        recyclerView.setHasFixedSize(true);
@@ -259,13 +260,13 @@ public class IncidentFormActivity extends AppCompatActivity {
             images.add(R.drawable.ic_people_black_24dp);
             images.add(R.drawable.ic_map_black_72dp);
             images.add(R.drawable.ic_add_black_24dp);
-            items.add(getString(R.string.general_info));
-            items.add(getString(R.string.photos_and_documents));
-            items.add(getString(R.string.objects_info));
-            items.add(getString(R.string.participants_info));
-            items.add(getString(R.string.event_description));
-            items.add(getString(R.string.additional_info));
-            ReportType adapter = new ReportType(getApplicationContext(), items, images);
+            items.add(getString(R.string.general_info)); availability.add(true);
+            items.add(getString(R.string.photos_and_documents)); availability.add(true);
+            items.add(getString(R.string.objects_info)); availability.add(true);
+            items.add(getString(R.string.participants_info)); availability.add(true);
+            items.add(getString(R.string.event_description)); availability.add(true);
+            items.add(getString(R.string.additional_info)); availability.add(true);
+            ReportType adapter = new ReportType(getApplicationContext(), items, images, availability);
             ListView list = (ListView) findViewById(R.id.reports);
             list.setAdapter(adapter);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -303,14 +304,14 @@ public class IncidentFormActivity extends AppCompatActivity {
             images.add(R.drawable.ic_map_black_72dp);
             images.add(R.drawable.ic_add_black_24dp);
 
-            items.add(getString(R.string.general_info));
-            items.add(getString(R.string.photos_and_documents));
-            items.add(getString(R.string.objects_info));
-            items.add(getString(R.string.participants_info));
-            items.add(getString(R.string.event_description));
-            items.add(getString(R.string.additional_info));
+            items.add(getString(R.string.general_info)); availability.add(true);
+            items.add(getString(R.string.photos_and_documents)); availability.add(true);
+            items.add(getString(R.string.objects_info)); availability.add(true);
+            items.add(getString(R.string.participants_info)); availability.add(true);
+            items.add(getString(R.string.event_description)); availability.add(true);
+            items.add(getString(R.string.additional_info)); availability.add(true);
 
-            ReportType adapter = new ReportType(getApplicationContext(), items, images);
+            ReportType adapter = new ReportType(getApplicationContext(), items, images, availability);
             ListView list = (ListView) findViewById(R.id.reports);
             list.setAdapter(adapter);
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {

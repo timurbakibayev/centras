@@ -37,13 +37,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.gii.insreport.InsReport.INCIDENT_TYPE;
 import static com.gii.insreport.InsReport.user;
 
 public class MainActivity extends AppCompatActivity {
@@ -349,15 +347,17 @@ public class MainActivity extends AppCompatActivity {
     MainActivity thisActivity = this;
 
     private void addForms() {
-        ArrayList<String> items = new ArrayList<String>();
+        ArrayList<String> items = new ArrayList<>();
+        ArrayList<Boolean> availability = new ArrayList<>();
         ArrayList<Integer> images = new ArrayList<>();
         for(FormsCollection formsCollection : InsReport.mainMenuForms){
             items.add(formsCollection.description);
+            availability.add(true);
         }
-        items.add("Имущество");
-        items.add("Недвижимость");
-        items.add("Грузы");
-        items.add("Эмулятор сервера");
+        items.add("Имущество"); availability.add(false);
+        items.add("Недвижимость"); availability.add(false);
+        items.add("Грузы"); availability.add(false);
+        items.add("Эмулятор сервера"); availability.add(false);
         images.add(R.drawable.ic_assignment_black_24dp);
         images.add(R.drawable.ic_traffic_black_24dp);
         images.add(R.drawable.ic_location_city_black_24dp);
@@ -376,7 +376,7 @@ public class MainActivity extends AppCompatActivity {
 //        recyclerView.setHasFixedSize(true);
 //        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
 //        recyclerView.setLayoutManager(layoutManager);
-        ReportType adapter = new ReportType(getApplicationContext(), items, images);
+        ReportType adapter = new ReportType(getApplicationContext(), items, images, availability);
         ListView list = (ListView) findViewById(R.id.reports);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {

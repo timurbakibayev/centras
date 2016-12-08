@@ -5,7 +5,7 @@
 
     <!-- view background color -->
     <stroke
-        android:width="7px"
+        android:width="2px"
         android:color="@color/colorPrimaryDark" >
     </stroke>
 

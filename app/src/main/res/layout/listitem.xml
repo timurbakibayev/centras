@@ -43,6 +43,7 @@
             tools:text="This is the real life" />
 
         <ImageView
+            android:id="@+id/arrow"
             android:layout_width="48dp"
             android:layout_height="24dp"
             android:maxHeight="24dp"
