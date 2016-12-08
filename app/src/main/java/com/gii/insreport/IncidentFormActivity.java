@@ -641,18 +641,18 @@ public class IncidentFormActivity extends AppCompatActivity {
     }
 
     private void showManyInsured() {
-        if (currentForm.objects.elements.size() == 0 && !readOnly) {
+        if (currentForm.insureds.elements.size() == 0 && !readOnly) {
             //Необходимо добавить как минимум клиента. Дальше объекты будут создаваться вручную.
             Element newObject = new Element("object", Element.ElementType.eInsured,
                     "insureds", "Застрахованные");
             FormTemplates.applyTemplateForInsureds(newObject);
-            currentForm.objects.elements.add(newObject);
+            currentForm.insureds.elements.add(newObject);
             currentForm.saveToCloud();
         }
 
-        final String[] objects = new String[currentForm.objects.elements.size() + 1];
-        for (int i = 0; i < currentForm.objects.elements.size(); i++) {
-            Element element = currentForm.objects.elements.get(i);
+        final String[] insureds = new String[currentForm.insureds.elements.size() + 1];
+        for (int i = 0; i < currentForm.insureds.elements.size(); i++) {
+            Element element = currentForm.insureds.elements.get(i);
             int count = 0;
             for (Element element1 : element.elements) {
                 if (element1.category.equals("insureds")) {
@@ -662,13 +662,13 @@ public class IncidentFormActivity extends AppCompatActivity {
                     }
                 }
             }
-            objects[i] = element.constructObjectInfo() + " (" + count + " застрахованные)";
+            insureds[i] = element.constructInduredsInfo() + " (" + count + " застрахованные)";
         }
-        objects[objects.length - 1] = "Добавить +";
+        insureds[insureds.length - 1] = "Добавить +";
         final IncidentFormActivity incidentFormActivity = this;
         new android.app.AlertDialog.Builder(this)
                 .setTitle("Выберите застрахованного")
-                .setSingleChoiceItems(objects, 0, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(insureds, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
@@ -682,21 +682,21 @@ public class IncidentFormActivity extends AppCompatActivity {
 
                             default:
                                 dialog.dismiss();
-                                if (which == objects.length - 1) {
+                                if (which == insureds.length - 1) {
                                     if (readOnly)
                                         return;
-                                    Element newObject = new Element("object", Element.ElementType.eInsured,
+                                    Element newInsureds = new Element("object", Element.ElementType.eParticipant,
                                             "object" + (which + 1), "Застрахованные " + (which + 1));
-                                    FormTemplates.applyTemplateForDocuments(newObject);
-                                    currentForm.objects.elements.add(newObject);
+                                    FormTemplates.applyTemplateForInsureds(newInsureds);
+                                    currentForm.insureds.elements.add(newInsureds);
                                 }
-                                InsReport.currentElement = currentForm.objects.elements.get(which);
-                                currentElement = currentForm.objects.elements.get(which);
+                                InsReport.currentElement = currentForm.insureds.elements.get(which);
+                                currentElement = currentForm.insureds.elements.get(which);
                                 LinearLayout newLL = new LinearLayout(incidentFormActivity);
                                 newLL.setOrientation(LinearLayout.VERTICAL);
                                 addElementsToLL(newLL, InsReport.currentElement.elements);
-                                linearLayoutForFragment.put("insureds", newLL);
-                                showTheFragment("insureds", InsReport.currentElement.description);
+                                linearLayoutForFragment.put("participant", newLL);
+                                showTheFragment("participant", InsReport.currentElement.description);
                                 break;
                         }
                     }
@@ -711,18 +711,18 @@ public class IncidentFormActivity extends AppCompatActivity {
     }
 
     private void showManyDocuments() {
-        if (currentForm.objects.elements.size() == 0 && !readOnly) {
+        if (currentForm.documents.elements.size() == 0 && !readOnly) {
             //Необходимо добавить как минимум клиента. Дальше объекты будут создаваться вручную.
-            Element newObject = new Element("object", Element.ElementType.eDocuments,
-                    "documents", "Документы");
-            FormTemplates.applyTemplateForDocuments(newObject);
-            currentForm.objects.elements.add(newObject);
+            Element newDocument = new Element("document", Element.ElementType.eParticipant,
+                    "client", "Клиент");
+            FormTemplates.applyTemplateForDocuments(newDocument);
+            currentForm.documents.elements.add(newDocument);
             currentForm.saveToCloud();
         }
 
-        final String[] objects = new String[currentForm.objects.elements.size() + 1];
-        for (int i = 0; i < currentForm.objects.elements.size(); i++) {
-            Element element = currentForm.objects.elements.get(i);
+        final String[] documents = new String[currentForm.documents.elements.size() + 1];
+        for (int i = 0; i < currentForm.documents.elements.size(); i++) {
+            Element element = currentForm.documents.elements.get(i);
             int count = 0;
             for (Element element1 : element.elements) {
                 if (element1.category.equals("documents")) {
@@ -732,13 +732,13 @@ public class IncidentFormActivity extends AppCompatActivity {
                     }
                 }
             }
-            objects[i] = element.constructObjectInfo() + " (" + count + " документы)";
+            documents[i] = element.constructDocumentInfo() + " (" + count + " документы)";
         }
-        objects[objects.length - 1] = "Добавить +";
+        documents[documents.length - 1] = "Добавить +";
         final IncidentFormActivity incidentFormActivity = this;
         new android.app.AlertDialog.Builder(this)
                 .setTitle("Выберите документ")
-                .setSingleChoiceItems(objects, 0, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(documents, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
@@ -752,21 +752,21 @@ public class IncidentFormActivity extends AppCompatActivity {
 
                             default:
                                 dialog.dismiss();
-                                if (which == objects.length - 1) {
+                                if (which == documents.length - 1) {
                                     if (readOnly)
                                         return;
-                                    Element newObject = new Element("object", Element.ElementType.eDocuments,
-                                            "object" + (which + 1), "Документы " + (which + 1));
-                                    FormTemplates.applyTemplateForDocuments(newObject);
-                                    currentForm.objects.elements.add(newObject);
+                                    Element newDocument = new Element("documents", Element.ElementType.eParticipant,
+                                            "documents" + (which + 1), "Документы " + (which + 1));
+                                    FormTemplates.applyTemplateForDocuments(newDocument);
+                                    currentForm.documents.elements.add(newDocument);
                                 }
-                                InsReport.currentElement = currentForm.objects.elements.get(which);
-                                currentElement = currentForm.objects.elements.get(which);
+                                InsReport.currentElement = currentForm.documents.elements.get(which);
+                                currentElement = currentForm.documents.elements.get(which);
                                 LinearLayout newLL = new LinearLayout(incidentFormActivity);
                                 newLL.setOrientation(LinearLayout.VERTICAL);
                                 addElementsToLL(newLL, InsReport.currentElement.elements);
-                                linearLayoutForFragment.put("documents", newLL);
-                                showTheFragment("documents", InsReport.currentElement.description);
+                                linearLayoutForFragment.put("participant", newLL);
+                                showTheFragment("participant", InsReport.currentElement.description);
                                 break;
                         }
                     }

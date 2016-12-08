@@ -286,6 +286,30 @@ public class Element {
         return s;
     }
 
+    @JsonIgnore
+    public String constructDocumentInfo() {
+        String s = this.find("DOCUMENT_NO");
+        if (s.equals(""))
+            s = description;
+        if (!s.equals(""))
+            s += ", ";
+        if (fireBaseFieldName.equals("client"))
+            s = "Клиент: " + s;
+        return s;
+    }
+
+    @JsonIgnore
+    public String constructInduredsInfo() {
+        String s = this.find("IIN");
+        if (s.equals(""))
+            s = description;
+        if (!s.equals(""))
+            s += ", ";
+        if (fireBaseFieldName.equals("client"))
+            s = "Клиент: " + s;
+        return s;
+    }
+
     public String find(String fireBaseFieldName) {
         for (Element element : elements) {
             if (element.fireBaseFieldName.equals(fireBaseFieldName))

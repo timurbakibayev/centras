@@ -173,6 +173,7 @@ public class Form {
 
     public ArrayList<Map<String, String>> inputObjects = new ArrayList<>();
     public ArrayList<Map<String, String>> inputParticipants = new ArrayList<>();
+    public ArrayList<Map<String, String>> inputDocuments = new ArrayList<>();
 
     public Map<String, String> getInput() {
         return input;
@@ -266,6 +267,35 @@ public class Form {
         }
     }
 
+    public void applyInputDocuments() {
+        if (inputDocuments.size() == 0) {
+            Log.w(TAG, "applyInputDocuments: 0 documents");
+            return;
+        }
+        int i = 0;
+        for (Map<String, String> inputDocument : inputDocuments) {
+            Element newDocument;
+            if (i == 0) {
+                newDocument = new Element("document", Element.ElementType.eParticipant,
+                        "client", "Клиент");
+            } else {
+                newDocument = new Element("document", Element.ElementType.eParticipant,
+                        "object" + i, "Участник " + i);
+            }
+            FormTemplates.applyTemplateForDocuments(newDocument);
+            if (i == 0) {
+                for (Element element : newDocument.elements) {
+                    if (element.fireBaseFieldName.equals("IS_CLIENT"))
+                        element.vBoolean = true;
+                }
+            }
+            documents.elements.add(newDocument);
+            Log.w(TAG, "applyInputDocument: input #" + i + ": " + inputDocument);
+            applyInput(inputDocument, newDocument.elements);
+            i++;
+        }
+    }
+
     public void applyInputParticipants() {
         if (inputParticipants.size() == 0) {
             Log.w(TAG, "applyInputParticipants: 0 participants");
@@ -298,6 +328,7 @@ public class Form {
     public int numberOfObjects() {
         return objects.elements.size();
     }
+    public int numberOfDocuments(){return documents.elements.size();}
 
     public int numberOfParticipants() {
         return participants.elements.size();
@@ -305,6 +336,8 @@ public class Form {
 
     public Element objects = new Element();
     public Element participants = new Element();
+    public Element documents = new Element();
+    public Element insureds = new Element();
 
     public Element getParticipants() {
         return participants;
@@ -313,6 +346,7 @@ public class Form {
     public Element getObjects() {
         return objects;
     }
+    public Element getDocuments(){return documents;}
 
     public String getStatus() {
         return status;
