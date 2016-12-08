@@ -143,7 +143,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             suggestion.setVisibility(View.GONE);
             mEmailView.setVisibility(View.GONE);
             mPasswordView.setVisibility(View.GONE);
-            findViewById(R.id.passwordTextInputLayour).setVisibility(View.GONE);
+            findViewById(R.id.passwordTextInputLayout).setVisibility(View.GONE);
             mEmailSignInButton.setVisibility(View.GONE);
             mRegisterButton.setVisibility(View.GONE);
             mResetPasswordButton.setVisibility(View.GONE);
@@ -163,7 +163,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     InsReport.mAuth.signOut();
                     mEmailView.setVisibility(View.VISIBLE);
                     mPasswordView.setVisibility(View.VISIBLE);
-                    findViewById(R.id.passwordTextInputLayour).setVisibility(View.VISIBLE);
+                    findViewById(R.id.passwordTextInputLayout).setVisibility(View.VISIBLE);
                     signOutButton.setEnabled(false);
                     mBlockButton.setEnabled(false);
                     mChangePasswordButton.setEnabled(false);

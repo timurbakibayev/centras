@@ -4,9 +4,10 @@
     android:shape="rectangle">
 
     <!-- view background color -->
-    <solid
+    <stroke
+        android:width="7px"
         android:color="@color/colorPrimaryDark" >
-    </solid>
+    </stroke>
 
     <!-- If you want to add some padding -->
     <!--<padding-->
