@@ -48,7 +48,8 @@
             android:layout_height="24dp"
             android:maxHeight="24dp"
             android:maxWidth="24dp"
-            android:src="@drawable/arrow" />
+            android:tint="@color/colorSecondaryText"
+            android:src="@drawable/ic_chevron_right_black_24dp" />
 
     </LinearLayout>
 

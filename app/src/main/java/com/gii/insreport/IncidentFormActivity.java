@@ -260,12 +260,18 @@ public class IncidentFormActivity extends AppCompatActivity {
             images.add(R.drawable.ic_people_black_24dp);
             images.add(R.drawable.ic_map_black_72dp);
             images.add(R.drawable.ic_add_black_24dp);
-            items.add(getString(R.string.general_info)); availability.add(true);
-            items.add(getString(R.string.photos_and_documents)); availability.add(true);
-            items.add(getString(R.string.objects_info)); availability.add(true);
-            items.add(getString(R.string.participants_info)); availability.add(true);
-            items.add(getString(R.string.event_description)); availability.add(true);
-            items.add(getString(R.string.additional_info)); availability.add(true);
+            items.add(getString(R.string.general_info));
+            availability.add(true);
+            items.add(getString(R.string.photos_and_documents));
+            availability.add(true);
+            items.add(getString(R.string.objects_info));
+            availability.add(true);
+            items.add(getString(R.string.participants_info));
+            availability.add(true);
+            items.add(getString(R.string.event_description));
+            availability.add(true);
+            items.add(getString(R.string.additional_info));
+            availability.add(true);
             ReportType adapter = new ReportType(getApplicationContext(), items, images, availability);
             ListView list = (ListView) findViewById(R.id.reports);
             list.setAdapter(adapter);
@@ -301,15 +307,21 @@ public class IncidentFormActivity extends AppCompatActivity {
             images.add(R.drawable.ic_perm_media_black_24dp);
             images.add(R.drawable.ic_directions_car_black_24dp);
             images.add(R.drawable.ic_people_black_24dp);
-            images.add(R.drawable.ic_map_black_72dp);
-            images.add(R.drawable.ic_add_black_24dp);
+            images.add(R.drawable.ic_camera_alt_black_24dp);
+            images.add(R.drawable.ic_border_color_black_24dp);
 
-            items.add(getString(R.string.general_info)); availability.add(true);
-            items.add(getString(R.string.photos_and_documents)); availability.add(true);
-            items.add(getString(R.string.objects_info)); availability.add(true);
-            items.add(getString(R.string.participants_info)); availability.add(true);
-            items.add(getString(R.string.event_description)); availability.add(true);
-            items.add(getString(R.string.additional_info)); availability.add(true);
+            items.add(getString(R.string.general));
+            availability.add(true);
+            items.add(getString(R.string.documents));
+            availability.add(true);
+            items.add(getString(R.string.object_of_insurance));
+            availability.add(true);
+            items.add(getString(R.string.insured));
+            availability.add(true);
+            items.add(getString(R.string.photo));
+            availability.add(true);
+            items.add(getString(R.string.signature));
+            availability.add(true);
 
             ReportType adapter = new ReportType(getApplicationContext(), items, images, availability);
             ListView list = (ListView) findViewById(R.id.reports);
@@ -475,7 +487,7 @@ public class IncidentFormActivity extends AppCompatActivity {
             ((Button) findViewById(R.id.BButtonGeneral)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showTheFragment("general", "Заявление");
+                    showTheFragment("general", getString(R.string.general));
                 }
             });
             ((Button) findViewById(R.id.BMenuDocuments)).setOnClickListener(new View.OnClickListener() {
@@ -580,7 +592,7 @@ public class IncidentFormActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(Intent.ACTION_VIEW);
 
-                String locationStr = address.replaceAll(" ", "+");
+                String locationStr = address.trim();
 
                 Uri locationUri = Uri.parse("geo:0,0?").buildUpon()
                         .appendQueryParameter("q", locationStr)
@@ -589,7 +601,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     InsReport.logFirebase("Open a map from inside the form: " + currentForm.fireBaseCatalog + " form no. " + currentForm.id + ", Location: " + locationStr);
                     startActivity(intent);
-                    Toast.makeText(thisActivity, locationStr, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(thisActivity, locationStr, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(thisActivity,
                             "Нет карты", Toast.LENGTH_SHORT).show();
@@ -899,7 +911,7 @@ public class IncidentFormActivity extends AppCompatActivity {
             Element element = currentForm.objects.elements.get(i);
             int count = 0;
             for (Element element1 : element.elements) {
-                if (element1.category.equals("photo")) {
+                if (element1.category.equals("object")) {
                     for (Element element2 : element1.elements) {
                         if (!element2.deleted)
                             count++;
@@ -1997,7 +2009,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                         Toast.makeText(IncidentFormActivity.this, "Код уже существует!", Toast.LENGTH_LONG).show();
                         return;
                     }
-                addNewDirectoryItem(dirNameEditText.getText().toString(), codeEditText.getText().toString(),element.directory);
+                addNewDirectoryItem(dirNameEditText.getText().toString(), codeEditText.getText().toString(), element.directory);
                 lookupEditText.setText(dirNameEditText.getText().toString());
                 element.vText = codeEditText.getText().toString();
                 newDirectoryItemDialog.dismiss();

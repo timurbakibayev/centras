@@ -20,7 +20,6 @@
             android:background="@drawable/header_tesla"
             android:minHeight="?attr/actionBarSize"
             android:padding="0dp"
-            android:layoutDirection="rtl"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
 

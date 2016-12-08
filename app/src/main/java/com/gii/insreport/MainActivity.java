@@ -350,14 +350,18 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> items = new ArrayList<>();
         ArrayList<Boolean> availability = new ArrayList<>();
         ArrayList<Integer> images = new ArrayList<>();
-        for(FormsCollection formsCollection : InsReport.mainMenuForms){
+        for (FormsCollection formsCollection : InsReport.mainMenuForms) {
             items.add(formsCollection.description);
             availability.add(true);
         }
-        items.add("Имущество"); availability.add(false);
-        items.add("Недвижимость"); availability.add(false);
-        items.add("Грузы"); availability.add(false);
-        items.add("Эмулятор сервера"); availability.add(false);
+        items.add("Имущество");
+        availability.add(false);
+        items.add("Недвижимость");
+        availability.add(false);
+        items.add("Грузы");
+        availability.add(false);
+        items.add("Эмулятор сервера");
+        availability.add(false);
         images.add(R.drawable.ic_assignment_black_24dp);
         images.add(R.drawable.ic_traffic_black_24dp);
         images.add(R.drawable.ic_location_city_black_24dp);
@@ -730,11 +734,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void askReadyResult(final Form form, Context context, final boolean closeActivity, final Activity activity) {
+
         final Dialog askForResult = new Dialog(context);
         final EditText reasonET = new EditText(context);
         //reasonET.setText(InsReport.sharedPref.getString("reasonToReject", ""));
         askForResult.setCancelable(false);
         TextView captionTV = new TextView(context);
+
         captionTV.setText("Введите результат завершения работы");
         Button positiveButton = new Button(context);
         positiveButton.setText("OK");
@@ -746,7 +752,13 @@ public class MainActivity extends AppCompatActivity {
         formResultLL.setOrientation(LinearLayout.VERTICAL);
         formResultLL.addView(captionTV);
 
-        String reasons[] = new String[]{"Оформлен ДТП", "Урегулирован на месте", "Направлен страховщику виновной стороны"};
+        String reasons[];
+        if (form.fireBaseCatalog.equalsIgnoreCase("preInsurance")) {
+            reasons = new String[]{"Осмотр завершен"};
+        } else {
+            reasons = new String[]{"Оформлен ДТП",
+                    "Урегулирован на месте", "Направлен страховщику виновной стороны"};
+        }
 
         formResultLL.addView(reasonET);
 
