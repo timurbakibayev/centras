@@ -614,6 +614,7 @@ public class IncidentFormActivity extends AppCompatActivity {
             }
         });
 
+        /*
         ((ImageButton)findViewById(R.id.arrive_button)).setColorFilter(currentForm.atTheAddress? Color.GREEN: Color.WHITE);
         findViewById(R.id.arrive_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -647,34 +648,115 @@ public class IncidentFormActivity extends AppCompatActivity {
 
             }
         });
+        */
         findViewById(R.id.ready_adik).setVisibility(readOnly ? View.GONE : View.VISIBLE);
         ((ImageButton) findViewById(R.id.ready_adik)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(thisActivity).setTitle("Форма полностью готова?")
-                        .setPositiveButton("Да", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                currentForm.switchDone(thisActivity, true, thisActivity);
-                                //finish();
-                            }
-                        }).
-                        setNeutralButton("Нет", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        })
-                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialogInterface) {
-                                currentForm.saveToCloud();
-                            }
-                        }).
-                        show();
+                LinearLayout buttonsLL = new LinearLayout(thisActivity);
+                buttonsLL.setOrientation(LinearLayout.VERTICAL);
+                Button buttonArrive = new Button(thisActivity);
+                buttonArrive.setText("НАЧАЛО ОСМОТРА");
+                Button buttonLeave = new Button(thisActivity);
+                buttonLeave.setText("КОНЕЦ ОСМОТРА");
+                buttonArrive.setEnabled(!currentForm.atTheAddress && currentForm.coordinatesDateArrived.equals(""));
+                buttonLeave.setEnabled(currentForm.atTheAddress);
+                Button buttonComplete = new Button(thisActivity);
+                buttonComplete.setText("ЗАВЕРШЕНИЕ РАБОТЫ");
+                TextView captionTV = new TextView(thisActivity);
+                captionTV.setText("Статус осмотра");
+                captionTV.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                TextView captionTV1 = new TextView(thisActivity);
+                captionTV1.setText(" ");
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(150, 150, 150, 150);
+                buttonsLL.setLayoutParams(lp);
+                buttonsLL.addView(captionTV);
+                buttonsLL.addView(captionTV1);
+                buttonsLL.addView(buttonArrive);
+                buttonsLL.addView(buttonLeave);
+                buttonsLL.addView(buttonComplete);
+                final Dialog deviceNameDialog = new Dialog(thisActivity);
+                buttonComplete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        currentForm.switchDone(thisActivity, true, thisActivity);
+                        deviceNameDialog.dismiss();
+                    }
+                });
+                buttonArrive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        switchArrival();
+                        deviceNameDialog.dismiss();
+                    }
+                });
+                buttonLeave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        switchArrival();
+                        deviceNameDialog.dismiss();
+                    }
+                });
+                deviceNameDialog.setContentView(buttonsLL);
+                deviceNameDialog.setTitle("Статус осмотра");
+                deviceNameDialog.show();
 
             }
         });
+    }
+
+    private void switchArrival() {
+        currentForm.atTheAddress = !currentForm.atTheAddress;
+        Log.w(TAG, "Location: " + InsReport.locationTracker.hasPossiblyStaleLocation());
+        if (InsReport.locationTracker.hasPossiblyStaleLocation()) {
+            Location loc = InsReport.locationTracker.getPossiblyStaleLocation();
+            String location = loc.getLatitude() + "," + loc.getLongitude();
+            if (currentForm.atTheAddress)
+                currentForm.coordinatesDateArrived = location;
+            else
+                currentForm.coordinatesDateLeft = location;
+            InsReport.logGPSFirebase(currentForm.phoneNo, location, currentForm.atTheAddress ? "Manual Arrived" : "Manual Left");
+            InsReport.logFirebase(currentForm.atTheAddress ? "Manual Arrived " + location : "Manual Left " + location);
+        } else {
+            InsReport.logFirebase(currentForm.atTheAddress? "Manual Arrived (no location)":"Manual Left (no location)");
+        }
+
+        currentForm.saveToCloud();
+        if (currentForm.atTheAddress) {
+            InsReport.ref.child("forms/" + fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + currentForm.id + "/dateArrived").
+                    setValue(ServerValue.TIMESTAMP);
+            Toast.makeText(IncidentFormActivity.this, "Зафиксировано прибытие на место ДТП", Toast.LENGTH_LONG).show();
+        } else {
+            InsReport.ref.child("forms/" + fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + currentForm.id + "/dateLeft").
+                    setValue(ServerValue.TIMESTAMP);
+            Toast.makeText(IncidentFormActivity.this, "Зафиксирован отъезд с места ДТП", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void makeFormReady() {
+        new AlertDialog.Builder(thisActivity).setTitle("Форма полностью готова?")
+                .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        currentForm.switchDone(thisActivity, true, thisActivity);
+                        //finish();
+                    }
+                }).
+                setNeutralButton("Нет", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        currentForm.saveToCloud();
+                    }
+                }).
+                show();
     }
 
     private void showManyInsured() {
