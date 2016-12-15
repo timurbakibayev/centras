@@ -630,17 +630,20 @@ public class IncidentFormActivity extends AppCompatActivity {
                     InsReport.logGPSFirebase(currentForm.phoneNo, location, currentForm.atTheAddress ? "Manual Arrived" : "Manual Left");
                     InsReport.logFirebase(currentForm.atTheAddress ? "Manual Arrived " + location : "Manual Left " + location);
                 } else {
-                    InsReport.logFirebase(currentForm.atTheAddress?"Manual Arrived (no location)":"Manual Left (no location)");
+                    InsReport.logFirebase(currentForm.atTheAddress? "Manual Arrived (no location)":"Manual Left (no location)");
                 }
 
                 ((ImageButton)view).setColorFilter(currentForm.atTheAddress? Color.GREEN: Color.WHITE);
                 currentForm.saveToCloud();
-                if (currentForm.atTheAddress)
+                if (currentForm.atTheAddress) {
                     InsReport.ref.child("forms/" + fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + currentForm.id + "/dateArrived").
                             setValue(ServerValue.TIMESTAMP);
-                else
+                    Toast.makeText(IncidentFormActivity.this, "Зафиксировано прибытие на место ДТП", Toast.LENGTH_LONG).show();
+                } else {
                     InsReport.ref.child("forms/" + fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + currentForm.id + "/dateLeft").
                             setValue(ServerValue.TIMESTAMP);
+                    Toast.makeText(IncidentFormActivity.this, "Зафиксирован отъезд с места ДТП", Toast.LENGTH_LONG).show();
+                }
 
             }
         });
