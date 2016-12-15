@@ -2,6 +2,7 @@ package com.gii.insreport;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.Log;
 
 /**
  * Created by Timur_hnimdvi on 15-Dec-16.
@@ -79,7 +80,7 @@ public class FallbackLocationTracker  implements LocationTracker, LocationTracke
 
     public void onUpdate(Location oldLoc, long oldTime, Location newLoc, long newTime) {
         boolean update = false;
-
+        Log.w("FallbackLocationTracker", "onUpdate: " + newLoc.getLongitude() + "," + newLoc.getLatitude());
         //We should update only if there is no last location, the provider is the same, or the provider is more accurate, or the old location is stale
         if(lastLoc == null){
             update = true;

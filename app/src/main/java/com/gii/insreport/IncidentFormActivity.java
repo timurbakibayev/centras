@@ -627,6 +627,10 @@ public class IncidentFormActivity extends AppCompatActivity {
                         currentForm.coordinatesDateArrived = location;
                     else
                         currentForm.coordinatesDateLeft = location;
+                    InsReport.logGPSFirebase(currentForm.phoneNo, location, currentForm.atTheAddress ? "Manual Arrived" : "Manual Left");
+                    InsReport.logFirebase(currentForm.atTheAddress ? "Manual Arrived " + location : "Manual Left " + location);
+                } else {
+                    InsReport.logFirebase(currentForm.atTheAddress?"Manual Arrived (no location)":"Manual Left (no location)");
                 }
 
                 ((ImageButton)view).setColorFilter(currentForm.atTheAddress? Color.GREEN: Color.WHITE);
@@ -637,6 +641,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                 else
                     InsReport.ref.child("forms/" + fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + currentForm.id + "/dateLeft").
                             setValue(ServerValue.TIMESTAMP);
+
             }
         });
         findViewById(R.id.ready_adik).setVisibility(readOnly ? View.GONE : View.VISIBLE);

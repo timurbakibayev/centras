@@ -96,6 +96,7 @@ public class ProviderLocationTracker implements LocationListener, LocationTracke
     }
 
     public boolean hasPossiblyStaleLocation(){
+        Log.w(TAG, "hasPossiblyStaleLocation: service is running: " + isRunning);
         if(lastLocation != null){
             return true;
         }
