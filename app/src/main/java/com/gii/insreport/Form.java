@@ -30,10 +30,31 @@ public class Form {
 
     public String fireBaseCatalog = "";
     public Date dateCreated = new Date();
-    public Date dateArrived = new Date();
+    public Date dateArrived = null;
+    public Date dateLeft = null;
+    public String coordinatesDateArrived = "";
+    public String coordinatesDateLeft = "";
     public long dateCreatedNeg = 000000000000;
     public Date dateModified = new Date();
     public Date dateAccepted = null;
+
+    public boolean atTheAddress = false;
+
+    public boolean isAtTheAddress() {
+        return atTheAddress;
+    }
+
+    public String getCoordinatesDateArrived() {
+        return coordinatesDateArrived;
+    }
+
+    public String getCoordinatesDateLeft() {
+        return coordinatesDateLeft;
+    }
+
+    public Date getDateLeft() {
+        return dateLeft;
+    }
 
     @JsonIgnore
     public ArrayList<String> descriptionFields = new ArrayList<>();

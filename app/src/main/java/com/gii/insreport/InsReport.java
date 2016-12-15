@@ -48,6 +48,8 @@ public class InsReport extends Application {
 
     //public final static String forceUserID = "5K0dJbLCxzPrz9ijuXuJPqiu18u1";
 
+    public static FallbackLocationTracker locationTracker;
+
     public static Firebase ref;
     public static FirebaseAuth mAuth;
     public static FirebaseStorage storage;
@@ -98,6 +100,7 @@ public class InsReport extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        locationTracker = new FallbackLocationTracker(this);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         prepareBeep();
 

@@ -36,48 +36,67 @@
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:text="test" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:orientation="vertical">
+                    <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
-
-                    <ImageButton
-                        android:id="@+id/call_center_adik"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="wrap_content"
+                        <ImageButton
+                            android:id="@+id/call_center_adik"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layoutDirection="rtl"
+                            android:src="@drawable/call_center_worker"
+                            android:tint="@android:color/white" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layoutDirection="rtl"
-                        android:src="@drawable/call_center_worker"
-                        android:tint="@android:color/white" />
+                        android:orientation="horizontal">
 
-                    <ImageButton
-                        android:id="@+id/call_adik"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layoutDirection="rtl"
-                        android:src="@drawable/ic_call_black_24dp"
-                        android:tint="@android:color/white" />
 
-                    <ImageButton
-                        android:id="@+id/map_adik"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layoutDirection="rtl"
-                        android:src="@drawable/ic_pin_drop_black_24dp"
-                        android:tint="@android:color/white" />
 
-                    <ImageButton
-                        android:id="@+id/ready_adik"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layoutDirection="rtl"
-                        android:src="@drawable/ic_done_black_24dp"
-                        android:tint="@android:color/white" />
+                        <ImageButton
+                            android:id="@+id/call_adik"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layoutDirection="rtl"
+                            android:src="@drawable/ic_call_black_24dp"
+                            android:tint="@android:color/white" />
+
+                        <ImageButton
+                            android:id="@+id/map_adik"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layoutDirection="rtl"
+                            android:src="@drawable/ic_pin_drop_black_24dp"
+                            android:tint="@android:color/white" />
+
+                        <ImageButton
+                            android:id="@+id/ready_adik"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layoutDirection="rtl"
+                            android:src="@drawable/ic_done_black_24dp"
+                            android:tint="@android:color/white" />
+
+                        <ImageButton
+                            android:id="@+id/arrive_button"
+                            style="@style/Widget.AppCompat.Button.Borderless"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layoutDirection="rtl"
+                            android:src="@drawable/ic_beenhere_black_24dp"
+                            android:tint="@android:color/white" />
+                    </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>
 

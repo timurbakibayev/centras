@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -51,6 +52,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.firebase.client.ServerValue;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -373,6 +376,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                 for (Form form : formsCollection.forms) {
                     if (form.id.equals(id_no)) {
                         currentForm = form;
+                        InsReport.currentForm = form;
                         InsReport.savePref("lastFormId", id_no);
                         InsReport.savePref("lastFormCatalog", fireBaseCatalog);
                     }
@@ -610,6 +614,31 @@ public class IncidentFormActivity extends AppCompatActivity {
             }
         });
 
+        ((ImageButton)findViewById(R.id.arrive_button)).setColorFilter(currentForm.atTheAddress? Color.GREEN: Color.WHITE);
+        findViewById(R.id.arrive_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentForm.atTheAddress = !currentForm.atTheAddress;
+                Log.w(TAG, "Location: " + InsReport.locationTracker.hasPossiblyStaleLocation());
+                if (InsReport.locationTracker.hasPossiblyStaleLocation()) {
+                    Location loc = InsReport.locationTracker.getPossiblyStaleLocation();
+                    String location = loc.getLatitude() + "," + loc.getLongitude();
+                    if (currentForm.atTheAddress)
+                        currentForm.coordinatesDateArrived = location;
+                    else
+                        currentForm.coordinatesDateLeft = location;
+                }
+
+                ((ImageButton)view).setColorFilter(currentForm.atTheAddress? Color.GREEN: Color.WHITE);
+                currentForm.saveToCloud();
+                if (currentForm.atTheAddress)
+                    InsReport.ref.child("forms/" + fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + currentForm.id + "/dateArrived").
+                            setValue(ServerValue.TIMESTAMP);
+                else
+                    InsReport.ref.child("forms/" + fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + currentForm.id + "/dateLeft").
+                            setValue(ServerValue.TIMESTAMP);
+            }
+        });
         findViewById(R.id.ready_adik).setVisibility(readOnly ? View.GONE : View.VISIBLE);
         ((ImageButton) findViewById(R.id.ready_adik)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2171,6 +2200,7 @@ public class IncidentFormActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        InsReport.currentForm = null;
         if (!readOnly)
             saveToCloud();
         finish();
@@ -2179,6 +2209,7 @@ public class IncidentFormActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        InsReport.currentForm = null;
         if (currentForm != null && !readOnly) {
             currentForm.validate();
             currentForm.saveToCloud();

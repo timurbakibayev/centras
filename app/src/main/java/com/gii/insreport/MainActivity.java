@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        InsReport.locationTracker.start();
+
         setContentView(R.layout.activity_main);
         text_header = (TextView) findViewById(R.id.text_header);
         text_header2 = (TextView) findViewById(R.id.text_header2);

@@ -118,8 +118,15 @@ public class FormsCollection {
                         if (forms.get(i).id.equals(newForm.id)) {
                             if (!InsReport.currentForm.id.equals(newForm.id)) {
                                 forms.set(i, newForm);
-                            } else
+                            } else {
                                 Log.w(TAG, "onChildChanged: ignoring form, because it's open");
+                                InsReport.currentForm.atTheAddress = newForm.atTheAddress;
+                                InsReport.currentForm.dateArrived = newForm.dateArrived;
+                                InsReport.currentForm.dateLeft = newForm.dateLeft;
+                                InsReport.currentForm.dateModified = newForm.dateModified;
+                                InsReport.currentForm.coordinatesDateArrived = newForm.coordinatesDateArrived;
+                                InsReport.currentForm.coordinatesDateLeft = newForm.coordinatesDateLeft;
+                            }
                         }
                     }
                     InsReport.notifyFormsList();
