@@ -653,31 +653,45 @@ public class IncidentFormActivity extends AppCompatActivity {
         ((ImageButton) findViewById(R.id.ready_adik)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LinearLayout buttonsLL = new LinearLayout(thisActivity);
-                buttonsLL.setOrientation(LinearLayout.VERTICAL);
-                Button buttonArrive = new Button(thisActivity);
-                buttonArrive.setText("НАЧАЛО ОСМОТРА");
-                Button buttonLeave = new Button(thisActivity);
-                buttonLeave.setText("КОНЕЦ ОСМОТРА");
+                LinearLayout  workProgressStatus = (LinearLayout) findViewById(R.id.work_progress_parent);
+                View workView = View.inflate(thisActivity, R.layout.work_progress_dialog, null);
+                final Dialog deviceNameDialog = new Dialog(thisActivity);
+                deviceNameDialog.setContentView(workView);
+                Button buttonArrive = (Button) deviceNameDialog.findViewById(R.id.work_stars);
+                Button buttonComplete = (Button) deviceNameDialog.findViewById(R.id.work_finish);
+                Button buttonLeave = (Button) deviceNameDialog.findViewById(R.id.work_end);
+                //LinearLayout buttonsLL = new LinearLayout(thisActivity);
+                //buttonsLL.setOrientation(LinearLayout.VERTICAL);
+//                Button buttonArrive = (Button) findViewById(R.id.work_stars);
+//                Button buttonComplete = (Button) findViewById(R.id.work_finish);
+//                Button buttonLeave = (Button) findViewById(R.id.work_end);
+
+
+//                Button buttonArrive = new Button(thisActivity);
+//                buttonArrive.setText("НАЧАЛО ОСМОТРА");
+//                Button buttonLeave = new Button(thisActivity);
+//                buttonLeave.setText("КОНЕЦ ОСМОТРА");
                 buttonArrive.setEnabled(!currentForm.atTheAddress && currentForm.coordinatesDateArrived.equals(""));
                 buttonLeave.setEnabled(currentForm.atTheAddress);
-                Button buttonComplete = new Button(thisActivity);
-                buttonComplete.setText("ЗАВЕРШЕНИЕ РАБОТЫ");
-                TextView captionTV = new TextView(thisActivity);
-                captionTV.setText("Статус осмотра");
-                captionTV.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                TextView captionTV1 = new TextView(thisActivity);
-                captionTV1.setText(" ");
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
-                lp.setMargins(150, 150, 150, 150);
-                buttonsLL.setLayoutParams(lp);
-                buttonsLL.addView(captionTV);
-                buttonsLL.addView(captionTV1);
-                buttonsLL.addView(buttonArrive);
-                buttonsLL.addView(buttonLeave);
-                buttonsLL.addView(buttonComplete);
-                final Dialog deviceNameDialog = new Dialog(thisActivity);
+//                Button buttonComplete = new Button(thisActivity);
+//                buttonComplete.setText("ЗАВЕРШЕНИЕ РАБОТЫ");
+//                TextView captionTV = new TextView(thisActivity);
+//                captionTV.setText("Статус осмотра");
+//                captionTV.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+//                TextView captionTV1 = new TextView(thisActivity);
+//                captionTV1.setText(" ");
+//                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+//                        LinearLayout.LayoutParams.WRAP_CONTENT);
+//                lp.setMargins(150, 150, 150, 150);
+//                buttonsLL.setLayoutParams(lp);
+//                buttonsLL.addView(captionTV);
+//                buttonsLL.addView(captionTV1);
+//                buttonsLL.addView(buttonArrive);
+//                buttonsLL.addView(buttonLeave);
+//                buttonsLL.addView(buttonComplete);
+
+
+//                deviceNameDialog.setContentView(workProgressStatus);
                 buttonComplete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -699,7 +713,15 @@ public class IncidentFormActivity extends AppCompatActivity {
                         deviceNameDialog.dismiss();
                     }
                 });
-                deviceNameDialog.setContentView(buttonsLL);
+//                buttonArrive.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        currentForm.switchDone(thisActivity, true, thisActivity);
+//                        deviceNameDialog.dismiss();
+//
+//                    }
+//                });
+
                 deviceNameDialog.setTitle("Статус осмотра");
                 deviceNameDialog.show();
 
