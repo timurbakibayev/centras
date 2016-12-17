@@ -69,12 +69,29 @@
         android:src="@drawable/ic_photo_black_24dp"
         app:layout_anchor="@id/dummy3"
         app:layout_anchorGravity="top|right|end" />
+    <View
+        android:id="@+id/dummy7"
+        android:layout_width="1dp"
+        android:layout_height="16dp"
+        app:layout_anchor="@id/iconFab"
+        app:layout_anchorGravity="top|right|end" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/penFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|top"
+        android:layout_margin="16dp"
+        android:src="@android:drawable/ic_menu_edit"
+        android:tint="@color/white"
+        app:layout_anchor="@id/dummy7"
+        app:layout_anchorGravity="top|right|end" />
 
     <View
         android:id="@+id/dummy2"
         android:layout_width="1dp"
         android:layout_height="16dp"
-        app:layout_anchor="@id/iconFab"
+        app:layout_anchor="@id/penFab"
         app:layout_anchorGravity="top|right|end" />
 
     <android.support.design.widget.FloatingActionButton

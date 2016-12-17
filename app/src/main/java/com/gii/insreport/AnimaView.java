@@ -74,7 +74,7 @@ public class AnimaView extends View {
     }
 
     public enum AppState {
-        idle, chooseIcon, positionIcon, moveIcon, rotateIcon
+        idle, chooseIcon, positionIcon, moveIcon, freeDraw, rotateIcon
     }
 
     public AppState appState = AppState.idle;
@@ -136,7 +136,8 @@ public class AnimaView extends View {
         //canvas.drawLine(40,40,200,200,roadMark);
 
         if (appState == AppState.idle || appState == AppState.positionIcon ||
-                appState == AppState.moveIcon || appState == AppState.rotateIcon) {
+                appState == AppState.moveIcon || appState == AppState.rotateIcon ||
+                appState == AppState.freeDraw) {
             if (currentFrame.strokes.size() > 0) {
                 for (Stroke stroke : currentFrame.strokes) {
                     if (stroke.points.size() > 0) {
@@ -373,7 +374,8 @@ public class AnimaView extends View {
 
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
-        if (appState == AppState.idle || appState == AppState.moveIcon || appState == AppState.rotateIcon)
+        if (appState == AppState.idle || appState == AppState.moveIcon || appState == AppState.rotateIcon ||
+                appState == AppState.freeDraw)
             return onTouchEventIdle(event);
 
         if (appState == AppState.positionIcon)

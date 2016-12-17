@@ -727,11 +727,11 @@ public class IncidentFormActivity extends AppCompatActivity {
         if (currentForm.atTheAddress) {
             InsReport.ref.child("forms/" + fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + currentForm.id + "/dateArrived").
                     setValue(ServerValue.TIMESTAMP);
-            Toast.makeText(IncidentFormActivity.this, "Зафиксировано прибытие на место ДТП", Toast.LENGTH_LONG).show();
+            Toast.makeText(IncidentFormActivity.this, "Начало осмотра", Toast.LENGTH_LONG).show();
         } else {
             InsReport.ref.child("forms/" + fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + currentForm.id + "/dateLeft").
                     setValue(ServerValue.TIMESTAMP);
-            Toast.makeText(IncidentFormActivity.this, "Зафиксирован отъезд с места ДТП", Toast.LENGTH_LONG).show();
+            Toast.makeText(IncidentFormActivity.this, "Конец осмотра", Toast.LENGTH_LONG).show();
         }
     }
 

@@ -1,10 +1,13 @@
 package com.gii.insreport;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -58,6 +61,18 @@ public class AnimaActivity extends AppCompatActivity {
 
         final AnimaActivity thisActivity = this;
 
+        findViewById(R.id.penFab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (animaView.appState != animaView.appState.freeDraw)
+                    animaView.appState = AnimaView.AppState.freeDraw;
+                else
+                    animaView.appState = AnimaView.AppState.idle;
+                refreshFab(thisActivity);
+            }
+        });
+        findViewById(R.id.penFab).setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(thisActivity,R.color.colorPrimary)));
+
         final FloatingActionButton photoFab = (FloatingActionButton) findViewById(R.id.photoFab);
         photoFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,8 +80,10 @@ public class AnimaActivity extends AppCompatActivity {
                 animaView.takeSnapshot();
             }
         });
+        photoFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(thisActivity,R.color.colorPrimary)));
 
         final FloatingActionButton undoFab = (FloatingActionButton) findViewById(R.id.undoFab);
+        undoFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(thisActivity,R.color.colorPrimary)));
         undoFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,6 +94,7 @@ public class AnimaActivity extends AppCompatActivity {
         });
 
         final FloatingActionButton iconFab = (FloatingActionButton) findViewById(R.id.iconFab);
+        iconFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(thisActivity,R.color.colorPrimary)));
         iconFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +104,7 @@ public class AnimaActivity extends AppCompatActivity {
         });
 
         final FloatingActionButton gmapsFab = (FloatingActionButton) findViewById(R.id.googleMaps);
+        gmapsFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(thisActivity,R.color.colorPrimary)));
         gmapsFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,6 +156,17 @@ public class AnimaActivity extends AppCompatActivity {
 
     }
 
+    public void refreshFab(Context context) {
+        View view = findViewById(R.id.penFab);
+
+        animaView.postInvalidate();
+        view.setBackgroundTintList(
+                ColorStateList.valueOf(
+                        animaView.appState != animaView.appState.freeDraw?
+                                ContextCompat.getColor(context,R.color.colorPrimary):
+                                ContextCompat.getColor(context,R.color.colorAccent))
+        );
+    }
 
     public void updateFrameNo() {
         frameNoMenu.setTitle("Кадр " + (frameNo + 1) + "/" + frames.size() + "\n Play");
@@ -180,6 +210,7 @@ public class AnimaActivity extends AppCompatActivity {
             animaView.postInvalidate();
             return true;
         }
+
         if (id == R.id.action_nextFrame) {
             if (frameNo < frames.size() - 1) {
                 frameNo++;
@@ -193,6 +224,7 @@ public class AnimaActivity extends AppCompatActivity {
             animaView.postInvalidate();
             return true;
         }
+
         if (id == R.id.action_frameClick) {
             if (frameNo == frames.size() - 1) {
                 frameNo = 0;

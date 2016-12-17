@@ -114,9 +114,10 @@ public class FormsCollection {
                         InsReport.formToBeAccepted = newForm;
                         newForm.fireBaseCatalog = fireBaseCatalog;
                     }*/
+
                     for (int i = 0; i < forms.size(); i++) {
                         if (forms.get(i).id.equals(newForm.id)) {
-                            if (!InsReport.currentForm.id.equals(newForm.id)) {
+                            if (InsReport.currentForm == null || !InsReport.currentForm.id.equals(newForm.id)) {
                                 forms.set(i, newForm);
                             } else {
                                 Log.w(TAG, "onChildChanged: ignoring form, because it's open");
