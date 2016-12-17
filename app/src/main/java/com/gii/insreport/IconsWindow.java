@@ -164,7 +164,7 @@ public class IconsWindow {
                 newIcon.center = new PointF(- currentFrame.backgroundCenter.x / currentFrame.scale
                         + animaView.canvasWidth / 2 / currentFrame.scale,
                         - currentFrame.backgroundCenter.y / currentFrame.scale
-                        + animaView.canvasHeight / 2 / currentFrame.scale);
+                                + animaView.canvasHeight / 2 / currentFrame.scale);
                 newIcon.left = newIcon.center.x - AnimaView.drawableSize[i].x / 2;
                 newIcon.top = newIcon.center.y - AnimaView.drawableSize[i].y / 2;
                 newIcon.right = newIcon.center.x + AnimaView.drawableSize[i].x / 2;

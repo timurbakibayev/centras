@@ -41,9 +41,10 @@ public class AnimaActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (animaView.appState != AnimaView.AppState.idle)
+        if (animaView.appState != AnimaView.AppState.idle) {
             animaView.appState = AnimaView.AppState.idle;
-        else
+            refreshFab(this);
+        } else
             super.onBackPressed();
         animaView.postInvalidate();
     }
@@ -89,6 +90,7 @@ public class AnimaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 animaView.currentFrame.undo();
                 animaView.appState = AnimaView.AppState.idle;
+                refreshFab(thisActivity);
                 animaView.postInvalidate();
             }
         });
@@ -100,6 +102,7 @@ public class AnimaActivity extends AppCompatActivity {
             public void onClick(View v) {
                 animaView.appState = AnimaView.AppState.chooseIcon;
                 animaView.postInvalidate();
+                refreshFab(thisActivity);
             }
         });
 
@@ -115,7 +118,7 @@ public class AnimaActivity extends AppCompatActivity {
 
         if (animaView == null) {
             animaView = new AnimaView(this);
-
+            refreshFab(thisActivity);
         }
 
         animaView.bindActivity(this);
@@ -197,6 +200,7 @@ public class AnimaActivity extends AppCompatActivity {
 
         if (id == R.id.action_new) {
             newFile();
+            refreshFab(this);
             return true;
         }
 
@@ -208,6 +212,7 @@ public class AnimaActivity extends AppCompatActivity {
                 updateFrameNo();
             }
             animaView.postInvalidate();
+            refreshFab(this);
             return true;
         }
 
@@ -222,6 +227,7 @@ public class AnimaActivity extends AppCompatActivity {
             animaView.appState = AnimaView.AppState.idle;
             updateFrameNo();
             animaView.postInvalidate();
+            refreshFab(this);
             return true;
         }
 
@@ -235,22 +241,12 @@ public class AnimaActivity extends AppCompatActivity {
             play = true;
             animaView.playTo(frameNo);
         }
-
+        refreshFab(this);
         return super.onOptionsItemSelected(item);
     }
 
 
-    public void saveAs() {
-
-    }
-
-    public void load() {
-
-    }
-
     public void newFile() {
-        //currentFilename = "";
-        //frames = new ArrayList<>();
         frames.clear();
         frames.add(new Frame());
         frameNo = 0;

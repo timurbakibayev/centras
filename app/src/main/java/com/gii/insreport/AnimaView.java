@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -54,9 +53,6 @@ public class AnimaView extends View {
     }
 
     public void takeSnapshot() {
-        //TODO: ADD THIS TO FORMS!
-        //TODO: Show the snapshots in Photo!
-
         final Bitmap screenShot = Bitmap.createBitmap(canvasWidth, canvasHeight, Bitmap.Config.ARGB_4444);
         Canvas canvas = new Canvas(screenShot);
         appState = AppState.idle;
@@ -115,9 +111,6 @@ public class AnimaView extends View {
         canvasWidth = canvas.getWidth();
         canvasHeight = canvas.getHeight();
 
-
-
-
         if (animaActivity.backgroundbitmap != null) {
             int bW = animaActivity.backgroundbitmap.getWidth();
             int bH = animaActivity.backgroundbitmap.getHeight();
@@ -138,18 +131,6 @@ public class AnimaView extends View {
         if (appState == AppState.idle || appState == AppState.positionIcon ||
                 appState == AppState.moveIcon || appState == AppState.rotateIcon ||
                 appState == AppState.freeDraw) {
-            if (currentFrame.strokes.size() > 0) {
-                for (Stroke stroke : currentFrame.strokes) {
-                    if (stroke.points.size() > 0) {
-                        path.reset();
-                        path.moveTo(stroke.points.get(0).x, stroke.points.get(0).y);
-                        for (Point point : stroke.points)
-                            path.lineTo(point.x, point.y);
-                        canvas.drawPath(path, gray);
-                    }
-                }
-            }
-
 
             intermediateFrameProperties.scale = currentFrame.scale;
             intermediateFrameProperties.backgroundCenter.set(currentFrame.backgroundCenter.x,
@@ -211,6 +192,33 @@ public class AnimaView extends View {
                                 canvas.restore();
                         }
                     }
+            }
+            if (currentFrame.strokes.size() > 0) {
+                for (Stroke stroke : currentFrame.strokes) {
+                    if (stroke.points.size() > 0) {
+                        path.reset();
+                        path.moveTo(stroke.points.get(0).x * currentFrame.scale + currentFrame.backgroundCenter.x,
+                                stroke.points.get(0).y * currentFrame.scale + currentFrame.backgroundCenter.y);
+                        for (PointF point : stroke.points)
+                            path.lineTo(point.x * currentFrame.scale + currentFrame.backgroundCenter.x,
+                                    point.y * currentFrame.scale + currentFrame.backgroundCenter.y);
+                        gray.setStrokeWidth(currentFrame.scale/10);
+                        if (animaActivity.play) {
+                            for (Stroke _stroke : animaActivity.frames.get(playToFrame).strokes) {
+                                if (_stroke.id.equals(stroke.id)) {
+                                    path.reset();
+                                    path.moveTo((stroke.points.get(0).x + (_stroke.points.get(0).x - stroke.points.get(0).x) / intermediateFrames * playToPercent)   * currentFrame.scale + currentFrame.backgroundCenter.x,
+                                            (stroke.points.get(0).y + (_stroke.points.get(0).y - stroke.points.get(0).y) / intermediateFrames * playToPercent)   * currentFrame.scale + currentFrame.backgroundCenter.y);
+                                    for (int i = 1; i < stroke.points.size(); i++)
+                                        path.lineTo((stroke.points.get(i).x + (_stroke.points.get(i).x - stroke.points.get(i).x) / intermediateFrames * playToPercent)   * currentFrame.scale + currentFrame.backgroundCenter.x,
+                                                (stroke.points.get(i).y + (_stroke.points.get(i).y - stroke.points.get(i).y) / intermediateFrames * playToPercent)   * currentFrame.scale + currentFrame.backgroundCenter.y);
+                                    gray.setStrokeWidth(currentFrame.scale/10);
+                                }
+                            }
+                        }
+                        canvas.drawPath(path, gray);
+                    }
+                }
             }
             if (appState == AppState.moveIcon || appState == AppState.rotateIcon) {
                 canvas.drawRect(0,canvasHeight * 9 / 10, canvasWidth, canvasHeight, green);
@@ -362,7 +370,24 @@ public class AnimaView extends View {
                 copyAhead(movingIcon);
             }
             */
+
+            PointF centerReal = new PointF(- currentFrame.backgroundCenter.x / currentFrame.scale
+                    + canvasWidth / 2 / currentFrame.scale,
+                    - currentFrame.backgroundCenter.y / currentFrame.scale
+                            + canvasHeight / 2 / currentFrame.scale);
+
             currentFrame.scale *= detector.getScaleFactor();
+
+            PointF nowAt = new PointF(
+                    centerReal.x * currentFrame.scale + currentFrame.backgroundCenter.x,
+                    centerReal.y * currentFrame.scale + currentFrame.backgroundCenter.y
+            );
+
+            //move the background:
+            currentFrame.backgroundCenter.set(
+                    (int)(currentFrame.backgroundCenter.x - (nowAt.x - canvasWidth/2)),
+                    (int)(currentFrame.backgroundCenter.y - (nowAt.y - canvasHeight/2))
+            );
 
             return true;
         }
@@ -404,6 +429,11 @@ public class AnimaView extends View {
         Calendar time = Calendar.getInstance();
         //lastTime = Calendar.getInstance();
 
+        PointF pointReal = new PointF((- currentFrame.backgroundCenter.x / currentFrame.scale
+                + event.getX() / currentFrame.scale),
+                (- currentFrame.backgroundCenter.y / currentFrame.scale
+                        + event.getY() / currentFrame.scale));
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 int i = 0;
@@ -411,8 +441,20 @@ public class AnimaView extends View {
                     //rotation zone
                     startedRotationAt = (int)event.getX();
                     appState = AppState.rotateIcon;
-                } else
+                    animaActivity.refreshFab(animaActivity);
+                } else if (appState == AppState.freeDraw) {
+                    currentStroke = new Stroke();
+                    currentFrame.strokes.add(currentStroke);
+                    currentStroke.points.add(pointReal);
+                    Operation moveOperation;
+                    moveOperation = new Operation();
+                    moveOperation.operationType = "new stroke";
+                    currentFrame.operations.add(moveOperation);
+
+                } else {
                     appState = AppState.idle;
+                    animaActivity.refreshFab(animaActivity);
+                }
 
                 if (!(appState == AppState.rotateIcon)) {
                     int minLayer = InsReport.currentElement.vBoolean?2:0;
@@ -496,6 +538,9 @@ public class AnimaView extends View {
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
+                if (appState == AppState.freeDraw) {
+                    currentStroke.points.add(pointReal);
+                }
                 if (appState == AppState.idle) {
                     //currentStroke.points.add(new Point((int) event.getX(), (int) event.getY()));
                     //currentStroke.intervals.add((int) (time.getTimeInMillis() - lastTime.getTimeInMillis()));
@@ -554,7 +599,7 @@ public class AnimaView extends View {
                 if (appState == AppState.moveIcon) {
                     copyAhead(movingIcon);
                 }
-
+                animaActivity.refreshFab(animaActivity);
                 break;
         }
         lastTime = time;

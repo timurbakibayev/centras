@@ -1,6 +1,6 @@
 package com.gii.insreport;
 
-import android.graphics.Point;
+import android.graphics.PointF;
 
 import java.util.ArrayList;
 
@@ -8,10 +8,11 @@ import java.util.ArrayList;
  * Created by Timur on 06-Jul-16.
  */
 public class Stroke {
-    ArrayList<Point> points = new ArrayList<>();
+    public String id = AnimaView.generateNewId();
+    ArrayList<PointF> points = new ArrayList<>();
     ArrayList<Integer> intervals = new ArrayList<>();
 
-    public ArrayList<Point> getPoints() {
+    public ArrayList<PointF> getPoints() {
         return points;
     }
 
