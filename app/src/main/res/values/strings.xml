@@ -28,7 +28,6 @@
     <string name="sign_in">Войти</string>
 
 
-
     <!--PreInsurance-->
     <string name="general">Заявление на проведение осмотра имущества</string>
     <string name="object_of_insurance">Объект страхования</string>
@@ -132,5 +131,9 @@
     <string name="device_alert">Введите название устройства, например \'Samsung s5\' или \'Планшет Арман\'.
         Это необходимо для возможности блокировки устройства при потере.</string>
 
-
+    <!--Work progress-->
+    <string name="work_star">НАЧАЛО ОСМОТРА</string>
+    <string name="work_end">КОНЕЦ ОСМОТРА</string>
+    <string name="work_finish">ЗАВЕРШЕНИЕ РАБОТЫ</string>
+    <string name="work_progress_title">Статус осмотра</string>
 </resources>
