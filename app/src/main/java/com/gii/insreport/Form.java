@@ -154,6 +154,21 @@ public class Form {
 
     }
 
+    public Element element(String fireBaseFieldName) {
+        for (Element element : elements) {
+            if (element.fireBaseFieldName.equals(fireBaseFieldName)) {
+                return element;
+            }
+        }
+        if (input.get(fireBaseFieldName) != null) {
+            Element element = new Element();
+            element.type = Element.ElementType.eText;
+            element.vText = input.get(fireBaseFieldName);
+            return element;
+        }
+        return new Element();
+    }
+
     public void updateDescription() {
         description = id + " ";
         String firebaseFieldClientName = "CLIENT_NAME";

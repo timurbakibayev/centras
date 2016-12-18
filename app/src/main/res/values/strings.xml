@@ -135,5 +135,6 @@
     <string name="work_star">НАЧАЛО ОСМОТРА</string>
     <string name="work_end">КОНЕЦ ОСМОТРА</string>
     <string name="work_finish">ЗАВЕРШЕНИЕ РАБОТЫ</string>
+    <string name="work_export">ЭКСПОРТ В PDF</string>
     <string name="work_progress_title">Статус осмотра</string>
 </resources>

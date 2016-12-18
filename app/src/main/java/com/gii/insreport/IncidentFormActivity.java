@@ -660,38 +660,8 @@ public class IncidentFormActivity extends AppCompatActivity {
                 Button buttonArrive = (Button) deviceNameDialog.findViewById(R.id.work_stars);
                 Button buttonComplete = (Button) deviceNameDialog.findViewById(R.id.work_finish);
                 Button buttonLeave = (Button) deviceNameDialog.findViewById(R.id.work_end);
-                //LinearLayout buttonsLL = new LinearLayout(thisActivity);
-                //buttonsLL.setOrientation(LinearLayout.VERTICAL);
-//                Button buttonArrive = (Button) findViewById(R.id.work_stars);
-//                Button buttonComplete = (Button) findViewById(R.id.work_finish);
-//                Button buttonLeave = (Button) findViewById(R.id.work_end);
-
-
-//                Button buttonArrive = new Button(thisActivity);
-//                buttonArrive.setText("НАЧАЛО ОСМОТРА");
-//                Button buttonLeave = new Button(thisActivity);
-//                buttonLeave.setText("КОНЕЦ ОСМОТРА");
                 buttonArrive.setEnabled(!currentForm.atTheAddress && currentForm.coordinatesDateArrived.equals(""));
                 buttonLeave.setEnabled(currentForm.atTheAddress);
-//                Button buttonComplete = new Button(thisActivity);
-//                buttonComplete.setText("ЗАВЕРШЕНИЕ РАБОТЫ");
-//                TextView captionTV = new TextView(thisActivity);
-//                captionTV.setText("Статус осмотра");
-//                captionTV.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-//                TextView captionTV1 = new TextView(thisActivity);
-//                captionTV1.setText(" ");
-//                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-//                        LinearLayout.LayoutParams.WRAP_CONTENT);
-//                lp.setMargins(150, 150, 150, 150);
-//                buttonsLL.setLayoutParams(lp);
-//                buttonsLL.addView(captionTV);
-//                buttonsLL.addView(captionTV1);
-//                buttonsLL.addView(buttonArrive);
-//                buttonsLL.addView(buttonLeave);
-//                buttonsLL.addView(buttonComplete);
-
-
-//                deviceNameDialog.setContentView(workProgressStatus);
                 buttonComplete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -713,14 +683,21 @@ public class IncidentFormActivity extends AppCompatActivity {
                         deviceNameDialog.dismiss();
                     }
                 });
-//                buttonArrive.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        currentForm.switchDone(thisActivity, true, thisActivity);
-//                        deviceNameDialog.dismiss();
-//
-//                    }
-//                });
+                deviceNameDialog.findViewById(R.id.pdf_button).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Thread thread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                PDFReport pdfReport = new PDFReport(thisActivity, currentForm);
+                                pdfReport.generatePDF();
+                            }
+                        });
+                        thread.start();
+                        Toast.makeText(IncidentFormActivity.this, "Пожалуйста, подождите... ", Toast.LENGTH_SHORT).show();
+                        deviceNameDialog.dismiss();
+                    }
+                });
 
                 deviceNameDialog.setTitle("Статус осмотра");
                 deviceNameDialog.show();

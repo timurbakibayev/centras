@@ -137,7 +137,7 @@ public class Element {
             case eSignature:
                 return ((vDraw.size() == 0)?"":"Подписано");
             case eBoolean:
-                return (vBoolean?description:"");
+                return (vBoolean?"Да":"Нет");
             default:
                 return (vText);
         }
