@@ -50,6 +50,7 @@ public class PDFReport {
         pageInfo = new PdfDocument.PageInfo.Builder
                 (595, 842, 1).create();
         page = document.startPage(pageInfo);
+        canvas = page.getCanvas();
         y = 40;
     }
     public void generatePDF() {
@@ -59,7 +60,7 @@ public class PDFReport {
         }
 
         newPage();
-        draw(page.getCanvas());
+        draw();
         document.finishPage(page);
 
         saveToFile();
@@ -109,7 +110,7 @@ public class PDFReport {
         catch (Exception e) {        }
     }
     int leftBound = 30;
-    private void draw(Canvas canvas) {
+    private void draw() {
         Drawable logoIcon = ContextCompat.getDrawable(context, R.drawable.centras_logo_new);
         for (FirebaseUserEmail firebaseUserEmail : InsReport.firebaseUserEmails) {
             if (firebaseUserEmail.id.equals(InsReport.user.getUid()))
@@ -124,53 +125,54 @@ public class PDFReport {
         black.setStrokeWidth(0.3f);
         black.setStyle(Paint.Style.FILL_AND_STROKE);
         black.setColor(Color.BLACK);
-        print(canvas,"", true, black);
+        print("", true, black);
         logoIcon.setBounds(leftBound,y,leftBound+70,(int)(y + 70 * (392f/306f))); logoIcon.draw(canvas);
-        print(canvas,"Акт осмотра места происшествия", true, black);
-        print(canvas,form.description, true, black);
-        print(canvas,"Дело номер " + form.element("CLAIM_REGID").toString(), true, black);
-        print(canvas,"", false, black);
-        print(canvas,"", false, black);
-        print(canvas,"", false, black);
-        print(canvas,"", false, black);
+        print("Акт осмотра места происшествия", true, black);
+        print(form.description, true, black);
+        print("Дело номер " + form.element("CLAIM_REGID").toString(), true, black);
+        print("", false, black);
+        print("", false, black);
+        print("", false, black);
+        print("", false, black);
 
-        Map<String, String> block = new HashMap<>();
+        Map<String, String> cat = new HashMap<>();
 
         for (Element element : form.elements) {
-            if (block.get(element.category) == null) {
-                block.put(element.category, description(element.category));
+            if (cat.get(element.category) == null) {
+                cat.put(element.category, description(element.category));
             }
         }
 
 
-        print(canvas,new String[]{"Дата Время ДТП","Время вызова",form.element("INSR_TYPE").description,
+        print(new String[]{"Дата Время ДТП","Время вызова",form.element("INSR_TYPE").description,
                 "ФИО Сотрудника"},black);
-        print(canvas,"",false,black);
-        print(canvas,new String[]{
+        print("",false,black);
+        print(new String[]{
                 form.element("EVENT_DATE").toString(),
                 IncidentFormActivity.dateTimeText(form.dateCreated),
                 form.element("INSR_TYPE").toStringDirectory(),
                 InsReport.sharedPref.getString("username","Имя пользователя не выбрано")
         },black);
 
-        print(canvas,"",false,black);
+        print("",false,black);
 
-        print(canvas,"", true, black);
-        print(canvas,"Основная информация", true, black);
-        print(canvas,"", true, black);
+        print("", true, black);
+        print("Основная информация", true, black);
+        print("", true, black);
+
         outputCategory(canvas,form.elements,"general",black);
 
-        outputObjects(canvas,black);
-        outputParticipants(canvas,black);
-        outputOtherPhotos(canvas,black);
+        outputObjects(black);
+        outputParticipants(black);
+        outputOtherPhotos(black);
     }
 
-    private void outputObjects(Canvas canvas, Paint black) {
+    private void outputObjects(Paint black) {
         for (Element element : form.objects.elements) {
             newPage();
-            print(canvas,"Информация по объекту " + element.description,true,black);
-            print(canvas,"",true,black);
-            print(canvas,"",true,black);
+            print("Информация по объекту " + element.description,true,black);
+            print("",true,black);
+            print("",true,black);
             outputCategory(canvas,element.elements,"object",black);
             for (Element element1 : element.elements) {
                 if (element1.type == Element.ElementType.ePlan) {
@@ -178,50 +180,60 @@ public class PDFReport {
                         Element photoElement = new Element();
                         photoElement.description = "Повреждения";
                         photoElement.vText = element1.vText;
-                        boolean s = drawPicture(canvas, photoElement, 2, 0, black);
+                        boolean s = drawPicture(photoElement, 2, 0, black);
+                        Log.w(TAG, "outputObjects: returned from drawPicture, fuf");
                     }
                 }
             }
-            if (y > canvas.getWidth()/2)
+            Log.w(TAG, "outputObjects: 111011");
+            if (y > canvas.getWidth()/2) {
+                Log.w(TAG, "outputObjects: 111011-1");
                 newPage();
-            print(canvas,"Фотографии объекта " + element.description,true,black);
-            print(canvas,"",true,black);
+                Log.w(TAG, "outputObjects: 111011-2");
+            }
+            print("Фотографии объекта " + element.description,true,black);
+            print("",true,black);
             boolean even = false;
             for (Element element1 : element.elements) {
                 if (element1.category.equals("photo")) {
+                    Log.w(TAG, "outputObjects: a picture found");
                     for (Element photoElement : element1.elements) {
-                        if (drawPicture(canvas,photoElement,2,(even?0:1),black))
+                        if (drawPicture(photoElement,2,(even?0:1),black))
                             even = !even;
+                        Log.w(TAG, "outputObjects: picture drawn successfully");
                     }
                 }
             }
         }
+        Log.w(TAG, "outputObjects: exiting...");
     }
 
-    private void outputParticipants(Canvas canvas, Paint black) {
+    Canvas canvas;
+    private void outputParticipants(Paint black) {
         for (Element element : form.participants.elements) {
-            if (y > canvas.getWidth()/2)
+            if (y > canvas.getWidth()/2) {
                 newPage();
-            print(canvas,"",true,black);
-            print(canvas,"",true,black);
-            print(canvas,"Информация по участнику " + element.description,true,black);
-            print(canvas,"",true,black);
-            print(canvas,"",true,black);
+            }
+            print("",true,black);
+            print("",true,black);
+            print("Информация по участнику " + element.description,true,black);
+            print("",true,black);
+            print("",true,black);
             outputCategory(canvas,element.elements,"participant",black);
         }
     }
 
 
-    private void outputOtherPhotos(Canvas canvas, Paint black) {
+    private void outputOtherPhotos(Paint black) {
         for (Element element : form.elements) {
             if (element.category.equals("photo") && element.elements.size() > 0) {
                 newPage();
-                print(canvas, element.description, true, black);
-                print(canvas, "", true, black);
-                print(canvas, "", true, black);
+                print(element.description, true, black);
+                print("", true, black);
+                print("", true, black);
                 boolean even = false;
                 for (Element photoElement : element.elements) {
-                    if (drawPicture(canvas, photoElement, 2, (even ? 0 : 1), black))
+                    if (drawPicture(photoElement, 2, (even ? 0 : 1), black))
                         even = !even;
                 }
             }
@@ -233,7 +245,7 @@ public class PDFReport {
         for (Element element : elements) {
             if (element.category.equals(category)) {
                 if (!element.toStringDirectory().equals("")) {
-                    print(canvas, element, paint);
+                    print(element, paint);
                 }
             }
         }
@@ -249,13 +261,13 @@ public class PDFReport {
         return category;
     }
 
-    private void print(Canvas canvas, String text, boolean centered, Paint paint) {
+    private void print(String text, boolean centered, Paint paint) {
+        Log.w(TAG, "print: " + text);
         int x = leftBound;
 
         if (y > canvas.getHeight() * 0.9) {
             y = 20;
             newPage();
-            canvas = page.getCanvas();
         }
 
         if (centered)
@@ -265,12 +277,11 @@ public class PDFReport {
     }
 
 
-    private void print(Canvas canvas, Element element, Paint paint) {
-
+    private void print(Element element, Paint paint) {
+        Log.w(TAG, "print: " + element.description + " : " + element.toStringDirectory());
         if (y > canvas.getHeight() * 0.9) {
             y = 20;
             newPage();
-            canvas = page.getCanvas();
         }
 
         String text = element.description;
@@ -307,7 +318,7 @@ public class PDFReport {
         y = (int)(Math.max(y1,y2) + paint.getTextSize() * 1.5);
     }
     private String TAG = "PDFReport.java";
-    private boolean drawPicture(final Canvas canvas, final Element element, final int columns, final int column, final Paint paint) {
+    private boolean drawPicture(final Element element, final int columns, final int column, final Paint paint) {
         Log.w(TAG, "drawPicture: " + element.description);
         final AtomicBoolean done = new AtomicBoolean(false);
         final int x = (int)((canvas.getWidth()*0.8) / columns * column) + leftBound;
@@ -321,12 +332,14 @@ public class PDFReport {
                         if (gotData != null) {
                             Log.w(TAG, "onDataChange: got image");
                             try {
+                                Log.w(TAG, "onDataChange: decoding...");
                                 final Bitmap thePicture = CameraAndPictures.decodeBase64(gotData);
                                 //InsReport.bitmapsNeedToBeRecycled.add(thePicture);
+                                Log.w(TAG, "onDataChange: calculating...");
                                 int h = (int)(thePicture.getHeight()/(float)thePicture.getWidth() * (x1 - x - 10));
-
+                                Log.w(TAG, "onDataChange: drawing...");
                                 canvas.drawBitmap(thePicture,null,new Rect(x,y,x1-10,y+h),null);
-
+                                Log.w(TAG, "onDataChange: writing...");
                                 int xk = x;
                                 int y1 = (int)(y + h + paint.getTextSize());
                                 String[] t = element.description.split(" ");
@@ -339,6 +352,7 @@ public class PDFReport {
                                     canvas.drawText(s + " ", xk, y1 + paint.getTextSize()/2, paint);
                                     xk += k;
                                 }
+                                Log.w(TAG, "onDataChange: setting successful!");
                                 successful.set(true);
                                 if (column < columns - 1)
                                     y = y1 + (int)(paint.getTextSize())+ 20;
@@ -361,6 +375,7 @@ public class PDFReport {
                         done.set(true);
                     }
                 });
+        Log.w(TAG, "drawPicture: listener set.");
         while (!done.get()) {
             try {
                 Thread.sleep(100);
@@ -368,10 +383,11 @@ public class PDFReport {
 
             }
         }
+        Log.w(TAG, "drawPicture: listener worked out!");
         return (successful.get());
     }
 
-    private void print(Canvas canvas, String[] texts, Paint paint) {
+    private void print(String[] texts, Paint paint) {
         int i=0;
         int max = 0;
 
