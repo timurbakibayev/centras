@@ -281,7 +281,7 @@ public class InsReport extends Application {
             log.put("Text",logText);
             log.put("Device ID",FirebaseInstanceId.getInstance().getToken());
 
-            ref.child("log/"+ IncidentFormActivity.dateToYYMMDD(d) + "/" + user.getEmail().toString().replaceAll("[^A-Za-z]+", "")).
+            ref.child("log/"+ IncidentFormActivity.dateToYYMMDD(d) + "/" + InsReport.forceUserID()).
                     push().setValue(log);
         }
     }
@@ -298,7 +298,7 @@ public class InsReport extends Application {
             log.put("Text3",logText3);
             log.put("Device ID",FirebaseInstanceId.getInstance().getToken());
 
-            ref.child("error/"+ IncidentFormActivity.dateToYYMMDD(d) + "/" + user.getEmail().toString().replaceAll("[^A-Za-z]+", "")).
+            ref.child("error/"+ IncidentFormActivity.dateToYYMMDD(d) + "/" + InsReport.forceUserID()).
                     push().setValue(log);
         }
     }
@@ -315,7 +315,7 @@ public class InsReport extends Application {
             log.put("Text3",logText3);
             log.put("Device ID",FirebaseInstanceId.getInstance().getToken());
 
-            ref.child("gps/"+ IncidentFormActivity.dateToYYMMDD(d) + "/" + user.getEmail().toString().replaceAll("[^A-Za-z]+", "")).
+            ref.child("gps/"+ IncidentFormActivity.dateToYYMMDD(d) + "/" + InsReport.forceUserID()).
                     push().setValue(log);
         }
     }

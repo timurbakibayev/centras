@@ -160,7 +160,7 @@ public class IncidentFormActivity extends AppCompatActivity {
         String year = "" + cal.get(Calendar.YEAR);
         int monthNo = cal.get(Calendar.MONTH);
         String day = "" + cal.get(Calendar.DAY_OF_MONTH);
-        return (year + "_" + monthNo + "/" + day);
+        return (year + "_" + (monthNo+1) + "/" + day);
     }
 
 

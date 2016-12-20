@@ -549,9 +549,10 @@ public class MainActivity extends AppCompatActivity {
                 scheduleNotification(personName, phoneNo, address, 0);
 
 //                Log.e(TAG, "Sending SMS: " + SMS.send(phoneNo,
-//                        getString(R.string.accept_sms, "Нурбек"))); //phoneNo
-//                SMS.wsdlQuery(phoneNo,
-//                        getString(R.string.accept_sms, "Нурбек"));
+//                        getString(R.string.accept_sms, InsReport.sharedPref.getString("username","")))); //phoneNo
+                Log.w(TAG, "onClick: trying to send sms via wsdl: " + getString(R.string.accept_sms, InsReport.sharedPref.getString("username","")));
+                SMS.wsdlQuery(phoneNo,
+                        getString(R.string.accept_sms, InsReport.sharedPref.getString("username","")));
                 form.formReady = false;
                 if (form.elements.size() == 0) {
                     FormTemplates.applyTemplate(form, form.fireBaseCatalog);
@@ -603,8 +604,8 @@ public class MainActivity extends AppCompatActivity {
         (acceptOrRejectDialog.findViewById(R.id.buttonDelay)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                SMS.wsdlQuery(phoneNo,
-//                        getString(R.string.delay_sms, "Нурбек", 30));
+                SMS.wsdlQuery(phoneNo,
+                        getString(R.string.delay_sms, InsReport.sharedPref.getString("username",""), 30));
                 NotificationManager nMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 nMgr.cancel(form.calculateId());
                 //TODO: change this to 30!
