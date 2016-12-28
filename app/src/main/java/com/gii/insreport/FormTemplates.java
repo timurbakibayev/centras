@@ -91,7 +91,7 @@ public class FormTemplates {
 
         element.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_PRODUCTION",
                 "марка",
-                "DCT_OBJECT_PRODUCTION"));
+                "DCT_BRAND"));
 
         element.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_MODEL",
                 "модель",
