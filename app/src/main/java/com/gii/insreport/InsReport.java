@@ -25,6 +25,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -39,6 +40,9 @@ import java.util.Random;
 public class InsReport extends Application {
 
     private final static String TAG = "InsReport (Application)";
+
+    ArrayList<String> carProducers = new ArrayList<>();
+    ArrayList<String> carModels = new ArrayList<>();
 
     public final static String fireBaseGeneralDirectory = "calimregistration";
     public final static String EXTRA_FIREBASE_CATALOG = "Firebase.Catalog";
@@ -107,6 +111,8 @@ public class InsReport extends Application {
         Firebase.setAndroidContext(this);
         Firebase.getDefaultConfig().setPersistenceEnabled(true);
 
+        loadCars();
+
         if (sharedPref.getString("userID", "").equals("")) {
             userID = generateNewId();
             savePref("userID", userID);
@@ -165,6 +171,32 @@ public class InsReport extends Application {
 
         loadUserBase();
 
+    }
+
+
+    private void loadCars() {
+        InputStream is = this.getResources().openRawResource(R.raw.cars);
+        String jsontext = "";
+        try {
+            byte[] buffer = new byte[is.available()];
+            while (is.read(buffer) != -1) ;
+            jsontext = new String(buffer);
+            Log.w(TAG, "loadCars: file is " + jsontext.length() +" bytes long");
+            for (String s : jsontext.split("\n")) {
+                if (s.split(",").length <2)
+                    carProducers.add(s);
+                else
+                    carModels.add(s);
+            }
+            Log.w(TAG, "loadCars: producers " + carProducers.size());
+            Log.w(TAG, "loadCars: models " + carModels.size());
+            is.close();
+        } catch (Exception e) {
+            Log.w(TAG, "loadCars failed: " + e.getMessage() );
+            e.printStackTrace();
+        } finally {
+
+        }
     }
 
     private void loadUserBase() {
