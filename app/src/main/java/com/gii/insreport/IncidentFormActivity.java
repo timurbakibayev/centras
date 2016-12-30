@@ -1368,6 +1368,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                     element.type == Element.ElementType.eBoolean ||
                             element.type == Element.ElementType.eCombo ||
                             element.type == Element.ElementType.eComboMulti ||
+                            element.type == Element.ElementType.eComboFromFile ||
                             element.type == Element.ElementType.eInteger ||
                             element.type == Element.ElementType.eLookUp ||
                             element.type == Element.ElementType.eRadio ||
@@ -1403,6 +1404,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                     element.type == Element.ElementType.eBoolean ||
                             element.type == Element.ElementType.eCombo ||
                             element.type == Element.ElementType.eComboMulti ||
+                            element.type == Element.ElementType.eComboFromFile ||
                             element.type == Element.ElementType.eInteger ||
                             element.type == Element.ElementType.eLookUp ||
                             element.type == Element.ElementType.eRadio ||
@@ -1900,6 +1902,34 @@ public class IncidentFormActivity extends AppCompatActivity {
                         horizontalLLCombo.addView(comboButton);
                         LL.addView(horizontalLLCombo);
                         break;
+                    case eComboFromFile:
+                        LinearLayout horizontalLLComboFromFile = new LinearLayout(thisActivity);
+                        horizontalLLComboFromFile.setOrientation(LinearLayout.VERTICAL);
+                        horizontalLLComboFromFile.setLayoutParams(new LinearLayoutCompat.LayoutParams(LinearLayoutCompat.LayoutParams.MATCH_PARENT, LinearLayoutCompat.LayoutParams.WRAP_CONTENT, 1));
+
+                        TextView captionTVComboFromFile = new TextView(this);
+                        captionTVComboFromFile.setText(element.description);
+
+                        captionTVComboFromFile.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                        final Button comboFFButton = new Button(this);
+                        element.container = comboFFButton;
+                        comboFFButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                        comboFFButton.setText(element.vText);
+                        comboFFButton.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.boxy_button_spinner, null));
+                        comboFFButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_more_black_24dp, 0);
+
+                        comboFFButton.setOnClickListener(new View.OnClickListener() {
+                                                             @Override
+                                                             public void onClick(View view) {
+                                                                 openLookUpFromFile(comboFFButton, element);
+                                                             }
+                                                         });
+
+                        horizontalLLComboFromFile.addView(captionTVComboFromFile);
+                        horizontalLLComboFromFile.addView(comboFFButton);
+                        LL.addView(horizontalLLComboFromFile);
+                        break;
                     case eComboMulti:
                         TextView captionTVComboMulti = new TextView(this);
                         captionTVComboMulti.setText(element.description);
@@ -2105,6 +2135,76 @@ public class IncidentFormActivity extends AppCompatActivity {
 
         lookUpDialog.show();
     }
+
+    private void openLookUpFromFile(final Button lookupEditText, final Element element) {
+        final Dialog lookUpDialog = new Dialog(this);
+        lookUpDialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        lookUpDialog.setContentView(getLayoutInflater().inflate(R.layout.lookup
+                , null));
+
+        ArrayList<DirectoryItem> directoryItems = new ArrayList<>();
+        if (element.fireBaseFieldName.equals("OBJECT_PRODUCTION")) {
+            for (String carProducer : InsReport.carProducers) {
+                directoryItems.add(new DirectoryItem(carProducer,carProducer));
+            }
+        }
+        if (element.fireBaseFieldName.equals("OBJECT_MODEL")) {
+            String s = "not found";
+            for (Element elementa : currentForm.objects.elements) {
+                Log.w(TAG, "car: looking into some object: " + elementa.description );
+                String s1 = "";
+                boolean thisObject = false;
+                for (Element element1 : elementa.elements) {
+
+                    if (element1 == element)
+                        thisObject = true;
+
+                    if (element1.fireBaseFieldName.equals("OBJECT_PRODUCTION")) {
+                        Log.w(TAG, "element: found in some object: " + element1.vText);
+                        s1 = element1.vText;
+                    }
+                }
+                if (!s1.equals("") && thisObject) {
+                    s = s1;
+                    Log.w(TAG, "openLookUpFromFile: found corect object: " + s);
+                }
+            }
+
+            Log.w(TAG, "openLookUpFromFile: setting filter: " + s);
+            for (String carModel : InsReport.carModels) {
+                String a = carModel.split(",")[0];
+                String b = carModel.split(",")[1];
+                if (a.trim().contains(s.trim())) {
+                    directoryItems.add(new DirectoryItem(b,b));
+                }
+            }
+        }
+
+        ListView listView = (ListView) lookUpDialog.findViewById(R.id.ListView007);
+        final EditText filterEditText = (EditText) lookUpDialog.findViewById(R.id.filterEditText);
+        final KolesaAdapter kolesaAdapter = new KolesaAdapter(this, directoryItems, filterEditText);
+        listView.setAdapter(kolesaAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedString = kolesaAdapter.filteredObjects.get(i).name;
+                lookupEditText.setText(selectedString);
+                element.vText = kolesaAdapter.filteredObjects.get(i).id;
+                lookUpDialog.dismiss();
+            }
+        });
+        lookUpDialog.findViewById(R.id.addToDirectory).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                lookupEditText.setText(filterEditText.getText().toString());
+                element.vText = filterEditText.getText().toString();
+                lookUpDialog.dismiss();
+            }
+        });
+
+        lookUpDialog.show();
+    }
+
 
     private void addNewDirectoryItem(String s, final Button lookupEditText, final Element element) {
         final Dialog newDirectoryItemDialog = new Dialog(this);

@@ -41,8 +41,8 @@ public class InsReport extends Application {
 
     private final static String TAG = "InsReport (Application)";
 
-    ArrayList<String> carProducers = new ArrayList<>();
-    ArrayList<String> carModels = new ArrayList<>();
+    public static ArrayList<String> carProducers = new ArrayList<>();
+    public static ArrayList<String> carModels = new ArrayList<>();
 
     public final static String fireBaseGeneralDirectory = "calimregistration";
     public final static String EXTRA_FIREBASE_CATALOG = "Firebase.Catalog";
@@ -177,6 +177,8 @@ public class InsReport extends Application {
     private void loadCars() {
         InputStream is = this.getResources().openRawResource(R.raw.cars);
         String jsontext = "";
+        carProducers = new ArrayList<>();
+        carModels = new ArrayList<>();
         try {
             byte[] buffer = new byte[is.available()];
             while (is.read(buffer) != -1) ;

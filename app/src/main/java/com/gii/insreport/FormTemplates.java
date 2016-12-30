@@ -89,11 +89,11 @@ public class FormTemplates {
                 "подтип объекта",
                 "DCT_OBJECT_SUB_TYPE"));
 
-        element.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_PRODUCTION",
+        element.elements.add(new Element("object", Element.ElementType.eComboFromFile, "OBJECT_PRODUCTION",
                 "марка",
                 "DCT_BRAND"));
 
-        element.elements.add(new Element("object", Element.ElementType.eCombo, "OBJECT_MODEL",
+        element.elements.add(new Element("object", Element.ElementType.eComboFromFile, "OBJECT_MODEL",
                 "модель",
                 "DCT_OBJECT_MODEL"));
 

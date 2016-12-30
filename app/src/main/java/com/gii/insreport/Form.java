@@ -155,17 +155,22 @@ public class Form {
     }
 
     public Element element(String fireBaseFieldName) {
+        Log.w(TAG, "element: trying to find " + fireBaseFieldName);
         for (Element element : elements) {
             if (element.fireBaseFieldName.equals(fireBaseFieldName)) {
+                Log.w(TAG, "element: found in elements");
                 return element;
             }
         }
+
         if (input.get(fireBaseFieldName) != null) {
             Element element = new Element();
             element.type = Element.ElementType.eText;
             element.vText = input.get(fireBaseFieldName);
+            Log.w(TAG, "element: found in input");
             return element;
         }
+        Log.w(TAG, "element: couldn't find");
         return new Element();
     }
 
