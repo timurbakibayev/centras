@@ -184,6 +184,7 @@ public class Form {
         formIndex.userId = InsReport.forceUserID();
         formIndex.userName = InsReport.sharedPref.getString("username","");
         formIndex.userEmail = InsReport.user.getEmail().toString();
+        formIndex.dateCreated = dateCreated;
         return formIndex;
     }
 
