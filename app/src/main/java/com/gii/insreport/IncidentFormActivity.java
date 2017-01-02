@@ -371,14 +371,18 @@ public class IncidentFormActivity extends AppCompatActivity {
 
         currentForm = null;
 
-        for (FormsCollection formsCollection : InsReport.mainMenuForms) {
-            if (formsCollection.fireBaseCatalog.equals(fireBaseCatalog)) {
-                for (Form form : formsCollection.forms) {
-                    if (form.id.equals(id_no)) {
-                        currentForm = form;
-                        InsReport.currentForm = form;
-                        InsReport.savePref("lastFormId", id_no);
-                        InsReport.savePref("lastFormCatalog", fireBaseCatalog);
+        if (InsReport.currentForm != null && InsReport.currentForm.id.equals(id_no))
+            currentForm = InsReport.currentForm;
+        else {
+            for (FormsCollection formsCollection : InsReport.mainMenuForms) {
+                if (formsCollection.fireBaseCatalog.equals(fireBaseCatalog)) {
+                    for (Form form : formsCollection.forms) {
+                        if (form.id.equals(id_no)) {
+                            currentForm = form;
+                            InsReport.currentForm = form;
+                            InsReport.savePref("lastFormId", id_no);
+                            InsReport.savePref("lastFormCatalog", fireBaseCatalog);
+                        }
                     }
                 }
             }

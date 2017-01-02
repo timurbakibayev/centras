@@ -211,7 +211,7 @@ public class InsReport extends Application {
                     firebaseUserEmails.add(newUser);
                     //Log.e(TAG, "onDataChange: found user " + newUser.email);
                 }
-                FormsCollection.formIndices.clear();
+                //FormsCollection.formIndices.clear();
                 for (FirebaseUserEmail firebaseUserEmail : firebaseUserEmails) {
                     FormsCollection.addIndexListener(firebaseUserEmail.id);
                 }

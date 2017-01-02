@@ -112,6 +112,14 @@ public class FormsList extends AppCompatActivity {
             }
         });
 
+        final FormsList context = this;
+        findViewById(R.id.search_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent searchIntent = new Intent(context,SearchActivity.class);
+                startActivity(searchIntent);
+            }
+        });
 
     }
 
