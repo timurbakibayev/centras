@@ -144,6 +144,8 @@ public class Form {
         if (!fireBaseCatalog.equals("")) {
             ref.child("forms/" + fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + id).
                     setValue(this);
+            ref.child("index/" + fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + id).
+                    setValue(index());
             //TODO: ONLY IF IT REALLY WAS MODIFIED!
             ref.child("forms/" + fireBaseCatalog + "/" + InsReport.forceUserID() + "/" + id + "/dateModified").
                     setValue(ServerValue.TIMESTAMP);
@@ -152,6 +154,37 @@ public class Form {
             Log.e(TAG, "NOT saveToCloud: " + id);
         //now save raw data (ungroup and save):
 
+    }
+
+    private FormIndex index() {
+        String s="";
+        for (Element element : elements) {
+            if (!element.toString().equals(""))
+                s+=element.toString()+";";
+            if (element.type == Element.ElementType.eGroup)
+                for (Element element1 : element.elements)
+                    if (!element1.toString().equals(""))
+                        s+=element1.toString()+";";
+        }
+        for (Element element : objects.elements) {
+            s+=element.toString() + "obj#"+element.description+";";
+            for (Element element1 : element.elements)
+                if (!element1.toString().equals(""))
+                    s+=element1.toString()+";";
+        }
+        for (Element element : participants.elements) {
+            s+=element.toString() + "par#"+element.description+";";
+            for (Element element1 : element.elements)
+                if (!element1.toString().equals(""))
+                    s+=element1.toString()+";";
+        }
+        FormIndex formIndex = new FormIndex();
+        formIndex.content = s;
+        formIndex.formId = id;
+        formIndex.userId = InsReport.forceUserID();
+        formIndex.userName = InsReport.sharedPref.getString("username","");
+        formIndex.userEmail = InsReport.user.getEmail().toString();
+        return formIndex;
     }
 
     public Element element(String fireBaseFieldName) {

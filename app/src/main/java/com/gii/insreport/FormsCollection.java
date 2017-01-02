@@ -28,6 +28,7 @@ public class FormsCollection {
     public boolean loadComplete = false;
     public boolean dataChangeListenerAdded = false;
     public ArrayList<Form> forms = new ArrayList<>();
+    public ArrayList<FormIndex> formIndices = new ArrayList<>();
 
     public String getFireBaseCatalog() {
         return fireBaseCatalog;
@@ -41,6 +42,162 @@ public class FormsCollection {
         return forms;
     }
 
+    public void addIndexListener(String userId) {
+        Query queryRef = InsReport.ref.child("index/" + fireBaseCatalog + "/" + userId);
+        queryRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot postSnapshot, String s7) {
+                try {
+                    Form newForm = postSnapshot.getValue(Form.class);
+                    newForm.id = postSnapshot.getKey();
+                    newForm.fireBaseCatalog = fireBaseCatalog;
+                    Log.e(TAG, "onChildAdded: processing new item..." + newForm.id);
+                    //newForm.validate();
+                    boolean exists = false;
+                    for (int i = 0; i < forms.size(); i++) {
+                        if (forms.get(i).id.equals(newForm.id)) {
+                            exists = true;
+                            Log.e(TAG, "onChildAdded: found the corresponding form id");
+                        }
+                    }
+
+                    if (!exists) {
+                        if (newForm.elements.size() == 0) {
+                            InsReport.formToBeAccepted = newForm;
+                            newForm.fireBaseCatalog = fireBaseCatalog;
+                        }
+                        forms.add(newForm);
+                    }
+                    Log.e(TAG, "onDataChange: Sorting...");
+                    Collections.sort(forms, new Comparator<Form>() {
+                        @Override
+                        public int compare(Form lhs, Form rhs) {
+                            return (!lhs.dateCreated.after(rhs.dateCreated) ? 1 : -1);
+                        }
+                    });
+                    InsReport.notifyFormsList();
+                } catch (Exception e) {
+                    Log.e(TAG, "onDataChange: PROBLEMS CASTING FROM DB!!! : " + postSnapshot.getKey() + ", " + e.getMessage());
+                    e.printStackTrace();
+                    InsReport.logFirebase("ERROR FORM: " + "forms/" + fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + postSnapshot.getKey());
+                    Writer writer = new StringWriter();
+                    PrintWriter printWriter = new PrintWriter(writer);
+                    e.printStackTrace(printWriter);
+                    String s = writer.toString();
+                    String s1 = "";
+                    if (s.indexOf("InvalidFormatException") > 0) {
+                        int a = s.indexOf("InvalidFormatException");
+                        s = s.substring(a,a+500);
+                        if (s.indexOf("chain:") > 0)
+                            s1 = s.substring(s.indexOf("chain:"),s.indexOf("chain:") + 100);
+                        InsReport.logErrorFirebase("FORM NO." + postSnapshot.getKey(), s, s1);
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot postSnapshot, String s7) {
+                try {
+                    Form newForm = postSnapshot.getValue(Form.class);
+                    newForm.id = postSnapshot.getKey();
+                    newForm.fireBaseCatalog = fireBaseCatalog;
+                    Log.e(TAG, "onChildChanged: processing existing item..." + newForm.id + ", status " + newForm.status);
+                    //newForm.validate();
+                    /*
+                    if (newForm.elements.size() == 0) {
+                        InsReport.formToBeAccepted = newForm;
+                        newForm.fireBaseCatalog = fireBaseCatalog;
+                    }*/
+
+                    for (int i = 0; i < forms.size(); i++) {
+                        if (forms.get(i).id.equals(newForm.id)) {
+                            if (InsReport.currentForm == null || !InsReport.currentForm.id.equals(newForm.id)) {
+                                forms.set(i, newForm);
+                            } else {
+                                Log.w(TAG, "onChildChanged: ignoring form, because it's open");
+                                InsReport.currentForm.atTheAddress = newForm.atTheAddress;
+                                InsReport.currentForm.dateArrived = newForm.dateArrived;
+                                InsReport.currentForm.dateLeft = newForm.dateLeft;
+                                InsReport.currentForm.dateModified = newForm.dateModified;
+                                InsReport.currentForm.coordinatesDateArrived = newForm.coordinatesDateArrived;
+                                InsReport.currentForm.coordinatesDateLeft = newForm.coordinatesDateLeft;
+                            }
+                        }
+                    }
+                    InsReport.notifyFormsList();
+                } catch (Exception e) {
+                    Log.e(TAG, "onDataChange: PROBLEMS CASTING FROM DB!!! : " + postSnapshot.getKey() + ", " + e.getMessage());
+                    e.printStackTrace();
+                    InsReport.logFirebase("ERROR FORM: " + "forms/" + fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + postSnapshot.getKey());
+                    Writer writer = new StringWriter();
+                    PrintWriter printWriter = new PrintWriter(writer);
+                    e.printStackTrace(printWriter);
+                    String s = writer.toString();
+                    String s1 = "";
+                    if (s.indexOf("InvalidFormatException") > 0) {
+                        int a = s.indexOf("InvalidFormatException");
+                        s = s.substring(a,a+500);
+                        if (s.indexOf("chain:") > 0)
+                            s1 = s.substring(s.indexOf("chain:"),s.indexOf("chain:") + 100);
+                        InsReport.logErrorFirebase("FORM NO." + postSnapshot.getKey(), s, s1);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot postSnapshot) {
+                try {
+                    Form newForm = postSnapshot.getValue(Form.class);
+                    newForm.id = postSnapshot.getKey();
+                    newForm.fireBaseCatalog = fireBaseCatalog;
+                    Log.e(TAG, "onChildRemoved: removing existing item..." + newForm.id + ", status " + newForm.status);
+                    //newForm.validate();
+                    /*
+                    if (newForm.elements.size() == 0) {
+                        InsReport.formToBeAccepted = newForm;
+                        newForm.fireBaseCatalog = fireBaseCatalog;
+                    }*/
+                    for (int i = 0; i < forms.size(); i++) {
+                        if (forms.get(i).id.equals(newForm.id)) {
+                            Log.w(TAG, "onChildRemoved: removing form, because it's open");
+                            forms.get(i).removed = true;
+                            forms.remove(i);
+                            break;
+                        }
+                    }
+                    InsReport.notifyFormsList();
+                } catch (Exception e) {
+                    Log.e(TAG, "onDataChange: PROBLEMS CASTING FROM DB!!! : " + postSnapshot.getKey() + ", " + e.getMessage());
+                    e.printStackTrace();
+                    InsReport.logFirebase("ERROR FORM: " + "forms/" + fireBaseCatalog + "/" + InsReport.user.getUid() + "/" + postSnapshot.getKey());
+                    Writer writer = new StringWriter();
+                    PrintWriter printWriter = new PrintWriter(writer);
+                    e.printStackTrace(printWriter);
+                    String s = writer.toString();
+                    String s1 = "";
+                    if (s.indexOf("InvalidFormatException") > 0) {
+                        int a = s.indexOf("InvalidFormatException");
+                        s = s.substring(a,a+500);
+                        if (s.indexOf("chain:") > 0)
+                            s1 = s.substring(s.indexOf("chain:"),s.indexOf("chain:") + 100);
+                        InsReport.logErrorFirebase("FORM NO." + postSnapshot.getKey(), s, s1);
+                    }
+                }
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+    }
 
     public void addDataChangeListener() {
         InsReport.logFirebase("Retrieving data from: " + "forms/" + fireBaseCatalog + "/" + InsReport.user.getUid());
