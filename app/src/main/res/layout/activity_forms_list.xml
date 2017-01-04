@@ -26,20 +26,27 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <ImageButton
                     android:id="@+id/search_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_menu_search"/>
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@android:color/transparent"
+                    android:scaleX="-1"
+                    android:src="@android:drawable/ic_menu_search"
+                    android:tint="@android:color/white" />
+
                 <TextView
                     android:id="@+id/text_header"
                     style="?android:textAppearanceLarge"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:text="test"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:text="test" />
+                    android:textColor="@color/white" />
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
@@ -49,11 +56,11 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
-        android:tint="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_input_add" />
+        android:src="@android:drawable/ic_input_add"
+        android:tint="@color/white" />
 
 </android.support.design.widget.CoordinatorLayout>

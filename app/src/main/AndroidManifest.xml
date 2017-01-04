@@ -120,7 +120,10 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".SearchActivity"
+            android:theme="@style/AppTheme.NoTitle">
+
+        </activity>
     </application>
 
 </manifest>
