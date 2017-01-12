@@ -345,127 +345,127 @@ public class MainActivity extends AppCompatActivity {
 
 
     ArrayList<Button> formButtons = new ArrayList<>();
-    //    Button loginButton = null;
+    Button loginButton = null;
     MainActivity thisActivity = this;
 
     private void addForms() {
-        ArrayList<String> items = new ArrayList<>();
-        ArrayList<Boolean> availability = new ArrayList<>();
-        ArrayList<Integer> images = new ArrayList<>();
-        for (FormsCollection formsCollection : InsReport.mainMenuForms) {
-            items.add(formsCollection.description);
-            availability.add(true);
-        }
-        items.add("Имущество");
-        availability.add(false);
-        items.add("Недвижимость");
-        availability.add(false);
-        items.add("Грузы");
-        availability.add(false);
-        items.add("Эмулятор сервера");
-        availability.add(false);
-        images.add(R.drawable.ic_assignment_black_24dp);
-        images.add(R.drawable.ic_traffic_black_24dp);
-        images.add(R.drawable.ic_location_city_black_24dp);
-        images.add(R.drawable.ic_account_balance_black_24dp);
-        images.add(R.drawable.ic_local_shipping_black_24dp);
-        images.add(R.drawable.ic_add_black_24dp);
-
-
-//        items.add(getString(R.string.general_info));
-//        items.add(getString(R.string.photos_and_documents));
-//        items.add(getString(R.string.objects_info));
-//        items.add(getString(R.string.participants_info));
-//        items.add(getString(R.string.event_description));
-//        items.add(getString(R.string.additional_info));
-//        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.card_recycler_view);
-//        recyclerView.setHasFixedSize(true);
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-//        recyclerView.setLayoutManager(layoutManager);
-        ReportType adapter = new ReportType(getApplicationContext(), items, images, availability);
-        ListView list = (ListView) findViewById(R.id.reports);
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(thisActivity, FormsList.class);
-                String message = "";
-                switch (i) {
-                    case 0:
-                        message = InsReport.mainMenuForms.get(0).fireBaseCatalog;
-                        intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, message);
-                        InsReport.logFirebase("Opening " + InsReport.mainMenuForms.get(0).fireBaseCatalog);
-                        startActivity(intent);
-                        break;
-                    case 1:
-                        message = InsReport.mainMenuForms.get(1).fireBaseCatalog;
-                        intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, message);
-                        InsReport.logFirebase("Opening " + InsReport.mainMenuForms.get(1).fireBaseCatalog);
-                        startActivity(intent);
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        break;
-                    case 5:
-                        Intent serverIntent = new Intent(thisActivity, ServerEmuActivity.class);
-                        startActivity(serverIntent);
-                        break;
+//        ArrayList<String> items = new ArrayList<>();
+//        ArrayList<Boolean> availability = new ArrayList<>();
+//        ArrayList<Integer> images = new ArrayList<>();
+//        for (FormsCollection formsCollection : InsReport.mainMenuForms) {
+//            items.add(formsCollection.description);
+//            availability.add(true);
+//        }
+//        items.add("Имущество");
+//        availability.add(false);
+//        items.add("Недвижимость");
+//        availability.add(false);
+//        items.add("Грузы");
+//        availability.add(false);
+//        items.add("Эмулятор сервера");
+//        availability.add(false);
+//        images.add(R.drawable.ic_assignment_black_24dp);
+//        images.add(R.drawable.ic_traffic_black_24dp);
+//        images.add(R.drawable.ic_location_city_black_24dp);
+//        images.add(R.drawable.ic_account_balance_black_24dp);
+//        images.add(R.drawable.ic_local_shipping_black_24dp);
+//        images.add(R.drawable.ic_add_black_24dp);
+//
+//
+////        items.add(getString(R.string.general_info));
+////        items.add(getString(R.string.photos_and_documents));
+////        items.add(getString(R.string.objects_info));
+////        items.add(getString(R.string.participants_info));
+////        items.add(getString(R.string.event_description));
+////        items.add(getString(R.string.additional_info));
+////        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.card_recycler_view);
+////        recyclerView.setHasFixedSize(true);
+////        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+////        recyclerView.setLayoutManager(layoutManager);
+//        ReportType adapter = new ReportType(getApplicationContext(), items, images, availability);
+//        ListView list = (ListView) findViewById(R.id.reports);
+//        list.setAdapter(adapter);
+//        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Intent intent = new Intent(thisActivity, FormsList.class);
+//                String message = "";
+//                switch (i) {
+//                    case 0:
+//                        message = InsReport.mainMenuForms.get(0).fireBaseCatalog;
+//                        intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, message);
+//                        InsReport.logFirebase("Opening " + InsReport.mainMenuForms.get(0).fireBaseCatalog);
+//                        startActivity(intent);
+//                        break;
+//                    case 1:
+//                        message = InsReport.mainMenuForms.get(1).fireBaseCatalog;
+//                        intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, message);
+//                        InsReport.logFirebase("Opening " + InsReport.mainMenuForms.get(1).fireBaseCatalog);
+//                        startActivity(intent);
+//                        break;
+//                    case 2:
+//                        break;
+//                    case 3:
+//                        break;
+//                    case 4:
+//                        break;
+//                    case 5:
+//                        Intent serverIntent = new Intent(thisActivity, ServerEmuActivity.class);
+//                        startActivity(serverIntent);
+//                        break;
+//                }
+////                Toast.makeText(getApplicationContext(), "Position " + i, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+        final float scale = getResources().getDisplayMetrics().density;
+        LinearLayout mainMenuLL = (LinearLayout) findViewById(R.id.mainMenuLL);
+        mainMenuLL.removeAllViews();
+        for (final FormsCollection formsCollection : InsReport.mainMenuForms) {
+            Button newMenuButton = new Button(this);
+            formButtons.add(newMenuButton);
+            newMenuButton.setText(formsCollection.description);
+            newMenuButton.setHeight((int) (96 * scale + 0.5f));
+            newMenuButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(thisActivity, FormsList.class);
+                    String message = formsCollection.fireBaseCatalog;
+                    intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, message);
+                    InsReport.logFirebase("Opening " + formsCollection.fireBaseCatalog);
+                    startActivity(intent);
                 }
-//                Toast.makeText(getApplicationContext(), "Position " + i, Toast.LENGTH_SHORT).show();
+            });
+            newMenuButton.setEnabled(false);
+            mainMenuLL.addView(newMenuButton);
+        }
+        Button serverButton = new Button(this);
+        serverButton.setText("Эмулятор сервера");
+        serverButton.setHeight((int) (96 * scale + 0.5f));
+        serverButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent serverIntent = new Intent(thisActivity, ServerEmuActivity.class);
+                startActivity(serverIntent);
             }
         });
-//        final float scale = getResources().getDisplayMetrics().density;
-//        LinearLayout mainMenuLL = (LinearLayout) findViewById(R.id.mainMenuLL);
-//        mainMenuLL.removeAllViews();
-//        for (final FormsCollection formsCollection : InsReport.mainMenuForms) {
-//            Button newMenuButton = new Button(this);
-//            formButtons.add(newMenuButton);
-//            newMenuButton.setText(formsCollection.description);
-//            newMenuButton.setHeight((int) (96 * scale + 0.5f));
-//            newMenuButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(thisActivity, FormsList.class);
-//                    String message = formsCollection.fireBaseCatalog;
-//                    intent.putExtra(InsReport.EXTRA_FIREBASE_CATALOG, message);
-//                    InsReport.logFirebase("Opening " + formsCollection.fireBaseCatalog);
-//                    startActivity(intent);
-//                }
-//            });
-//            newMenuButton.setEnabled(false);
-//            mainMenuLL.addView(newMenuButton);
-//        }
-//        Button serverButton = new Button(this);
-//        serverButton.setText("Эмулятор сервера");
-//        serverButton.setHeight((int) (96 * scale + 0.5f));
-//        serverButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent serverIntent = new Intent(thisActivity, ServerEmuActivity.class);
-//                startActivity(serverIntent);
-//            }
-//        });
-//        formButtons.add(serverButton);
-//        serverButton.setEnabled(false);
-//        mainMenuLL.addView(serverButton);
-//
-//        Button newMenuButton = new Button(this);
-//        formButtons.add(newMenuButton);
-//        newMenuButton.setText("АВТОРИЗАЦИЯ");
-//        newMenuButton.setHeight((int) (96 * scale + 0.5f));
-//        newMenuButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(thisActivity, LoginActivity.class);
-//                startActivityForResult(intent, 1);
-//            }
-//        });
-//
-//        loginButton = newMenuButton;
-//        mainMenuLL.addView(newMenuButton);
+        formButtons.add(serverButton);
+        serverButton.setEnabled(false);
+        mainMenuLL.addView(serverButton);
+
+        Button newMenuButton = new Button(this);
+        formButtons.add(newMenuButton);
+        newMenuButton.setText("АВТОРИЗАЦИЯ");
+        newMenuButton.setHeight((int) (96 * scale + 0.5f));
+        newMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(thisActivity, LoginActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        loginButton = newMenuButton;
+        mainMenuLL.addView(newMenuButton);
     }
 
     public boolean checkNewForms(Activity context, boolean formsAreJustLoaded) {
@@ -550,9 +550,9 @@ public class MainActivity extends AppCompatActivity {
 
 //                Log.e(TAG, "Sending SMS: " + SMS.send(phoneNo,
 //                        getString(R.string.accept_sms, InsReport.sharedPref.getString("username","")))); //phoneNo
-                Log.w(TAG, "onClick: trying to send sms via wsdl: " + getString(R.string.accept_sms, InsReport.sharedPref.getString("username","")));
+                Log.w(TAG, "onClick: trying to send sms via wsdl: " + getString(R.string.accept_sms, InsReport.sharedPref.getString("username", "")));
                 SMS.wsdlQuery(phoneNo,
-                        getString(R.string.accept_sms, InsReport.sharedPref.getString("username","")));
+                        getString(R.string.accept_sms, InsReport.sharedPref.getString("username", "")));
                 form.formReady = false;
                 if (form.elements.size() == 0) {
                     FormTemplates.applyTemplate(form, form.fireBaseCatalog);
@@ -605,7 +605,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 SMS.wsdlQuery(phoneNo,
-                        getString(R.string.delay_sms, InsReport.sharedPref.getString("username",""), 30));
+                        getString(R.string.delay_sms, InsReport.sharedPref.getString("username", ""), 30));
                 NotificationManager nMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 nMgr.cancel(form.calculateId());
                 //TODO: change this to 30!
