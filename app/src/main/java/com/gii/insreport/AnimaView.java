@@ -30,6 +30,7 @@ import java.util.Calendar;
  */
 public class AnimaView extends View {
 
+    public boolean readOnly = false;
     int playToPercent = 0;
     int playToFrame = -1;
     int intermediateFrames = 10;
@@ -456,7 +457,7 @@ public class AnimaView extends View {
                     animaActivity.refreshFab(animaActivity);
                 }
 
-                if (!(appState == AppState.rotateIcon)) {
+                if (!(appState == AppState.rotateIcon) && !readOnly) {
                     int minLayer = InsReport.currentElement.vBoolean?2:0;
                     //if roads are locked, minLayer = 2;
                     for (int layer = 10; layer >= minLayer; layer--) {
@@ -484,7 +485,7 @@ public class AnimaView extends View {
                             i++;
                         }
                     }
-                    if (appState == AppState.idle)
+                    if (appState == AppState.idle && !readOnly)
                         for (int layer = 10; layer >= minLayer; layer--) {
                             i = 0;
                             float minDistanceSqr = 10000; //the minimal distance to move the object: sqrt(1600)=40
@@ -525,7 +526,8 @@ public class AnimaView extends View {
                     newOperation.operationType = "background position";
                     newOperation.lastBackgroundCenter.set(currentFrame.backgroundCenter.x,currentFrame.backgroundCenter.y);
                     newOperation.lastScale = currentFrame.scale;
-                    currentFrame.operations.add(newOperation);
+                    if (!readOnly)
+                        currentFrame.operations.add(newOperation);
                     Log.e(TAG, "onTouchEventIdle: adding a new 'BACKGROUND POSITION/SCALE' operation!" );
 
                     /*

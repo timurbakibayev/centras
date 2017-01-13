@@ -1834,21 +1834,22 @@ public class IncidentFormActivity extends AppCompatActivity {
                         //element.container = animaButton;
                         animaButton.setText(span2Strings(element.description, element.toString()), Button.BufferType.SPANNABLE);
                         animaButton.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT));
-                        if (!readOnly)
-                            animaButton.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    InsReport.currentElement = element;
-                                    InsReport.currentForm = currentForm;
-                                    currentElement = element;
-                                    currentButton = animaButton;
-                                    Intent intent = new Intent(thisActivity, AnimaActivity.class);
-                                    //InsReport.damagePlanData = element.vPlan;
-                                    startActivityForResult(intent, ANIMA_INTENT);
-                                }
+//                        if (!readOnly)
+                        animaButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                InsReport.currentElement = element;
+                                InsReport.currentForm = currentForm;
+                                currentElement = element;
+                                currentButton = animaButton;
+                                Intent intent = new Intent(thisActivity, AnimaActivity.class);
+                                intent.putExtra("readOnly",readOnly);
+                                //InsReport.damagePlanData = element.vPlan;
+                                startActivityForResult(intent, ANIMA_INTENT);
+                            }
                             });
-                        if (readOnly)
-                            animaButton.setVisibility(View.GONE);
+//                        if (readOnly)
+//                            animaButton.setVisibility(View.GONE);
                         linearLayoutPhoto1.addView(animaButton);
                         scrollViewPhoto1.addView(linearLayoutPhoto1);
                         LL.addView(scrollViewPhoto1);

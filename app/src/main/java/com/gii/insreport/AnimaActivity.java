@@ -35,6 +35,8 @@ public class AnimaActivity extends AppCompatActivity {
     public boolean play = false;
     public Timer tim = new Timer();
 
+    private boolean readOnly = false;
+
     String currentFilename = "default";
 
     public FloatingActionButton defFab;
@@ -55,6 +57,8 @@ public class AnimaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_anima);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        readOnly = getIntent().getBooleanExtra("readOnly",false);
 
         iconsWindow = new IconsWindow();
 
@@ -116,8 +120,17 @@ public class AnimaActivity extends AppCompatActivity {
             }
         });
 
+        if (readOnly) {
+            findViewById(R.id.penFab).setVisibility(View.GONE);
+            gmapsFab.setVisibility(View.GONE);
+            iconFab.setVisibility(View.GONE);
+            undoFab.setVisibility(View.GONE);
+            photoFab.setVisibility(View.GONE);
+        }
+
         if (animaView == null) {
             animaView = new AnimaView(this);
+            animaView.readOnly = readOnly;
             refreshFab(thisActivity);
         }
 
