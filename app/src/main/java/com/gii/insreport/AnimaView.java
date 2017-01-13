@@ -274,7 +274,7 @@ public class AnimaView extends View {
         green.setAlpha(100);
         green.setStrokeWidth(2);
         green.setStyle(Paint.Style.FILL_AND_STROKE);
-        drawableIcon = new Drawable[16];
+        drawableIcon = new Drawable[17];
         drawableIconCategory = new Integer[drawableIcon.length];
         drawableSize = new PointF[drawableIcon.length];
         iconLayer = new Integer[drawableIcon.length];
@@ -330,6 +330,9 @@ public class AnimaView extends View {
         drawableSize[iconNo] = new PointF(1.7f,3);
         iconLayer[iconNo] = 1;
         drawableIconCategory[iconNo] = 1; drawableIcon[iconNo] = ContextCompat.getDrawable(context, R.drawable.syellow); iconNo++;
+        drawableSize[iconNo] = new PointF(5,5);
+        iconLayer[iconNo] = 1;
+        drawableIconCategory[iconNo] = 1; drawableIcon[iconNo] = ContextCompat.getDrawable(context, R.drawable._directions_compass); iconNo++;
     }
 
     public void bindActivity(AnimaActivity mainActivity) {
