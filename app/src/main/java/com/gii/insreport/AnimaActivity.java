@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -78,6 +79,7 @@ public class AnimaActivity extends AppCompatActivity {
         });
         findViewById(R.id.penFab).setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(thisActivity,R.color.colorPrimary)));
 
+        final FloatingActionButton saveFab = (FloatingActionButton) findViewById(R.id.fabSave);
         final FloatingActionButton photoFab = (FloatingActionButton) findViewById(R.id.photoFab);
         photoFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +112,14 @@ public class AnimaActivity extends AppCompatActivity {
             }
         });
 
+        saveFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InsReport.currentForm.saveToCloud();
+                Toast.makeText(AnimaActivity.this, "Сохранено", Toast.LENGTH_LONG).show();
+            }
+        });
+
         final FloatingActionButton gmapsFab = (FloatingActionButton) findViewById(R.id.googleMaps);
         gmapsFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(thisActivity,R.color.colorPrimary)));
         gmapsFab.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +136,7 @@ public class AnimaActivity extends AppCompatActivity {
             iconFab.setVisibility(View.GONE);
             undoFab.setVisibility(View.GONE);
             photoFab.setVisibility(View.GONE);
+            saveFab.setVisibility(View.GONE);
         }
 
         if (animaView == null) {
