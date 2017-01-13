@@ -92,6 +92,24 @@ public class PhotosActivity extends AppCompatActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabPhoto);
 
+        Log.w("PhotosActivity", "onCreate: InsReport.currentForm" + (InsReport.currentForm != null));
+        Log.w("PhotosActivity", "onCreate: InsReport.incidentFormsCollection" + (InsReport.incidentFormsCollection != null));
+        if (InsReport.currentForm == null && InsReport.incidentFormsCollection != null) {
+            for (Form form : InsReport.incidentFormsCollection.forms) {
+                if (form.id == InsReport.sharedPref.getString("lastFormId",""))
+                    InsReport.currentForm=form;
+            }
+        }
+        if (InsReport.currentForm == null && InsReport.preInsuranceFormsCollection != null) {
+            for (Form form : InsReport.preInsuranceFormsCollection.forms) {
+                if (form.id == InsReport.sharedPref.getString("lastFormId",""))
+                    InsReport.currentForm=form;
+            }
+        }
+        if (InsReport.currentForm == null) {
+            finish();
+            return;
+        }
         if (InsReport.currentForm.formReady) {
             fab.setVisibility(View.GONE);
             (findViewById(R.id.galleryFab)).setVisibility(View.GONE);

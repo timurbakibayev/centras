@@ -31,6 +31,7 @@ import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class CameraAndPictures {
     public static String TAG = "CameraAndPictures";
@@ -48,6 +49,20 @@ public class CameraAndPictures {
         //uncomment this to upload the file to the firebase storage as well.
         //does not work offline :(
         //UploadTask uploadTask = InsReport.storageRef.child("images/" + id + ".jpg").putFile(fileUri);
+        File fileTo = new File(Environment.getExternalStorageDirectory()+File.separator+"insurance");
+        fileTo.mkdirs();
+        Calendar calendar = Calendar.getInstance();
+        fileTo = new File(Environment.getExternalStorageDirectory()+File.separator+"insurance"+File.separator+
+                calendar.get(Calendar.YEAR)+"_"+(calendar.get(Calendar.MONTH)+1)+"_"+calendar.get(Calendar.DAY_OF_MONTH)+"_"
+                +id+".jpg");
+        try {
+            FileOutputStream out = new FileOutputStream(fileTo);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         InsReport.ref.child("images/" + id).setValue(encodeToBase64(bitmap,Bitmap.CompressFormat.JPEG,70));
         InsReport.logFirebase("New picture saved: " + id);
         return id;
