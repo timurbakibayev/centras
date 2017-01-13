@@ -262,6 +262,7 @@ public class IncidentFormActivity extends AppCompatActivity {
             images.add(R.drawable.ic_directions_car_black_24dp);
             images.add(R.drawable.ic_people_black_24dp);
             images.add(R.drawable.ic_map_black_72dp);
+            images.add(R.drawable.ic_border_color_black_24dp);
             images.add(R.drawable.ic_add_black_24dp);
             items.add(getString(R.string.general_info));
             availability.add(true);
@@ -272,6 +273,8 @@ public class IncidentFormActivity extends AppCompatActivity {
             items.add(getString(R.string.participants_info));
             availability.add(true);
             items.add(getString(R.string.event_description));
+            availability.add(true);
+            items.add(getString(R.string.signatures));
             availability.add(true);
             items.add(getString(R.string.additional_info));
             availability.add(true);
@@ -298,6 +301,9 @@ public class IncidentFormActivity extends AppCompatActivity {
                             showTheFragment("description", "Описание событий");
                             break;
                         case 5:
+                            showTheFragment("signature", getString(R.string.signatures));
+                            break;
+                        case 6:
                             showTheFragment("additionalInfo", "Дополнительная информация");
                             break;
                     }

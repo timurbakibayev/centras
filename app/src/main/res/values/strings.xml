@@ -50,6 +50,7 @@
     <string name="objects_info">Данные по объектам</string>
     <string name="photos_and_documents">Фотографии (документы) по делу</string>
     <string name="signature">Подпись</string>
+    <string name="signatures">Подписи</string>
     <string name="event_description">Описание событий</string>
 
     <string-array name="cars_array">
