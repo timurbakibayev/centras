@@ -760,7 +760,7 @@ public class MainActivity extends AppCompatActivity {
             reasons = new String[]{"Осмотр завершен"};
         } else {
             reasons = new String[]{"Оформлен ДТП",
-                    "Урегулирован на месте", "Направлен страховщику виновной стороны"};
+                    "Урегулирован на месте", "Направлен страховщику виновной стороны","Оформлено сообщение с опозданием"};
         }
 
         formResultLL.addView(reasonET);
