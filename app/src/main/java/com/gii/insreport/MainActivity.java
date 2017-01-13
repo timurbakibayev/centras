@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -740,7 +741,7 @@ public class MainActivity extends AppCompatActivity {
         final Dialog askForResult = new Dialog(context);
         final EditText reasonET = new EditText(context);
         //reasonET.setText(InsReport.sharedPref.getString("reasonToReject", ""));
-        askForResult.setCancelable(false);
+        //askForResult.setCancelable(false);
         TextView captionTV = new TextView(context);
 
         captionTV.setText("Введите результат завершения работы");
@@ -780,6 +781,16 @@ public class MainActivity extends AppCompatActivity {
         formResultLL.addView(positiveButton);
         askForResult.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         askForResult.setContentView(formResultLL);
+        askForResult.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                form.statusNote = "В работе";
+                form.formReady = false;
+                form.saveToCloud();
+                InsReport.notifyFormsList();
+                askForResult.dismiss();
+            }
+        });
         askForResult.show();
         positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
