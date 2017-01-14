@@ -286,7 +286,7 @@ public class Form {
                 if (element.type == Element.ElementType.eDate || element.type == Element.ElementType.eDateTime) {
                     try {
                         Long t = Long.parseLong(value);
-                        Date inputDate = new Date(t * 1000);
+                        Date inputDate = new Date(t);
                         element.vDate = inputDate;
                     } catch (Exception e) {
 

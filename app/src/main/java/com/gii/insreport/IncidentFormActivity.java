@@ -73,6 +73,8 @@ public class IncidentFormActivity extends AppCompatActivity {
     private static final int ANIMA_INTENT = 21;
     private static final int REQUEST_ELEMENT_PHOTO = 29;
 
+    private static final int TIME_DELIMITER = 1000;
+
 
     String fireBaseCatalog = "";
     String id_no = "";
@@ -102,7 +104,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                     calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                     datePicker[currentDatePicker].setText(dateTimeText(calendar.getTime()));
                     currentDateElement.vDate.setTime(calendar.getTime().getTime());
-                    currentDateElement.vText = String.valueOf(calendar.getTime().getTime() / 1000);
+                    currentDateElement.vText = String.valueOf(calendar.getTime().getTime());
                     new TimePickerDialog(thisActivity, android.R.style.Theme_Holo_Light_Dialog, timeTo, calendar
                             .get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show();
                 }
@@ -160,7 +162,7 @@ public class IncidentFormActivity extends AppCompatActivity {
         String year = "" + cal.get(Calendar.YEAR);
         int monthNo = cal.get(Calendar.MONTH);
         String day = "" + cal.get(Calendar.DAY_OF_MONTH);
-        return (year + "_" + (monthNo+1) + "/" + day);
+        return (year + "_" + (monthNo + 1) + "/" + day);
     }
 
 
@@ -663,7 +665,7 @@ public class IncidentFormActivity extends AppCompatActivity {
         ((ImageButton) findViewById(R.id.ready_adik)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LinearLayout  workProgressStatus = (LinearLayout) findViewById(R.id.work_progress_parent);
+                LinearLayout workProgressStatus = (LinearLayout) findViewById(R.id.work_progress_parent);
                 View workView = View.inflate(thisActivity, R.layout.work_progress_dialog, null);
                 final Dialog deviceNameDialog = new Dialog(thisActivity);
                 deviceNameDialog.setContentView(workView);
@@ -729,7 +731,7 @@ public class IncidentFormActivity extends AppCompatActivity {
             InsReport.logGPSFirebase(currentForm.phoneNo, location, currentForm.atTheAddress ? "Manual Arrived" : "Manual Left");
             InsReport.logFirebase(currentForm.atTheAddress ? "Manual Arrived " + location : "Manual Left " + location);
         } else {
-            InsReport.logFirebase(currentForm.atTheAddress? "Manual Arrived (no location)":"Manual Left (no location)");
+            InsReport.logFirebase(currentForm.atTheAddress ? "Manual Arrived (no location)" : "Manual Left (no location)");
         }
 
         currentForm.saveToCloud();
@@ -1843,11 +1845,11 @@ public class IncidentFormActivity extends AppCompatActivity {
                                 currentElement = element;
                                 currentButton = animaButton;
                                 Intent intent = new Intent(thisActivity, AnimaActivity.class);
-                                intent.putExtra("readOnly",readOnly);
+                                intent.putExtra("readOnly", readOnly);
                                 //InsReport.damagePlanData = element.vPlan;
                                 startActivityForResult(intent, ANIMA_INTENT);
                             }
-                            });
+                        });
 //                        if (readOnly)
 //                            animaButton.setVisibility(View.GONE);
                         linearLayoutPhoto1.addView(animaButton);
@@ -1931,11 +1933,11 @@ public class IncidentFormActivity extends AppCompatActivity {
                         comboFFButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_expand_more_black_24dp, 0);
 
                         comboFFButton.setOnClickListener(new View.OnClickListener() {
-                                                             @Override
-                                                             public void onClick(View view) {
-                                                                 openLookUpFromFile(comboFFButton, element);
-                                                             }
-                                                         });
+                            @Override
+                            public void onClick(View view) {
+                                openLookUpFromFile(comboFFButton, element);
+                            }
+                        });
 
                         horizontalLLComboFromFile.addView(captionTVComboFromFile);
                         horizontalLLComboFromFile.addView(comboFFButton);
@@ -2156,13 +2158,13 @@ public class IncidentFormActivity extends AppCompatActivity {
         ArrayList<DirectoryItem> directoryItems = new ArrayList<>();
         if (element.fireBaseFieldName.equals("OBJECT_PRODUCTION")) {
             for (String carProducer : InsReport.carProducers) {
-                directoryItems.add(new DirectoryItem(carProducer,carProducer));
+                directoryItems.add(new DirectoryItem(carProducer, carProducer));
             }
         }
         if (element.fireBaseFieldName.equals("OBJECT_MODEL")) {
             String s = "not found";
             for (Element elementa : currentForm.objects.elements) {
-                Log.w(TAG, "car: looking into some object: " + elementa.description );
+                Log.w(TAG, "car: looking into some object: " + elementa.description);
                 String s1 = "";
                 boolean thisObject = false;
                 for (Element element1 : elementa.elements) {
@@ -2186,7 +2188,7 @@ public class IncidentFormActivity extends AppCompatActivity {
                 String a = carModel.split(",")[0];
                 String b = carModel.split(",")[1];
                 if (a.trim().contains(s.trim())) {
-                    directoryItems.add(new DirectoryItem(b,b));
+                    directoryItems.add(new DirectoryItem(b, b));
                 }
             }
         }

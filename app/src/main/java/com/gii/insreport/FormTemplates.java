@@ -2,6 +2,8 @@ package com.gii.insreport;
 
 import java.util.Date;
 
+import static java.awt.font.TextAttribute.WEIGHT;
+
 /**
  * Created by Timur_hnimdvi on 07-Aug-16.
  */
@@ -337,8 +339,49 @@ public class FormTemplates {
 //                    form.elements.add(new Element("", Element.ElementType.eText, "QUESTION_ANSWER_TYPE",
 //                            "Тип ответа"));
 
-                    form.elements.add(new Element("additionalInfo", Element.ElementType.eCombo, "QUESTION_ANSWER",
-                            "Ответ на вопрос", "DCT_QUESTION_ANSWER"));
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "QUESTION_ID",
+                            "Код вопроса"));
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "QUESTION_NAME",
+                            "Описание вопроса"));
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "ANSWER_TYPE",
+                            "Тип ответа"));
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "DEFINED_ANSWERS",
+                            "Ответ"));
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "DEFAULT_ANSWER",
+                            "Значение по умолчанию"));
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eCombo, "MANDATORY",
+                            "Обязательно вопроса"));
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eTextNum, "QUESTION_ORDER",
+                            "Порядковый номер вопроса"));
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eDate, "VALID_FROM",
+                            "Дата с применения вопроса"));
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eDate, "VALID_TO",
+                            "Дата по применение вопроса"));
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "REGION_ID",
+                            "Регион для которого вопрос должен быть доступен"));
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "OFFICE_ID",
+                            "Подразделение для которого вопрос должен быть доступен"));
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "FORMAT_MASK",
+                            "Формат ответа"));
+
+
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "ANSWER_ID",
+                            "Код/значение ответа"));
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "ANSWER_NAME",
+                            "Описание ответа"));
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "QUESTION_ID",
+                            "Регион для которого вопрос должен быть доступен"));
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eTextNum, "WEIGHT",
+                            "Вес ответа"));
+                    form.elements.add(new Element("additionalInfo", Element.ElementType.eText, "STATUS",
+                            "Статус ответа"));
+
+
+
+
+
+
+
 
                     form.elements.add(new Element("description", Element.ElementType.eAnima, "PLAN", "План ДТП"));
                     form.elements.add(new Element("description", Element.ElementType.eText, "DESCRIPTION", "Описание событий"));
